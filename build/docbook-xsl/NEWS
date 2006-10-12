@@ -1,0 +1,568 @@
+Changes since the 1.70.1 release
+
+------------------------------------------------------------------------------
+
+Table of Contents
+
+Release: 1.71.0
+
+    Common
+    Extensions
+    FO
+    HTML
+    Highlighting
+    HTMLHelp
+    Lib
+    Manpages
+    Params
+    Template
+    Tools
+    WordML
+
+Release: 1.71.0
+
+The following is a list of changes that have been made since the 1.70.1
+release.
+
+Common
+
+The following changes have been made to the common code since the 1.70.1
+release.
+
+  * Further tinkering with sidebar handling. Think I got it right this
+    time. (re)closes bug 1541793. Thanks to Mauritz Jeanson.
+
+  * To make DocBook4-valid (the build ends up validing output of this
+    using xjparse), replaced author/orgname with corpauthor and
+    replaced all instances of tag with sgmltag.
+
+  * Added reference.autolabel parameter for controlling labels on
+    reference output.
+
+  * Did some touch-ups to a few files to ensure that building from PDF
+    and text from reference.dbk will work.
+
+  * Support rows that are *completely* overlapped by the preceding row
+
+  * New modules for supporting indexing extensions.
+
+  * Merged ref.css into reference.css, deleted ref.css, and updated
+    stylesheet to use reference.css instead of ref.css. Also changed
+    individual reference pages to use graphical admonitions.
+
+  * Added IDs in a number of places that should have time.
+
+  * Added normalization to object.title.markup.textonly mode, reverted
+    copyright link template in html/chunk-common.xsl to use it, and
+    updated a couple of places in manpages that should have already
+    been using it instead of object.title.markup.
+
+  * Fix attribute name
+
+  * fixed bug #1528002 olinks not handling dbhtml dir
+
+  * Fixed bug #1539010, fix xml.base.dirs template to stop recursing
+    if hit an absolute uri.
+
+  * Corrected XPath expression used for finding date data within *info
+    content -- such that dbtimestamp PIs are now correctly processed
+    when they occur within refentry *info content.
+
+  * Removed svn:executable property from many xml and xsl files on
+    which it had been inadvertently (CVS legacy).
+
+  * Support startinglinenumber on orderedlist
+
+  * fixed lang entity to remove en appendage
+
+Extensions
+
+The following changes have been made to the extensions code since the 1.70.1
+release.
+
+  * Completely reworked extensions build system; now uses NetBeans and ant
+
+FO
+
+The following changes have been made to the fo code since the 1.70.1 release.
+
+  * Fixed path selection in tgroup template.
+
+  * Change tgroup position test to count preceding-sibling instead.
+
+  * Moved XSL stylesheets out of docsrc dir and into tools/xsl/build
+
+  * Citations to nonexistent biblioentries do not issue warning.
+
+  * More carefully select language substring for sorting.
+
+  * Re-enabled build of PDF version of ref docs.
+
+  * xsl:sort lang attribute now uses two-char substring of lang attribute.
+
+  * Support titlecase "Java", "Perl", and "IDL" as values for the
+    language attribute on classsynopsis, etc. (instead of just
+    lowercase "java", "perl", and "idl"). Also support "c++" and "C++"
+    (instead of just "cpp").
+
+    Affects HTML, FO, and manpages output. Closes bug 1552332. Thanks
+    to "Brian A. Vanderburg II".
+
+  * Fixed index.term.separator on secondary and tertiary entries.
+
+  * Added support for the reference.autolabel param in (X)HTML and FO
+    output.
+
+  * Did some touch-ups to a few files to ensure that building from PDF
+    and text from reference.dbk will work.
+
+  * Support rows that are *completely* overlapped by the preceding row
+
+  * Add exclude-result-prefix="mml" so xmlns output only if mml: is actually used.
+
+  * Rearranged templates for the 3 indexing methods
+    and changed method named 'english' to 'basic'.
+
+  * New modules for supporting indexing extensions.
+
+  * Fixed bug #1542773 section title in info not working, for db5 too.
+
+  * Fixed bug #1542773 section title in info not formatting correctly.
+
+  * Fixed bug 1545377 xml:id not supported in glossary.xsl.
+
+  * Added IDs in a number of places that should have time.
+
+  * Prevent "titleabbrev in article: no template matches" warnings.
+    Patch from Camille Bgnis. Closes bug #1509100.
+
+  * Turn off blank-body for fop1.extensions too since fop 0.92
+    does not support it either.
+
+  * Finish fixing bug #1540539
+
+  * Fix bug #1540539
+
+  * Fixed bug #1537751 sidebar content not being included.
+
+  * Add Xalan variant to test for exslt:node-set function.
+    Xalan can use function named node-set(), but doesn't
+    recognize it using function-available().
+
+  * Add curly braces around &lang; in xsl:sort lang attribute to make it an AVT.
+
+  * Added support to FO stylesheets for handling instances of Org
+    where it occurs outside of *info content. In HTML stylesheets,
+    moved handling of Org out of info.xsl and into inline.xsl. In both
+    FO and HTML stylesheets, added support for correctly processing
+    Affiliation and Jobtitle.
+
+  * Don't output punctuation between Refname and Refpurpose if
+    Refpurpose is empty. Also corrected handling of Refsect2/title
+    instances, and removed some debugging stuff that was generated in
+    manpages output to mark the ends of sections.
+
+  * Added new email.delimiters.enabled param. If non-zero (the
+    default), delimiters are generated around e-mail addresses (output
+    of the email element). If zero, the delimiters are suppressed.
+
+  * Fixed handling of punctuation for methodparam in methodsynopsis.
+    Closes bug 1530558. Thanks to Evan Goer and Michael Fuchs.
+
+  * Removed svn:executable property from many xml and xsl files on
+    which it had been inadvertently (CVS legacy).
+
+  * fixed lang entity to remove en appendage
+
+  * fixed bug 1516275 set table
+     width to 100% when proportional columns are used
+
+  * fixed bug 1497436 confirm @cols is a number
+
+  * Initial support of syntax highlighting of programlistings.
+
+  * Chapter after preface should restart numbering of pages.
+
+HTML
+
+The following changes have been made to the html code since the 1.70.1
+release.
+
+  * Moved XSL stylesheets out of docsrc dir and into tools/xsl/build
+
+  * Citations to nonexistent biblioentries do not issue warning.
+
+  * More carefully select language substring for sorting.
+
+  * re-Fixed typo introduced in html/synop.xsl, and re-disabled
+    reference.pdf build in snapshot build.
+
+  * Fixed typo introduced in previous html/synop.xsl commit.
+
+  * xsl:sort lang attribute now uses two-char substring of lang attribute.
+
+  * Support titlecase "Java", "Perl", and "IDL" as values for the
+    language attribute on classsynopsis, etc. (instead of just
+    lowercase "java", "perl", and "idl"). Also support "c++" and "C++"
+    (instead of just "cpp").
+
+    Affects HTML, FO, and manpages output. Closes bug 1552332. Thanks
+    to "Brian A. Vanderburg II".
+
+  * Further tinkering with sidebar handling. Think I got it right this
+    time. (re)closes bug 1541793. Thanks to Mauritz Jeanson.
+
+  * Added support for the reference.autolabel param in (X)HTML and FO
+    output.
+
+  * Support rows that are *completely* overlapped by the preceding row
+
+  * Exclude mml result prefix unless mml is in the output.
+
+  * Rearranged templates for the 3 indexing methods
+    and changed method named 'english' to 'basic'.
+
+  * New modules for supporting indexing extensions.
+
+  * Fixed bug #1542773 section title in info not working, for db5 too.
+
+  * Fixed bug #1542773 section title in info not formatting correctly.
+
+  * Fixed bug 1545377 xml:id not supported in glossary.xsl.
+
+  * Fixed part of bug #1484944 authorgroup needing a named anchor.
+
+  * Added IDs in a number of places that should have time.
+
+  * Added several new HTML parameters for controlling appearance of
+    content on HTML title pages:
+
+    contrib.inline.enabled:
+      If non-zero (the default), output of the contrib element is
+      displayed as inline content rather than as block content.
+
+    othercredit.like.author.enabled:
+      If non-zero, output of the othercredit element on titlepages is
+      displayed in the same style as author and editor output. If zero
+      (the default), othercredit output is displayed using a style
+      different than that of author and editor.
+
+    blurb.on.titlepage.enabled:
+      If non-zero, output from authorblurb and personblurb elements is
+      displayed on title pages. If zero (the default), output from
+      those elements is suppressed on title pages (unless you are
+      using a titlepage customization that causes them to be included).
+
+    editedby.enabled
+      If non-zero (the default), a localized Edited by heading is
+      displayed above editor names in output of the editor element.
+
+  * Added normalization to object.title.markup.textonly mode, reverted
+    copyright link template in html/chunk-common.xsl to use it, and
+    updated a couple of places in manpages that should have already
+    been using it instead of object.title.markup.
+
+  * Corrected XPath expression used for locating first legalnotice
+    instance in a document. Closes request #1476450. Thanks to Sam
+    Steingold.
+
+  * Correctly handle sidebar instances that have sidebar/info/title
+    instead of sidebar/title. This change simply makes sidebar
+    handling for this case identical to that of abstract. Closes bug
+    #1541793. Thanks to Mauritz Jeanson.
+
+  * Further refinement to cause nested QandASet to appear in top-level
+    TOC. Patch from Daniel Leidert. Closes patch #1509018.
+
+  * Fixed bug #1541113 predicate bugs in next/previous
+
+  * fixed bug #1528002 olinks not handling dbhtml dir
+
+  * Fixed bug #1537076 where sectioninfo/keywordset was not being processed.
+
+  * Add Xalan variant to test for exslt:node-set function.
+    Xalan can use function named node-set(), but doesn't
+    recognize it using function-available().
+
+  * Add curly braces around &lang; in xsl:sort lang attribute to make it an AVT.
+
+  * Added support to FO stylesheets for handling instances of Org
+    where it occurs outside of *info content. In HTML stylesheets,
+    moved handling of Org out of info.xsl and into inline.xsl. In both
+    FO and HTML stylesheets, added support for correctly processing
+    Affiliation and Jobtitle.
+
+  * Don't output punctuation between Refname and Refpurpose if
+    Refpurpose is empty. Also corrected handling of Refsect2/title
+    instances, and removed some debugging stuff that was generated in
+    manpages output to mark the ends of sections.
+
+  * Added new email.delimiters.enabled param. If non-zero (the
+    default), delimiters are generated around e-mail addresses (output
+    of the email element). If zero, the delimiters are suppressed.
+
+  * Fixed handling of punctuation for methodparam in methodsynopsis.
+    Closes bug 1530558. Thanks to Evan Goer and Michael Fuchs.
+
+  * Removed svn:executable property from many xml and xsl files on
+    which it had been inadvertently (CVS legacy).
+
+  * Further changes related to handling when qanda.nested.in.toc is
+    non-zer0; deal also with answer/qandaset instances (which are
+    valid in DocBook 5).
+
+  * Added qanda.nested.in.toc param. Default value is zero. If
+    non-zero, instances of "nested" Qandaentry (ones that are children
+    of Answer elements) are displayed in the TOC. Closes patch 1509018
+    (from Daniel Leidert). Currently on affects HTML output (no patch
+    for FO output provided).
+
+  * Made changes to correct handling of nested answer/qandaentry
+    instances. Closes bug 1509043. Thanks to Daniel Leidert.
+
+    To avoid code duplication, part of the change involved adding a
+    new process.qandaset named template and moving the code for output
+    of all the question/answer table markup into that template.
+
+  * Removed obsolete DL instances from biblio.xsl that were causing
+    invalid XHTML output. Closes bug 1509041. Thanks to Daniel
+    Leidert.
+
+  * Used copy-of instead of value-of with biblioentry.item.separator,
+    so that it can contain linebreaks. Closes bug 1509021. Patch from
+    Daniel Leidert.
+
+  * Improved handling of relative locations generated files
+
+  * Fix functionsynopsis presentation
+
+  * fixed lang entity to remove en appendage
+
+  * fixed bug 1497436 confirm @cols is a number
+
+  * Initial support of syntax highlighting of programlistings.
+
+  * Support org
+
+  * Support person
+
+  * Support $keep.relative.image.uris also when chunking
+
+Highlighting
+
+The following changes have been made to the highlighting code since the 1.70.1
+release.
+
+  * Opps, seems that I forgot to commit changes previously
+
+  * Initial support of syntax highlighting of programlistings.
+
+HTMLHelp
+
+The following changes have been made to the htmlhelp code since the 1.70.1
+release.
+
+  * Fixed bug #1477771 where article was missing from hhc part TOC.
+
+Lib
+
+The following changes have been made to the lib code since the 1.70.1 release.
+
+  * Moved XSL stylesheets out of docsrc dir and into tools/xsl/build
+
+  * Added some IDs to the lib.xweb file.
+
+  * Did some touch-ups to a few files to ensure that building from PDF
+    and text from reference.dbk will work.
+
+Manpages
+
+The following changes have been made to the manpages code since the 1.70.1
+release.
+
+  * Suppress footnote markers and output warning that footnotes are
+    not yet supported.
+
+  * Moved XSL stylesheets out of docsrc dir and into tools/xsl/build
+
+  * Fixed handling of verbatims (address, screen, etc.) within
+    listitem instances in varlistentry and glossentry. (We now always
+    use .RS instead of .TP). Closes bug 1551922 and closes Debian bug
+    385940. Thanks to Daniel Leidert and Jakub Wilk.
+
+  * Correctly handle lists that have block content before the actual
+    list items. Closes bug #1547511. Thanks to Daniel Leidert. Also,
+    attempt to be smarter about adding space after lists where needed.
+
+  * Adjusted normalization of person-names. The person.name.normalized
+    template now checks the RTF of output from person.name template
+    node-by-node, and does normalization only on the nodes that need
+    it. Also fixed normalization of email output for the metadata
+    comment part of the man page, such that normalization is done
+    before the angle brackets are added.
+
+  * Added normalization to object.title.markup.textonly mode, reverted
+    copyright link template in html/chunk-common.xsl to use it, and
+    updated a couple of places in manpages that should have already
+    been using it instead of object.title.markup.
+
+  * Added person.name.normalized template to cause contents of author,
+    editor, etc., names to be normalized. Also added normalization in
+    several others places in *info output that lacked it. Thanks to
+    Daniel Leidert.
+
+  * Properly process collabname, corpauthor, corpcredit, orgname, and
+    publishername before normalizing.
+
+  * Normalize corpauthor|corpcredit|orgname|publishername
+
+  * Normalize output of contrib instances.
+
+  * Handle instances of address/otheraddr/ulink in author et al in the
+    same way as email instances; that is, display them on the same
+    linke as the author, editor, etc., name.
+
+  * Don't number or link-list any Ulink instance whose string value is
+    identical to the value of its url attribute. Just display it inline.
+
+  * Improved handling of cases with sibling contrib, authorblurb, or
+    personblurb instances.
+
+  * Handle instances of authorblurb or personblurb that lack sibling
+    *name or email content. Also, make sure space gets properly
+    normalized in para and simpara within authorblurb or personblurb.
+
+  * Output linebreak before start of .RS macro in nested lists. Closes
+    bug #1524573. Thanks to Sam Steingold.
+
+  * Normalize space in Refsect/title output.
+
+  * Don't output punctuation between Refname and Refpurpose if
+    Refpurpose is empty. Also corrected handling of Refsect2/title
+    instances, and removed some debugging stuff that was generated in
+    manpages output to mark the ends of sections.
+
+  * Added new email.delimiters.enabled param. If non-zero (the
+    default), delimiters are generated around e-mail addresses (output
+    of the email element). If zero, the delimiters are suppressed.
+
+  * Reverted suppression of markup for refsect1 instances with empty titles.
+
+  * Suppressed output of .SH markup for Refsect1 instances with empty
+    titles.
+
+  * In manpages output, if the last/nearest *info element for
+    particular Refentry has multiple Copyright and/or Legalnotice
+    children, process them all (not just the first ones). Closes bug
+    1524576. Thanks to Sam Steingold for the report and to Daniel
+    Leidert for providing a patch.
+
+  * Made some minor fixes and clarifications to comments in the
+    charmap.groff.xsl file.
+
+Params
+
+The following changes have been made to the params code since the 1.70.1
+release.
+
+  * Added reference.autolabel parameter for controlling labels on
+    reference output.
+
+  * Added namespace declarations to document elements for all param files.
+
+  * Updated to describe revised setup for importing index extensions.
+
+  * Added several new HTML parameters for controlling appearance of
+    content on HTML title pages:
+
+    contrib.inline.enabled:
+      If non-zero (the default), output of the contrib element is
+      displayed as inline content rather than as block content.
+
+    othercredit.like.author.enabled:
+      If non-zero, output of the othercredit element on titlepages is
+      displayed in the same style as author and editor output. If zero
+      (the default), othercredit output is displayed using a style
+      different than that of author and editor.
+
+    blurb.on.titlepage.enabled:
+      If non-zero, output from authorblurb and personblurb elements is
+      displayed on title pages. If zero (the default), output from
+      those elements is suppressed on title pages (unless you are
+      using a titlepage customization that causes them to be included).
+
+    editedby.enabled
+      If non-zero (the default), a localized Edited by heading is
+      displayed above editor names in output of the editor element.
+
+  * Added new email.delimiters.enabled param. If non-zero (the
+    default), delimiters are generated around e-mail addresses (output
+    of the email element). If zero, the delimiters are suppressed.
+
+  * Removed svn:executable property from many xml and xsl files on
+    which it had been inadvertently (CVS legacy).
+
+  * Added qanda.nested.in.toc param. Default value is zero. If
+    non-zero, instances of "nested" Qandaentry (ones that are children
+    of Answer elements) are displayed in the TOC. Closes patch 1509018
+    (from Daniel Leidert). Currently on affects HTML output (no patch
+    for FO output provided).
+
+  * Word-smithing
+
+  * Initial support of syntax highlighting of programlistings.
+
+Template
+
+The following changes have been made to the template code since the 1.70.1
+release.
+
+  * Did some touch-ups to a few files to ensure that building from PDF
+    and text from reference.dbk will work.
+
+  * Added more IDs, and added support to docsrc/xsl2jref.xsl for
+    copying their values to output.
+
+  * Added IDs in a number of places that should have time.
+
+Tools
+
+The following changes have been made to the tools code since the 1.70.1
+release.
+
+  * Fixed xsl-params.xsl build.
+
+  * Moved XSL stylesheets out of docsrc dir and into tools/xsl/build
+
+  * Racheted down font sizes of headings in example makefile FO output.
+
+  * Added param and attribute set to example makefile, for getting
+    wrapping in verbatims in FO output.
+
+  * Renamed Makefile.paramDoc to Makefile.docParam.
+
+  * Added Makefile.paramDoc file, for creating versions of param.xsl
+    files with doc embedded.
+
+  * Added variable to example makefile for controlling whether HTML or
+    XHTML is generated.
+
+  * Correctly handle cases where DocBook files have an extension other
+    than .xml
+
+WordML
+
+The following changes have been made to the wordml code since the 1.70.1
+release.
+
+  * Moved XSL stylesheets out of docsrc dir and into tools/xsl/build
+
+  * Did some touch-ups to a few files to ensure that building from PDF
+    and text from reference.dbk will work.
+
+  * Added IDs in a number of places that should have time.
+
+  * Removed svn:executable property from many xml and xsl files on
+    which it had been inadvertently (CVS legacy).
+
+
