@@ -1,0 +1,462 @@
+/* 
+  File name:  default.css
+  Author:     IT Mill Ltd
+
+  Description:
+    Styles for Millstone default theme.
+*/
+
+
+/* Basic page properties ------------------------------------------------- */
+
+BODY, TABLE { 
+	color: black; 
+	font-style: normal; 
+	font-size: 8pt;
+	font-weight: normal; 
+	font-family:verdana,arial,helvetica;
+	text-decoration: none; 
+	margin: 0px; 
+	padding: 0px;
+	}
+	
+
+BODY { background-color: #efebde; } /* ButtonFace in XP*/
+	
+A { 
+	color: navy; 
+	text-decoration: none 
+	}
+
+A:hover { 
+	text-decoration: underline 
+	}
+	
+PRE { 
+	display: inline; 
+	margin: 0px 
+	}
+	
+IMG.icon {vertical-align: middle; border: none; }
+	
+/* General component properties ------------------------------------------ */
+.caption {
+	font-weight: bold;
+	color: #0059ef;
+}
+
+DIV.popup,DIV.popup-inline
+{
+	background-color: #ffffca;
+	border: solid 1px #aaaa88;
+	overflow: visible;
+}
+DIV.popup  { position: absolute; z-index: 100000; }
+DIV.popup-inline  { margin:5px; }
+
+
+IMG.action {
+	cursor: pointer; 
+	cursor: hand; 
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+	vertical-align: middle;
+}
+
+/* Component Margins and Paddings --------------------------------------- */
+
+INPUT.button, DIV.button-link, NOBR.button,
+DIV.component, 
+DIV.datefield,DIV.datefield-text,DIV.datefield-calendar,
+DIV.embedded,
+DIV.label,
+DIV.link,
+DIV.select,DIV.select-optiongroup,
+DIV.table,DIV.table-list,
+DIV.tabsheet,
+DIV.textfield,
+DIV.tree,DIV.tree-menu,DIV.tree-dropmenu,
+DIV.upload { 
+	margin: 5px;
+}
+
+/* Layout Properties ----------------------------------------------------- */
+
+DIV.customlayout, DIV.gridlayout, DIV.orderedlayout, DIV.orderedlayout-form 
+{ 
+	margin: 0px; 
+}
+TD.form-caption {
+	vertical-align: top;
+}
+
+/* TextField ------------------------------------------------------------- */
+
+INPUT.modified { border: 1px solid black; background-color: #fffee0; }
+
+/* Button ---------------------------------------------------------------- */
+
+A.button-link, NOBR.button {
+	font-weight: bold;
+	color: #0059ef;
+	cursor: pointer; 
+	cursor: hand; 
+}
+
+/* Server commands ------------------------------------------------------- */
+
+IFRAME.server-commands {
+	visibility: hidden;
+	position: absolute;
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+/* Select ---------------------------------------------------------------- */
+
+SPAN.select-option {cursor: pointer; cursor: hand; }
+
+/* Tabsheet -------------------------------------------------------------- */
+
+TD.tab-l-s, TD.tab-c-s, TD.tab-r-s, TD.tab-l, TD.tab-c, TD.tab-r 
+{
+	padding: 0px;
+	margin: 0px;
+	border: 0px; 
+}
+TD.tab-l-s, TD.tab-l  { width: 4px; }
+TD.tab-r-s, TD.tab-r  { width: 6px; background-repeat: no-repeat; }
+INPUT.tab-c-s, TD.tab-c-s, INPUT.tab-c, TD.tab-c 
+{
+	cursor: pointer; 
+	cursor: hand; 
+	color: White;
+	text-align: center;
+	font-weight: bold;
+	padding: 2px 3px 3px 2px;
+	height: 20px;
+}
+TD.tab-l { background-image: url(../img/tabl.gif); }
+INPUT.tab-c, TD.tab-c { border: none; background-color: #7fabf6; }
+TD.tab-r { background-image: url(../img/tabr.gif); }
+TD.tab-l-s { background-image: url(../img/tabls.gif); }
+INPUT.tab-c-s, TD.tab-c-s { border: none; background-color: #0059ef; }
+TD.tab-r-s { background-image: url(../img/tabrs.gif); }
+TD.tabsheet 
+{
+	border: solid 2px #0059ef; 
+	margin: 0px 0px 0px 0px;
+	background-color: #f7f8f9;
+}
+
+
+/* Panel ----------------------------------------------------------------- */
+
+DIV.panel, DIV.panel-light { margin: 5px; }
+NOBR.panel, NOBR.panel-light { font-weight: bold; color: #0059ef; }
+DIV.panel-body { border: solid 1px #0059ef; background-color: #fcfcfc; }
+DIV.panel-body-light { border-top: solid 1px #0059ef; }
+DIV.panel-strong 
+{
+	background-color: #7fabf6;
+	border: solid 1px #0059ef;
+	padding: 2px 2px 2px 2px;
+	margin: 5px;
+}
+NOBR.panel-strong {	font-weight: bold; color: White; }
+DIV.panel-body-strong 
+{
+	background-color: #dbe9ff;
+	padding: 0px 0px 0px 0px;
+	margin-top: 2px;
+}
+
+/* Table ----------------------------------------------------------------- */
+
+TABLE.table { border: solid 1px #0059ef; }
+TD.table-column-header { color: white; font-weight: bold; background-color: #7fabf6; }
+DIV.table-column-header { position: relative; cursor:pointer;color: white; font-weight: bold; background-color: #7fabf6; }
+DIV.table-column-header-highlighted { border-left: 1px solid gray;position: relative; cursor:pointer;color: white; font-weight: bold; background-color: #666666; }
+TD.table-row-header 
+{ 
+	background-color: #7fabf6; 
+	color: white; 
+	font-weight: bold; 
+	text-align: right; 
+	padding-left: 0px; 
+	padding-right: 2px; 
+}
+TR.table, TR.table-unselected, TR.table-selected { 
+	border: dotted 1px #7fabf6; 
+	background-color: #fcfcfc; 
+	cursor: pointer; 
+	cursor: hand; 
+}
+TR.table-list-selected,TR.table-list {
+	cursor: pointer; 
+	cursor: hand; 
+}
+
+TR.table-selected, TR.table-list-selected { background-color: #0059ef; color: white; }
+TD.table { padding: 2px; border-top: dotted 1px #7fabf6; }
+TD.table-select { border: 0px; margin: 0px; cellspacing: 0px; background-color: #7fabf6;}
+INPUT.table-select { border: 0px; margin: 0px;  }
+TABLE.table-cursor { }
+
+/* Tree ----------------------------------------------------------------- */
+
+A.tree-node, A.tree-node-selected {  color: black; padding: 1px; }
+INPUT.tree-node { text-align: left; height: 18px; background-color: white; border:none; }
+INPUT.tree-node-selected { text-align: left; height: 18px; background-color: #0059ef; color: white; border: none; }
+A.tree-node-selected { background-color: #0059ef; color: white; border: 1px dashed white; }
+A.tree-node:hover, A.tree-node-selected:hover { text-decoration: underline; }
+IMG.tree { margin: 0px; width: 16px; height: 16px; }
+
+/* Menu Style tree  ----------------------------------------------------- */
+
+IMG.tree-menu-exp { margin: 1px; vertical-align: text-top; width: 13px; height: 13px;}
+DIV.tree-menu-body { 
+	cursor: pointer; 
+	cursor: hand; 
+	padding: 2px; 
+	border: 1px solid #0059ef; 
+	background-color: #7fabf6; }
+
+/* Level 1 in menu  */
+INPUT.tree-menu-1, 
+INPUT.tree-menu-1-selected, 
+DIV.tree-menu-1, 
+DIV.tree-menu-1-selected {
+	text-align:left;
+	color: white;
+	font-weight: bold; 
+	vertical-align: top; 
+	background-color: #7fabf6;
+	border: none;
+	height: 18px;}
+A.tree-menu-1, 
+A.tree-menu-1-selected {
+	color: white;
+	font-weight: bold;
+}
+
+DIV.tree-menu-1-child { background-color: #fcfcfc;}
+INPUT.tree-menu-1-selected, 
+DIV.tree-menu-1-selected { background-color: #0059ef; }
+
+/* Level 2 in menu  */
+DIV.tree-menu-2,
+DIV.tree-menu-2-selected { vertical-align: top; }
+INPUT.tree-menu-2 {
+	background-color: #fcfcfc; 
+	text-align:left; 
+	color: black; 
+	border:none; 
+}
+DIV.tree-menu-2 { background-color: #fcfcfc; }
+DIV.tree-menu-2-child { margin-left:16px; }
+DIV.tree-menu-2-selected { 
+	color: white; 
+	background-color: #0059ef; 
+}
+INPUT.tree-menu-2-selected {
+	text-align:left; 
+	border:none; 
+	background-color: #0059ef; 
+	height: 18px;
+}
+
+/* Level 3 in menu  */
+DIV.tree-menu-3,
+DIV.tree-menu-3-selected { vertical-align: top; }
+INPUT.tree-menu-3 {
+	background-color: #fcfcfc; 
+	text-align:left; 
+	color: black; 
+	border:none; 
+}
+DIV.tree-menu-3 { background-color: #fcfcfc; }
+DIV.tree-menu-3-child { margin-left:16px; }
+DIV.tree-menu-3-selected { 
+	color: white; 
+	background-color: #0059ef; 
+}
+INPUT.tree-menu-3-selected {
+	text-align:left; 
+	border:none; 
+	background-color: #0059ef; 
+	height: 18px;
+}
+
+/* Level 4 in menu  */
+DIV.tree-menu-4,
+DIV.tree-menu-4-selected { vertical-align: top; }
+INPUT.tree-menu-4 {
+	background-color: #fcfcfc; 
+	text-align:left; 
+	color: black; 
+	border:none; 
+}
+DIV.tree-menu-4 { background-color: #fcfcfc; }
+DIV.tree-menu-4-child { margin-left:16px; }
+DIV.tree-menu-4-selected { 
+	color: white; 
+	background-color: #0059ef; 
+}
+INPUT.tree-menu-4-selected {
+	text-align:left; 
+	border:none; 
+	background-color: #0059ef; 
+	height: 18px;
+}
+
+/* Level 5 in menu  */
+DIV.tree-menu-5,
+DIV.tree-menu-5-selected { vertical-align: top; }
+INPUT.tree-menu-5 {
+	background-color: #fcfcfc; 
+	text-align:left; 
+	color: black; 
+	border:none; 
+}
+DIV.tree-menu-5 { background-color: #fcfcfc; }
+DIV.tree-menu-5-child { margin-left:16px; }
+DIV.tree-menu-5-selected { 
+	color: white; 
+	background-color: #0059ef; 
+}
+INPUT.tree-menu-5-selected {
+	text-align:left; 
+	border:none; 
+	background-color: #0059ef; 
+	height: 18px;
+}
+
+/* Action styles  ----------------------------------------------------- */
+
+/* Popup menu */
+DIV.action-popup {
+    line-height: 18px;
+	position:absolute;
+	border: solid 1px #aaaa88;
+	background-color:#fcfcfc;
+	font-family:Verdana;
+	cursor:default;
+	z-index:100;
+}
+
+DIV.action-item {
+    padding-left: 5px;
+    padding-right: 10px;
+	cursor: pointer;
+	cursor: hand;
+}
+
+DIV.action-item-disabled {
+  display:none;
+}
+
+DIV.action-item-highlighted {
+    color: white;
+    padding-left: 5px;
+    padding-right: 10px;
+    background-color: #0059ef;
+	cursor: pointer;
+	cursor: hand;
+}
+
+/* Default datefield styles ----------------------------------------------------- */
+
+INPUT.datefield-y,INPUT.datefield-calendar-y
+INPUT.datefield-m,
+INPUT.datefield-d,
+INPUT.datefield-h,
+INPUT.datefield-min,
+INPUT.datefield-s,
+INPUT.datefield-ms { background-color: white; border: 1px solid #7fabf6; }
+
+INPUT.datefield-y {width: 34px; }
+INPUT.datefield-m,
+INPUT.datefield-d,
+INPUT.datefield-h,
+INPUT.datefield-min,
+INPUT.datefield-s { width: 18px; }
+INPUT.datefield-ms { width: 26px; }
+
+SPAN.datefield-date { }
+SPAN.datefield-time { padding-left: 10px}
+
+
+/* Text style datefield ----------------------------------------------------- */
+
+INPUT.datefield-text-y,
+INPUT.datefield-text-m,
+INPUT.datefield-text-d,
+INPUT.datefield-text-h,
+INPUT.datefield-text-min,
+INPUT.datefield-text-s,
+INPUT.datefield-text-ms { background-color: white; border: 0px solid #7fabf6; }
+
+INPUT.datefield-text-y {width: 34px; }
+INPUT.datefield-text-m,
+INPUT.datefield-text-d,
+INPUT.datefield-text-h,
+INPUT.datefield-text-min,
+INPUT.datefield-text-s { width: 18px; }
+INPUT.datefield-text-ms { width: 26px; }
+
+/* Calendar styles  ----------------------------------------------------- */
+
+INPUT.datefield-calendar-y,
+INPUT.datefield-calendar-m,
+TABLE.datefield-calendar-d {background-color: white; border: 1px solid #7fabf6; }
+INPUT.datefield-calendar-y {width: 34px; }
+
+INPUT.datefield-calendar-h,
+INPUT.datefield-calendar-min,
+INPUT.datefield-calendar-s { width: 18px; }
+INPUT.datefield-calendar-ms { width: 26px; }
+
+TD.datefield-time { padding-left: 10px}
+
+
+TD.cal-title-0,TD.cal-title-1,TD.cal-title-2,TD.cal-title-3,
+TD.cal-title-4,TD.cal-title-5 {
+	width: 20px;
+	color: #7fabf6;
+	font-weight: bold;
+	text-align: center;
+	border:1px solid  #7fabf6; }
+	
+/* Weekend highligh */
+TD.cal-title-0, TD.cal-title-6 {
+	width: 20px;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	background-color: #7fabf6; }
+
+/* Day cells */
+TD.cal-day,TD.cal-day-selected {
+	cursor: pointer;
+	cursor: hand; 
+	width: 16px; 
+	height:16px; 
+	border: 1px solid #aaaa88; 
+	background-color: #fcfcfc; 
+	text-align: center;}
+
+TD.cal-day-selected {
+	color: white;
+    background-color: #0059ef;
+}	
+
+.draggable {
+	display:			block;
+	float:				left;
+	background-color: 	red;
+	cursor:				pointer;
+}

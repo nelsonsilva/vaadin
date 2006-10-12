@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<theme name="default">
+
+   <description>Default Theme</description>
+   <author name="IT Mill Ltd" email="dev@millstone.org"/>
+
+   <fileset name="default">
+      <file name="xsl/uidl.xsl"/>
+      <file name="xsl/probe.xsl"/>
+      <file name="xsl/abstractcomponent.xsl"/>
+      <file name="xsl/basic/button.xsl"/>
+      <file name="xsl/basic/component.xsl"/>
+      <file name="xsl/basic/datefield.xsl"/>
+      <file name="xsl/basic/embedded.xsl"/>
+      <file name="xsl/basic/label.xsl"/>
+      <file name="xsl/basic/link.xsl"/>
+      <file name="xsl/basic/textfield.xsl"/>
+      <file name="xsl/basic/upload.xsl"/>
+      <file name="xsl/container/action.xsl"/>
+      <file name="xsl/container/select.xsl"/>
+      <file name="xsl/container/table.xsl"/>
+      <file name="xsl/container/tree.xsl"/>
+      <file name="xsl/layout/customlayout.xsl"/>
+      <file name="xsl/layout/gridlayout.xsl"/>
+      <file name="xsl/layout/orderedlayout.xsl"/>
+      <file name="xsl/layout/panel.xsl"/>
+      <file name="xsl/layout/tabsheet.xsl"/>
+      <file name="xsl/window/framewindow.xsl"/>
+      <file name="xsl/window/window.xsl"/>
+   </fileset>
+</theme>
