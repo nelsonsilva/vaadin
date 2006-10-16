@@ -2,8 +2,8 @@
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
-    xmlns:wa="millstone://org.millstone.webadapter.ThemeFunctionLibrary" 
-    xmlns:browser="millstone://org.millstone.webadapter.WebBrowser">
+    xmlns:wa="millstone://com.itmill.tk.terminal.web.ThemeFunctionLibrary" 
+    xmlns:browser="millstone://com.itmill.tk.terminal.web.WebBrowser">
 
 <xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.0 Transitional//EN"/>
 
