@@ -1,0 +1,10 @@
+	   body { background-color: white; font-family: Verdana, Arial, Helvetica; 
+            	   		font-size: 10pt;}
+                #outerpage {background-image: url(img/page-bg.png); width: 851px; margin-left: auto; margin-right: auto;}
+            	   #innerpage {
+            	   		padding: 0 50px 0 70px;
+            	   		
+            	   }
+                h1 { font-size: 14pt; border-bottom: 1px solid #000066; margin-top: 20px;}
+                h2 { font-size: 12pt; }
+
