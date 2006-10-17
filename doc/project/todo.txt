@@ -9,7 +9,6 @@ Lisää tehtävät OpenOfficesta todo.txt:n
 Joonas
 =============
 
-- Synccaa teemasta uusimmat js:t
 - index.html
 - "license.txt"
 - Guiden intro-chapteri
