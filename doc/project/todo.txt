@@ -12,7 +12,8 @@ Joonas
 - index.html
 - "license.txt"
 - Guiden intro-chapteri
-
+- Sorsien headerit
+- Cleanaa JavaDocit
 
 Jouni
 =============
