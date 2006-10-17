@@ -2,7 +2,7 @@
 Marc
 =============
 
-Lisää tehtävät OpenOfficesta todo.txt:n
+- Lisää tehtävät OpenOfficesta todo.txt:n
 
 
 
