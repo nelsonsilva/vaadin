@@ -9,11 +9,12 @@ Marc
 Joonas
 =============
 
-- index.html
 - "license.txt"
+- License guide
+- html-style -> non-javascript pohjaieksi (nykyinen ei toimi ie:ssä)
 - Guiden intro-chapteri
-- Sorsien headerit
 - Cleanaa JavaDocit
+- Sorsat demo-hakemistoon
 
 Jouni
 =============
