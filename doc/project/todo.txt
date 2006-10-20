@@ -11,10 +11,8 @@ Joonas
 
 - "license.txt"
 - License guide
-- html-style -> non-javascript pohjaieksi (nykyinen ei toimi ie:ssä)
 - Guiden intro-chapteri
 - Cleanaa JavaDocit
-- Sorsat demo-hakemistoon
 
 Jouni
 =============
