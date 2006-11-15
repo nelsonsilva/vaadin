@@ -25,12 +25,12 @@
 		</div>
 		<div class="window" id="ajax-window" style=""></div>				
 		<script language="JavaScript">
-			var baseUrl = document.location.href.split("features-ajax.html")[0];
-					
+			var baseUrl = document.location.href.split("demoapp.html")[0];
+			var app = document.location.href.split("=")[1];
 			// Create ajax-client for the application
 			var client = new MillstoneAjaxClient(
 				document.getElementById('ajax-window'),
-				baseUrl + "features/ajax/", 
+				baseUrl + app + "/ajax/", 
 				baseUrl + "../client/",
 				document.getElementById('ajax-wait'));
 			client.debugEnabled = (document.location.href.indexOf("debug")>0);
