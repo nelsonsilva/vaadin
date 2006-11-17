@@ -38,7 +38,7 @@
 			var baseUrl = document.location.href.split("demoapp.html")[0];
 			
 			// Determine the demo application
-			var app = document.location.href.split("=")[1];
+			var app = document.location.href.split("app=")[1].split("&")[0];
 			document.title = document.title + " - " + app;
 			
 			// Create ajax-client for the application
@@ -49,7 +49,9 @@
 				document.getElementById('ajax-wait'));		// Element to show while loading
 				
 			// Should we also show debug information?
-			client.debugEnabled = (document.location.href.indexOf("debug")>0);
+			var debug = document.location.href.split("debug=")[1];
+			if (debug && debug.split("&")[0] == "1") 
+				client.debugEnabled = true;
 			     
 			// Create the default theme and register the theme to the ajax-client
 			var defaultTheme = new DefaultTheme(baseUrl + "../themes/default/");		 
