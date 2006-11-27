@@ -63,7 +63,7 @@
 		     class that extends Application must be named in such way that it contains 
 		     given prefix (often a package name).
 		-->
-		<application name="Rondo" purpose="Document management" classPrefix="fi.wmdata.rondo" />
+		<application purpose="Document management" name="Rondo" classPrefix="fi.wmdata.rondo"/>
 
 		<!-- Only the version within these limits are covered by this license  
 	    -->
@@ -75,5 +75,5 @@
 
 	</limits>
 	
-	<signature>9382109380129830912809</signature>
+	<signature>MC4CFQCBvNzUiLnYl++XNZhsqyllB5zcOAIVAJSY20IvyX2d8pdpaVUp/K9zd7ct</signature>
 </license>
