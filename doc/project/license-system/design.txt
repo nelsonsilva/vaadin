@@ -6,7 +6,7 @@ License-file
 ------------
 
 Each web application using Toolkit must have a valid license -file
-filename: itmill-license.xml
+filename: itmill-toolkit-license.xml
 placement: either in WEB-INF directory or given in Application init
 
 
@@ -19,7 +19,7 @@ Web directory
 -------------
 
 License file can be downloaded from the url:
-http://license.itmill.com/license/<license number>/itmill-license.xml
+http://license.itmill.com/license/<license number>/itmill-toolkit-license.xml
 
 Downloading does not require password - sparse license number space is gives _enough_ protection for license-files.
 Web directory can be (in the beginning) easily implemented with static files
@@ -28,4 +28,14 @@ Web directory can be (in the beginning) easily implemented with static files
 File contents
 -------------
 
-See example license-files in https://svn.itmill.com/svn/itmill-toolkit/doc/project/license-system
+See example license-files in https://svn.itmill.com/svn/itmill-toolkit/toolkit/doc/project/license-system/examples
+- testing.xml  (this is distributed by default with each copy of toolkit
+- free-mini-server.xml
+- small-server.xml
+- unlimited-one-server.xml
+- oem.xml
+Also see "empty" template in
+https://svn.itmill.com/svn/itmill-toolkit/toolkit/doc/project/license-system/license-file-template.xml
+
+Security mechanism
+------------------
