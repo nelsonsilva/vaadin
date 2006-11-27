@@ -68,7 +68,15 @@
 		-->
 		<application name="Rondo" purpose="Document management" classPrefix="fi.wmdata.rondo" />
 
+		<!-- Only the version within these limits are covered by this license  
+	    -->
+		<version>
+			<major equals-to="4"/>
+			<minor equals-to-or-is-less-than="3"/>
+			<minor equals-to-or-is-more-than="0"/>
+		</version>
+
 	</limits>
 	
-	<signature></signature>
+	<signature>9382109380129830912809</signature>
 </license>
