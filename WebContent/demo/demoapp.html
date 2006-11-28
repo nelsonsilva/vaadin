@@ -42,7 +42,7 @@
 			document.title = document.title + " - " + app;
 			
 			// Create ajax-client for the application
-			var client = new MillstoneAjaxClient(
+			var client = new ITMillToolkitClient(
 				document.getElementById('ajax-window'),		// Element where to put main window
 				baseUrl + app + "/ajax/", 					// Adapter servlet URL (see WEB-INF/web.xml)
 				baseUrl + "../client/",						// Base directory for the client
