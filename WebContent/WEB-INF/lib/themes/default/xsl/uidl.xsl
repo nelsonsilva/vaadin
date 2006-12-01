@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!--  TODO: millstone: -> itmill: ? -->
-
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
-    xmlns:wa="millstone://com.itmill.toolkit.terminal.web.ThemeFunctionLibrary" 
-    xmlns:browser="millstone://com.itmill.toolkit.terminal.web.WebBrowser">
+    xmlns:wa="java://com.itmill.toolkit.terminal.web.ThemeFunctionLibrary" 
+    xmlns:browser="java://com.itmill.toolkit.terminal.web.WebBrowser">
 
 <xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.0 Transitional//EN"/>
 
