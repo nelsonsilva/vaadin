@@ -50,7 +50,7 @@
 		<purpose>For development and testing only, production use is forbidden</purpose>
 		
 		<!-- This license is invalid after given date -->
-		<valid-until year="2006" month="12" day="20" check-online-if-expired="true" />
+		<valid-until year="2006" month="12" day="20" />
 		
 		<!-- Number of concurrent users per server -->
 		<concurrent-users-per-server limit="unlimited"/>
