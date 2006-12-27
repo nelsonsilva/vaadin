@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  License for IT Mill Toolkit
+
+	test license for 3 active users free mini server license
+
+-->
+
+<license number="1001">
+
+	<!-- This license is only valid for the product specified below -->
+	<product>
+		<name>IT Mill Toolkit</name>
+	</product>
+
+	<!-- The licensee who has the rights to use this license. -->	
+	<licensee>
+	
+		<!--  Name of the licensee organization -->
+		<name>Oy IT Mill Ltd</name>
+		
+		<!--  Named contact person who is allowed to request changes to the license. -->
+		<contact>
+			<person>Joonas Lehtinen</person>
+			<address>
+				<street>Ruunkinkatu 2-4</street>
+				<zipcode>20540</zipcode>
+				<city>Turku</city>
+				<country>Finland</country>
+			</address>
+			<phone>+358-40-5035001</phone>
+			<email>joonas.lehtinen@itmill.com</email>
+		</contact>
+	</licensee>
+	
+	<!--  These limits define how you can use the product (defined above) -->
+	<limits print-limits-on-init="false">
+	
+		<!--  This license can only be used for the purpose defined below -->
+		<purpose>Production</purpose>
+
+		<!-- Number of concurrent users per server -->
+		<concurrent-users-per-server limit="3"/>
+
+		<!-- Only the version within these limits are covered by this license  
+	    -->
+		<version>
+			<major equals-to="4"/>
+		</version>
+
+	</limits>
+	
+	<signature>MCwCFGg5k98w7w14VB6wD1mgr/K+NYufAhQNs4YF0px8wxlJtJhyTS2euVjTMA==</signature>
+</license>
