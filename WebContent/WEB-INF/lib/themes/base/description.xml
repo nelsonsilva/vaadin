@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<theme name="base">
+
+	<author name="IT Mill Ltd" email="info@itmill.com" />
+
+	<description>
+		IT Mill Toolkit Base theme. This theme should not extended in your application.
+		If you don't want to extend a theme, try corporate -theme instead.
+	</description>
+
+	<!-- This theme does not extend any other theme, so extension is not needed:
+		<extends theme="parentTheme" />  
+	-->
+
+	<!--  List of supported modes by this theme -->
+	<modes>
+
+		<!--  UIDL mode is the AJAX-based primary rendering mode -->
+		<mode name="uidl">
+
+			<!-- The requirements for the browsers that are supported in UIDL-mode
+				are listed here -->
+			<require>
+				<supports javascript="1.5" />
+				<or>
+					<supports agent="Safari" />
+				</or>
+			</require>
+		</mode>
+
+		<!-- XSLT is a fallback mode with very wide browser support. As no requirements
+			are given here, it basically tries to support everything -->
+		<mode name="xslt" /> 
+	</modes>
+
+	<fileset>
+
+		<!-- UIDL Mode support files -->
+		<fileset mode="uidl">
+
+			<!--  CSS stylesheets to load in html head -->
+			<file name="css/base-uidl.css" />
+			<file name="css/calendar-default.css" />
+			<file name="css/debug.css" />
+
+			<!-- JavaScripts to load in html head -->
+			<file name="script/uidl-client.js" />
+			<file name="script/base-uidl-components.js" />
+			<file name="ext/jscalendar/calendar.js" />
+		</fileset>
+
+		<!-- XSLT mode support files -->
+		<fileset mode="xslt">
+		
+			<!--  XSL stylesheets that are used for transforming UIDL to HTML -->
+			<file name="xsl/uidl.xsl" />
+			<file name="xsl/probe.xsl" />
+			<file name="xsl/abstractcomponent.xsl" />
+			<file name="xsl/basic/button.xsl" />
+			<file name="xsl/basic/component.xsl" />
+			<file name="xsl/basic/datefield.xsl" />
+			<file name="xsl/basic/embedded.xsl" />
+			<file name="xsl/basic/label.xsl" />
+			<file name="xsl/basic/link.xsl" />
+			<file name="xsl/basic/textfield.xsl" />
+			<file name="xsl/basic/upload.xsl" />
+			<file name="xsl/container/action.xsl" />
+			<file name="xsl/container/select.xsl" />
+			<file name="xsl/container/table.xsl" />
+			<file name="xsl/container/tree.xsl" />
+			<file name="xsl/layout/customlayout.xsl" />
+			<file name="xsl/layout/gridlayout.xsl" />
+			<file name="xsl/layout/orderedlayout.xsl" />
+			<file name="xsl/layout/panel.xsl" />
+			<file name="xsl/layout/tabsheet.xsl" />
+			<file name="xsl/window/framewindow.xsl" />
+			<file name="xsl/window/window.xsl" />
+			
+			<!--  CSS stylesheets to load in html head -->
+			<file name="css/base-xslt.css" />
+			
+			<!-- JavaScripts to load in html head -->
+			<file name="script/commons.js" />
+			<file name="script/logger.js" />
+			<file name="script/events.js" />
+			<file name="script/focusable.js" />
+			<file name="script/window.js" />
+<!-- Not used? 			<file name="script/tableheaderdragger.js" /> -->
+			<file name="script/xslt-helper-lib.js" />
+		</fileset>
+	</fileset>
+
+</theme>
