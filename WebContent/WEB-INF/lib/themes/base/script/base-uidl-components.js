@@ -68,6 +68,7 @@ BaseTheme.prototype.registerTo = function(client) {
 	client.registerRenderer(this,"customlayout",null,this.renderCustomLayout);
 	client.registerRenderer(this,"gridlayout",null,this.renderGridLayout);
 	client.registerRenderer(this,"tabsheet",null,this.renderTabSheet);
+    client.registerRenderer(this,"progressindicator",null,this.renderProgressIndicator);
 
 	client.registerRenderer(this,"table",null,this.renderScrollTable);
     client.registerRenderer(this,"table","paging",this.renderPagingTable);
@@ -75,6 +76,7 @@ BaseTheme.prototype.registerTo = function(client) {
 	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
 	//client.registerRenderer(this,"tree","menu",this.renderTreeMenu);
 };
+
 
 /* 
 #### DOM functions ########################################################
@@ -1324,6 +1326,48 @@ BaseTheme.prototype.renderPanel = function(renderer,uidl,target,layoutInfo) {
 			theme.applyWidthAndHeight(uidl,outer);
 			
 }
+
+/** under development
+ * this should be easyly modified not to use polling in case "comet" is implemented
+ */
+BaseTheme.prototype.renderProgressIndicator = function(renderer,uidl,target,layoutInfo) {
+    // TODO try to mess intervals
+    // Create container element
+    var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+    var id = div.id;
+    var interval = uidl.getAttribute("pollinginterval");
+
+    var f = function() {
+        // poll server for changes
+        client.processVariableChanges(false,false);
+        if(null == document.getElementById(id)) {
+            //if progressindicator is removed, clear this interval
+            clearInterval(renderer.theme.intervals[id]);
+        }
+    };
+    if(!renderer.theme.intervals) {
+        renderer.theme.intervals = new Object();
+    }
+    if(renderer.theme.intervals[id]) {
+        // remove old interval
+        clearInterval(renderer.theme.intervals[id]);
+    }
+    renderer.theme.intervals[id] = setInterval(f,interval);
+    
+    if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
+    // Create default header
+    var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+    var indeterminate = ("true" == uidl.getAttribute("indeterminate"));
+    var indeterminate = true;
+    var state = uidl.getAttribute("state");
+    if(indeterminate) {
+        div.innerHTML = "<div>TODO:INDETERMINATE PROGRESS INDICATOR (Simple Mozilla giallo style animated gif or XP style bar?), INTERVAL:"+interval+"</div>";
+    } else {
+        var widthPros = Math.round(state*100);
+        div.innerHTML = "<div style=\"width:"+widthPros+"%;background-color;background-color:red;\"><br/></div>";
+    }
+}
+
 
 BaseTheme.prototype.renderTabSheet = function(renderer,uidl,target,layoutInfo) {
 
