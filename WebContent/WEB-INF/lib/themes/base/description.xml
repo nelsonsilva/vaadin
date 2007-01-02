@@ -22,11 +22,13 @@
 			<!-- The requirements for the browsers that are supported in UIDL-mode
 				are listed here -->
 			<require>
-				<!--  TODO THIS LIST IS REALLY INCOMPLETE -->
-				<supports javascript="1.5" />
+				<supports javascript="ECMA-262" />
 				<or>
-					<supports agent="Safari" />
+					<supports agent="Safari/4" />
 					<supports agent="Firefox" />
+					<supports agent="Camino/1" />
+					<supports agent="MSIE 6." />
+					<supports agent="MSIE 7." />
 				</or>
 			</require>
 		</mode>
