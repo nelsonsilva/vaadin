@@ -235,8 +235,9 @@ BaseTheme.prototype.createInputElementTo = function(target,type,className,focusi
 		input = this.createElementTo(target,"<input type='"+type+"'>");
 	} else {
 		// Other browsers
-		input = this.createElementTo(target,"input");
-		input.type = type;
+        input = document.createElement("input");
+        input.type = type;
+        target.appendChild(input);
 	}
 	
 	// Assign class
