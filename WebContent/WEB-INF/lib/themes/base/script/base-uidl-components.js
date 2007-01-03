@@ -1358,13 +1358,26 @@ BaseTheme.prototype.renderProgressIndicator = function(renderer,uidl,target,layo
     // Create default header
     var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
     var indeterminate = ("true" == uidl.getAttribute("indeterminate"));
-    var indeterminate = true;
     var state = uidl.getAttribute("state");
     if(indeterminate) {
-        div.innerHTML = "<div>TODO:INDETERMINATE PROGRESS INDICATOR (Simple Mozilla giallo style animated gif or XP style bar?), INTERVAL:"+interval+"</div>";
+        div.state = 0;
+        var chars = ['|', '/', '-','\\', '|','/','-', '\\'];
+        div.ipiStateChange = function() {
+            // this will change divs char constantly | / - | \ -
+            // we this particular div exists (and not redrawn due it has new timer)
+            if(document.getElementById(id) && document.getElementById(id) == div) {
+                // change state
+                div.state++;
+                // set new state
+                div.innerHTML = chars[div.state%8];
+                setTimeout(div.ipiStateChange,700);
+            }
+        }
+        // start indeterminate indicator
+        div.ipiStateChange();
     } else {
         var widthPros = Math.round(state*100);
-        div.innerHTML = "<div style=\"width:"+widthPros+"%;background-color;background-color:red;\"><br/></div>";
+        div.innerHTML = "<div style=\"border:1px solid red;\"><div style=\"width:"+widthPros+"%;background-color:red;\"><br/></div></div>";
     }
 }
 
