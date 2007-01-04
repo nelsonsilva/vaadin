@@ -24,7 +24,7 @@
 			<file name="css/corporate-uidl.css" />
 
 			<!-- JavaScripts to load in html head -->
-			<file name="script/corpoeate-uidl-components.js" />
+			<file name="script/corporate-uidl-components.js" />
 		</fileset>
 	</fileset>
 	

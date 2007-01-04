@@ -1,0 +1,17 @@
+
+html {
+    background-color: #c9d1db;
+}
+
+div#ajax-wait {
+	top:1px;
+	right:1px;
+	cursor:wait;
+	z-index:10000;
+	background-color: #ffff99;
+	display:none;
+	position:absolute;
+	border: 1px solid #cccc00;
+	padding: 3px;
+	font-weight: bold;
+}

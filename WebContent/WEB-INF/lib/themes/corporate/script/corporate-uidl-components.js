@@ -16,7 +16,7 @@ function CorporateTheme(themeRoot) {
  *
  * @param client The ajax client instance.
  */
-BaseTheme.prototype.registerTo = function(client) {
+CorporateTheme.prototype.registerTo = function(client) {
 
 	// Register renderer functions
 
