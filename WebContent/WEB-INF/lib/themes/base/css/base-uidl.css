@@ -34,10 +34,13 @@ div#ajax-wait {
 /* General styles */
 html {
     background-color: ThreeDFace;
+}
+input, select, button,html {
     font-family: Tahoma, sans-serif; 
-    font-size: 8pt;
+    font-size: 1em;
     font-weight: normal;
 }
+
 .abs {
 	position: absolute;
 }
@@ -334,9 +337,6 @@ IMG.overlay {
 	background-color: ButtonFace;
 }
 
-
-
-
 /* TabSheet */
 .tabsheet .tabs {
 	margin-top: 0.5em;
@@ -367,7 +367,6 @@ IMG.overlay {
 	border: none;
 }
 .textfield INPUT {
-	font-size: 1em;
 	padding: 0.12em 0.4em 0.12em 0.4em;
 }
 
