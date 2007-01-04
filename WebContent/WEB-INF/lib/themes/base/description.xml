@@ -46,7 +46,6 @@
 			<!--  CSS stylesheets to load in html head -->
 			<file name="css/base-uidl.css" />
 			<file name="css/calendar-default.css" />
-			<file name="css/debug.css" />
 
 			<!-- JavaScripts to load in html head -->
 			<file name="script/uidl-client.js" />
