@@ -634,9 +634,7 @@ BaseTheme.prototype.renderDefaultComponentHeader = function(renderer, uidl, targ
 		if (iconUrl) {
 			/* overlay icon */
 			this.setCSSClass(icon,"overlay");
-		} else {
-			this.setCSSClass(icon,"error");
-		}
+		} 
 	}
 	
 	var popupTarget = (captionText)?caption:target;
@@ -1515,8 +1513,8 @@ BaseTheme.prototype.renderTreeNode = function(renderer,node,target,selectable,se
     }
 	
 	// Caption
-	var cap = theme.createElementTo(n,"div","nodecaption inline");
-	theme.createTextNodeTo(n,node.getAttribute("caption"));	
+	var cap = theme.createElementTo(n,"span","");
+	theme.createTextNodeTo(cap,node.getAttribute("caption"));	
 	
 	// Hover effects
 	if (!disabled&&!readonly) {

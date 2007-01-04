@@ -4,7 +4,7 @@
 	z-index: 1001;
 	text-indent: 18px;
 	background-color: white;
-	background-image: url('img/debug.gif');
+	background-image: url('../img/debug.gif');
 	background-repeat: no-repeat;
 	background-position: 1 1;
 	font-weight: normal;
@@ -12,13 +12,16 @@
 }
 
 div#ajax-wait {
-	top:40px;
-	right:48%;
+	top:1px;
+	right:1px;
 	cursor:wait;
 	z-index:10000;
-	background:white;
+	background-color: #ffff99;
 	display:none;
 	position:absolute;
+	border: 1px solid #cccc00;
+	padding: 3px;
+	font-weight: bold;
 }
 
 .minimized {
@@ -29,11 +32,10 @@ div#ajax-wait {
 }
 
 /* General styles */
-
-* {
+html {
     background-color: ThreeDFace;
-    font-family: sans-serif;
-    /* font-size: 10pt; */
+    font-family: Tahoma, sans-serif; 
+    font-size: 8pt;
     font-weight: normal;
 }
 .abs {
@@ -97,7 +99,7 @@ INPUT, SELECT, SELECT OPTION, TEXTAREA {
 	border: 1px solid ThreeDDarkShadow;
 }
 .over .caption {
- 	color: ActiveCaption;
+ 	/* color: ActiveCaption; */
 }
 
 .selected {
@@ -125,6 +127,7 @@ IMG.overlay {
 .popup .border {
 	border: 1px solid InfoText;
 	background-color: InfoBackground;
+	padding: 4px;
 }
 .popup .caption {
 	text-align: left;
@@ -137,7 +140,6 @@ IMG.overlay {
 .popup .error {
 	font-size: 0.9em;
 	overflow: auto;
-	border: solid 1px red;
 }
 
 /* COMPONENTS */
@@ -151,6 +153,7 @@ IMG.overlay {
 	overflow: hidden;
 	padding: 0.2em 0.4em 0.2em 0.4em;
 	text-align: center;
+    border-width: 2px;
 }
 
 .button-link .caption {
@@ -292,10 +295,10 @@ IMG.overlay {
 	background-repeat: no-repeat;
 }
 .table .hin .tableheader IMG.sortasc {
-	background-image: url('img/table/asc.gif');
+	background-image: url('../img/table/asc.gif');
 }
 .table .hin .tableheader IMG.sortdesc {
-	background-image: url('img/table/desc.gif');
+	background-image: url('../img/table/desc.gif');
 }
 .table .hin .tableheader {
 	border-left: 1px solid ButtonHighlight;
@@ -381,13 +384,23 @@ IMG.overlay {
 .tree .content, .tree .content .node, .tree .content .nodes, .tree .content .node IMG {
 	background-color: Window;
 }
-.tree .node {
+
+.tree .node, .tree-menu .node {
 	border: none;
-	padding: 0.1em 0.4em 0.2em 0em;
+	padding: 0px;
+	height: 16px;
+	white-space: nowrap;
+}
+
+.tree-menu .node span , .tree .node span {
+	line-height: 16px;
+	white-space: nowrap;
+	position: relative;
+	bottom: 3px;
 }
 
 .tree .nodes {
-	padding-left: 1em;
+	padding-left: 16px;
 }
 .tree .over  {
 	text-decoration: underline;
