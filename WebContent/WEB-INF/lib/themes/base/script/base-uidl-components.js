@@ -15,24 +15,30 @@ if(document.all) {
 	Node.NOTATION_NODE = 12;
 }
 
-/** Default theme constructor.
- *
+
+
+
+/** Base theme class extends ITMillToolkitClient.Theme */
+itmill.toolkit.themes.Base = itmill.toolkit.Class.extend( {
+
+
+/** Constructor
  *  @param themeRoot The base URL for theme resources.
  *  @constructor
- *
- */
-function BaseTheme(themeRoot) {
-	this.themeName = "BaseTheme";
+*/
+constructor : function(themeRoot) {
+
+	this.themeName = "base";
 
 	// Store the the root URL
 	this.root = themeRoot;
-}
+},
 
 /** Register all renderers to a ajax client.
  *
  * @param client The ajax client instance.
  */
-BaseTheme.prototype.registerTo = function(client) {
+registerTo : function(client) {
 
 	// This hides all integer, string, etc. variables
 	client.registerRenderer(this,"integer",null,function() {});
@@ -75,14 +81,14 @@ BaseTheme.prototype.registerTo = function(client) {
 	client.registerRenderer(this,"tree",null,this.renderTree);
 	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
 	//client.registerRenderer(this,"tree","menu",this.renderTreeMenu);
-};
+},
 
 
 /* 
 #### DOM functions ########################################################
 */
 
-BaseTheme.prototype.createElementTo = function (target, tagName, cssClass) {
+createElementTo : function (target, tagName, cssClass) {
 
 	if (target == null) return null;
 
@@ -98,9 +104,9 @@ BaseTheme.prototype.createElementTo = function (target, tagName, cssClass) {
 	target.appendChild(e);
 	
 	return e;
-}
+},
 
-BaseTheme.prototype.createTextNodeTo = function (target,text) {
+createTextNodeTo : function (target,text) {
 
 	// Sanity check
 	if (text == null || target == null) return null;
@@ -112,9 +118,9 @@ BaseTheme.prototype.createTextNodeTo = function (target,text) {
 	target.appendChild(tn);
 		
 	return tn;
-}
+},
 
-BaseTheme.prototype.getFirstElement = function(parent, elementName) {
+getFirstElement : function(parent, elementName) {
 	if (parent && parent.childNodes) {
 		for (var i=0;i<parent.childNodes.length;i++) {
 			if (parent.childNodes[i].nodeName == elementName) {
@@ -123,9 +129,9 @@ BaseTheme.prototype.getFirstElement = function(parent, elementName) {
 		}
 	}
 	return null;
-}
+},
 
-BaseTheme.prototype.getFirstTextNode = function(parent) {
+getFirstTextNode : function(parent) {
 	if (parent == null || parent.childNodes == null) return null;
 	
 	var cns = parent.childNodes;
@@ -137,7 +143,7 @@ BaseTheme.prototype.getFirstTextNode = function(parent) {
 		}
 	}
 	
-}
+},
 
 /**
  *   Removes all children of an element an element.
@@ -146,7 +152,7 @@ BaseTheme.prototype.getFirstTextNode = function(parent) {
  *  
  *   @return the element with children removed
  */
-BaseTheme.prototype.removeAllChildNodes = function(element) {
+removeAllChildNodes : function(element) {
 	//TODO event listener leakage prevention, verify
 	// MOVED to client
 	//this.removeAllEventListeners(element);
@@ -154,9 +160,9 @@ BaseTheme.prototype.removeAllChildNodes = function(element) {
 		element.removeChild(element.childNodes[0]);
 	}
 	return element;
-}
+},
 
-BaseTheme.prototype.getElementContent = function(parent, elementName) {
+getElementContent : function(parent, elementName) {
 	if (elementName != null) {
 		// Find element and return its content		
 		var n = this.getFirstElement(parent,elementName);
@@ -175,9 +181,9 @@ BaseTheme.prototype.getElementContent = function(parent, elementName) {
 		}
 		return "";	
 	}
-}
+},
 
-BaseTheme.prototype.getChildElements = function(parent, tagName) {
+getChildElements : function(parent, tagName) {
 	
 	if (parent == null || parent.childNodes == null || tagName == null) return null;
 
@@ -190,8 +196,9 @@ BaseTheme.prototype.getChildElements = function(parent, tagName) {
 		}
 	}
 	return res;	
-}
-BaseTheme.prototype.nodeToString = function(node, deep) {
+},
+
+nodeToString : function(node, deep) {
 
 	if (node == null) {
 		return "";
@@ -226,8 +233,9 @@ BaseTheme.prototype.nodeToString = function(node, deep) {
 	  }
 	  
 	  return ""+node.nodeName + "-node";
-}
-BaseTheme.prototype.createInputElementTo = function(target,type,className,focusid) {
+},
+
+createInputElementTo : function(target,type,className,focusid) {
 	
 	var input = null;
 	if (document.all && !window.opera) {
@@ -248,15 +256,13 @@ BaseTheme.prototype.createInputElementTo = function(target,type,className,focusi
 	if (focusid) input.focusid = focusid;
 	
 	return input;
-}
-
-
+},
 
 /* 
 #### CSS functions ###################################################### 
 */
 
-BaseTheme.prototype.addCSSClass = function(element, className) {
+addCSSClass : function(element, className) {
 	if (element == null) return element;
 	if (element.className) {
 		var classArray = element.className.split(" ");
@@ -269,9 +275,9 @@ BaseTheme.prototype.addCSSClass = function(element, className) {
 	}
 	element.className = (element.className?element.className:"") + " " + className;
 	return element;	
-}
+},
 
-BaseTheme.prototype.removeCSSClass = function(element, className) {
+removeCSSClass : function(element, className) {
 	if (element == null) return element;
 	var classArray = new Array();
 	if (element.className) {
@@ -285,8 +291,9 @@ BaseTheme.prototype.removeCSSClass = function(element, className) {
 	} 
 	element.className = newArray.join(" ");
 	return element;	
-}
-BaseTheme.prototype.toggleCSSClass = function(element, className) {
+},
+
+toggleCSSClass : function(element, className) {
 	if (element == null) return element;
 
 	var classArray = new Array();
@@ -302,19 +309,22 @@ BaseTheme.prototype.toggleCSSClass = function(element, className) {
 	this.addCSSClass(element, className);
 	
 	return element;	
-}
-BaseTheme.prototype.setCSSClass = function(element, className) {
+},
+
+setCSSClass : function(element, className) {
 	if (element == null) return element;
 	element.className = className;
 	return element;	
-}
-BaseTheme.prototype.setCSSDefaultClass = function(renderer,element,uidl) {
+},
+
+setCSSDefaultClass : function(renderer,element,uidl) {
 	if (element == null) return element;
 	var cn = this.styleToCSSClass(renderer.tag,uidl.getAttribute("style"));
 	element.className = cn;
 	return element;	
-}
-BaseTheme.prototype.styleToCSSClass = function(prefix,style) {
+},
+
+styleToCSSClass : function(prefix,style) {
 
 	var s = "";
 	if (prefix != null) {
@@ -327,7 +337,7 @@ BaseTheme.prototype.styleToCSSClass = function(prefix,style) {
   		s = s + style;
   	}
   	return s
-}
+},
 
 /* 
 #### Generic JS helpers ##################################################
@@ -341,8 +351,7 @@ BaseTheme.prototype.styleToCSSClass = function(prefix,style) {
  *  
  *   @return true iff the number can be found in the list
  */
-
-BaseTheme.prototype.listContainsInt = function(list,number) {
+listContainsInt : function(list,number) {
   if (!list) return false;
   a = list.split(",");
 
@@ -351,7 +360,8 @@ BaseTheme.prototype.listContainsInt = function(list,number) {
   }
   
   return false;
-}
+},
+
 /** Add number to integer list, if it does not exit before.
  *  
  *  
@@ -360,15 +370,15 @@ BaseTheme.prototype.listContainsInt = function(list,number) {
  *  
  *  @return new list
  */
-
-BaseTheme.prototype.listAddInt = function(list,number) {
+listAddInt : function(list,number) {
 
   if (this.listContainsInt(list,number)) 
     return list;
     
   if (list == "") return number;
   else return list + "," + number;
-}
+},
+
 /** Remove number from integer list.
  *  
  *  @param list         Comma separated list of integers
@@ -376,7 +386,7 @@ BaseTheme.prototype.listAddInt = function(list,number) {
  *  
  *  @return new list
  */
-BaseTheme.prototype.listRemoveInt = function(list,number) {
+listRemoveInt : function(list,number) {
 	if (!list) return "";
 	retval = "";
 	a = list.split(',');
@@ -388,11 +398,12 @@ BaseTheme.prototype.listRemoveInt = function(list,number) {
     	}
   	}
 	return retval;
-}
+},
+
 /* 
 #### Variable helpers #############################################
 */
-BaseTheme.prototype.getVariableElement = function(uidl,type,name) {
+getVariableElement : function(uidl,type,name) {
 
 	if (uidl == null) return;
 	
@@ -405,8 +416,9 @@ BaseTheme.prototype.getVariableElement = function(uidl,type,name) {
 		}
 	}
 	return null;	
-}
-BaseTheme.prototype.createVariableElementTo = function(target,variableElement) {
+},
+
+createVariableElementTo : function(target,variableElement) {
 	if (!variableElement) {
 		return null;
 	}
@@ -433,8 +445,9 @@ BaseTheme.prototype.createVariableElementTo = function(target,variableElement) {
 		input.value = variableElement.getAttribute("value");
 	}
 	return input;
-}
-BaseTheme.prototype.getVariableElementValue = function(variableElement) {
+},
+
+getVariableElementValue : function(variableElement) {
 	if ( variableElement == null) {
 		return null;
 	}
@@ -448,18 +461,21 @@ BaseTheme.prototype.getVariableElementValue = function(variableElement) {
 		return variableElement.getAttribute("value");
 	}
 	return null;
-}
-BaseTheme.prototype.setVariable = function(client, variableNode, newValue, immediate) {
+},
+
+setVariable : function(client, variableNode, newValue, immediate) {
 	if (variableNode == null) return;
 	variableNode.value = newValue;
 	client.changeVariable(variableNode.variableId, newValue, immediate);
-}
-BaseTheme.prototype.addArrayVariable = function(client, variableNode, newValue, immediate) {
+},
+
+addArrayVariable : function(client, variableNode, newValue, immediate) {
 	if (variableNode == null) return;
 	variableNode.value = this.listAddInt(variableNode.value,newValue);
 	client.changeVariable(variableNode.variableId, variableNode.value, immediate);
-}
-BaseTheme.prototype.toggleArrayVariable = function(client, variableNode, value, immediate) {
+},
+
+toggleArrayVariable : function(client, variableNode, value, immediate) {
 	if (variableNode == null) return;
 	if (this.listContainsInt(variableNode.value,value)) {
 		variableNode.value = this.listRemoveInt(variableNode.value,value);
@@ -467,13 +483,15 @@ BaseTheme.prototype.toggleArrayVariable = function(client, variableNode, value, 
 		variableNode.value = this.listAddInt(variableNode.value,value);
 	}
 	client.changeVariable(variableNode.variableId, variableNode.value, immediate);
-}
-BaseTheme.prototype.removeArrayVariable = function(client, variableNode, value, immediate) {
+},
+
+removeArrayVariable : function(client, variableNode, value, immediate) {
 	if (variableNode == null) return;
 	variableNode.value = this.listRemoveInt(variableNode.value,value);
 	client.changeVariable(variableNode.variableId, variableNode.value, immediate);
-}
-BaseTheme.prototype.arrayToList = function(arrayVariableElement) {
+},
+
+arrayToList : function(arrayVariableElement) {
 
   var list = "";
   if (arrayVariableElement == null || arrayVariableElement.childNodes == null) return list;
@@ -490,13 +508,13 @@ BaseTheme.prototype.arrayToList = function(arrayVariableElement) {
   }	
   
   return list;
-}
+},
 
 
 /* 
 #### Generic component functions #############################################
 */
-BaseTheme.prototype.renderChildNodes = function(renderer, uidl, to) {
+renderChildNodes : function(renderer, uidl, to) {
 	for (var i=0; i<uidl.childNodes.length; i++) {
 		var child = uidl.childNodes.item(i);
 		if (child.nodeType == Node.ELEMENT_NODE) {
@@ -505,8 +523,9 @@ BaseTheme.prototype.renderChildNodes = function(renderer, uidl, to) {
 			to.appendChild(to.ownerDocument.createTextNode(child.data));
 		}
 	}
-}
-BaseTheme.prototype.applyWidthAndHeight = function(uidl,target) {
+},
+
+applyWidthAndHeight : function(uidl,target) {
 	if (target == null || uidl == null) return;
 
 	// Width
@@ -526,8 +545,9 @@ BaseTheme.prototype.applyWidthAndHeight = function(uidl,target) {
 			target.style.height = ""+h+"px";
 		}
 	}	
-}
-BaseTheme.prototype.createPaintableElement = function (renderer, uidl, target,layoutInfo) {
+},
+
+createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 
 	// And create DIV as container
 	var div = null;
@@ -564,9 +584,9 @@ BaseTheme.prototype.createPaintableElement = function (renderer, uidl, target,la
 	}
 	
 	return div;	
-}
+},
 
-BaseTheme.prototype.renderDefaultComponentHeader = function(renderer, uidl, target, layoutInfo) {
+renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	var theme = renderer.theme;
 	var doc = renderer.doc;
 	var client = renderer.client;
@@ -656,9 +676,9 @@ BaseTheme.prototype.renderDefaultComponentHeader = function(renderer, uidl, targ
 	this.createTextNodeTo(caption,captionText);
 
 	return caption;
-}
+},
 
-BaseTheme.prototype.renderActionPopup = function(renderer, uidl, to, actions, actionVar, id, popupEvent) {
+renderActionPopup : function(renderer, uidl, to, actions, actionVar, id, popupEvent) {
 	// Shortcuts
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -688,8 +708,7 @@ BaseTheme.prototype.renderActionPopup = function(renderer, uidl, to, actions, ac
 	theme.addStopListener(theme,client,to,"contextmenu");
 	//theme.addStopListener(theme,client,to,evtName);
 	theme.addTogglePopupListener(theme,client,to,evtName,popup);
-}
-
+},
 
 /** Show popup at specified position.
  *  Hides previous popup.
@@ -701,7 +720,7 @@ BaseTheme.prototype.renderActionPopup = function(renderer, uidl, to, actions, ac
  *  @param defWidth		(optional) default width for the popup
  *  
  */
-BaseTheme.prototype.showPopup = function(client,popup, x, y, delay, defWidth) {
+showPopup : function(client,popup, x, y, delay, defWidth) {
 	if (this.popupTimeout) {
 		clearTimeout(this.popupTimeout);
 		delete this.popupTimeout;
@@ -783,10 +802,11 @@ BaseTheme.prototype.showPopup = function(client,popup, x, y, delay, defWidth) {
 	} else {
 		this.showPopup(client);
 	}
-}
+},
+
 /** Hides previous popup.
  */
-BaseTheme.prototype.hidePopup = function() {
+hidePopup : function() {
 	if (this.popupSelectsHidden) {
 		var len = this.popupSelectsHidden.length;
 		for (var i=0;i<len;i++) {
@@ -804,7 +824,8 @@ BaseTheme.prototype.hidePopup = function() {
 		clearTimeout(this.popupTimeout);
 		delete this.popupTimeout;
 	}
-}
+},
+
 /** Shows the popup if it's not currently shown,
  *  hides the popup otherwise.
  *  Hides previous popup.
@@ -816,19 +837,19 @@ BaseTheme.prototype.hidePopup = function() {
  *  @param defWidth		(optional) default width for the popup
  *  
  */
-BaseTheme.prototype.togglePopup = function(popup, x, y, delay, defWidth) {
+togglePopup : function(popup, x, y, delay, defWidth) {
 	if (this.popup == popup && this.popupShowing) {
 		this.hidePopup();
 	} else {
 		this.showPopup(client,popup,x,y,delay,defWidth);
 	}
-}
+},
 
 
 /*
 #### Generic event handlers ######################################################
 */
-BaseTheme.prototype.addAddClassListener = function(theme,client,element,event,className,target,current) {
+addAddClassListener : function(theme,client,element,event,className,target,current) {
 	client.addEventListener(element,event, function(e) {
 			if (current) {
 				if (current.length) {
@@ -850,28 +871,32 @@ BaseTheme.prototype.addAddClassListener = function(theme,client,element,event,cl
 			}
 		}
 	);
-}
-BaseTheme.prototype.addRemoveClassListener = function(theme,client,element,event,className,target) {
+},
+
+addRemoveClassListener : function(theme,client,element,event,className,target) {
 	client.addEventListener(element,event, function(e) {
 			theme.removeCSSClass((target?target:element),className);
 		}
 	);
-}
-BaseTheme.prototype.addToggleClassListener = function(theme,client,element,event,className,target) {
+},
+
+addToggleClassListener : function(theme,client,element,event,className,target) {
 	client.addEventListener(element,event, function(e) {
 			theme.toggleCSSClass((target?target:element),className);
 		}
 	);
-}
-BaseTheme.prototype.addStopListener = function(theme,client,element,event) {
+},
+
+addStopListener : function(theme,client,element,event) {
 	client.addEventListener(element, event, function(e) { 
 			var evt = client.getEvent(e);
 			evt.stop();
 			return false;				
 		}
 	);
-}
-BaseTheme.prototype.addSetVarListener = function(theme,client,element,event,variable,key,immediate) {
+},
+
+addSetVarListener : function(theme,client,element,event,variable,key,immediate) {
 	client.addEventListener(element,event, function(e) {
 			var value = "";
 			if (typeof(key)=="string") {
@@ -896,26 +921,30 @@ BaseTheme.prototype.addSetVarListener = function(theme,client,element,event,vari
 			}
 		}
 	);
-}
-BaseTheme.prototype.addRemoveVarListener = function(theme,client,element,event,variable,key,immediate) {
+},
+
+addRemoveVarListener : function(theme,client,element,event,variable,key,immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.removeArrayVariable(client,variable,key,immediate);
 		}
 	);
-}
-BaseTheme.prototype.addAddVarListener = function(theme,client,element,event,variable,key,immediate) {
+},
+
+addAddVarListener : function(theme,client,element,event,variable,key,immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.addArrayVariable(client,variable,key,immediate);
 		}
 	);
-}
-BaseTheme.prototype.addToggleVarListener = function(theme,client,element,event,variable,key,immediate) {
+},
+
+addToggleVarListener : function(theme,client,element,event,variable,key,immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.toggleArrayVariable(client,variable,key,immediate);
 		}
 	);
-}
-BaseTheme.prototype.addExpandNodeListener = function(theme,client,img,event,subnodes,expandVariable,collapseVariable,key,immediate,target) {
+},
+
+addExpandNodeListener : function(theme,client,img,event,subnodes,expandVariable,collapseVariable,key,immediate,target) {
 		client.addEventListener((target?target:img), event, function(e) { 
 				if (img.expanded == "true") {
 					theme.removeArrayVariable(client,expandVariable,key,false);
@@ -931,9 +960,9 @@ BaseTheme.prototype.addExpandNodeListener = function(theme,client,img,event,subn
 				}
 			}
 		);
-}
+},
 
-BaseTheme.prototype.addTogglePopupListener = function(theme,client,element,event,popup,delay,defWidth,popupAt) {
+addTogglePopupListener : function(theme,client,element,event,popup,delay,defWidth,popupAt) {
 	client.addEventListener(element,(event=="rightclick"?"mouseup":event), function(e) {
 			var evt = client.getEvent(e);
 			if (event=="rightclick"&&!evt.rightclick) return;
@@ -948,8 +977,9 @@ BaseTheme.prototype.addTogglePopupListener = function(theme,client,element,event
 			evt.stop();
 		}
 	);
-}
-BaseTheme.prototype.addShowPopupListener = function(theme,client,element,event,popup,delay,defWidth) {
+},
+
+addShowPopupListener : function(theme,client,element,event,popup,delay,defWidth) {
 	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
 			var evt = client.getEvent(e);
 			if (event=="rightclick"&&!evt.rightclick) return;
@@ -958,9 +988,10 @@ BaseTheme.prototype.addShowPopupListener = function(theme,client,element,event,p
 			evt.stop();
 		}
 	);
-}
+},
+
 // TODO dontstop -> stop in all listeners
-BaseTheme.prototype.addHidePopupListener = function(theme,client,element,event,dontstop) {
+addHidePopupListener : function(theme,client,element,event,dontstop) {
 	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
 			var evt = client.getEvent(e);
             if (evt.alt) return;
@@ -971,12 +1002,12 @@ BaseTheme.prototype.addHidePopupListener = function(theme,client,element,event,d
 			}
 		}
 	);
-}
+},
 
 /**
 * Adds a hidden button with a tabindex; adds .over to hoverTarget when focused
 */
-BaseTheme.prototype.addTabtoHandlers = function(client,theme,target,hoverTarget,tabindex,defaultButton) {
+addTabtoHandlers : function(client,theme,target,hoverTarget,tabindex,defaultButton) {
 	
 	var d = this.createElementTo(target,"div");
 	d.style.border = "none";
@@ -997,12 +1028,12 @@ BaseTheme.prototype.addTabtoHandlers = function(client,theme,target,hoverTarget,
 	client.addEventListener(b,"blur", function() {
 		theme.removeCSSClass(hoverTarget,"over");
 	});
-}
+},
 
 /*
 #### Component renderers ######################################################
 */
-BaseTheme.prototype.renderComponent = function(renderer,uidl,target,layoutInfo) {
+renderComponent : function(renderer,uidl,target,layoutInfo) {
 
 	// Create containing element
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
@@ -1013,10 +1044,9 @@ BaseTheme.prototype.renderComponent = function(renderer,uidl,target,layoutInfo) 
 	
 	// Render children to div
 	renderer.theme.renderChildNodes(renderer, uidl, div);
-}
+},
 
-
-BaseTheme.prototype.renderWindow = function(renderer,uidl,target,layoutInfo) {
+renderWindow : function(renderer,uidl,target,layoutInfo) {
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
@@ -1069,9 +1099,9 @@ BaseTheme.prototype.renderWindow = function(renderer,uidl,target,layoutInfo) {
 			}		
 		}
 	}
-}
+},
 
-BaseTheme.prototype.renderOpen = function(renderer,uidl,target,layoutInfo) {
+renderOpen : function(renderer,uidl,target,layoutInfo) {
 	var theme = renderer.theme;
  	
  	var src = uidl.getAttribute("src");
@@ -1083,9 +1113,9 @@ BaseTheme.prototype.renderOpen = function(renderer,uidl,target,layoutInfo) {
  		var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
  		div.innerHTML = "<IFRAME name=\""+name+"\" id=\""+name+"\" width=100% height=100% style=\"border:none;margin:0px;padding:0px;background:none;\" src=\""+src+"\"></IFRAME>";
 	}
-}
+},
 
-BaseTheme.prototype.renderFramewindow = function(renderer,uidl,target,layoutInfo) {	
+renderFramewindow : function(renderer,uidl,target,layoutInfo) {	
 	var theme = renderer.theme;
 	var client = renderer.client;
 	
@@ -1094,9 +1124,9 @@ BaseTheme.prototype.renderFramewindow = function(renderer,uidl,target,layoutInfo
 	// We just reinitialize the window
 	var win = target.ownerDocument.ownerWindow;
 	client.initializeNewWindow(win,uidl,theme);
-}
+},
 
-BaseTheme.prototype.renderCustomLayout = function(renderer,uidl,target,layoutInfo) {
+renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
 	// Shortcuts
 	var theme = renderer.theme;
 	
@@ -1165,9 +1195,9 @@ BaseTheme.prototype.renderCustomLayout = function(renderer,uidl,target,layoutInf
     	}
     }
     
-}
+},
 
-BaseTheme.prototype.renderOrderedLayout = function(renderer,uidl,target,layoutInfo) {
+renderOrderedLayout : function(renderer,uidl,target,layoutInfo) {
 	// Shortcuts
 	var theme = renderer.theme;
 	
@@ -1215,10 +1245,9 @@ BaseTheme.prototype.renderOrderedLayout = function(renderer,uidl,target,layoutIn
 			
 		}
 	}			
-}
+},
 
-
-BaseTheme.prototype.renderGridLayout = function(renderer,uidl,target,layoutInfo) {
+renderGridLayout : function(renderer,uidl,target,layoutInfo) {
 	// NOTE TODO indenting might be off
 	// Shortcuts
 	var theme = renderer.theme;
@@ -1277,9 +1306,9 @@ BaseTheme.prototype.renderGridLayout = function(renderer,uidl,target,layoutInfo)
 			}
 		}
 	}
-}
+},
 
-BaseTheme.prototype.renderPanel = function(renderer,uidl,target,layoutInfo) {
+renderPanel : function(renderer,uidl,target,layoutInfo) {
     // Supports styles "light" and "none"
 
 			// Shortcuts
@@ -1322,14 +1351,13 @@ BaseTheme.prototype.renderPanel = function(renderer,uidl,target,layoutInfo) {
 			theme.renderChildNodes(renderer, uidl, content);
 
 			// Apply width and height
-			theme.applyWidthAndHeight(uidl,outer);
-			
-}
+			theme.applyWidthAndHeight(uidl,outer);		
+},
 
 /** under development
  * this should be easyly modified not to use polling in case "comet" is implemented
  */
-BaseTheme.prototype.renderProgressIndicator = function(renderer,uidl,target,layoutInfo) {
+renderProgressIndicator : function(renderer,uidl,target,layoutInfo) {
     // TODO try to mess intervals
     // Create container element
     var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
@@ -1378,10 +1406,9 @@ BaseTheme.prototype.renderProgressIndicator = function(renderer,uidl,target,layo
         var widthPros = Math.round(state*100);
         div.innerHTML = "<div style=\"border:1px solid red;\"><div style=\"width:"+widthPros+"%;background-color:red;\"><br/></div></div>";
     }
-}
+},
 
-
-BaseTheme.prototype.renderTabSheet = function(renderer,uidl,target,layoutInfo) {
+renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 
 			var theme = renderer.theme;
 			
@@ -1442,9 +1469,9 @@ BaseTheme.prototype.renderTabSheet = function(renderer,uidl,target,layoutInfo) {
 			if (selectedTabNode != null) {
 				theme.renderChildNodes(renderer,selectedTabNode, content);
 			}
-}
+},
 
-BaseTheme.prototype.renderTree = function(renderer,uidl,target,layoutInfo) {
+renderTree : function(renderer,uidl,target,layoutInfo) {
 			
 	var theme = renderer.theme;
 	
@@ -1493,9 +1520,9 @@ BaseTheme.prototype.renderTree = function(renderer,uidl,target,layoutInfo) {
 			theme.renderTreeNode(renderer,node,content,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly);
 		} 	
 	}
-}
+},
 
-BaseTheme.prototype.renderTreeNode = function(renderer,node,target,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly) {
+renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly) {
 
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -1588,9 +1615,9 @@ BaseTheme.prototype.renderTreeNode = function(renderer,node,target,selectable,se
 		img.src = theme.root + "img/tree/empty.gif";	
 	}
 
-}
+},
 
-BaseTheme.prototype.renderTextField = function(renderer,uidl,target, layoutInfo) {
+renderTextField : function(renderer,uidl,target, layoutInfo) {
 
 	var client = renderer.client;
 	var theme = renderer.theme;
@@ -1656,9 +1683,9 @@ BaseTheme.prototype.renderTextField = function(renderer,uidl,target, layoutInfo)
 		
 	// Listener 
 	theme.addSetVarListener(theme,client,input,"change",inputId,input,immediate);
-}
+},
 
-BaseTheme.prototype.renderDateField = function(renderer,uidl,target,layoutInfo) {
+renderDateField : function(renderer,uidl,target,layoutInfo) {
 	// TODO needs simplification
 	// - jscalendar supports time! but not resolution?
 	// - dynamic .js loading!
@@ -1974,8 +2001,9 @@ BaseTheme.prototype.renderDateField = function(renderer,uidl,target,layoutInfo) 
 	 		}
 	 	); 
 	}
-}
-BaseTheme.prototype.addDateFieldNullListener = function (client,elm,text,msec,sec,min,hour,day,month,year,yearVar,immediate) {
+},
+
+addDateFieldNullListener : function (client,elm,text,msec,sec,min,hour,day,month,year,yearVar,immediate) {
 	client.addEventListener(elm, "change", function(event) {
 
 		if ( !elm || elm.value != -1) return;
@@ -2015,9 +2043,9 @@ BaseTheme.prototype.addDateFieldNullListener = function (client,elm,text,msec,se
    			//client.changeVariable(monthVar.getAttribute("id"), -1, false);
    			client.changeVariable(yearVar.getAttribute("id"), -1, immediate);
    });
-}
+},
 
-BaseTheme.prototype.renderDateFieldCalendar = function(renderer,uidl,target,layoutInfo) {
+renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
 
 	var theme = renderer.theme;
 	
@@ -2096,9 +2124,9 @@ BaseTheme.prototype.renderDateFieldCalendar = function(renderer,uidl,target,layo
  		}
  	);
  	
-}
+},
 
-BaseTheme.prototype.renderUpload = function(renderer,uidl,target,layoutInfo) {
+renderUpload : function(renderer,uidl,target,layoutInfo) {
 
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -2196,9 +2224,9 @@ BaseTheme.prototype.renderUpload = function(renderer,uidl,target,layoutInfo) {
 		}
 	
 	}	
-}
+},
 
-BaseTheme.prototype.renderEmbedded = function(renderer,uidl,target,layoutInfo) {
+renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 
     var theme = renderer.theme;
     
@@ -2286,9 +2314,9 @@ BaseTheme.prototype.renderEmbedded = function(renderer,uidl,target,layoutInfo) {
 		
 		div.innerHTML = html;		
 	}
-}
+},
 
-BaseTheme.prototype.renderLink = function(renderer,uidl,target,layoutInfo) {
+renderLink : function(renderer,uidl,target,layoutInfo) {
 	// Shortcut variables
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -2391,8 +2419,9 @@ BaseTheme.prototype.renderLink = function(renderer,uidl,target,layoutInfo) {
 		var desc = theme.createElementTo(link,"div", "description");
 		theme.createTextNodeTo(desc,descriptionText);
 	}
-}
-BaseTheme.prototype.addLinkOpenWindowListener = function(theme,client,element,event,url,target,features) {
+},
+
+addLinkOpenWindowListener : function(theme,client,element,event,url,target,features) {
 	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
 			var evt = client.getEvent(e);
 			if (event=="rightclick"&&!evt.rightclick) return;
@@ -2404,8 +2433,9 @@ BaseTheme.prototype.addLinkOpenWindowListener = function(theme,client,element,ev
 			}
 		}
 	);
-}
-BaseTheme.prototype.renderPagingTable = function(renderer,uidl,target,layoutInfo) {
+},
+
+renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	// Shortcut variables
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -2619,9 +2649,9 @@ BaseTheme.prototype.renderPagingTable = function(renderer,uidl,target,layoutInfo
 		theme.addCSSClass(button,"disabled");
 	}
 	theme.createTextNodeTo(button,">>");
-}
+},
 
-BaseTheme.prototype.renderScrollTable = function(renderer,uidl,target,layoutInfo) {
+renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	// Shortcut variables
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -2974,9 +3004,10 @@ BaseTheme.prototype.renderScrollTable = function(renderer,uidl,target,layoutInfo
     var hin = target.ownerDocument.getElementById(pid+"hin");
     var cin = target.ownerDocument.getElementById(pid+"cin");
      theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
-}
+},
+
 // Header order drag & drop	
-BaseTheme.prototype.tableAddWidthListeners = function(client,theme,element,cid,table,pid) {
+tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 	
 	var colWidths = table.colWidths;
 	
@@ -3035,9 +3066,9 @@ BaseTheme.prototype.tableAddWidthListeners = function(client,theme,element,cid,t
 		client.addEventListener(element.ownerDocument.body,"mouseup", mouseUpListener);
 		client.addEventListener(element.ownerDocument.body,"drag",stopListener);
 	});
-}
+},
 
-BaseTheme.prototype.scrollTableRegisterLF = function(client,theme,paintableElement,inner,cout,hout,cin,hin) {
+scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,cin,hin) {
 	client.registerLayoutFunction(paintableElement,function() {
 		var w = (inner.offsetWidth-2) +"px";
 		cout.style.width = w;
@@ -3047,9 +3078,9 @@ BaseTheme.prototype.scrollTableRegisterLF = function(client,theme,paintableEleme
 		hout.style.width = hout.offsetParent.offsetWidth + "px";
 		//div.recalc();
 	});
-}
+},
 
-BaseTheme.prototype.scrollTableAddScrollListener = function (theme,target,pid,lr,fr,rows,totalrows,fv) {
+scrollTableAddScrollListener : function (theme,target,pid,lr,fr,rows,totalrows,fv) {
 	var hout = target.ownerDocument.getElementById(pid+"hout");
     var cout = target.ownerDocument.getElementById(pid+"cout"); 		
  	client.addEventListener(cout,"scroll", function (e) {
@@ -3069,8 +3100,9 @@ BaseTheme.prototype.scrollTableAddScrollListener = function (theme,target,pid,lr
 				cout.scrollHandler();
 			},500)	
  	});
-}
-BaseTheme.prototype.scrollTableGetFV = function(cout,lr,fr,rows,totalrows,fv) {
+},
+
+scrollTableGetFV : function(cout,lr,fr,rows,totalrows,fv) {
  			var rh = (lr-fr)/rows;
  			if (cout.scrollTop >= (fr+rh/2) || cout.scrollTop <= (fr-rh/2)) {
  				var d = Math.round((cout.scrollTop-fr)/rh);
@@ -3081,8 +3113,9 @@ BaseTheme.prototype.scrollTableGetFV = function(cout,lr,fr,rows,totalrows,fv) {
  			} else {
  				return fv;
  			}
- }
-BaseTheme.prototype.scrollTableAddScrollHandler = function(client,theme,cout,target,status,lr,fr,rows,totalrows,fv,fvVar,immediate) {
+ },
+ 
+scrollTableAddScrollHandler : function(client,theme,cout,target,status,lr,fr,rows,totalrows,fv,fvVar,immediate) {
  	cout.scrollHandler = function () {
  			var rh = (lr-fr)/rows;
 			var d = theme.scrollTableGetFV(cout,lr,fr,rows,totalrows,fv);
@@ -3098,8 +3131,9 @@ BaseTheme.prototype.scrollTableAddScrollHandler = function(client,theme,cout,tar
  				cout.scrollTop = fr;
  			}
  	};
-} 
-BaseTheme.prototype.scrollTableRecalc = function(pid,target) {
+},
+
+scrollTableRecalc : function(pid,target) {
 	var defPad = 7;
 	var div = target.ownerDocument.getElementById(pid);
 	var wholeWidth = div.initialWidth;
@@ -3146,9 +3180,10 @@ BaseTheme.prototype.scrollTableRecalc = function(pid,target) {
     	whole += parseInt(w);
     }
          
-}
+},
+
 // Header order drag & drop	
-BaseTheme.prototype.addToDragOrderGroup = function (client,theme,element,group,variable,sortVar,sortascVar,sortasc) {
+addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sortascVar,sortasc) {
 	element.dragGroup = group;
 	if (!group.elements) {
 		group.elements = new Array();
@@ -3261,9 +3296,9 @@ BaseTheme.prototype.addToDragOrderGroup = function (client,theme,element,group,v
 		}
 	});
 	//client.addEventListener(element,"mouseup", mouseUpListener);
-}
+},
 
-BaseTheme.prototype.renderSelect = function(renderer,uidl,target,layoutInfo) {
+renderSelect : function(renderer,uidl,target,layoutInfo) {
 			
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -3343,9 +3378,9 @@ BaseTheme.prototype.renderSelect = function(renderer,uidl,target,layoutInfo) {
 		var newitemVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"string","newitem"));
 		theme.addSetVarListener(theme,client,input,"change",newitemVariable,input,true);
 	}
-}
+},
 
-BaseTheme.prototype.renderSelectTwincol = function(renderer,uidl,target,layoutInfo) {
+renderSelectTwincol : function(renderer,uidl,target,layoutInfo) {
     function deleteOptionFromSelectByOptionValue(select, value) {
         for(var i = 0; i < select.options.length; i++) {
             if(select.options[i].value == value) {
@@ -3498,9 +3533,9 @@ BaseTheme.prototype.renderSelectTwincol = function(renderer,uidl,target,layoutIn
         moveRightButton.disabled = "true";
     }
     
-}
+},
 
-BaseTheme.prototype.renderSelectOptionGroup = function(renderer,uidl,target,layoutInfo) {
+renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
 	// TODO: 
 	// 	- newitem currently always immediate, change
 	//	- optiongrouphorizontal style	
@@ -3584,9 +3619,9 @@ BaseTheme.prototype.renderSelectOptionGroup = function(renderer,uidl,target,layo
 		var newitemVariable = theme.createVariableElementTo(ni,theme.getVariableElement(uidl,"string","newitem"));
 		theme.addSetVarListener(theme,client,input,"change",newitemVariable,input,true);
 	}
-}
+},
 
-BaseTheme.prototype.renderLabel = function(renderer,uidl,target,layoutInfo) {
+renderLabel : function(renderer,uidl,target,layoutInfo) {
 			
 			// Create container element
 			var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
@@ -3601,9 +3636,9 @@ BaseTheme.prototype.renderLabel = function(renderer,uidl,target,layoutInfo) {
 				renderer.theme.renderChildNodes(renderer, uidl, div);
 			}
 			if (div.innerHTML == "") div.innerHTML = "&nbsp;";
-}
+},
 
-BaseTheme.prototype.renderData = function(renderer,uidl,target) {
+renderData : function(renderer,uidl,target) {
 
 	var html = "";
 	for (var i=0; i<uidl.childNodes.length; i++) {
@@ -3616,9 +3651,9 @@ BaseTheme.prototype.renderData = function(renderer,uidl,target) {
 	}
 	target.innerHTML = html;
 				
-}
+},
 
-BaseTheme.prototype.renderPre = function(renderer,uidl,target) {
+renderPre : function(renderer,uidl,target) {
 
 	// Create pre node
 	var pre = renderer.theme.createElementTo(target,"pre");
@@ -3633,10 +3668,10 @@ BaseTheme.prototype.renderPre = function(renderer,uidl,target) {
 		}
 	}
 	pre.innerHTML = html;				
-}
+},
 
 
-BaseTheme.prototype.renderButton = function(renderer,uidl,target,layoutInfo) {
+renderButton : function(renderer,uidl,target,layoutInfo) {
 			// Branch for checkbox
 
 			if (uidl.getAttribute("type") == "switch") {
@@ -3674,9 +3709,9 @@ BaseTheme.prototype.renderButton = function(renderer,uidl,target,layoutInfo) {
 				}		
 			}
 				
-}
+},
 
-BaseTheme.prototype.renderCheckBox = function(renderer,uidl,target,layoutInfo) {
+renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 		// Shortcuts
 		var theme = renderer.theme;
 		var client = renderer.client;
@@ -3711,7 +3746,7 @@ BaseTheme.prototype.renderCheckBox = function(renderer,uidl,target,layoutInfo) {
 			// Attach listener
 			theme.addSetVarListener(theme,client,input,(immediate?"click":"change"),varId,input,immediate);
 		}
-}
+},
 
 
 ///////
@@ -3725,7 +3760,7 @@ BaseTheme.prototype.renderCheckBox = function(renderer,uidl,target,layoutInfo) {
  *  
  */
 
-BaseTheme.prototype.renderTreeMenu = function(renderer,uidl,target,layoutInfo) {
+renderTreeMenu : function(renderer,uidl,target,layoutInfo) {
 			
 	var theme = renderer.theme;
 	
@@ -3774,9 +3809,9 @@ BaseTheme.prototype.renderTreeMenu = function(renderer,uidl,target,layoutInfo) {
 			theme.renderTreeMenuNode(renderer,node,content,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,0);
 		} 	
 	}
-}
+},
 
-BaseTheme.prototype.renderTreeMenuNode = function(renderer,node,target,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,level) {
+renderTreeMenuNode : function(renderer,node,target,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,level) {
 
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -3874,7 +3909,7 @@ BaseTheme.prototype.renderTreeMenuNode = function(renderer,node,target,selectabl
 	} else {
 			img.src = theme.root + "img/tree/empty.gif";			
 	}
-}
+},
 
 /**
 * 5.6.2006 - Jouni Koivuviita
@@ -3882,7 +3917,7 @@ BaseTheme.prototype.renderTreeMenuNode = function(renderer,node,target,selectabl
 * RENAMED for testing both - marc
 */
 
-BaseTheme.prototype.renderNewPanel = function(renderer,uidl,target,layoutInfo) {
+renderNewPanel : function(renderer,uidl,target,layoutInfo) {
     // Shortcuts
     var theme = renderer.theme;
 	var style = uidl.getAttribute("style");
@@ -3904,9 +3939,9 @@ BaseTheme.prototype.renderNewPanel = function(renderer,uidl,target,layoutInfo) {
     
     theme.renderDefaultComponentHeader(renderer,uidl,cap);
     theme.renderChildNodes(renderer, uidl, content);
-}
+},
 
-BaseTheme.prototype.renderNewPanelModal = function(renderer,uidl,target,layoutInfo,alignment) {
+renderNewPanelModal : function(renderer,uidl,target,layoutInfo,alignment) {
     // Shortcuts
     var theme = renderer.theme;
     //var parentTheme = theme.parent;
@@ -3929,9 +3964,9 @@ BaseTheme.prototype.renderNewPanelModal = function(renderer,uidl,target,layoutIn
    
    html = "<IFRAME frameborder=\"0\" style=\"border:none;z-index:9998;position:absolute;top:"+(div.childNodes[1].offsetTop+5)+"px;left:"+(table.offsetLeft+5)+"px;width:"+(table.offsetWidth-7)+"px;height:"+(table.offsetHeight-7)+"px;background-color:white;filter: alpha(opacity=100);opacity:1;\"></IFRAME>";
    ifrdiv.innerHTML += html;
-}
+},
 
-BaseTheme.prototype.renderNewPanelLight = function(renderer,uidl,target,layoutInfo) {
+renderNewPanelLight : function(renderer,uidl,target,layoutInfo) {
     // Shortcuts
     var theme = renderer.theme;
 	var style = uidl.getAttribute("style");
@@ -3944,9 +3979,9 @@ BaseTheme.prototype.renderNewPanelLight = function(renderer,uidl,target,layoutIn
     
     theme.renderDefaultComponentHeader(renderer,uidl,content);
     theme.renderChildNodes(renderer, uidl, content);
-}
+},
 
-BaseTheme.prototype.renderNewPanelNone = function(renderer,uidl,target,layoutInfo) {
+renderNewPanelNone : function(renderer,uidl,target,layoutInfo) {
     // Shortcuts
     var theme = renderer.theme;
 	var style = uidl.getAttribute("style");
@@ -3957,9 +3992,9 @@ BaseTheme.prototype.renderNewPanelNone = function(renderer,uidl,target,layoutInf
    
     theme.renderDefaultComponentHeader(renderer,uidl,content);
     theme.renderChildNodes(renderer, uidl, content);
-}
+},
 
-BaseTheme.prototype.renderNewTabSheet = function(renderer,uidl,target,layoutInfo) {
+renderNewTabSheet : function(renderer,uidl,target,layoutInfo) {
     // Shortcuts
     var theme = renderer.theme;
 
@@ -4041,10 +4076,10 @@ BaseTheme.prototype.renderNewTabSheet = function(renderer,uidl,target,layoutInfo
 		
 	}
 	
-}
+},
 
 
-BaseTheme.prototype.addDescriptionAndErrorPopupListener = function(theme, client, target, errorIcon) {
+addDescriptionAndErrorPopupListener : function(theme, client, target, errorIcon) {
 	
 	client.addEventListener(target, "mouseover", 
 		function(e) {
@@ -4076,9 +4111,9 @@ BaseTheme.prototype.addDescriptionAndErrorPopupListener = function(theme, client
 		);
 	}
 	
-}
+},
 
-BaseTheme.prototype.showDescriptionAndErrorPopup = function(theme, target, pos, delay, forceOpen) {
+showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 
 	if(target._descriptionPopupTimeout) clearTimeout(target._descriptionPopupTimeout);
 	
@@ -4162,18 +4197,16 @@ BaseTheme.prototype.showDescriptionAndErrorPopup = function(theme, target, pos, 
 	} else {
 		target._descriptionPopupTimeout = setTimeout(function() {theme.showDescriptionAndErrorPopup(theme, target, pos);}, delay);
 	}
-}
+},
 
-BaseTheme.prototype.hideDescriptionAndErrorPopup = function(target, forceClose) {
+hideDescriptionAndErrorPopup : function(target, forceClose) {
 	if(target._descriptionPopupTimeout) clearTimeout(target._descriptionPopupTimeout);
 	if((popupContainer = target.ownerDocument.getElementById("popup-container-div")) && (!target._forcedOpen || forceClose)) {
 		popupContainer.style.left = "-10000px";
 		popupContainer.style.top = "-10000px";
 		target._forcedOpen = false;
 	}
-}
-	
-
+},
 
 
 /** 
@@ -4187,7 +4220,7 @@ BaseTheme.prototype.hideDescriptionAndErrorPopup = function(target, forceClose) 
 *
 * Returns an object with x and y properties.
 */
-BaseTheme.prototype.calculateAbsoluteEventPosition = function(theme, client, e, modFF) {
+calculateAbsoluteEventPosition : function(theme, client, e, modFF) {
 	
 	if (!e) var e = window.event;
 	
@@ -4255,14 +4288,14 @@ BaseTheme.prototype.calculateAbsoluteEventPosition = function(theme, client, e, 
 	var posy = e.screenY - windowY + scroll.y;
 	return {x:posx, y:posy};
 	
-}
+},
 
 /**
 * Calculate the scroll amount of a window, both x and y.
 *
 * Returns an object with x and y properties.
 */
-BaseTheme.prototype.getScrollXY = function(win) {
+getScrollXY : function(win) {
 	var doc = win.document;
 	var scrOfX = 0, scrOfY = 0;
 	if( typeof( win.pageYOffset ) == 'number' ) {
@@ -4280,12 +4313,12 @@ BaseTheme.prototype.getScrollXY = function(win) {
 	}
 
 	return {x:scrOfX, y:scrOfY};
-}
+},
 
 /**
 * Calculate event position (Quirksmode.org script)
 */
-BaseTheme.prototype.eventPosition = function(e) {
+eventPosition : function(e) {
 	var posx = 0;
 	var posy = 0;
 	if (!e) var e = window.event;
@@ -4302,3 +4335,7 @@ BaseTheme.prototype.eventPosition = function(e) {
 	
 	return {x:posx, y:posy};
 }
+
+
+
+}) // End of BaseTheme -class

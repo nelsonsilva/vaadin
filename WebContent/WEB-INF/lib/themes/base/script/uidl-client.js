@@ -1,5 +1,15 @@
 
-/** Creates new ITMillToolkit ajax client.
+/** Declare our own namespace. 
+ * 
+ * All globals should be defined in this namespace.
+ *
+ */
+itmill = new Object();
+itmill.toolkit = new Object();
+itmill.toolkit.themes = new Object();
+
+
+/** Creates new itmill.toolkit ajax client.
  *  @param windowElementNode Reference to element that will contain the 
  * 				application window.
  *  @param servletUrl Base URL to server-side ajax adapter.
@@ -8,7 +18,7 @@
  *
  *  @author Oy IT Mill Ltd / Sami Ekblad
  */
-function ITMillToolkitClient(windowElementNode, servletUrl, clientRoot, waitElement) {
+itmill.toolkit.Client = function(windowElementNode, servletUrl, clientRoot, waitElement) {
 
 	// Store parameters
 	this.mainWindowElement = windowElementNode;
@@ -107,7 +117,7 @@ function ITMillToolkitClient(windowElementNode, servletUrl, clientRoot, waitElem
  *
  *  @author Oy IT Mill Ltd / Sami Ekblad
  */
-ITMillToolkitClient.prototype.start = function() {
+itmill.toolkit.Client.prototype.start = function() {
     
     if (this.debugEnabled) {
     	this.debug("Starting Ajax client");
@@ -127,9 +137,9 @@ ITMillToolkitClient.prototype.start = function() {
  *
  *  @author Oy IT Mill Ltd / Sami Ekblad
  */
-ITMillToolkitClient.prototype.createDebugWindow = function() {
+itmill.toolkit.Client.prototype.createDebugWindow = function() {
 
-	var dw = window.open("","ITMillToolkitDebugWindow","width=500,height=700,scrollbars=1,menubar=0,status=0,titlebar=0,toolbar=0,resizable=1");
+	var dw = window.open("","itmill.toolkitDebugWindow","width=500,height=700,scrollbars=1,menubar=0,status=0,titlebar=0,toolbar=0,resizable=1");
 	if (dw != null) {
 		with (dw.document) {
 		
@@ -151,7 +161,7 @@ ITMillToolkitClient.prototype.createDebugWindow = function() {
 }
 
 
-ITMillToolkitClient.prototype.warn = function (message, folded, extraStyle, html) {
+itmill.toolkit.Client.prototype.warn = function (message, folded, extraStyle, html) {
 
 	// Check if we are in debug mode
 	if (!this.debugEnabled)	{ return; }
@@ -167,7 +177,7 @@ ITMillToolkitClient.prototype.warn = function (message, folded, extraStyle, html
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.debug = function (message, folded, extraStyle, html) {
+itmill.toolkit.Client.prototype.debug = function (message, folded, extraStyle, html) {
 
 	// Check if we are in debug mode
 	if (!this.debugEnabled)	{ return; }
@@ -218,7 +228,7 @@ ITMillToolkitClient.prototype.debug = function (message, folded, extraStyle, htm
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.debugObject = function (obj,level) {
+itmill.toolkit.Client.prototype.debugObject = function (obj,level) {
 	this.debug(this.printObject(obj,level),true,null,true);
 }
 
@@ -230,7 +240,7 @@ ITMillToolkitClient.prototype.debugObject = function (obj,level) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.error = function (message, causeException) {
+itmill.toolkit.Client.prototype.error = function (message, causeException) {
 
 	// Check if we are in debug mode
 	if (!this.debugEnabled)	{ return; }
@@ -271,7 +281,7 @@ ITMillToolkitClient.prototype.error = function (message, causeException) {
  *
  *  @author Oy IT Mill Ltd / Sami Ekblad
  */
-ITMillToolkitClient.prototype.getXMLHttpRequest = function () {
+itmill.toolkit.Client.prototype.getXMLHttpRequest = function () {
 
 	var req = false;
   	
@@ -308,7 +318,7 @@ ITMillToolkitClient.prototype.getXMLHttpRequest = function () {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.loadDocument = function (url,skipCache) {
+itmill.toolkit.Client.prototype.loadDocument = function (url,skipCache) {
 
 	if (!skipCache) {
 		if (!this.loadcache) this.loadcache = new Object();
@@ -354,7 +364,7 @@ ITMillToolkitClient.prototype.loadDocument = function (url,skipCache) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.registerRenderer = function (theme, tag, componentStyle, renderFunction) {
+itmill.toolkit.Client.prototype.registerRenderer = function (theme, tag, componentStyle, renderFunction) {
 
 	if (renderFunction == null) {
 		alert("Theme error: Invalid renderer function registered for '"+tag+(componentStyle == null ? "" : "." + componentStyle)+"'");
@@ -389,7 +399,7 @@ ITMillToolkitClient.prototype.registerRenderer = function (theme, tag, component
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.unregisterAllRenderers = function () {
+itmill.toolkit.Client.prototype.unregisterAllRenderers = function () {
 
 	// We just create new, empty rederer map.
 	this.renderers = new Object();
@@ -405,7 +415,7 @@ ITMillToolkitClient.prototype.unregisterAllRenderers = function () {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.createRequestChangeListener = function(client, req) {
+itmill.toolkit.Client.prototype.createRequestChangeListener = function(client, req) {
 	
 	return (function()  {
 		if (req.readyState != 4 || req.status == null) {
@@ -467,7 +477,7 @@ ITMillToolkitClient.prototype.createRequestChangeListener = function(client, req
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.processVariableChanges = function (repaintAll,nowait) {
+itmill.toolkit.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
 	
 	if (this.waitElement&&!nowait) {
 		this.waitElement.style.display = "inline";
@@ -505,7 +515,7 @@ ITMillToolkitClient.prototype.processVariableChanges = function (repaintAll,nowa
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.getFirstChildElement = function (parent) {
+itmill.toolkit.Client.prototype.getFirstChildElement = function (parent) {
 	/*
 	if (parent == null || parent.childNodes == null) {
 		return null;
@@ -544,7 +554,7 @@ ITMillToolkitClient.prototype.getFirstChildElement = function (parent) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.initializeNewWindow = function (win,uidl,theme) {
+itmill.toolkit.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 
 	if (win == null) {
 		return null;
@@ -668,7 +678,7 @@ ITMillToolkitClient.prototype.initializeNewWindow = function (win,uidl,theme) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.createFramesetHtml = function(uidl,theme) {
+itmill.toolkit.Client.prototype.createFramesetHtml = function(uidl,theme) {
 
 	if (uidl == null) {
 		return "";
@@ -720,7 +730,7 @@ ITMillToolkitClient.prototype.createFramesetHtml = function(uidl,theme) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.unregisterWindow = function (windowName) {
+itmill.toolkit.Client.prototype.unregisterWindow = function (windowName) {
 	if (this.debugEnabled) {
 		this.debug("Unregistering window '"+windowName+"'");
 	}
@@ -754,7 +764,7 @@ ITMillToolkitClient.prototype.unregisterWindow = function (windowName) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.registerWindow = function (windowName,win,doc) {
+itmill.toolkit.Client.prototype.registerWindow = function (windowName,win,doc) {
 	if (win != null && doc != null && windowName != null) {	
 		doc.itmtkWindowName = windowName;
 		this.documents[windowName] = doc;
@@ -774,7 +784,7 @@ ITMillToolkitClient.prototype.registerWindow = function (windowName,win,doc) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.findPaintableById = function (paintableId) {
+itmill.toolkit.Client.prototype.findPaintableById = function (paintableId) {
 
 	if (this.documents == null) {
 		return null;
@@ -835,7 +845,7 @@ ITMillToolkitClient.prototype.findPaintableById = function (paintableId) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.processUpdates = function (updates) {
+itmill.toolkit.Client.prototype.processUpdates = function (updates) {
 	if (this.debugEnabled) {
 		this.debug("Processing updates.");
 	}
@@ -979,7 +989,7 @@ ITMillToolkitClient.prototype.processUpdates = function (updates) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.renderUIDL = function (uidl, target, renderer) {
+itmill.toolkit.Client.prototype.renderUIDL = function (uidl, target, renderer) {
 
 	// Sanity check
 	if (uidl == null || uidl.nodeType != Node.ELEMENT_NODE) return;
@@ -1053,7 +1063,7 @@ ITMillToolkitClient.prototype.renderUIDL = function (uidl, target, renderer) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.findRenderer = function (tag, componentStyle) {
+itmill.toolkit.Client.prototype.findRenderer = function (tag, componentStyle) {
 	var renderer = null;
 	var rendererId = tag + (componentStyle == null ? "" : "__" + componentStyle);
 
@@ -1081,7 +1091,7 @@ ITMillToolkitClient.prototype.findRenderer = function (tag, componentStyle) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.renderHTML = function (xml, target) {
+itmill.toolkit.Client.prototype.renderHTML = function (xml, target) {
 
 	var n = this.createElement("div",target);
 	target.appendChild(n);
@@ -1115,7 +1125,7 @@ ITMillToolkitClient.prototype.renderHTML = function (xml, target) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.getXMLtext = function(xml) {
+itmill.toolkit.Client.prototype.getXMLtext = function(xml) {
 	var n = "";
 	n += "<" + xml.nodeName;
 	if (xml.attributes.length > 0)
@@ -1150,7 +1160,7 @@ ITMillToolkitClient.prototype.getXMLtext = function(xml) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.changeVariable = function (name, value, immediate, nowait) {
+itmill.toolkit.Client.prototype.changeVariable = function (name, value, immediate, nowait) {
 	this.debug("variableChange('" + name + "', '" + value + "', " + immediate + ");");
 
 	this.variableStates[name] = value;
@@ -1173,7 +1183,7 @@ ITMillToolkitClient.prototype.changeVariable = function (name, value, immediate,
  *  @author Oy IT Mill Ltd / Sami Ekblad
  * 
  */
-ITMillToolkitClient.prototype.createPaintableElement = function (uidl, target) {
+itmill.toolkit.Client.prototype.createPaintableElement = function (uidl, target) {
 
 	// Create DIV as container to right document.
 	var div = this.createElement("div", target);
@@ -1213,7 +1223,7 @@ ITMillToolkitClient.prototype.createPaintableElement = function (uidl, target) {
  *  @author Oy IT Mill Ltd / Sami Ekblad
  *
  */
-ITMillToolkitClient.prototype.setElementClassName = function(element,className) {
+itmill.toolkit.Client.prototype.setElementClassName = function(element,className) {
 	if (element == null) { return; }
 		element.style.className = className;
 	
@@ -1228,7 +1238,7 @@ ITMillToolkitClient.prototype.setElementClassName = function(element,className) 
  *  
  *   @return the listener function added
  */
-ITMillToolkitClient.prototype.addEventListener = function(element,type,func) {
+itmill.toolkit.Client.prototype.addEventListener = function(element,type,func) {
 	if (element.addEventListener) {
 		element.addEventListener(type, func, false);
 		
@@ -1255,7 +1265,7 @@ ITMillToolkitClient.prototype.addEventListener = function(element,type,func) {
  *   @param func         The listener function to remove.
  *  
  */
-ITMillToolkitClient.prototype.removeEventListener = function(element,type,func) {
+itmill.toolkit.Client.prototype.removeEventListener = function(element,type,func) {
 	if (element.removeEventListener) {
 		element.removeEventListener(type, func, false);
 		
@@ -1283,7 +1293,7 @@ ITMillToolkitClient.prototype.removeEventListener = function(element,type,func) 
  *   @param func         The listener function to remove.
  *  
  */
- ITMillToolkitClient.prototype.removeAllEventListeners = function(element) {
+ itmill.toolkit.Client.prototype.removeAllEventListeners = function(element) {
  	var removed = 0;
 	if (element.eventMap) {
 		for (var t in element.eventMap) {
@@ -1319,7 +1329,7 @@ ITMillToolkitClient.prototype.removeEventListener = function(element,type,func) 
 	return removed;
 }
 
-ITMillToolkitClient.prototype.registerLayoutFunction = function (paintableElement,func) {
+itmill.toolkit.Client.prototype.registerLayoutFunction = function (paintableElement,func) {
 	if (!paintableElement || !func) {
 		this.error("Invalid layout function registration; paintableElement:"+paintableElement+" func:"+func);
 		return;
@@ -1344,7 +1354,7 @@ ITMillToolkitClient.prototype.registerLayoutFunction = function (paintableElemen
 
 	this.debug("Registered layout function for ("+paintableElement.nodeName+") pid " + pid + " as number " + idx);
 }
-ITMillToolkitClient.prototype.unregisterLayoutFunction = function (paintableElement) {
+itmill.toolkit.Client.prototype.unregisterLayoutFunction = function (paintableElement) {
 	if (!paintableElement) {
 		this.error("unregisterLayoutFunction(): NULL paintableElement!");
 		return false;
@@ -1374,7 +1384,7 @@ ITMillToolkitClient.prototype.unregisterLayoutFunction = function (paintableElem
 
 	return true;
 }
-ITMillToolkitClient.prototype.unregisterAllLayoutFunctions = function (paintableElement) {
+itmill.toolkit.Client.prototype.unregisterAllLayoutFunctions = function (paintableElement) {
 	var removed = 0;
 	if (!paintableElement) {
 		removed = (this.layoutFunctions?this.layoutFunctions.length:0);
@@ -1401,7 +1411,7 @@ ITMillToolkitClient.prototype.unregisterAllLayoutFunctions = function (paintable
 	
 	return removed;
 }
-ITMillToolkitClient.prototype.processAllLayoutFunctions = function() {
+itmill.toolkit.Client.prototype.processAllLayoutFunctions = function() {
 	if (this.layoutFunctions) {
 		this.debug("Processing layout functions...");
 		var lf = this.layoutFunctions;
@@ -1442,7 +1452,7 @@ ITMillToolkitClient.prototype.processAllLayoutFunctions = function() {
  *
  *	@return Properties object.  
  */
-ITMillToolkitClient.prototype.getEvent = function(e) {
+itmill.toolkit.Client.prototype.getEvent = function(e) {
 	var props = new Object()
 
 	if (!e) var e = window.event;
@@ -1497,7 +1507,7 @@ ITMillToolkitClient.prototype.getEvent = function(e) {
 	
 	return props;
 }
-ITMillToolkitClient.prototype.getElementPosition = function(element) {
+itmill.toolkit.Client.prototype.getElementPosition = function(element) {
 	var props = new Object();
 // TODO scroll offsets testing in IE
 	var obj = element;
@@ -1527,7 +1537,7 @@ ITMillToolkitClient.prototype.getElementPosition = function(element) {
  *  @obj Object to be printed
  *  @level recursion level
  */
-ITMillToolkitClient.prototype.debugObjectWindow = function(obj,level) {
+itmill.toolkit.Client.prototype.debugObjectWindow = function(obj,level) {
 
 	// Default level
 	if (level == null) {
@@ -1550,7 +1560,7 @@ ITMillToolkitClient.prototype.debugObjectWindow = function(obj,level) {
  *  @obj Object to be printed
  *  @level recursion level
  */
-ITMillToolkitClient.prototype.printObject = function(obj,level) {
+itmill.toolkit.Client.prototype.printObject = function(obj,level) {
 	if (level == null || level < 1) {
 		level = 1;
 	}
@@ -1584,7 +1594,7 @@ ITMillToolkitClient.prototype.printObject = function(obj,level) {
  *  @target Target element
  *  @text Textnode content
  */
-ITMillToolkitClient.prototype.createTextNode = function(text, target) {
+itmill.toolkit.Client.prototype.createTextNode = function(text, target) {
 	if (target != null && target.ownerDocument != null) {
 		return target.ownerDocument.createTextNode(text);
 	} else {
@@ -1599,11 +1609,49 @@ ITMillToolkitClient.prototype.createTextNode = function(text, target) {
  *  @nodeName Element nodeName
  *  @text Textnode content
  */
-ITMillToolkitClient.prototype.createElement = function(nodeName, target) {
+itmill.toolkit.Client.prototype.createElement = function(nodeName, target) {
 	
 	if (target != null && target.ownerDocument != null) {
 		return target.ownerDocument.createElement(nodeName);
 	} else {
 		return document.createElement(nodeName);
 	}
+}
+
+
+
+
+/** Theme class that implements inheritance mechanism for themes */
+
+itmill.toolkit.Class = function() {};
+
+itmill.toolkit.Class.prototype.constructor = function() {};
+
+itmill.toolkit.Class.extend = function(Members) {
+	
+	var __Class = function() {
+	this.$ = new this.$(this);
+	this.constructor.apply(this, arguments); 
+	};
+	
+	//Inherited all the properties & methods from super class
+	__Class.prototype = new this;
+	
+	//Create a copy of super class
+	__Class.prototype.$ = function($) {
+	this.$ = $;
+	}
+	
+	//Redirect the pointer, so it cannot reference to super object. 
+	for (var i in this.prototype) {
+	var Item = this.prototype[i];
+	if (!(Item instanceof Function)) continue;
+	eval('__Class.prototype.$.prototype[i] = ' + Item.toString().replace(/this/g, 'this.$'));
+	}
+	
+	//Any inherited with same name will be overwrited.
+	for (var Member in Members) __Class.prototype[Member] = Members[Member];
+	
+	__Class.extend = this.extend;
+	return __Class;
 }

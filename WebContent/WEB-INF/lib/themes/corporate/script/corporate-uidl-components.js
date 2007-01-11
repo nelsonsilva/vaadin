@@ -1,3 +1,5 @@
+/** Corporate theme class extends BaseTheme */
+itmill.toolkit.themes.Corporate = itmill.toolkit.themes.Base.extend( {
 
 /** Corporate theme constructor.
  *
@@ -5,19 +7,21 @@
  *  @constructor
  *
  */
-function CorporateTheme(themeRoot) {
+constructor : function(themeRoot) {
 	this.themeName = "BaseTheme";
 
 	// Store the the root URL
 	this.root = themeRoot;
-}
+},
 
 /** Register all renderers to a ajax client.
  *
  * @param client The ajax client instance.
  */
-CorporateTheme.prototype.registerTo = function(client) {
+registerTo : function(client) {
 
 	// Register renderer functions
 
-};
+}
+
+}) // End of class
