@@ -78,6 +78,7 @@ registerTo : function(client) {
 
 	client.registerRenderer(this,"table",null,this.renderScrollTable);
     client.registerRenderer(this,"table","paging",this.renderPagingTable);
+    client.registerRenderer(this,"table","list",this.renderPagingTable);
 	client.registerRenderer(this,"tree",null,this.renderTree);
 	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
 	//client.registerRenderer(this,"tree","menu",this.renderTreeMenu);
@@ -2680,7 +2681,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var colorder = new Array();
 	var fv = parseInt(theme.getVariableElementValue(theme.getVariableElement(uidl,"integer","firstvisible"))||1);
 	var selected; // Selected map
-	if (selectmode) {
+	if (selectmode != "none") {
 		selected = new Array();
 	}
 	
@@ -2941,7 +2942,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		}	
 		
 		// selection
-		if (selectmode) {
+		if (selectmode != "none") {
 			selected[selected.length] = tr;
 			theme.addCSSClass(tr,"clickable");
 			theme.addToggleClassListener(theme,client,tr,"mouseover","selectable");

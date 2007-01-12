@@ -337,6 +337,104 @@ IMG.overlay {
 	background-color: ButtonFace;
 }
 
+/* Paging table */
+
+.table-paging {
+	border: 1px solid;
+	border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+.table-paging .tablecaption {
+	border: 1px solid;
+	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+	padding: 0.0em 0.4em 0.1em 0.4em;
+}
+
+.table-paging .header IMG.sort {
+	Xposition: absolute;
+	Xmargin-top: 0.5em;
+	Xmargin-left: 2px;
+	width: 9px;
+	height: 5px;
+	background-repeat: no-repeat;
+}
+.table-paging .header IMG.sortasc {
+	background-image: url('../img/table/asc.gif');
+}
+.table-paging .header IMG.sortdesc {
+	background-image: url('../img/table/desc.gif');
+}
+.table-paging .header {
+	border-left: 1px solid ButtonHighlight;
+	border-right: 1px solid ButtonShadow;
+	padding-left: 0.2em;
+}
+.table-paging table {
+	border-collapse: collapse;
+	empty-cells: show;
+}
+
+.table-paging .selected TD DIV {
+	background-color: Highlight;
+	color: HighlightText;
+}
+.table-paging .selected TD {
+	background-color: Highlight;
+	color: HighlightText;
+	border-left: 1px solid Highlight;
+}
+.table-paging .even TD DIV {
+	border-left: 1px solid Window;
+	background-color: Window;
+}
+.table-paging .odd TD DIV {
+	border-left: 1px solid ButtonFace;
+	background-color: ButtonFace;
+}
+
+/* "List" table, very simple table */
+
+.table-list {
+	border: 0;
+}
+.table-list .tablecaption {
+	border: 1px solid;
+	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+	padding: 0.0em 0.4em 0.1em 0.4em;
+}
+
+.table-list .header IMG.sort {
+	Xposition: absolute;
+	Xmargin-top: 0.5em;
+	Xmargin-left: 2px;
+	width: 9px;
+	height: 5px;
+	background-repeat: no-repeat;
+}
+.table-list .header IMG.sortasc {
+	background-image: url('../img/table/asc.gif');
+}
+.table-list .header IMG.sortdesc {
+	background-image: url('../img/table/desc.gif');
+}
+.table-list table {
+	border-collapse: collapse;
+	empty-cells: hide;
+}
+.table-list td {
+	border:0;
+}
+
+.table-list .selected TD DIV {
+	background-color: Highlight;
+	color: HighlightText;
+}
+.table-list .selected TD {
+	background-color: Highlight;
+	color: HighlightText;
+	border-left: 1px solid Highlight;
+}
+
+
 /* TabSheet */
 .tabsheet .tabs {
 	margin-top: 0.5em;
