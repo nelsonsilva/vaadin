@@ -1,5 +1,5 @@
 /** Corporate theme class extends BaseTheme */
-itmill.toolkit.themes.Corporate = itmill.toolkit.themes.Base.extend( {
+itmill.themes.Corporate = itmill.themes.Base.extend( {
 
 /** Corporate theme constructor.
  *

@@ -19,7 +19,7 @@ if(document.all) {
 
 
 /** Base theme class extends ITMillToolkitClient.Theme */
-itmill.toolkit.themes.Base = itmill.toolkit.Class.extend( {
+itmill.themes.Base = itmill.Class.extend( {
 
 
 /** Constructor
