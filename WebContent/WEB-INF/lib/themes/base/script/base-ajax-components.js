@@ -1360,7 +1360,7 @@ renderPanel : function(renderer,uidl,target,layoutInfo) {
 
 /** under development
  * this should be easyly modified not to use polling in case "comet" is implemented
- */
+ */ 
 renderProgressIndicator : function(renderer,uidl,target,layoutInfo) {
     // TODO try to mess intervals
     // Create container element
@@ -4342,4 +4342,4 @@ eventPosition : function(e) {
 
 
 
-}) // End of BaseTheme -class
+}); // End of BaseTheme -class

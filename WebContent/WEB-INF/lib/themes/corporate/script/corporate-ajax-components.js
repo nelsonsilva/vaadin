@@ -10,7 +10,7 @@ itmill.themes.Corporate = itmill.themes.Base.extend( {
 constructor : function(themeRoot) {
 
 	// Call parent constructur (explicit call is necessary)
-	this.$.constructor(themeRoot);
+	arguments.callee.$.constructor.call(this,themeRoot);
 	this.themeName = "corporate";
 },
 
@@ -19,8 +19,9 @@ constructor : function(themeRoot) {
  * @param client The ajax client instance.
  */
 registerTo : function(client) {
+
 	// Register all parent rendering functions
-	this.$.registerTo(client);
+	arguments.callee.$.registerTo.call(this,client);
 	
 	// Register additional renderers
 	// TODO add corporate theme implementation here

@@ -1626,8 +1626,29 @@ itmill.Class = function() {};
 
 itmill.Class.prototype.constructor = function() {};
 
-itmill.Class.extend = function(Members) {
+itmill.Class.extend = function(def) {
 	
+	// Thinwire approach
+	 var classDef = function() {
+        if (arguments[0] !== itmill.Class) { this.constructor.apply(this, arguments); }
+    };
+    
+    var proto = new this(itmill.Class);
+    var superClass = this.prototype;
+    
+    for (var n in def) {
+        var item = def[n];                        
+        if (item instanceof Function) item.$ = superClass;
+        proto[n] = item;
+    }
+
+    classDef.prototype = proto;
+    
+    //Give this new class the same static extend method    
+    classDef.extend = this.extend;        
+    return classDef;
+	
+	/* Original one
 	var __Class = function() {
 	this.$ = new this.$(this);
 	this.constructor.apply(this, arguments); 
@@ -1643,9 +1664,9 @@ itmill.Class.extend = function(Members) {
 	
 	//Redirect the pointer, so it cannot reference to super object. 
 	for (var i in this.prototype) {
-	var Item = this.prototype[i];
-	if (!(Item instanceof Function)) continue;
-	eval('__Class.prototype.$.prototype[i] = ' + Item.toString().replace(/this/g, 'this.$'));
+		var Item = this.prototype[i];
+		if (!(Item instanceof Function)) continue;
+		eval('__Class.prototype.$.prototype[i] = ' + Item.toString().replace(/this/g, 'this.$'));
 	}
 	
 	//Any inherited with same name will be overwrited.
@@ -1653,4 +1674,5 @@ itmill.Class.extend = function(Members) {
 	
 	__Class.extend = this.extend;
 	return __Class;
+	*/
 }
