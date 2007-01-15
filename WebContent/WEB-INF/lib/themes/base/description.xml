@@ -16,8 +16,8 @@
 	<!--  List of supported modes by this theme -->
 	<modes>
 
-		<!--  UIDL mode is the AJAX-based primary rendering mode -->
-		<mode name="uidl">
+		<!--  AJAX mode is the AJAX-based primary rendering mode -->
+		<mode name="ajax">
 
 			<!-- The requirements for the browsers that are supported in UIDL-mode
 				are listed here -->
@@ -33,28 +33,28 @@
 			</require>
 		</mode>
 
-		<!-- XSLT is a fallback mode with very wide browser support. As no requirements
+		<!-- HTML is a fallback mode with very wide browser support. As no requirements
 			are given here, it basically tries to support everything -->
-		<mode name="xslt" /> 
+		<mode name="html" /> 
 	</modes>
 
 	<fileset>
 
 		<!-- UIDL Mode support files -->
-		<fileset mode="uidl">
+		<fileset mode="ajax">
 
 			<!--  CSS stylesheets to load in html head -->
-			<file name="css/base-uidl.css" />
+			<file name="css/base-ajax.css" />
 			<file name="css/calendar-default.css" />
 
 			<!-- JavaScripts to load in html head -->
-			<file name="script/uidl-client.js" />
-			<file name="script/base-uidl-components.js" />
+			<file name="script/ajax-client.js" />
+			<file name="script/base-ajax-components.js" />
 			<file name="ext/jscalendar/calendar.js" />
 		</fileset>
 
 		<!-- XSLT mode support files -->
-		<fileset mode="xslt">
+		<fileset mode="html">
 		
 			<!--  XSL stylesheets that are used for transforming UIDL to HTML -->
 			<file name="xsl/uidl.xsl" />
@@ -81,7 +81,7 @@
 			<file name="xsl/window/window.xsl" />
 			
 			<!--  CSS stylesheets to load in html head -->
-			<file name="css/base-xslt.css" />
+			<file name="css/base-html.css" />
 			
 			<!-- JavaScripts to load in html head -->
 			<file name="script/commons.js" />
@@ -89,8 +89,7 @@
 			<file name="script/events.js" />
 			<file name="script/focusable.js" />
 			<file name="script/window.js" />
-<!-- Not used? 			<file name="script/tableheaderdragger.js" /> -->
-			<file name="script/xslt-helper-lib.js" />
+			<file name="script/base-html-helper-lib.js" />
 		</fileset>
 	</fileset>
 
