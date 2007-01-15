@@ -239,6 +239,7 @@ nodeToString : function(node, deep) {
 createInputElementTo : function(target,type,className,focusid) {
 	
 	var input = null;
+	var appendInEnd = false;
 	if (document.all && !window.opera) {
 		// IE only
 		input = this.createElementTo(target,"<input type='"+type+"'>");
@@ -246,7 +247,7 @@ createInputElementTo : function(target,type,className,focusid) {
 		// Other browsers
         input = document.createElement("input");
         input.type = type;
-        target.appendChild(input);
+        appendInEnd = true;
 	}
 	
 	// Assign class
@@ -255,7 +256,9 @@ createInputElementTo : function(target,type,className,focusid) {
 	}
 	
 	if (focusid) input.focusid = focusid;
-	
+
+	if (appendInEnd)  target.appendChild(input);
+
 	return input;
 },
 
