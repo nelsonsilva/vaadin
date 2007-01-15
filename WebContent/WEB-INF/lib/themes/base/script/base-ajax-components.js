@@ -2803,7 +2803,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			html += "sorted=\"true\" class=\"sorted\" ";
 		}
 		html += "style=\"overflow:hidden\" cid=\""+cid+"\" id=\""+pid+"he"+i+"\" >"
-		html += "<DIV class=\"padnr tableheader\" ";
+		html += "<DIV class=\"padnr tableheader"+(sortasc?" asc":" desc")+"\" ";
 		if (alignments[i]) {
 			switch (alignments[i]) {
 				case "e":
@@ -2820,10 +2820,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			html += "width:"+colWidths[cid]+"px;";
 		} 
 		html += "overflow:hidden;height:100%;white-space:nowrap;\"><IMG id=\""+pid+"ha"+cid+"\" align=\"right\" src=\""+theme.root+"img/table/handle.gif\" border=\"0\">";
-        if (sortkey==cid) {
-            var simguri = theme.root + "img/table/" +(sortasc?"asc":"desc") + ".gif";
-            html += "<img src=\""+simguri+"\" class=\"sort sort"+(sortasc?"asc":"desc") + " alt=\""+(sortasc?"asc":"desc") + "\"/>";
-        }
         html += (iconUrl?"<img src=\""+iconUrl+"\" class=\"icon\">":"")+cap+"</DIV></TD>";
 	}
 	html += "</TR></TBODY></TABLE>";

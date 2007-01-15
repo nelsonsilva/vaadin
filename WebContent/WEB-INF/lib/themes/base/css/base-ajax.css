@@ -289,12 +289,6 @@ IMG.overlay {
 	width: 2px;
 	cursor:w-resize;
 }
-.table .hin .tableheader img.sort {
-	float:right;
-	width:11px;
-	height:11px;
-	overflow:hidden;
-}
 .table .hin .tableheader {
 	border-left: 1px solid ButtonHighlight;
 	border-right: 1px solid ButtonShadow;
@@ -327,6 +321,12 @@ IMG.overlay {
 .table .odd TD DIV {
 	border-left: 1px solid ButtonFace;
 	background-color: ButtonFace;
+}
+.table td.sorted div.asc {
+	background: url('RES/base/img/table/asc.gif') right top no-repeat;
+}
+.table td.sorted div.desc {
+	background: url('RES/base/img/table/desc.gif') right top no-repeat;
 }
 
 /* Paging table */
