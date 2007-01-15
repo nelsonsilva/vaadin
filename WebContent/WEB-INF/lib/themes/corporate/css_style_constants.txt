@@ -14,9 +14,9 @@ Tabsheet captions:				8pt normal	#426f92					-"-
 
 Colors
 ------
-Application background: 	#e7eaf0 img/common/application_bg.png
+Application background: 	#e7eaf0 img/common/application_bg.png		(1 x 555)
 
-Titlebar background:		#3d6ca8	img/common/caption_bg.png
+Titlebar background:		#3d6ca8	img/common/caption_bg.png			(1 x 25)
 Titlebar border:			#a3b5ce	solid 1px
 
 Panel background:			#fff
@@ -26,5 +26,50 @@ Panel borders:				solid 2px
 -bottom:					#9193a0
 -left:						#d3d4dc
 
+Button
+Normal:
+-left:						#d5dadd	img/button/left.png					(800 x 29)
+-right:						#d5dadd	img/button/right.png				(2 x 29)
+Hover:
+-left:						#f3f4f5	img/button/left_hover.png			(800 x 29)	
+-right:						#f3f4f5	img/button/right_hover.png			(2 x 29)
+Down:
+-left:						#c7ced2	img/button/left_down.png			(800 x 29)
+-right:						#c7ced2	img/button/right_down.png			(2 x 29)
 
+Table
+Column headers:				height 25px, #d4e7fe	img/table/column_header_bg.png		(1 x 25)
+-one header borders:		solid 1px
+-top:						none
+-right:						#b4cfe9
+-bottom:					none
+-left:						#f3f9ff
+Row height:					20px
+Odd row background:			#f0f4f9
+Hover row background:		#fbffd6
+Column select box:			18 x 25	img/table/column_select_arrow.png	(13 x 13)
+Column separator line:		#e3e7f0
 
+Tabsheet
+Tabs background:			height 30px, #d4e7fe	img/tabsheet/header_bg.png			(1 x 30)
+Normal tab:
+-height						22px
+-border						solid 1px #85a2c5
+-background					#b4d3f0	img/tabsheet/tab_bg.png				(1 x 22)
+Hover tab:
+-height						22px
+-border						solid 1px #85a2c5
+-background					#e5effa	img/tabsheet/tab_hover_bg.png		  -"-
+Open tab:
+-height						22px
+-border						solid 1px #85a2c5
+-background					#d4e7fe	img/tabsheet/tab_open_bg.png		  -"-
+
+Input
+-border						solid 1px #8fa5b3
+-background					#f6f9fc	img/common/input_bg.png				(1 x 19)
+Modified background			#fbffd6	img/common/input_modified_bg.png	  -"-
+
+Select (dropdown list)
+-border						solid 1px #8fa5b3
+-background					#f6f9fc	img/common/input_bg.png				(1 x 19)
