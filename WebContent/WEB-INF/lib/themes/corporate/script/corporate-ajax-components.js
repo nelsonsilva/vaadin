@@ -7,10 +7,10 @@ itmill.themes.Corporate = itmill.themes.Base.extend( {
  *  @constructor
  *
  */
-constructor : function(themeRoot) {
+construct : function(themeRoot) {
 
 	// Call parent constructur (explicit call is necessary)
-	arguments.callee.$.constructor.call(this,themeRoot);
+	arguments.callee.$.construct.call(this,themeRoot);
 	this.themeName = "corporate";
 },
 

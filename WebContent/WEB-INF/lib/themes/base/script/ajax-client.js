@@ -1624,20 +1624,20 @@ itmill.Client.prototype.createElement = function(nodeName, target) {
 
 itmill.Class = function() {};
 
-itmill.Class.prototype.constructor = function() {};
+itmill.Class.prototype.construct = function() {};
 
 itmill.Class.extend = function(def) {
 	
 	// Thinwire approach
 	 var classDef = function() {
-        if (arguments[0] !== itmill.Class) { this.constructor.apply(this, arguments); }
+        if (arguments[0] !== itmill.Class) { this.construct.apply(this, arguments); }
     };
     
     var proto = new this(itmill.Class);
     var superClass = this.prototype;
     
     for (var n in def) {
-        var item = def[n];                        
+        var item = def[n];  
         if (item instanceof Function) item.$ = superClass;
         proto[n] = item;
     }

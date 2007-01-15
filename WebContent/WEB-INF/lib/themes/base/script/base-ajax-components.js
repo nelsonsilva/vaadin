@@ -26,8 +26,7 @@ itmill.themes.Base = itmill.Class.extend( {
  *  @param themeRoot The base URL for theme resources.
  *  @constructor
 */
-constructor : function(themeRoot) {
-
+construct : function(themeRoot) {
 	this.themeName = "base";
 
 	// Store the the root URL
