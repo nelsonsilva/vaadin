@@ -1,0 +1,30 @@
+IT Mill Toolkit
+---------------
+Corporate theme CSS style constants
+-----------------------------------
+
+Fonts
+-----
+Basefont: 						8pt	normal	#2c3437	Helvetica, Arial, Tahoma, Verdana, sans-serif
+Strong captions (titlebars): 	8pt	bold	#fff					-"-
+Other captions (white bg): 		9pt	bold	#005c90					-"-
+Table header captions:			8pt bold	#426f92					-"-
+Tabsheet captions:				8pt normal	#426f92					-"-
+
+
+Colors
+------
+Application background: 	#e7eaf0 img/common/application_bg.png
+
+Titlebar background:		#3d6ca8	img/common/caption_bg.png
+Titlebar border:			#a3b5ce	solid 1px
+
+Panel background:			#fff
+Panel borders:				solid 2px
+-top:						#d8dbe3
+-right:						#aaacbc
+-bottom:					#9193a0
+-left:						#d3d4dc
+
+
+
