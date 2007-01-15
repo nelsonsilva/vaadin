@@ -12,19 +12,19 @@
 
 	<!--  Corporate theme only supports UIDL mode -->
 	<modes>
-		<mode name="uidl"/>
+		<mode name="ajax"/>
 	</modes>
 
 	<fileset>
 
 		<!-- UIDL Mode support files -->
-		<fileset mode="uidl">
+		<fileset mode="ajax">
 
 			<!--  CSS stylesheets to load in html head -->
-			<file name="css/corporate-uidl.css" />
+			<file name="css/corporate-ajax.css" />
 
 			<!-- JavaScripts to load in html head -->
-			<file name="script/corporate-uidl-components.js" />
+			<file name="script/corporate-ajax-components.js" />
 		</fileset>
 	</fileset>
 	
