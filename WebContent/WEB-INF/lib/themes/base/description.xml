@@ -40,7 +40,7 @@
 
 	<fileset>
 
-		<!-- UIDL Mode support files -->
+		<!-- AJAX Mode support files -->
 		<fileset mode="ajax">
 
 			<!--  CSS stylesheets to load in html head -->
@@ -51,9 +51,16 @@
 			<file name="script/ajax-client.js" />
 			<file name="script/base-ajax-components.js" />
 			<file name="ext/jscalendar/calendar.js" />
+			<!-- Firefox fixes -->
+			<fileset>
+				<require>
+					<supports agent="Firefox" />
+				</require> 
+				<file name="css/base-ajax-firefox.css"  />
+			</fileset>
 		</fileset>
 
-		<!-- XSLT mode support files -->
+		<!-- HTML mode support files -->
 		<fileset mode="html">
 		
 			<!--  XSL stylesheets that are used for transforming UIDL to HTML -->

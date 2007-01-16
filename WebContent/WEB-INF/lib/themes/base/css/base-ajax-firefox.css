@@ -1,0 +1,9 @@
+/* THIS FILE CONTAINS FIXES FOR FIREFOXES CSS BUGS ONLY */
+
+/* FF doesn't handle relative paths correctly, uses ownerdocuments path */
+.table td.sorted div.asc {
+	background: url('RES/base/img/table/asc.gif') right top no-repeat;
+}
+.table td.sorted div.desc {
+	background: url('RES/base/img/table/desc.gif') right top no-repeat;
+}

@@ -323,10 +323,10 @@ IMG.overlay {
 	background-color: ButtonFace;
 }
 .table td.sorted div.asc {
-	background: url('RES/base/img/table/asc.gif') right top no-repeat;
+	background: url('../img/table/asc.gif') right top no-repeat;
 }
 .table td.sorted div.desc {
-	background: url('RES/base/img/table/desc.gif') right top no-repeat;
+	background: url('../img/table/desc.gif') right top no-repeat;
 }
 
 /* Paging table */
