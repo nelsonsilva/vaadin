@@ -56,7 +56,6 @@
 				<require>
 					<supports agent="Firefox" />
 				</require> 
-				<file name="css/base-ajax-firefox.css"  />
 			</fileset>
 		</fileset>
 
