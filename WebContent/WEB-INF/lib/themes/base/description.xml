@@ -5,7 +5,7 @@
 	<author name="IT Mill Ltd" email="info@itmill.com" />
 
 	<description>
-		IT Mill Toolkit Base theme. This theme should not extended in your application.
+		IT Mill Toolkit Base theme. This theme should be extended in your application.
 		If you don't want to extend a theme, try corporate -theme instead.
 	</description>
 

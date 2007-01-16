@@ -15,7 +15,7 @@ itmill.themes = new Object();
  *  @param clientRoot Base URL to client-side ajax adapter resources.
  *  @constructor
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  */
 itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement) {
 
@@ -114,7 +114,7 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 /** Start the ajax client.
  *  Creates debug window and sends the initial request to server.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  */
 itmill.Client.prototype.start = function() {
     
@@ -134,7 +134,7 @@ itmill.Client.prototype.start = function() {
  *  @type Window
  *  @private
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  */
 itmill.Client.prototype.createDebugWindow = function() {
 
@@ -173,7 +173,7 @@ itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
  *  @param folded True if the message should be foldable and folded to default,
  *			false or missing otherwise.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
@@ -224,7 +224,7 @@ itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
  *  @param obj The object that is debugged.
  *  @param level The recursion level that the properties are inspected.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.debugObject = function (obj,level) {
@@ -236,7 +236,7 @@ itmill.Client.prototype.debugObject = function (obj,level) {
  *  @param message The message to be written
  *  @param causeException Exception that caused this error.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.error = function (message, causeException) {
@@ -278,7 +278,7 @@ itmill.Client.prototype.error = function (message, causeException) {
  *  @return New XMLHttpRequest or XMLHTTP (ActiveXObject) instance
  *  @type XMLHttpRequest | ActiveXObject
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  */
 itmill.Client.prototype.getXMLHttpRequest = function () {
 
@@ -314,7 +314,7 @@ itmill.Client.prototype.getXMLHttpRequest = function () {
  *  @param url The URL of document.		
  *  @skipCache If true, does not use cached documents (or cache this result).
  *	
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.loadDocument = function (url,skipCache) {
@@ -360,7 +360,7 @@ itmill.Client.prototype.loadDocument = function (url,skipCache) {
  *	@return Newly created renderer object instance.
  *  @type Object
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.registerRenderer = function (theme, tag, componentStyle, renderFunction) {
@@ -395,7 +395,7 @@ itmill.Client.prototype.registerRenderer = function (theme, tag, componentStyle,
 
 /** Unregisters all renderers in client.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.unregisterAllRenderers = function () {
@@ -411,7 +411,7 @@ itmill.Client.prototype.unregisterAllRenderers = function () {
  *
  *  @param client Reference to this client instance.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.createRequestChangeListener = function(client, req) {
@@ -473,7 +473,7 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
  *  @param repaintAll True if full window UIDL should be requested from server.
  *  @param nowait True if the wait-window should not be shown
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
@@ -511,7 +511,7 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
  *
  *  @param parent The parent element
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.getFirstChildElement = function (parent) {
@@ -550,7 +550,7 @@ itmill.Client.prototype.getFirstChildElement = function (parent) {
  *  @param win The window to be initialized.
  *  @param name IT Mill Toolkit name of the window to be initialized.
  *  @return reference to div in document that should contain the window.
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
@@ -674,7 +674,7 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
  *  @param win The window to be initialized.
  *  @param name IT Mill Toolkit name of the window to be initialized.
  *  @return reference to div in document that should contain the window.
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.createFramesetHtml = function(uidl,theme) {
@@ -726,7 +726,7 @@ itmill.Client.prototype.createFramesetHtml = function(uidl,theme) {
  
  *  @param windowName Name of the window
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.unregisterWindow = function (windowName) {
@@ -760,7 +760,7 @@ itmill.Client.prototype.unregisterWindow = function (windowName) {
  *  @param windowName Name of the window
  *  @param doc The document element of window.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.registerWindow = function (windowName,win,doc) {
@@ -780,7 +780,7 @@ itmill.Client.prototype.registerWindow = function (windowName,win,doc) {
  
  *  @param paintableId Id to look for.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.findPaintableById = function (paintableId) {
@@ -841,7 +841,7 @@ itmill.Client.prototype.findPaintableById = function (paintableId) {
  *
  *  @param updates Updates UIDL updates from server.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.processUpdates = function (updates) {
@@ -985,7 +985,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
  *  @param renderer The specific renderer instance that should be used (optional)
  *  @return This function returns whatever the utilized renderer returns.
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.renderUIDL = function (uidl, target, renderer) {
@@ -1059,7 +1059,7 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer) {
  *  @return A matching renderer instance
  *  @type Object
  *	
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.findRenderer = function (tag, componentStyle) {
@@ -1087,7 +1087,7 @@ itmill.Client.prototype.findRenderer = function (tag, componentStyle) {
  *  @return The rendered element
  *  @type Node
  *	
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.renderHTML = function (xml, target) {
@@ -1121,7 +1121,7 @@ itmill.Client.prototype.renderHTML = function (xml, target) {
  *  @return The XML as text
  *  @type String
  *	
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.getXMLtext = function(xml) {
@@ -1156,7 +1156,7 @@ itmill.Client.prototype.getXMLtext = function(xml) {
  *  @param immediate True if the variable change should immediately propagate to server.
  *  @param nowait True if the wait-window should not be shown
  * 
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.changeVariable = function (name, value, immediate, nowait) {
@@ -1179,7 +1179,7 @@ itmill.Client.prototype.changeVariable = function (name, value, immediate, nowai
  *  @return The newly created element node.
  *  @type Node
  *
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  * 
  */
 itmill.Client.prototype.createPaintableElement = function (uidl, target) {
@@ -1219,7 +1219,7 @@ itmill.Client.prototype.createPaintableElement = function (uidl, target) {
  *  @return element.
  *  @type Node
  * 
- *  @author Oy IT Mill Ltd / Sami Ekblad
+ *  @author IT Mill Ltd.
  *
  */
 itmill.Client.prototype.setElementClassName = function(element,className) {
