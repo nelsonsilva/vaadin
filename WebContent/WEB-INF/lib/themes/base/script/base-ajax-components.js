@@ -2733,7 +2733,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	delete alNode;
 
-	inner.innerHTML = "<DIV id=\""+pid+"status\" align=\"center\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></DIV><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD align=center width=16></TD></TR></TBODY></TABLE><TABLE>";
+	inner.innerHTML = "<DIV id=\""+pid+"status\" align=\"center\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></DIV><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD align=center width=16></TD></TR></TBODY></TABLE>";
 	//inner.style.width = wholeWidth+"px";
 	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
 	if (visiblecols) {			
