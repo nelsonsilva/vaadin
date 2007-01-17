@@ -24,7 +24,66 @@ registerTo : function(client) {
 	arguments.callee.$.registerTo.call(this,client);
 	
 	// Register additional renderers
-	// TODO add corporate theme implementation here
+	client.registerRenderer(this,"tabsheet",null,this.renderTabSheet);
+},
+
+renderTabSheet : function(renderer,uidl,target,layoutInfo) {
+
+			var theme = renderer.theme;
+			
+			// Create container element
+			var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+			if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
+
+			// Create default header
+			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+			
+			//  Render tabs
+			var tabs = theme.createElementTo(theme.createElementTo(div,"table","tabs") ,"tr");
+			var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");
+			
+			var tabNodes = theme.getChildElements(uidl,"tabs");
+			if (tabNodes != null && tabNodes.length >0)  tabNodes = theme.getChildElements(tabNodes[0],"tab");
+			var selectedTabNode = null;
+			if (tabNodes != null && tabNodes.length >0) {
+				for (var i=0; i< tabNodes.length;i++) {
+					var tabNode = tabNodes[i];
+					var tab = theme.createElementTo(tabs,"td");
+					var key = tabNode.getAttribute("key");
+					var iconUrl =  tabNode.getAttribute("icon");
+					if (iconUrl && iconUrl.indexOf("theme://") == 0) {
+		   				iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
+		    				+ iconUrl.substring(8);
+					}		
+					if (tabNode.getAttribute("selected") == "true") {
+						theme.addCSSClass(tab,"tab-on");
+						selectedTabNode = tabNode;
+					} else if (tabNode.getAttribute("disabled") == "true" 
+								|| uidl.getAttribute("disabled") == "true"
+								|| uidl.getAttribute("readonly") == "true") {
+						theme.setCSSClass(tab,"tab disabled inline");
+					} else {
+						theme.setCSSClass(tab,"tab clickable");
+						theme.addAddClassListener(theme,client,tab,"mouseover","over",tab);
+						theme.addRemoveClassListener(theme,client,tab,"mouseout","over",tab);
+						theme.addSetVarListener(theme,client,tab,"click",varId,key,true);
+					}
+					
+					// Icon
+					if (iconUrl) {
+						tab.innerHTML = "<IMG src=\""+iconUrl+"\" class=\"icon\" />" + tabNode.getAttribute("caption");
+					} else {
+						tab.innerHTML = tabNode.getAttribute("caption");
+					}
+				
+				}
+			}
+			
+			// Render content (IE renderbug need three)
+			var content = theme.createElementTo(div,"div","tab-content");
+			if (selectedTabNode != null) {
+				theme.renderChildNodes(renderer,selectedTabNode, content);
+			}
 }
 
 }) // End of class
