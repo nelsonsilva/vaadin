@@ -49,8 +49,6 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			var selectedTabNode = null;
 			if (tabNodes != null && tabNodes.length >0) {
 				for (var i=0; i< tabNodes.length;i++) {
-					if (i>0) 
-					var tab = theme.createElementTo(tabs,"td","tab-space");
 					var tabNode = tabNodes[i];
 					var tab = theme.createElementTo(tabs,"td");
 					var key = tabNode.getAttribute("key");
@@ -80,6 +78,7 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 						tab.innerHTML = tabNode.getAttribute("caption");
 					}
 				
+					theme.createElementTo(tabs,"td","tab-space");
 				}
 			}
 			

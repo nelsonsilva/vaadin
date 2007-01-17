@@ -44,64 +44,56 @@ div.panel div.panelborder div.content {
 
 /* Tabsheet */
 
-/*
-Tabs background:			height 30px, #d4e7fe	img/tabsheet/header_bg.png			(1 x 30)
-Normal tab:
--height						22px
--border						solid 1px #85a2c5
--background					#b4d3f0	img/tabsheet/tab_bg.png				(1 x 22)
-Hover tab:
--height						22px
--border						solid 1px #85a2c5
--background					#e5effa	img/tabsheet/tab_hover_bg.png		  -"-
-Open tab:
--height						22px
--border						solid 1px #85a2c5
--background					#d4e7fe	img/tabsheet/tab_open_bg.png		  -"-
-*/
-
 div.tabsheet table.tabs {
 	position: relative;
-	top: 1px;
+	top: 2px;
+	background-color: auto;
 }
 
 div.tabsheet table.tabs td {
 	height: 14px;
 	background-color: white;
-	border: solid 1px #85a2c5;
-	border-bottom: 1px solid white;
 	color: #094582;
 	padding: 4px;
 	padding-left: 8px;
 	padding-right: 8px;	
+	border-top:			2px solid #d8dbe3;
+	border-right:		2px solid #aaacbc;
+	border-left:		2px solid #d3d4dc;
+	border-bottom: 		2px solid white;
 }
 	
 div.tabsheet table.tabs td.clickable {
 	background-color: #b4d3f0;
-	border-bottom: solid 1px #85a2c5;
+	border-bottom: solid 1px #d8dbe3;
 	background-image: url(../img/tabsheet/tab_bg.png);
 }
 
 div.tabsheet table.tabs td.over {
-	border: solid 1px #85a2c5;
-	border-bottom: solid 1px #85a2c5;
 	background-image: url(../img/tabsheet/tab_hover_bg.png);
+	border-top:			2px solid #d8dbe3;
+	border-right:		2px solid #aaacbc;
+	border-left:		2px solid #d3d4dc;
+	border-bottom: solid 1px #d8dbe3;
 }
 
 div.tabsheet table.tabs td.tab-space {
 	width: 2px;
-	background-color: none;	
+	background-color: auto;	
 	padding: 0;
 	padding-left: 0;
 	padding-right: 0;
 	border: 0;
-	border-bottom: solid 1px #85a2c5;
+	border-bottom: solid 2px #d8dbe3;
 }
 
 div.tabsheet div.tab-content {
 	background-color: white;
-	border: none;
 	border: solid 1px #85a2c5;
+	border-top:					solid 2px #d8dbe3;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
 	padding: 7px;
 }
 
