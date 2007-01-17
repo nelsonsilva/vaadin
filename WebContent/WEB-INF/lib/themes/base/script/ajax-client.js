@@ -939,8 +939,13 @@ itmill.Client.prototype.processUpdates = function (updates) {
 						this.warn("Removed " + this.unregisterAllLayoutFunctions(currentNode) + " layout functions.");
 						if (currentNode.ownerDocument.renderUIDL) {
 							currentNode.ownerDocument.renderUIDL(uidl,currentNode);
-						} else {
-							this.renderUIDL(uidl,currentNode);
+						} else { 
+						
+							// TODO DOES THIS CHANGE CAUSE MEMORY LEAKS IN IE?
+							var tmpNode = this.createElement("div",currentNode);
+							this.renderUIDL(uidl,tmpNode);
+							while (currentNode.childNodes.length > 0) currentNode.removeChild(currentNode.childNodes[0]);
+							currentNode.appendChild(tmpNode.childNodes[0]);
 						}
 					}
 					uidl = uidl.nextSibling;
@@ -988,7 +993,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
  *  @author IT Mill Ltd.
  *
  */
-itmill.Client.prototype.renderUIDL = function (uidl, target, renderer) {
+itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuffer) {
 
 	// Sanity check
 	if (uidl == null || uidl.nodeType != Node.ELEMENT_NODE) return;
