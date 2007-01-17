@@ -39,7 +39,9 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 			
 			//  Render tabs
-			var tabs = theme.createElementTo(theme.createElementTo(div,"table","tabs") ,"tr");
+			var table = theme.createElementTo(div,"table","tabs");
+			table.cellSpacing = 0;
+			var tabs = theme.createElementTo(theme.createElementTo(table, "tbody"),"tr");
 			var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");
 			
 			var tabNodes = theme.getChildElements(uidl,"tabs");
@@ -47,6 +49,8 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			var selectedTabNode = null;
 			if (tabNodes != null && tabNodes.length >0) {
 				for (var i=0; i< tabNodes.length;i++) {
+					if (i>0) 
+					var tab = theme.createElementTo(tabs,"td","tab-space");
 					var tabNode = tabNodes[i];
 					var tab = theme.createElementTo(tabs,"td");
 					var key = tabNode.getAttribute("key");

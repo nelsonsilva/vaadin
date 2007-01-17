@@ -61,21 +61,19 @@ Open tab:
 */
 
 div.tabsheet table.tabs {
-	border-spacing: 2px 0;
 	position: relative;
 	top: 1px;
 }
 
 div.tabsheet table.tabs td {
 	height: 14px;
-	background-color: #b4d3f0;
-	background-image: url(../img/tabsheet/tab_white_bg.png);
+	background-color: white;
 	border: solid 1px #85a2c5;
 	border-bottom: 1px solid white;
 	color: #094582;
 	padding: 4px;
 	padding-left: 8px;
-	padding-right: 8px;
+	padding-right: 8px;	
 }
 	
 div.tabsheet table.tabs td.clickable {
@@ -89,7 +87,17 @@ div.tabsheet table.tabs td.over {
 	border-bottom: solid 1px #85a2c5;
 	background-image: url(../img/tabsheet/tab_hover_bg.png);
 }
-	
+
+div.tabsheet table.tabs td.tab-space {
+	width: 2px;
+	background-color: none;	
+	padding: 0;
+	padding-left: 0;
+	padding-right: 0;
+	border: 0;
+	border-bottom: solid 1px #85a2c5;
+}
+
 div.tabsheet div.tab-content {
 	background-color: white;
 	border: none;
