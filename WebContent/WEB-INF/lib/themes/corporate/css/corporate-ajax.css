@@ -1,7 +1,18 @@
 
 html {
-    background-color: #c9d1db;
+    background-color: #e7eaf0; 
+    background-image: url(../img/common/application_bg.png);
+   	background-repeat: repeat-x; 
+	background-position: 0 0;
 }
+
+input, select, button, html {
+    font-family: Tahoma, Helvetica, Arial, Tahoma, Verdana, sans-serif; 
+    font-size: 8pt;
+    font-weight: normal;
+    color: #2c3437;
+}
+
 
 div#ajax-wait {
 	top:1px;
@@ -15,3 +26,31 @@ div#ajax-wait {
 	padding: 3px;
 	font-weight: bold;
 }
+
+
+/* Panel */
+
+div.panel div.panelborder .panelcaption {
+	background-image: url(../img/common/caption_bg.png);
+	height: 15px;
+	color: white;
+	padding: 5px;
+	spacing: 0;
+	font-weight: bold;
+	border-bottom: 0;
+	border-top:					solid 1px #d8dbe3;
+	border-right:				solid 1px #aaacbc;
+	border-left:				solid 1px #d3d4dc;
+}
+div.panel div.panelborder {
+	border: 0;
+}
+
+div.panel div.panelborder div.content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
+	background-color: white;
+}
+
