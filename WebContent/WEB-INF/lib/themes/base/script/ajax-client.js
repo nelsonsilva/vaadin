@@ -940,12 +940,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 						if (currentNode.ownerDocument.renderUIDL) {
 							currentNode.ownerDocument.renderUIDL(uidl,currentNode);
 						} else { 
-						
-							// TODO DOES THIS CHANGE CAUSE MEMORY LEAKS IN IE?
-							var tmpNode = this.createElement("div",currentNode);
-							this.renderUIDL(uidl,tmpNode);
-							while (currentNode.childNodes.length > 0) currentNode.removeChild(currentNode.childNodes[0]);
-							currentNode.appendChild(tmpNode.childNodes[0]);
+							this.renderUIDL(uidl,currentNode);
 						}
 					}
 					uidl = uidl.nextSibling;
