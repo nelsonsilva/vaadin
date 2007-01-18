@@ -21,7 +21,7 @@ input, select, button, html {
 /* Panel */
 
 /* Default style */
-div.panel div.panelborder .panelcaption {
+.panel .panelborder .panelcaption {
 	background: #d8e8fc url(../img/common/caption_bg.png) repeat-x;
 	height: 16px;
 	color: #005290;
@@ -31,11 +31,11 @@ div.panel div.panelborder .panelcaption {
 	border: 1px solid #9fb1d1;
 }
 
-div.panel div.panelborder {
+.panel .panelborder {
 	border: 0;
 }
 
-div.panel div.panelborder div.content {
+.panel .panelborder .content {
 	border-top:					solid 0px #d8dbe3;
 	border-right:				solid 2px #aaacbc;
 	border-bottom:				solid 2px #9193a0;
@@ -45,7 +45,7 @@ div.panel div.panelborder div.content {
 }
 
 /* Strong style */
-div.panel-strong div.panelborder .panelcaption {
+.panel-strong .panelborder .panelcaption {
 	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
 	height: 15px;
 	color: white;
@@ -55,11 +55,11 @@ div.panel-strong div.panelborder .panelcaption {
 	border: 1px solid #a3b5ce;
 }
 
-div.panel-strong div.panelborder {
+.panel-strong .panelborder {
 	border: 0;
 }
 
-div.panel-strong div.panelborder div.content {
+.panel-strong .panelborder .content {
 	border-top:					solid 0px #d8dbe3;
 	border-right:				solid 2px #aaacbc;
 	border-bottom:				solid 2px #9193a0;
@@ -69,7 +69,7 @@ div.panel-strong div.panelborder div.content {
 }
 
 /* Light style */
-div.panel-light div.panelborder .panelcaption {
+.panel-light .panelborder .panelcaption {
 	background: transparent url(../img/common/caption_light_bg.png) repeat-x bottom left;
 	height: 16px;
 	color: #005290;
@@ -79,11 +79,11 @@ div.panel-light div.panelborder .panelcaption {
 	border: none;
 }
 
-div.panel-light div.panelborder {
+.panel-light .panelborder {
 	border: 0;
 }
 
-div.panel-light div.panelborder div.content {
+.panel-light .panelborder .content {
 	border-top:					solid 0px #d8dbe3;
 	border-right:				solid 1px #d5d7de;
 	border-bottom:				solid 1px #c9cad0;
@@ -94,13 +94,14 @@ div.panel-light div.panelborder div.content {
 
 /* Tabsheet */
 
-div.tabsheet table.tabs {
+.tabsheet .tabs {
 	position: relative;
 	top: 2px;
 	background-color: auto;
+	width:100%;
 }
 
-div.tabsheet table.tabs td {
+.tabsheet .tabs td {
 	height: 14px;
 	background-color: white;
 	color: #094582;
@@ -113,13 +114,13 @@ div.tabsheet table.tabs td {
 	border-bottom: 		2px solid white;
 }
 	
-div.tabsheet table.tabs td.clickable {
+.tabsheet .tabs .clickable {
 	background-color: #b4d3f0;
 	border-bottom: solid 1px #d8dbe3;
 	background-image: url(../img/tabsheet/tab_bg.png);
 }
 
-div.tabsheet table.tabs td.over {
+.tabsheet .tabs .over {
 	background-image: url(../img/tabsheet/tab_hover_bg.png);
 	border-top:			2px solid #d8dbe3;
 	border-right:		2px solid #aaacbc;
@@ -127,7 +128,7 @@ div.tabsheet table.tabs td.over {
 	border-bottom: solid 1px #d8dbe3;
 }
 
-div.tabsheet table.tabs td.tab-space {
+.tabsheet .tabs .tab-space {
 	width: 2px;
 	background-color: auto;	
 	padding: 0;
@@ -137,7 +138,7 @@ div.tabsheet table.tabs td.tab-space {
 	border-bottom: solid 2px #d8dbe3;
 }
 
-div.tabsheet div.tab-content {
+.tabsheet .tab-content {
 	background-color: white;
 	border: solid 1px #85a2c5;
 	border-top:					solid 2px #d8dbe3;
