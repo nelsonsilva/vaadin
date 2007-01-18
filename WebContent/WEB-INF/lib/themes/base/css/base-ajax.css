@@ -224,7 +224,7 @@ IMG.overlay {
 }
 .select-twincol div.buttons button {
 	text-align:center;
-	widht:35px;
+	width:35px;
 }
 .select-twincol select.unselected {
 	float:left;
@@ -284,25 +284,46 @@ IMG.overlay {
 	border-right: 1px solid ButtonShadow; 
 	padding-left: 0.2em;
 }
-.table .hin .hah IMG, .table .hin .tableheader IMG {
+/* @deprecated */
+.table .hin .hah img, .table .hin .tableheader img {
 	height: 1em;
 	width: 2px;
 	cursor:w-resize;
 }
-.table .hin .tableheader {
-	border-left: 1px solid ButtonHighlight;
-	border-right: 1px solid ButtonShadow;
-	padding-left: 0.2em;
+.table .hin td {
+	overflow:hidden;
 }
-.table TABLE {
+.table .hin td img.colresizer {
+	display:block;
+	/* header border at the same time */
+	background-color: ButtonShadow;
+	float:right;
+	height: 1em;
+	width: 2px;
+	cursor:w-resize;
+}
+.table .hin div.headerContent {
+	overflow:hidden;
+	height:100%;
+	white-space:nowrap;
+	/* same margin as for normal cells */
+	padding-left: 3px;
+}
+.table table {
 	border-collapse: collapse;
 	empty-cells: show;
 }
-.table .cin .tableheader {
-	padding-left: 0.2em;
+.table .cin td.tablecell {
+	overflow:hidden;
+	height:100%;
+	white-space:nowrap;
 }
-.table .cin .tablecell {
-	padding-left: 0.2em;
+.table .cin td.tablecell div.cellContent {
+	padding-left: 3px;
+	overflow:hidden;
+	height:100%;
+	white-space:nowrap;
+	border-right:1px solid gray;
 }
 
 .table .selected TD DIV {
@@ -315,17 +336,15 @@ IMG.overlay {
 	border-left: 1px solid Highlight;
 }
 .table .even TD DIV {
-	border-left: 1px solid Window;
 	background-color: Window;
 }
 .table .odd TD DIV {
-	border-left: 1px solid ButtonFace;
 	background-color: ButtonFace;
 }
-.table td.sorted div.asc {
+.table td.asc {
 	background: url('../img/table/asc.gif') right top no-repeat;
 }
-.table td.sorted div.desc {
+.table td.desc {
 	background: url('../img/table/desc.gif') right top no-repeat;
 }
 
@@ -536,5 +555,14 @@ IMG.overlay {
 	padding: 0px;
 	background: transparent;
 }
+
+/* COMPONENT INDEPENDENT CLASSES */
+.align_right {
+	text-align: right;	
+}
+.align_center {
+	text-align: center;	
+}
+
 
 

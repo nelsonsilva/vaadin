@@ -2654,7 +2654,20 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	theme.createTextNodeTo(button,">>");
 },
 
+/*
+SCROLLTABLE GLOSSARY
+hout : header tables container div, id is in form PID69hout
+hin : header table (separate table to allow smooth resizing)
+cout : content tables container div, id is in form PID69cout
+cin : content table
+heh && hah : something concerng row headers
+
+
+*/
+
 renderScrollTable : function(renderer,uidl,target,layoutInfo) {
+    // TODO  MT: extract all possible inline css to .css files to make styling possible
+    
 	// Shortcut variables
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -2734,10 +2747,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	delete alNode;
 
 	inner.innerHTML = "<DIV id=\""+pid+"status\" align=\"center\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></DIV><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD align=center width=16></TD></TR></TBODY></TABLE>";
-	//inner.style.width = wholeWidth+"px";
 	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
-	if (visiblecols) {			
-		vcols.innerHTML = "<DIV class=\"colsel\"><DIV/></DIV>";
+	if (visiblecols) {
+		vcols.innerHTML = "<DIV class=\"colsel\"><div></div</DIV>";
 		var icon = vcols.firstChild; 
 		vcols.id = pid+"vcols";
 		var popup = theme.createElementTo(div,"div","border popup hide");
@@ -2775,6 +2787,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	if (rowheaders) {
 				html += "<TD ";
 				if (colWidths["heh"]) {
+                    // MT this may propably be removed as width is also set for contained div 
 					html += "width=\""+colWidths["heh"]+"\" ";
 				}
 				html += "style=\"overflow:hidden\" cid=\"heh\" id=\""+pid+"heh\"><DIV class=\"padnr hah\" style=\"";
@@ -2798,31 +2811,43 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		alignments[i] = col.getAttribute("align");		
 		colorder[i] = cid;
 		html += "<TD ";
+        var cellClasses = '';
 		if (colWidths[cid]) {
-			html += "width=\""+colWidths[cid]+"\" ";
+            // set width explicitely
+			html += "style=\"width:"+colWidths[cid]+"px;\" ";
 		} 
 		if (sortkey == cid) {
-			html += "sorted=\"true\" class=\"sorted\" ";
+            html += "sorted=\"true\" ";
+            if(sortasc) {
+                cellClasses += 'asc ';
+            } else {
+                cellClasses += 'desc';
+            }
 		}
-		html += "style=\"overflow:hidden\" cid=\""+cid+"\" id=\""+pid+"he"+i+"\" >"
-		html += "<DIV class=\"padnr tableheader"+(sortasc?" asc":" desc")+"\" ";
+        
+		html += " class=\""+cellClasses+"\" cid=\""+cid+"\" id=\""+pid+"he"+i+"\" >"
+        // add image that is used for col resizing, width set in css
+        html += '<img id="'+pid+'ha'+cid+'" src="'+theme.root+'img/table/handle.gif" class="colresizer">';
+		html += '<div class="headerContent';
 		if (alignments[i]) {
 			switch (alignments[i]) {
 				case "e":
-					html += "align=\"right\"";
+					html += " align_right";
 					break;
 				case "c":
-					html += "align=\"center\"";
+					html += " align_center";
 					break;
 				default:
 			}
 		}
-		html += " style=\"";
+		html += '" ';
 		if (colWidths[cid]) {
-			html += "width:"+colWidths[cid]+"px;";
+        // header contents widht needs to be explicitely set to WIDTH - COL_RESIZER_WIDTH
+        // to enable grabbing resizer when header cells content overflows
+			html += 'style="width:'+(colWidths[cid] - 2)+'px;"';
 		} 
-		html += "overflow:hidden;height:100%;white-space:nowrap;\"><IMG id=\""+pid+"ha"+cid+"\" align=\"right\" src=\""+theme.root+"img/table/handle.gif\" border=\"0\">";
-        html += (iconUrl?"<img src=\""+iconUrl+"\" class=\"icon\">":"")+cap+"</DIV></TD>";
+		html += ">";
+        html += (iconUrl?"<img src=\""+iconUrl+"\" class=\"icon\">":"")+cap+"</div></TD>";
 	}
 	html += "</TR></TBODY></TABLE>";
 	hout.innerHTML = html;
@@ -2830,19 +2855,25 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	// content
 	// scroll padding calculations 
 	// TODO these need to be calculated better, perhaps updated after rendering content
+    // one pixel or 22 ( one line height) * first_visible_index
 	var prePad = (fv==1?1:fv*22);
+    // remaining invisible lines * line_height
 	var postPad = (totalrows-fv-rows+1)*22;
 	// html
 	cout = theme.createElementTo(inner,"div");
 	cout.style.width = wholeWidth+"px";
+    // MT why now line height is 18 px ??
 	cout.style.height = (18*rows)+"px";
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
 	cout.style.overflow = "scroll";
-	html = "<TABLE border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"cin\" id=\""+pid+"cin\"><TBODY><TR height=\""+prePad+"\"></TR>";
+	html = "<TABLE border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"cin\" id=\""+pid+"cin\"><TBODY>";
+    // first add a row that that takes space to "fool" scrollbar for unloaded rows
+    html += "<TR height=\""+prePad+"\"></TR>";
 	var trs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
 	len = trs.length;
 	if (len==0) {
+        // add empty row if table has no rows
 		html += "<TR id=\""+pid+"firstrow\"><TD style=\"overflow:hidden\">";
 		html += "<DIV class=\"tablecell pad\" style=\"overflow:hidden;height:100%;white-space:nowrap;border-right:1px solid gray;\"></DIV></TD></TR>";
 	}
@@ -2891,30 +2922,28 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			if (comp.nodeName == "al"||comp.nodeName == "#text") continue;
 			colNum++;
 			// Placeholder TD, we'll render the content later
-			html += "<TD "
+			html += '<td class="tablecell';
+            if (alignments[colNum]) {
+                switch (alignments[colNum]) {
+                    case "e":
+                        html += " align_right";
+                        break;
+                    case "c":
+                        html += " align_center";
+                        break;
+                    default:
+                }
+            }
+            html += '" ';
 			if (colWidths[colorder[colNum]]) {
 				html += "width=\""+colWidths[colorder[colNum]]+"\" ";
 			} 
-			html += "style=\"overflow:hidden\"><DIV class=\"padnr tablecell\" style=\"";
-			if (colWidths[colorder[colNum]]) {
-				html += "width:"+colWidths[colorder[colNum]]+"px;";
-			} 
-			html += "overflow:hidden;height:100%;white-space:nowrap;border-right:1px solid gray;\" ";
-			if (alignments[colNum]) {
-				switch (alignments[colNum]) {
-					case "e":
-						html += " align=\"right\" ";
-						break;
-					case "c":
-						html += " align=\"center\" ";
-						break;
-					default:
-				}
-			}
-			html += "></DIV></TD>";
+			html += '><div class="cellContent"</div></td>';
 		}	
 		html += "</TR>";
 	}
+    // add a row that that takes space to "fool" scrollbar for unloaded rows
+    // its height will be in metacode: (totalrows - firstrow_index + rows_shown) * row_height 
 	html += "<TR id=\""+pid+"lastrow\" height=\""+postPad+"\"></TR></TBODY></TABLE>";	
 	cout.innerHTML = html;
 
@@ -2974,7 +3003,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var p = client.getElementPosition(inner);
 	status.style.top = (p.y + p.h/2) + "px";
 	status.style.left = (p.x + p.w/2 - wholeWidth/4) +"px";
- 	theme.scrollTableAddScrollHandler(client,theme,cout,div,status,lr,fr,rows,totalrows,fv,fvVar,immediate);	
+ 	theme.scrollTableAddScrollHandler(client,theme,cout,div,status,lr,fr,rows,totalrows,fv,fvVar,immediate);
  	theme.scrollTableAddScrollListener(theme,div,pid,lr,fr,rows,totalrows,fv);
  	
  	
@@ -3006,7 +3035,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     var hin = target.ownerDocument.getElementById(pid+"hin");
     var cin = target.ownerDocument.getElementById(pid+"cin");
-     theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
+    theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
 },
 
 // Header order drag & drop	
@@ -3019,18 +3048,15 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 			evt.stop();
 			element.ownerDocument.onselectstart = function(e) {return false;}
 			var target = element.target;
-			var div = target.parentNode;
-			var td = div.parentNode;
-			//target.style.position = "relative";
-			target.style.zIndex = "99999";
-			var offset = -(target.origX-evt.mouseX+10);
+			var td = target.parentNode;
+			var offset = -(target.origX-evt.mouseX);
 			var w = (target.origW+offset);
-			if (w < 7) w = 7;
+            // minimum height = scrollresizer + space for sort indicator + margin
+			if (w < 17) w = 17;
 			try {
-				target.style.left = offset+"px";			
 				td.width = w;
 				td.style.width = w+"px";
-				td.firstChild.style.width = w+"px";
+				td.lastChild.style.width = (w-15)+"px";
 				colWidths[cid] = w;
 			} catch (err) {
 				client.debug("Failed: d&d target.style.left="+ offset+"px");
@@ -3137,7 +3163,7 @@ scrollTableAddScrollHandler : function(client,theme,cout,target,status,lr,fr,row
 },
 
 scrollTableRecalc : function(pid,target) {
-	var defPad = 7;
+	var defPad = 12;
 	var div = target.ownerDocument.getElementById(pid);
 	var wholeWidth = div.initialWidth;
 	var colWidths = div.colWidths;
@@ -3154,29 +3180,34 @@ scrollTableRecalc : function(pid,target) {
         
     var whole = 0;   
     var col = -1;
-    for (var i = 0;i<h.length;i++) {    
-        if (!h[i].getAttribute||!h[i].getAttribute("id")||h[i].getAttribute("id").indexOf(pid+"he")<0) {
+    for (var i = 0;i<h.length;i++) {
+        if (!h[i].getAttribute || !h[i].getAttribute("id") || h[i].getAttribute("id").indexOf(pid+"he")<0) {
             continue;
         }
         col++;
         // colWidth, or whole width if only one column
         var cw = (h.length>1?colWidths[h[i].getAttribute("cid")]:hout.clientWidth-20);
-        var w1 = h[i].firstChild.clientWidth + defPad; 
-        var w2 = (c[col]?c[col].firstChild.clientWidth + defPad:0);
+        var w1 = h[i].clientWidth + defPad ; 
+        var w2 = (c[col]? (c[col].firstChild.clientWidth + defPad) : 0 );
         
         var w = parseInt((cw?cw:(w1>w2?w1:w2)));
-
+        
+        // MT for style or width should be enough, remove h[i].width and test
+        // Headers cell borders are colresizers, so add them to width
         h[i].width = w;
-        h[i].style.width = w+"px";
-        h[i].firstChild.style.width = w+"px";
+        h[i].style.width = (w)+"px";
+        // set div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
+        // now text doesn't overlap resizer & sort indicator
+        h[i].lastChild.style.width = (w - 15)+"px";
         var rows = c.length/h.length;
         for (var j=0;j<rows;j++) {
         	var idx = j*h.length+col;
-                      
 	        if (c[idx]) {
 		        c[idx].width = w;
-		        c[idx].firstChild.style.width = w+"px";
-		        c[idx].style.width = w+"px";
+                c[idx].style.width = w+"px";
+                // workaround for IE overflow bug, set width explicitely for container div
+                // w - (borderwidth + margin/padding)
+                c[idx].firstChild.style.width = (w-4)+"px";
 		        colWidths[h[i].getAttribute("cid")] = w;
 	        }
         }
