@@ -68,6 +68,30 @@ div.panel-strong div.panelborder div.content {
 	padding: 8px 5px 5px 5px;
 }
 
+/* Light style */
+div.panel-light div.panelborder .panelcaption {
+	background: transparent url(../img/common/caption_light_bg.png) repeat-x bottom left;
+	height: 16px;
+	color: #005290;
+	padding: 3px 1px 2px 1px;
+	spacing: 0;
+	font-weight: bold;
+	border: none;
+}
+
+div.panel-light div.panelborder {
+	border: 0;
+}
+
+div.panel-light div.panelborder div.content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 1px #d5d7de;
+	border-bottom:				solid 1px #c9cad0;
+	border-left:				solid 1px #e9e9ee;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px 5px 5px;
+}
+
 /* Tabsheet */
 
 div.tabsheet table.tabs {
