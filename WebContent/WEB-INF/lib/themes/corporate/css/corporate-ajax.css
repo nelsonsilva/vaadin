@@ -1,11 +1,22 @@
+/*****************************************************
+ * IT Mill Toolkit                                   *
+ * ------------------------------------------------- *
+ * Corporate theme stylesheet (Ajax-version)         *
+ *****************************************************/
 
-/* Background */
+/**
+ * Background 
+ * ----------
+ */
 
 html {
     background: #e7eaf0 url(../img/common/application_bg.png) repeat-x 0 0;
 }
 
-/* Fonts */
+/**
+ * Fonts 
+ * -----
+ */
 
 input, select, button, html {
     font-family: Helvetica, Arial, Tahoma, Verdana, sans-serif; 
@@ -18,16 +29,20 @@ input, select, button, html {
 	vertical-align: middle;
 }
 
-/* Panel */
+/**
+ * Panel 
+ * -----
+ */
 
 /* Default style */
+
 .panel .panelborder .panelcaption {
 	background: #d8e8fc url(../img/common/caption_bg.png) repeat-x;
 	height: 16px;
 	color: #005290;
 	padding: 3px 7px 2px 7px;
 	spacing: 0;
-	font-weight: bold;
+	font-weight: normal;
 	border: 1px solid #9fb1d1;
 }
 
@@ -45,6 +60,7 @@ input, select, button, html {
 }
 
 /* Strong style */
+
 .panel-strong .panelborder .panelcaption {
 	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
 	height: 15px;
@@ -69,6 +85,7 @@ input, select, button, html {
 }
 
 /* Light style */
+
 .panel-light .panelborder .panelcaption {
 	background: transparent url(../img/common/caption_light_bg.png) repeat-x bottom left;
 	height: 16px;
@@ -92,13 +109,15 @@ input, select, button, html {
 	padding: 8px 5px 5px 5px;
 }
 
-/* Tabsheet */
+/**
+ * Tabsheet 
+ * --------
+ */
 
 .tabsheet .tabs {
 	position: relative;
 	top: 2px;
 	background-color: auto;
-	width:100%;
 }
 
 .tabsheet .tabs td {
