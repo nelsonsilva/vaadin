@@ -2,21 +2,21 @@
 /* Background */
 
 html {
-    background-color: #e7eaf0; 
-    background-image: url(../img/common/application_bg.png);
-   	background-repeat: repeat-x; 
-	background-position: 0 0;
+    background: #e7eaf0 url(../img/common/application_bg.png) repeat-x 0 0;
 }
 
 /* Fonts */
 
 input, select, button, html {
-    font-family: Tahoma, Helvetica, Arial, Tahoma, Verdana, sans-serif; 
+    font-family: Helvetica, Arial, Tahoma, Verdana, sans-serif; 
     font-size: 8pt;
     font-weight: normal;
     color: #2c3437;
 }
 
+.caption img {
+	vertical-align: middle;
+}
 
 /* Panel */
 
@@ -30,6 +30,7 @@ div.panel div.panelborder .panelcaption {
 	border: 1px solid #a3b5ce;
 	border-bottom: 0;
 }
+
 div.panel div.panelborder {
 	border: 0;
 }
@@ -39,7 +40,8 @@ div.panel div.panelborder div.content {
 	border-right:				solid 2px #aaacbc;
 	border-bottom:				solid 2px #9193a0;
 	border-left:				solid 2px #d3d4dc;
-	background-color: white;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px;
 }
 
 /* Tabsheet */
