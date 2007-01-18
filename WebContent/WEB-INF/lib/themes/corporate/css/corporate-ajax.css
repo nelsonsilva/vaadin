@@ -20,15 +20,15 @@ input, select, button, html {
 
 /* Panel */
 
+/* Default style */
 div.panel div.panelborder .panelcaption {
-	background-image: url(../img/common/caption_strong_bg.png);
-	height: 15px;
-	color: white;
-	padding: 5px;
+	background: #d8e8fc url(../img/common/caption_bg.png) repeat-x;
+	height: 16px;
+	color: #005290;
+	padding: 3px 7px 2px 7px;
 	spacing: 0;
 	font-weight: bold;
-	border: 1px solid #a3b5ce;
-	border-bottom: 0;
+	border: 1px solid #9fb1d1;
 }
 
 div.panel div.panelborder {
@@ -36,6 +36,30 @@ div.panel div.panelborder {
 }
 
 div.panel div.panelborder div.content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px 5px 5px;
+}
+
+/* Strong style */
+div.panel-strong div.panelborder .panelcaption {
+	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
+	height: 15px;
+	color: white;
+	padding: 5px 7px;
+	spacing: 0;
+	font-weight: bold;
+	border: 1px solid #a3b5ce;
+}
+
+div.panel-strong div.panelborder {
+	border: 0;
+}
+
+div.panel-strong div.panelborder div.content {
 	border-top:					solid 0px #d8dbe3;
 	border-right:				solid 2px #aaacbc;
 	border-bottom:				solid 2px #9193a0;
