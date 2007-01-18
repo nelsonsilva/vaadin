@@ -21,7 +21,7 @@ input, select, button, html {
 /* Panel */
 
 div.panel div.panelborder .panelcaption {
-	background-image: url(../img/common/caption_bg.png);
+	background-image: url(../img/common/caption_strong_bg.png);
 	height: 15px;
 	color: white;
 	padding: 5px;
@@ -41,7 +41,7 @@ div.panel div.panelborder div.content {
 	border-bottom:				solid 2px #9193a0;
 	border-left:				solid 2px #d3d4dc;
 	background: #fff url(../img/common/panel_bg.png) repeat-x;
-	padding: 8px 5px;
+	padding: 8px 5px 5px 5px;
 }
 
 /* Tabsheet */
