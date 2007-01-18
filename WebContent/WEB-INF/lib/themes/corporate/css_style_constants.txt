@@ -6,7 +6,9 @@ Corporate theme CSS style constants
 Fonts
 -----
 Basefont: 						8pt	normal	#2c3437	Helvetica, Arial, Tahoma, Verdana, sans-serif
+Default panel captions:			8pt	normal	#005290					-"-
 Strong captions (titlebars): 	8pt	bold	#fff					-"-
+Light panel captions:			8pt	bold	#005290					-"-
 Other captions (white bg): 		9pt	bold	#005c90					-"-
 Table header captions:			8pt bold	#426f92					-"-
 Tabsheet captions:				8pt normal	#426f92					-"-
@@ -16,12 +18,20 @@ Colors
 ------
 Application background: 	#e7eaf0 img/common/application_bg.png		(1 x 555)
 
-Titlebar background:		#3d6ca8	img/common/caption_bg.png			(1 x 25)
-Titlebar border:			#a3b5ce	solid 1px
-
-Panel background:			#fff
-Panel borders:				solid 2px
--top:						#d8dbe3
+Panel
+Titlebar:
+-Default
+ -background:				#d8e8fc	img/common/caption_bg.png			(1 x 21)
+ -border:					#9fb1d1 solid 1px
+-Strong
+ -background:				#3d6ca8	img/common/caption_strong_bg.png	(1 x 25)
+ -border:					#a3b5ce	solid 1px
+-Light
+ -height					23px
+ -background				transparent	img/common/caption_light_bg.png	bottom left (1 x 2)
+Content background:			#fff	img/common/panel_bg.png				(1 x 2)
+Content borders:			solid 2px
+-top:						0px #d8dbe3
 -right:						#aaacbc
 -bottom:					#9193a0
 -left:						#d3d4dc
