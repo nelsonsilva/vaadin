@@ -301,6 +301,8 @@ IMG.overlay {
 	height: 1em;
 	width: 2px;
 	cursor:w-resize;
+	margin:0;
+	padding:0;
 }
 .table .hin div.headerContent {
 	overflow:hidden;
@@ -308,6 +310,16 @@ IMG.overlay {
 	white-space:nowrap;
 	/* same margin as for normal cells */
 	padding-left: 3px;
+	/* extra margin to fill empty pixels in cell, 
+	otherwice d n' d will fail when increasing wider than visible area,
+	value on next line is for IE */
+	margin-right:13px;
+}
+html>body .table .hin div.headerContent {
+	/* for IE this needs to be 1px wider for some unknown reason, set thinner for real browsers
+	TODO: IE7 has the same problem but goes here :( Introduce IE spesific fix CSS file
+	 */
+	margin-right:12px;
 }
 .table table {
 	border-collapse: collapse;
