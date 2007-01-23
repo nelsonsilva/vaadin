@@ -144,6 +144,10 @@ IMG.overlay {
 	font-size: 0.9em;
 	overflow: auto;
 }
+#popup-blocker-iframe {
+	border: none;
+	background-color: transparent;
+}
 
 /* COMPONENTS */
 
