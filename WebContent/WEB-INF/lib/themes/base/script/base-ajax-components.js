@@ -4175,8 +4175,7 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 		var popupContainer;
 		var description;
 		var error;
-		
-		// TODO IFRAME below popup?
+		var iframe;
 		
 		// If the container div is not found, create it once
 		if(!(popupContainer = doc.getElementById("popup-container-div"))) {
@@ -4194,7 +4193,15 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 			error.className = "error";
 			popupContainer.appendChild(error);
 			
+			// IFrame to block browser components from clipping through (for IE6)
+			iframe = doc.createElement("iframe");
+			iframe.id = "popup-blocker-iframe";
+			iframe.style.position = "absolute";
+			iframe.style.zIndex = "99998";
+			//popupContainer.appendChild(iframe);
+			
 			doc.body.appendChild(popupContainer);
+			doc.body.appendChild(iframe);
 			
 			// Enable clicking on container
 			client.addEventListener(popupContainer, "click", 
@@ -4204,10 +4211,12 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 					ev.cancelBubble = true;
 				}
 			);
-		// If already create, restore references
+		// If already created, restore references
 		} else {
 			description = popupContainer.firstChild;
 			error = popupContainer.childNodes[1];
+			//iframe = popupContainer.childNodes[2];
+			iframe = doc.getElementById("popup-blocker-iframe")
 		}
 		
 		description.innerHTML = descHTML? descHTML : "";
@@ -4217,6 +4226,10 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 		else description.style.display = "block";
 		if(!errorHTML) error.style.display = "none";
 		else error.style.display = "block";
+		
+		// Calculate maximum width in pixels
+		popupContainer.style.width = maxPopupWidth;
+		var maxPopupWidthPixels = popupContainer.clientWidth;
 		popupContainer.style.width = "auto";
 		
 		// Align the popup
@@ -4224,7 +4237,7 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 		var popupWidth = popupContainer.clientWidth;
 		var available = doc.body.clientWidth-pos.x;
 		
-		if(popupWidth > available) {
+		if(popupWidth > available || popupWidth > maxPopupWidthPixels) {
 			popupContainer.style.width = maxPopupWidth;
 			popupWidth = popupContainer.clientWidth;
 			if(popupWidth > available) popupContainer.style.left = pos.x + 12 - (popupWidth-available) + "px";
@@ -4235,6 +4248,12 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 			popupContainer.style.top = pos.y + 20 + "px";
 		}
 		
+		iframe.style.width = popupWidth + "px";
+		iframe.style.height = popupContainer.clientHeight + "px";
+		iframe.style.position = "absolute";
+		iframe.style.left = popupContainer.style.left;
+		iframe.style.top = popupContainer.style.top;
+		
 		if(forceOpen) target._forcedOpen = true;
 		else target._forcedOpen = false;
 
@@ -4244,10 +4263,14 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 },
 
 hideDescriptionAndErrorPopup : function(target, forceClose) {
+	var popupContainer;
 	if(target._descriptionPopupTimeout) clearTimeout(target._descriptionPopupTimeout);
 	if((popupContainer = target.ownerDocument.getElementById("popup-container-div")) && (!target._forcedOpen || forceClose)) {
 		popupContainer.style.left = "-10000px";
 		popupContainer.style.top = "-10000px";
+		var iframe = target.ownerDocument.getElementById("popup-blocker-iframe");
+		iframe.style.left = "-10000px";
+		iframe.style.top = "-10000px";
 		target._forcedOpen = false;
 	}
 },
