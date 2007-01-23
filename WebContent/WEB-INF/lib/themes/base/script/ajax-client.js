@@ -935,8 +935,6 @@ itmill.Client.prototype.processUpdates = function (updates) {
 						if (!currentNode) {
 							currentNode = this.createPaintableElement(uidl);
 						}
-						this.warn("Removed " + this.removeAllEventListeners(currentNode) + " event listeners.");
-						this.warn("Removed " + this.unregisterAllLayoutFunctions(currentNode) + " layout functions.");
 						if (currentNode.ownerDocument.renderUIDL) {
 							currentNode.ownerDocument.renderUIDL(uidl,currentNode);
 						} else { 

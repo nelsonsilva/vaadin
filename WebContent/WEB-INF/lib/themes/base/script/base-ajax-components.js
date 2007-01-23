@@ -558,6 +558,9 @@ createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 	var li = layoutInfo||target.layoutInfo;
 	if (pid != null && target.getAttribute("id") == pid){
 		div = target;
+        // this a repaint, remove old listeners
+        renderer.client.warn("Removed " + renderer.client.removeAllEventListeners(div) + " event listeners.");
+        renderer.client.warn("Removed " + renderer.client.unregisterAllLayoutFunctions(div) + " layout functions.");
 	} else {
 		//TODO: Remove this if the statement below works.
 		// div = renderer.theme.createElementTo(target,"div");
