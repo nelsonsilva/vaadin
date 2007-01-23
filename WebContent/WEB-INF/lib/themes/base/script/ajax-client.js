@@ -4,7 +4,9 @@
  * All globals should be defined in this namespace.
  *
  */
-itmill = new Object();
+if (typeof itmill == 'undefined') itmill = new Object();
+
+/** List of themes */
 itmill.themes = new Object();
 
 
