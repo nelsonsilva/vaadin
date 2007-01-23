@@ -85,9 +85,9 @@
         
         <xsl:if test="$dhtml">
           <SCRIPT LANGUAGE="JavaScript">
-            Millstone.updateCalendar('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="$yearid"/>','<xsl:value-of select="$monthid"/>','<xsl:value-of select="$dayid"/>','<xsl:value-of select="$weekbegin"/>');
+            itmill.html.utils.updateCalendar('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="$yearid"/>','<xsl:value-of select="$monthid"/>','<xsl:value-of select="$dayid"/>','<xsl:value-of select="$weekbegin"/>');
             <xsl:if test="./integer[@name='day']">
-                Millstone.calendarDaySelect('<xsl:value-of select="$calendarid"/>',<xsl:value-of select="./integer[@name='day']/@value"/>);
+                itmill.html.utils.calendarDaySelect('<xsl:value-of select="$calendarid"/>',<xsl:value-of select="./integer[@name='day']/@value"/>);
              </xsl:if>
           </SCRIPT>
         </xsl:if>
@@ -148,10 +148,10 @@
          <xsl:when test="$dhtml and (../@style='calendar')">
            <xsl:variable name="monthid"><xsl:value-of select="../integer[@name='month']/@id"/></xsl:variable>  
            <xsl:variable name="dayid"><xsl:value-of select="../integer[@name='day']/@id"/></xsl:variable>  
-           <xsl:attribute name="ONCHANGE">Millstone.updateCalendar('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="@id"/>','<xsl:value-of select="$monthid"/>','<xsl:value-of select="$dayid"/>','<xsl:value-of select="$weekbegin"/>','<xsl:value-of select="../@immediate"/>');</xsl:attribute>
+           <xsl:attribute name="ONCHANGE">itmill.html.utils.updateCalendar('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="@id"/>','<xsl:value-of select="$monthid"/>','<xsl:value-of select="$dayid"/>','<xsl:value-of select="$weekbegin"/>','<xsl:value-of select="../@immediate"/>');</xsl:attribute>
          </xsl:when>
          <xsl:when test="$dhtml and (../@immediate)">
-           <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+           <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
          </xsl:when>        
        </xsl:choose>
       </INPUT>
@@ -186,7 +186,7 @@
       - <INPUT TYPE="text" SIZE="2" MAXLENGTH="2" ID="{@id}" NAME="{@id}" VALUE="{$value}" CLASS="{$class}-m">
         <xsl:if test="../@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
         <xsl:if test="$dhtml and (../@immediate)">
-            <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
         </xsl:if>
       </INPUT>
     </xsl:otherwise>
@@ -211,7 +211,7 @@
         <xsl:if test="$dhtml">
             <xsl:variable name="yearid"><xsl:value-of select="../integer[@name='year']/@id"/></xsl:variable>
             <xsl:variable name="dayid"><xsl:value-of select="../integer[@name='day']/@id"/></xsl:variable>  
-            <xsl:attribute name="ONCHANGE">Millstone.updateCalendar('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="$yearid"/>','<xsl:value-of select="@id"/>','<xsl:value-of select="$dayid"/>','<xsl:value-of select="$weekbegin"/>','<xsl:value-of select="../@immediate"/>');</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.updateCalendar('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="$yearid"/>','<xsl:value-of select="@id"/>','<xsl:value-of select="$dayid"/>','<xsl:value-of select="$weekbegin"/>','<xsl:value-of select="../@immediate"/>');</xsl:attribute>
         </xsl:if>
 
     	<!-- Generate months for selector -->    
@@ -248,7 +248,7 @@
         <xsl:if test="../@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
 
         <xsl:if test="$dhtml and (../@immediate)">
-            <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
         </xsl:if>
       </INPUT>
     </xsl:otherwise>
@@ -271,7 +271,7 @@
 
         <!-- calendar is updated on change -->
         <xsl:if test="$dhtml and (../@immediate)">
-          <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+          <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
         </xsl:if>
         
     	<!-- Generate days for selector -->          
@@ -335,7 +335,7 @@
       <INPUT TYPE="text" SIZE="2" MAXLENGTH="2" ID="{@id}" NAME="{@id}" VALUE="{$value}" CLASS="{$class}-h">
         <xsl:if test="../@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
         <xsl:if test="$dhtml and (../@immediate)">
-            <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
         </xsl:if>        
       </INPUT>
     </xsl:otherwise>
@@ -362,7 +362,7 @@
        : <INPUT TYPE="text" SIZE="2" MAXLENGTH="2" ID="{@id}" NAME="{@id}" VALUE="{$value}" CLASS="{$class}-min">
          <xsl:if test="../@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
          <xsl:if test="$dhtml and (../@immediate)">
-            <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
          </xsl:if>
       </INPUT>
     </xsl:otherwise>
@@ -390,7 +390,7 @@
          <xsl:if test="../@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
 
         <xsl:if test="$dhtml and (../@immediate)">
-            <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
         </xsl:if>
       </INPUT>
     </xsl:otherwise>
@@ -418,7 +418,7 @@
          <xsl:if test="../@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
 
         <xsl:if test="$dhtml and (../@immediate)">
-            <xsl:attribute name="ONCHANGE">Millstone.submit();</xsl:attribute>
+            <xsl:attribute name="ONCHANGE">itmill.html.utils.submit();</xsl:attribute>
         </xsl:if>
       </INPUT>
     </xsl:otherwise>
@@ -533,7 +533,7 @@
   
   <TD>
     <xsl:if test="not(../@readonly) and not(../@disabled)">
-      <xsl:attribute name="ONCLICK">Millstone.calSel('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="$dayid"/>',this.id,'<xsl:value-of select="$immediate"/>')</xsl:attribute>
+      <xsl:attribute name="ONCLICK">itmill.html.utils.calSel('<xsl:value-of select="$calendarid"/>','<xsl:value-of select="$dayid"/>',this.id,'<xsl:value-of select="$immediate"/>')</xsl:attribute>
     </xsl:if>
     <xsl:attribute name="ID"><xsl:value-of select="$calendarid"/>_<xsl:value-of select="$week"/>_<xsl:value-of select="$day"/></xsl:attribute>
     <xsl:attribute name="CLASS">cal-day</xsl:attribute>

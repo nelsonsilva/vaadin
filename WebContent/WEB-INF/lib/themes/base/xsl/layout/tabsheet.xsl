@@ -19,7 +19,7 @@
 	          <TD>
 	            <xsl:choose>
 	              <xsl:when test="$dhtml"> 
-	                <xsl:attribute name="ONCLICK">document.millstone.<xsl:value-of select="$selectid"/>.value='<xsl:value-of select="@key"/>';Millstone.submit();</xsl:attribute>
+	                <xsl:attribute name="ONCLICK">itmill.html.utils.setVarById('<xsl:value-of select="$selectid"/>','<xsl:value-of select="@key"/>',true);</xsl:attribute>
 	            	<xsl:attribute name="CLASS"><xsl:choose><xsl:when test="@selected='true'">tab-c-s</xsl:when><xsl:otherwise>tab-c</xsl:otherwise></xsl:choose></xsl:attribute>
 			    	<NOBR>
 			      	  <xsl:if test="@icon"><IMG SRC="{@icon}"/></xsl:if>

@@ -1,24 +1,105 @@
 // ==========================================================================
+
+/** Declare our own namespace. 
+ * 
+ * All globals should be defined in this namespace.
+ *
+ */
+if (typeof itmill == 'undefined') itmill = new Object();
+if (typeof itmill.html == 'undefined') itmill.html = new Object();
+
+// ==========================================================================
+//
+// Window load and unload callback manager
+// 
+// ==========================================================================
+
+Function.prototype.andThen=function(g) {
+  var f=this;
+  return function() {
+    f();g();
+  }
+};
+
+itmill.html.EventManager = function() {
+
+  this.loadCallback=function () { }; // do nothing
+  this.unloadCallback=function () { }; // do nothing
+  this.submitCallback=function () { }; // do nothing
+
+  this.registerLoadCallback=function(callbackFunction) {
+    this.loadCallback=(this.loadCallback).andThen(callbackFunction);
+  }
+
+  this.registerUnloadCallback=function(callbackFunction) {
+    this.unloadCallback=(this.unloadCallback).andThen(callbackFunction);
+  }
+  
+  this.registerSubmitCallback=function(callbackFunction) {
+    this.submitCallback=(this.submitCallback).andThen(callbackFunction);
+  }
+};
+
+itmill.html.eventMgr = new itmill.html.EventManager();
+
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Common utils constructor.
+//
+// Returns nothing
+// --------------------------------------------------------------------------
+itmill.html.BaseUtils = function() {
+
+	// Is the debug mode enabled?
+	this.debug = true;
+
+	// Globals for handling browser differences
+	this.ie5 = document.all && document.getElementById;
+	this.ns6 = document.getElementById && !document.all;
+	this.safari = navigator.userAgent.toLowerCase().indexOf("safari") >= 0;
+
+	// Modal window handling variables
+	this.dialogWin = new Object();
+	this.dialogs = new Array();
+	
+	// Global array of active popups
+	this.activePopups = new Array();
+	this.popupCount = 0;
+	this.skipNextHideAll = false;
+	
+	
+	// Create instances for other required classes
+	this.commons = new itmill.html.CommonUtils();
+	this.logger = new itmill.html.Logger();
+	this.events = new itmill.html.EventUtils();
+	this.focusable = new itmill.html.FocusableUtils(this.events);
+	this.windows = new itmill.html.WindowUtils();	
+
+	// Add handler for otherwise unhandled clicks
+	var f = function() { itmill.html.utils.hideAllPopups() };
+	if (window.document['onclick'] == null) {
+		window.document['onclick'] = f;
+	} else {
+		window.document['onclick'] = (document['onclick']).andThen(f);		
+	}
+}
+
 // ==========================================================================
 //
 // Variable handling functions
 // 
 // ==========================================================================
 
-// Global objects
-var Millstone = new MillstoneUtils();
-
-
-
 // --------------------------------------------------------------------------
-// Submit the millstone form.
+// Submit the form.
 //
 // Params:
 //
 // Returns nothing
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.submit = function() {
+itmill.html.BaseUtils.prototype.submit = function() {
 
 	// Manually call this beacause it is not
 	// called automatically ???
@@ -26,28 +107,29 @@ MillstoneUtils.prototype.submit = function() {
    		form_onsubmit();
    	}
     this.showHourglassCursor();
-	document.millstone.submit();
+    var form = document.forms["itmilltoolkit"]; if (typeof form == 'undefined') form = document.forms["mill"+"stone"];
+	form.submit();
 }
 
 // Window component javascript
 
-MillstoneUtils.prototype.form_submit = function() {
+itmill.html.BaseUtils.prototype.form_submit = function() {
 	 // Invoke all registered listeners	    
-	 if (typeof millstoneEventManager != 'undefined') {
-		millstoneEventManager.submitCallback();
+	 if (typeof itmill.html.eventMgr != 'undefined') {
+		itmill.html.eventMgr.submitCallback();
 	}
 }	    
 
 
-MillstoneUtils.prototype.window_onunload = function() {    
+itmill.html.BaseUtils.prototype.window_onunload = function() {    
 	// Invoke all registered listeners	    
-	if (typeof millstoneEventManager != 'undefined') {    
-	    		millstoneEventManager.unloadCallback();
+	if (typeof itmill.html.eventMgr != 'undefined') {    
+	    		itmill.html.eventMgr.unloadCallback();
 	}
 }
 
 
-MillstoneUtils.prototype.setFocusedFromActiveElement = function() {
+itmill.html.BaseUtils.prototype.setFocusedFromActiveElement = function() {
 	elementFocused(document.activeElement);
 }
 
@@ -61,7 +143,7 @@ MillstoneUtils.prototype.setFocusedFromActiveElement = function() {
 // Returns false iff no error occurred
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.getVarById = function(id) {
+itmill.html.BaseUtils.prototype.getVarById = function(id) {
   var e = document.getElementById(id);
   if (e) {
     return e.value; 
@@ -81,12 +163,12 @@ MillstoneUtils.prototype.getVarById = function(id) {
 // Returns false iff no error occurred
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.setVarById = function(id,value,immediate) {
+itmill.html.BaseUtils.prototype.setVarById = function(id,value,immediate) {
   e = document.getElementById(id);
   if (e) {
     e.value = value;
     if (immediate) {
-      Millstone.submit();
+      itmill.html.utils.submit();
     }
     return false; 
   }
@@ -104,7 +186,7 @@ MillstoneUtils.prototype.setVarById = function(id,value,immediate) {
 // Returns true iff the number can be found in the list
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.listContainsInt = function(list,number) {
+itmill.html.BaseUtils.prototype.listContainsInt = function(list,number) {
   a = list.split(",");
 
   for (i=0;i<a.length;i++) {
@@ -125,7 +207,7 @@ MillstoneUtils.prototype.listContainsInt = function(list,number) {
 // Return new list
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.listAddInt = function(list,number) {
+itmill.html.BaseUtils.prototype.listAddInt = function(list,number) {
 
   if (this.listContainsInt(list,number)) 
     return list;
@@ -145,7 +227,7 @@ MillstoneUtils.prototype.listAddInt = function(list,number) {
 // Return new list
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.listRemoveInt = function(list,number) {
+itmill.html.BaseUtils.prototype.listRemoveInt = function(list,number) {
 
   retval = "";
   a = list.split(',');
@@ -183,7 +265,7 @@ MillstoneUtils.prototype.listRemoveInt = function(list,number) {
 //
 // returns Class name without the selected appendix.
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.toUnselectedClassName = function(currentName) {
+itmill.html.BaseUtils.prototype.toUnselectedClassName = function(currentName) {
 	if (currentName) {
 		i = currentName.lastIndexOf("-selected");
 		if (i>=0) {
@@ -208,7 +290,7 @@ MillstoneUtils.prototype.toUnselectedClassName = function(currentName) {
 //
 // returns Class name with the selected appendix.
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.toSelectedClassName = function(currentName) {
+itmill.html.BaseUtils.prototype.toSelectedClassName = function(currentName) {
 	if (currentName) {
 		i = currentName.lastIndexOf("-selected");
 		if (i>=0) {
@@ -229,7 +311,7 @@ MillstoneUtils.prototype.toSelectedClassName = function(currentName) {
 //
 // returns Class name with the highlight appendix.
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.toHighlightClassName = function(currentName) {
+itmill.html.BaseUtils.prototype.toHighlightClassName = function(currentName) {
 	if (currentName) {
 		i = currentName.lastIndexOf("-highlighted");
 		if (i>=0) {
@@ -265,7 +347,7 @@ MillstoneUtils.prototype.toHighlightClassName = function(currentName) {
 //
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.openWindow = function(url,name,width,height,border) {
+itmill.html.BaseUtils.prototype.openWindow = function(url,name,width,height,border) {
 	var props = '';
 
 	// Open the url in this window ?
@@ -311,7 +393,7 @@ MillstoneUtils.prototype.openWindow = function(url,name,width,height,border) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.disableElement = function(element) {
+itmill.html.BaseUtils.prototype.disableElement = function(element) {
         if (element != null) {
             element.disabled = true;
         }
@@ -324,7 +406,7 @@ MillstoneUtils.prototype.disableElement = function(element) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.enableElement = function(element) {
+itmill.html.BaseUtils.prototype.enableElement = function(element) {
         if (element != null) {
 			element.disabled = false;        
         }
@@ -337,7 +419,7 @@ MillstoneUtils.prototype.enableElement = function(element) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.hideElement = function(element) {
+itmill.html.BaseUtils.prototype.hideElement = function(element) {
         if (element != null) {
             element.style.display="none";
         }
@@ -350,7 +432,7 @@ MillstoneUtils.prototype.hideElement = function(element) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.showElement = function(element) {
+itmill.html.BaseUtils.prototype.showElement = function(element) {
         if (element != null) {
 			element.style.display="";        
         }
@@ -363,7 +445,7 @@ MillstoneUtils.prototype.showElement = function(element) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.isElementVisible = function(element) {
+itmill.html.BaseUtils.prototype.isElementVisible = function(element) {
         if (element != null) {
 			return (element.style.display != "none");        
         }
@@ -377,7 +459,7 @@ MillstoneUtils.prototype.isElementVisible = function(element) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.toggleElement = function(element) {
+itmill.html.BaseUtils.prototype.toggleElement = function(element) {
         if (element != null) {
         	if (this.isElementVisible(element)) {
 				this.hideElement(element);
@@ -394,7 +476,7 @@ MillstoneUtils.prototype.toggleElement = function(element) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.hideElementById = function(id) {
+itmill.html.BaseUtils.prototype.hideElementById = function(id) {
     	this.hideElement(document.getElementById(id));
 }
 
@@ -405,7 +487,7 @@ MillstoneUtils.prototype.hideElementById = function(id) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.showElementById = function(id) {
+itmill.html.BaseUtils.prototype.showElementById = function(id) {
     	this.showElement(document.getElementById(id));
 }
 
@@ -416,7 +498,7 @@ MillstoneUtils.prototype.showElementById = function(id) {
 // id:      ID of the element
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.toggleElementById = function(id) {
+itmill.html.BaseUtils.prototype.toggleElementById = function(id) {
     	this.toggleElement(document.getElementById(id));
 }
 
@@ -431,7 +513,7 @@ MillstoneUtils.prototype.toggleElementById = function(id) {
 //
 // returns:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.showObjectProperties = function(el) 
+itmill.html.BaseUtils.prototype.showObjectProperties = function(el) 
 { 
     var result = getObjectProperties(el);
 	var w = window.open(); 
@@ -447,7 +529,7 @@ MillstoneUtils.prototype.showObjectProperties = function(el)
 //
 // returns: String containing objects properties in format name=value, one per line.
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.getObjectProperties = function(obj) {
+itmill.html.BaseUtils.prototype.getObjectProperties = function(obj) {
     var result = "" 
     for (var p in obj) {
         result += p + "=" + obj[p] + "\n"; 
@@ -471,7 +553,7 @@ MillstoneUtils.prototype.getObjectProperties = function(obj) {
 // Params:
 //
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.actionPopup = function(event,actionListId,itemKey,activeActions) {
+itmill.html.BaseUtils.prototype.actionPopup = function(event,actionListId,itemKey,activeActions) {
 
 	document.getElementById(actionListId+"_ACTIVE_ITEM").value = itemKey;
 	var popup = document.getElementById(actionListId + '_POPUP');
@@ -505,13 +587,13 @@ MillstoneUtils.prototype.actionPopup = function(event,actionListId,itemKey,activ
 //
 // return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.fireAction = function(actionListId,actionVariableId,actionKey) {
+itmill.html.BaseUtils.prototype.fireAction = function(actionListId,actionVariableId,actionKey) {
 	this.hidePopupById(actionListId+"_POPUP");
 	actionVariable = document.getElementById(actionVariableId);
 	currentItem = document.getElementById(actionListId+"_ACTIVE_ITEM");
 	if (currentItem && actionVariable) {
 		actionVariable.value = currentItem.value+","+actionKey;
-		void(Millstone.submit());	
+		void(itmill.html.utils.submit());	
 	}
 }
 
@@ -535,7 +617,7 @@ MillstoneUtils.prototype.fireAction = function(actionListId,actionVariableId,act
 //
 // Params:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.showPopupById = function(popupId, clientX, clientY) {
+itmill.html.BaseUtils.prototype.showPopupById = function(popupId, clientX, clientY) {
 
 	this.hideAllPopups();
 
@@ -586,7 +668,7 @@ MillstoneUtils.prototype.showPopupById = function(popupId, clientX, clientY) {
 //
 // returns:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.hidePopupById = function(id) {
+itmill.html.BaseUtils.prototype.hidePopupById = function(id) {
 		popup = document.getElementById(id);
 		if (popup) {
 			this.hideElement(popup);
@@ -601,7 +683,7 @@ MillstoneUtils.prototype.hidePopupById = function(id) {
 //
 // returns:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.hideAllPopups = function() {
+itmill.html.BaseUtils.prototype.hideAllPopups = function() {
 	// Do not immediately remove the popup
 	if (this.skipNextHideAll) {
 		this.skipNextHideAll = false;
@@ -637,14 +719,14 @@ MillstoneUtils.prototype.hideAllPopups = function() {
 // Returns false iff no error occurred
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.toggleCheckbox = function(id,immediate) {
+itmill.html.BaseUtils.prototype.toggleCheckbox = function(id,immediate) {
   
   e = document.getElementById(id);
   if (e) {
 	e.checked = (e.checked ? false : true);
 
 	if (immediate) {
-		Millstone.submit();
+		itmill.html.utils.submit();
 	}
 	return false;
   }
@@ -665,7 +747,7 @@ MillstoneUtils.prototype.toggleCheckbox = function(id,immediate) {
 // mode         "single" or "multi"
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.tableSelClick = function(inputid,key,immediate,mode) {
+itmill.html.BaseUtils.prototype.tableSelClick = function(inputid,key,immediate,mode) {
 
   prev = value = this.getVarById(inputid);
   
@@ -703,7 +785,7 @@ MillstoneUtils.prototype.tableSelClick = function(inputid,key,immediate,mode) {
 
   // Submit if in immediate mode  
   if (changed && immediate) {
-    Millstone.submit();
+    itmill.html.utils.submit();
   }
 }
 
@@ -717,7 +799,7 @@ MillstoneUtils.prototype.tableSelClick = function(inputid,key,immediate,mode) {
 // mode         "single" or "multi"
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.treeSelClick = function(inputid,key,immediate,mode) {
+itmill.html.BaseUtils.prototype.treeSelClick = function(inputid,key,immediate,mode) {
 
   prev = value = this.getVarById(inputid);
 
@@ -752,7 +834,7 @@ MillstoneUtils.prototype.treeSelClick = function(inputid,key,immediate,mode) {
 
   // Submit if in immediate mode  
   if (immediate) {
-    Millstone.submit();
+    itmill.html.utils.submit();
   }
 }
 
@@ -766,7 +848,7 @@ MillstoneUtils.prototype.treeSelClick = function(inputid,key,immediate,mode) {
 // immediate    "true" iff the table is in immediate mode
 // --------------------------------------------------------------------------
 
-MillstoneUtils.prototype.treeExpClick = function(expandid,collapseid,key,immediate) {
+itmill.html.BaseUtils.prototype.treeExpClick = function(expandid,collapseid,key,immediate) {
 
   // Fetch the current variable values
   var expanded = this.getVarById(expandid);
@@ -831,7 +913,7 @@ MillstoneUtils.prototype.treeExpClick = function(expandid,collapseid,key,immedia
     }
   } else {
       // Fetch the missing items
-      Millstone.submit();
+      itmill.html.utils.submit();
   }
 }
 
@@ -852,7 +934,7 @@ MillstoneUtils.prototype.treeExpClick = function(expandid,collapseid,key,immedia
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.getCalendarMonth = function(year, month, weekBegin) {
+itmill.html.BaseUtils.prototype.getCalendarMonth = function(year, month, weekBegin) {
 
 	var cal = new Array();
 	cal[0] = new Array(7);
@@ -886,7 +968,7 @@ MillstoneUtils.prototype.getCalendarMonth = function(year, month, weekBegin) {
 }
 
 
-MillstoneUtils.prototype.getDaysInMonth = function(year, month) {
+itmill.html.BaseUtils.prototype.getDaysInMonth = function(year, month) {
 	var lastDate = new Date(year, 1+month, 0);
 	return lastDate.getDate();
 }
@@ -899,7 +981,7 @@ MillstoneUtils.prototype.getDaysInMonth = function(year, month) {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.updateCalendar = function(calendarId, yearId, monthId, dayId, weekBegin, immediate) {
+itmill.html.BaseUtils.prototype.updateCalendar = function(calendarId, yearId, monthId, dayId, weekBegin, immediate) {
 
   if (calendarId != '') {;
 
@@ -944,7 +1026,7 @@ MillstoneUtils.prototype.updateCalendar = function(calendarId, yearId, monthId, 
 
   // Submit if in immediate mode  
   if (immediate && immediate == "true") {
-    Millstone.submit();
+    itmill.html.utils.submit();
   }
 	
 }
@@ -957,7 +1039,7 @@ MillstoneUtils.prototype.updateCalendar = function(calendarId, yearId, monthId, 
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.calendarUnselectAll = function(calendarId) {
+itmill.html.BaseUtils.prototype.calendarUnselectAll = function(calendarId) {
 
 	for (week = 0; week < 6; week++) {
 		for (day = 0; day < 7; day++) {
@@ -983,7 +1065,7 @@ MillstoneUtils.prototype.calendarUnselectAll = function(calendarId) {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.calendarDaySelect = function(calendarId, dayNumber) {
+itmill.html.BaseUtils.prototype.calendarDaySelect = function(calendarId, dayNumber) {
  
 	// Visually select the current day
 	for (week = 0; week < 6; week++) {
@@ -1009,7 +1091,7 @@ MillstoneUtils.prototype.calendarDaySelect = function(calendarId, dayNumber) {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.calSel = function(calendarId, dayVariableId, dayElementId, immediate) {
+itmill.html.BaseUtils.prototype.calSel = function(calendarId, dayVariableId, dayElementId, immediate) {
  
 	// Visually unselect all
 	this.calendarUnselectAll(calendarId);
@@ -1023,7 +1105,7 @@ MillstoneUtils.prototype.calSel = function(calendarId, dayVariableId, dayElement
 	
   // Submit if in immediate mode  
   if (immediate) {
-    Millstone.submit();
+    itmill.html.utils.submit();
   }
 }
 
@@ -1044,10 +1126,10 @@ MillstoneUtils.prototype.calSel = function(calendarId, dayVariableId, dayElement
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.focusModal = function() {
-   var win = Millstone.dialogs.pop();
+itmill.html.BaseUtils.prototype.focusModal = function() {
+   var win = itmill.html.utils.dialogs.pop();
    if (win) {
-     Millstone.dialogs.push(win);
+     itmill.html.utils.dialogs.push(win);
    	 win.focus();
    }
 }
@@ -1060,9 +1142,10 @@ MillstoneUtils.prototype.focusModal = function() {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.blockEvents = function(win) {
+itmill.html.BaseUtils.prototype.blockEvents = function(win) {
    win.document.onclick = this.focusModal;
-   win.document.forms["millstone"].disable
+   var form = win.document.forms["itmilltoolkit"]; if (typeof form == 'undefined') form = win.document.forms["mill"+"stone"];
+   form.disable
    win.onclick = this.focusModal;
    win.onfocus = this.focusModal;
    win.document.body.onfocus = this.focusModal;
@@ -1078,7 +1161,7 @@ MillstoneUtils.prototype.blockEvents = function(win) {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.unblockEvents = function(win) {
+itmill.html.BaseUtils.prototype.unblockEvents = function(win) {
    win.onclick = null;
    this.hideOverlayLayer(win);
    //alert("un-blocked: "+win.name);
@@ -1091,7 +1174,7 @@ MillstoneUtils.prototype.unblockEvents = function(win) {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.makeModal = function(win) {
+itmill.html.BaseUtils.prototype.makeModal = function(win) {
       this.dialogs.push(win);
       if (win.opener) {
           this.blockEvents(win.opener);
@@ -1109,10 +1192,10 @@ MillstoneUtils.prototype.makeModal = function(win) {
 //
 // Return:
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.cancelModal = function() {  
-   var win = Millstone.dialogs.pop();
+itmill.html.BaseUtils.prototype.cancelModal = function() {  
+   var win = itmill.html.utils.dialogs.pop();
    if (win && win.opener) {
-   		Millstone.unblockEvents(win.opener);
+   		itmill.html.utils.unblockEvents(win.opener);
    }
    //alert("closed dialog: "+window.name);   
 }
@@ -1131,7 +1214,7 @@ MillstoneUtils.prototype.cancelModal = function() {
 //
 // Return: The layer
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.showOverlayLayer = function(win)
+itmill.html.BaseUtils.prototype.showOverlayLayer = function(win)
 {
 	var layer = null;
 	var left = 0;
@@ -1173,7 +1256,7 @@ MillstoneUtils.prototype.showOverlayLayer = function(win)
 //
 // Return: nothing.
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.hideOverlayLayer = function(win) {
+itmill.html.BaseUtils.prototype.hideOverlayLayer = function(win) {
 	var layer = win.document.getElementById("ms_overlay");
 	if (layer) {
 		this.hideElement(layer);
@@ -1189,87 +1272,11 @@ MillstoneUtils.prototype.hideOverlayLayer = function(win) {
 //
 // Return: nothing.
 // --------------------------------------------------------------------------
-MillstoneUtils.prototype.showHourglassCursor = function() {
+itmill.html.BaseUtils.prototype.showHourglassCursor = function() {
 	var layer = this.showOverlayLayer(window);
 	layer.style.cursor = "wait";
 }
 
-// ==========================================================================
-// ==========================================================================
-//
-// Window load and unload callback manager
-// 
-// ==========================================================================
 
-Function.prototype.andThen=function(g) {
-  var f=this;
-  return function() {
-    f();g();
-  }
-}
-
-function MillstoneEventManager() {
-
-  this.loadCallback=function () { }; // do nothing
-  this.unloadCallback=function () { }; // do nothing
-  this.submitCallback=function () { }; // do nothing
-
-  this.registerLoadCallback=function(callbackFunction) {
-    this.loadCallback=(this.loadCallback).andThen(callbackFunction);
-  }
-
-  this.registerUnloadCallback=function(callbackFunction) {
-    this.unloadCallback=(this.unloadCallback).andThen(callbackFunction);
-  }
-  
-  this.registerSubmitCallback=function(callbackFunction) {
-    this.submitCallback=(this.submitCallback).andThen(callbackFunction);
-  }
-}
-
-var millstoneEventManager = new MillstoneEventManager();
-
-// --------------------------------------------------------------------------
-// Millstone utils constructor.
-//
-// Returns nothing
-// --------------------------------------------------------------------------
-function MillstoneUtils() {
-
-	// Is the debug mode enabled?
-	this.debug = true;
-
-	// Globals for handling browser differences
-	this.ie5 = document.all && document.getElementById;
-	this.ns6 = document.getElementById && !document.all;
-	this.safari = navigator.userAgent.toLowerCase().indexOf("safari") >= 0;
-
-	// Modal window handling variables
-	this.dialogWin = new Object();
-	this.dialogs = new Array();
-	
-	// Global array of active popups
-	this.activePopups = new Array();
-	this.popupCount = 0;
-	this.skipNextHideAll = false;
-	
-	
-	// Create instances for other required classes
-	this.commons = new MillstoneCommonUtils();
-	this.logger = new MillstoneLogger();
-	this.events = new MillstoneEventUtils();
-	this.focusable = new MillstoneFocusableUtils(this.events);
-	this.windows = new MillstoneWindowUtils();	
-
-	// Add handler for otherwise unhandled clicks
-	var f = function() { Millstone.hideAllPopups() };
-	if (window.document['onclick'] == null) {
-		window.document['onclick'] = f;
-	} else {
-		window.document['onclick'] = (document['onclick']).andThen(f);		
-	}
-}
-
-
-
+itmill.html.utils = new itmill.html.BaseUtils();
 

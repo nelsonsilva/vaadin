@@ -39,7 +39,7 @@
 
 <xsl:template match="description" mode="dhtml">
   <xsl:variable name="descid" select="generate-id(.)"/>
-  <A ONCLICK="Millstone.showPopupById('{$descid}',event.clientX,event.clientY);">	
+  <A ONCLICK="itmill.html.utils.showPopupById('{$descid}',event.clientX,event.clientY);">	
     <IMG> 
       <xsl:attribute name="SRC"><xsl:value-of select="wa:resource('icon/error/info.gif')"/></xsl:attribute>
     </IMG>
@@ -51,7 +51,7 @@
   <DIV ID="{$descid}" CLASS="popup">
     <xsl:if test="$dhtml">
       <xsl:attribute name="STYLE">display:none;</xsl:attribute>
-      <xsl:attribute name="ONCLICK">Millstone.hidePopupById('<xsl:value-of select="$descid"/>');</xsl:attribute>
+      <xsl:attribute name="ONCLICK">itmill.html.utils.hidePopupById('<xsl:value-of select="$descid"/>');</xsl:attribute>
     </xsl:if>
     <xsl:apply-templates/>		 
   </DIV>
@@ -71,7 +71,7 @@
 
 <xsl:template match="error" mode="dhtml">
   <xsl:variable name="errid" select="generate-id(.)"/>
-  <A ONCLICK="Millstone.showPopupById('{$errid}',event.clientX-4,event.clientY-4);">	
+  <A ONCLICK="itmill.html.utils.showPopupById('{$errid}',event.clientX-4,event.clientY-4);">	
     <xsl:call-template name="error-icon">
 	  <xsl:with-param name="level" select="@level"/>
 	</xsl:call-template>
@@ -82,7 +82,7 @@
   <xsl:variable name="errid" select="generate-id(.)"/>
   <DIV ID="{$errid}" CLASS="popup">
       <xsl:attribute name="STYLE">display:none;</xsl:attribute>
-      <xsl:attribute name="Millstone.ONCLICK">hidePopupById('<xsl:value-of select="$errid"/>');</xsl:attribute>
+      <xsl:attribute name="ONCLICK">itmill.html.utils.hidePopupById('<xsl:value-of select="$errid"/>');</xsl:attribute>
     <xsl:apply-templates select="." mode="errordesc"/>		 
   </DIV>
 </xsl:template>

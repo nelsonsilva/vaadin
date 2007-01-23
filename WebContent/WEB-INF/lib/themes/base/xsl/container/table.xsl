@@ -76,14 +76,14 @@
 	</xsl:for-each>
 	<xsl:for-each select="./visiblecolumns/column">	
 		<DIV CLASS="action-item"
-           ONMOUSEOVER="this.className = Millstone.toHighlightClassName(this.className);"
-           ONMOUSEOUT="this.className = Millstone.toUnselectedClassName(this.className);">
+           ONMOUSEOVER="this.className = itmill.html.utils.toHighlightClassName(this.className);"
+           ONMOUSEOUT="this.className = itmill.html.utils.toUnselectedClassName(this.className);">
 		<xsl:attribute name="onclick">
 			<xsl:choose>
-			<xsl:when test="not(@collapsed='true')">document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value=Millstone.listAddInt(document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value,'<xsl:value-of select="@cid"/>');</xsl:when>
-			<xsl:otherwise>document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value=Millstone.listRemoveInt(document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value,'<xsl:value-of select="@cid"/>');</xsl:otherwise>
+			<xsl:when test="not(@collapsed='true')">document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value=itmill.html.utils.listAddInt(document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value,'<xsl:value-of select="@cid"/>');</xsl:when>
+			<xsl:otherwise>document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value=itmill.html.utils.listRemoveInt(document.getElementById('<xsl:value-of select="../../array[@name='collapsedcolumns']/@id"/>').value,'<xsl:value-of select="@cid"/>');</xsl:otherwise>
 			</xsl:choose>
-			Millstone.submit();
+			itmill.html.utils.submit();
 		</xsl:attribute>
 		<INPUT type="checkbox">	
         <xsl:if test="not(@collapsed='true')">
@@ -134,7 +134,7 @@
 		         <DIV CLASS="{$class}-column-header" cid="{@cid}" id="{$hid}">
 		           <xsl:choose>
 		               <xsl:when test="../../string[@name='sortcolumn']=@cid">
-		                   <xsl:attribute name="onclick">javascript:Millstone.setVarById('<xsl:value-of select="../../boolean[@name='sortascending']/@id"/>','<xsl:value-of select="not(../../boolean[@name='sortascending']/@value='true')"/>',true);</xsl:attribute>
+		                   <xsl:attribute name="onclick">javascript:itmill.html.utils.setVarById('<xsl:value-of select="../../boolean[@name='sortascending']/@id"/>','<xsl:value-of select="not(../../boolean[@name='sortascending']/@value='true')"/>',true);</xsl:attribute>
 		                   <xsl:value-of select="@caption" />
 		                   <IMG BORDER="0" CLASS="{$class}-column-header" valign="middle">
 		                       <xsl:if test="../../boolean[@name='sortascending']/@value='true'"><xsl:attribute name="SRC"><xsl:value-of select="wa:resource('icon/arrows/down.gif')"/></xsl:attribute></xsl:if>        
@@ -142,7 +142,7 @@
 		                   </IMG>
 		               </xsl:when>
 		               <xsl:otherwise>
-		                       <xsl:attribute name="onclick">javascript:Millstone.setVarById('<xsl:value-of select="../../string[@name='sortcolumn']/@id"/>','<xsl:value-of select="@cid"/>',true);</xsl:attribute>
+		                       <xsl:attribute name="onclick">javascript:itmill.html.utils.setVarById('<xsl:value-of select="../../string[@name='sortcolumn']/@id"/>','<xsl:value-of select="@cid"/>',true);</xsl:attribute>
 		                       <xsl:value-of select="@caption" />
 		               </xsl:otherwise>
 		           </xsl:choose>
@@ -158,7 +158,7 @@
 	<xsl:if test="./visiblecolumns">
 	<TD CLASS="{$class}-column-header" align="right">    
 		<IMG SRC="{wa:resource('img/popup-button.gif')}" CLASS="action" BORDER="0">
-			<xsl:attribute name="onclick">Millstone.showPopupById('<xsl:value-of select="$popupid"/>',event.clientX,event.clientY);</xsl:attribute>
+			<xsl:attribute name="onclick">itmill.html.utils.showPopupById('<xsl:value-of select="$popupid"/>',event.clientX,event.clientY);</xsl:attribute>
 		</IMG>
 	</TD>
 	</xsl:if>
@@ -263,7 +263,7 @@
       <xsl:when test="$dhtml">
           <xsl:variable name="trid"><xsl:value-of select="$selectedid"/>_<xsl:value-of select="@key"/></xsl:variable>  
           <xsl:attribute name="ID"><xsl:value-of select="$trid"/></xsl:attribute>
-          <xsl:attribute name="onclick">Millstone.tableSelClick('<xsl:value-of select="$selectedid"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="../../@immediate"/>','<xsl:value-of select="../../@selectmode"/>')</xsl:attribute>
+          <xsl:attribute name="onclick">itmill.html.utils.tableSelClick('<xsl:value-of select="$selectedid"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="../../@immediate"/>','<xsl:value-of select="../../@selectmode"/>')</xsl:attribute>
       </xsl:when>
 
       <!-- Normal HTML mode selection -->

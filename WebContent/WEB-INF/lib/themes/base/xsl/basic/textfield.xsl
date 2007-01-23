@@ -9,7 +9,7 @@
 		<xsl:if test="@modified='true'"><xsl:attribute name="CLASS">modified</xsl:attribute></xsl:if>
 	    <xsl:if test="@readonly='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
         <xsl:if test="@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
-		<xsl:if test="@immediate='true' and $dhtml"><xsl:attribute name="onchange">Millstone.submit()</xsl:attribute></xsl:if>
+		<xsl:if test="@immediate='true' and $dhtml"><xsl:attribute name="onchange">itmill.html.utils.submit()</xsl:attribute></xsl:if>
 		<xsl:if test="not(@immediate='true') and $dhtml"><xsl:attribute name="onchange">this.className='modified'</xsl:attribute></xsl:if>
 		<xsl:if test="@cols"><xsl:attribute name="COLS"><xsl:value-of select="@cols"/></xsl:attribute></xsl:if>
 		<xsl:if test="@rows"><xsl:attribute name="ROWS"><xsl:value-of select="@rows"/></xsl:attribute></xsl:if>
@@ -25,7 +25,7 @@
 		<xsl:if test="@modified='true'"><xsl:attribute name="CLASS">modified</xsl:attribute></xsl:if>
 	    <xsl:if test="@readonly='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
         <xsl:if test="@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
-		<xsl:if test="@immediate='true' and $dhtml"><xsl:attribute name="onchange">Millstone.submit()</xsl:attribute></xsl:if>
+		<xsl:if test="@immediate='true' and $dhtml"><xsl:attribute name="onchange">itmill.html.utils.submit()</xsl:attribute></xsl:if>
 		<xsl:if test="not(@immediate='true') and $dhtml"><xsl:attribute name="onchange">this.className='modified'</xsl:attribute></xsl:if>
 		<xsl:if test="@cols"><xsl:attribute name="SIZE"><xsl:value-of select="@cols"/></xsl:attribute></xsl:if>
 		<xsl:if test="@maxlength"><xsl:attribute name="MAXLENGTH"><xsl:value-of select="@maxlength"/></xsl:attribute></xsl:if>

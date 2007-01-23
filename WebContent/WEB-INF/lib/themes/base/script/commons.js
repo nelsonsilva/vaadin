@@ -1,38 +1,46 @@
 // ==========================================================================
 //
-// Common functions for other Millstone Javascript Modules.
+// Common functions for other Javascript Modules.
 // (c) IT Mill Ltd
 //
 // ==========================================================================
 
 
+/** Declare our own namespace. 
+ * 
+ * All globals should be defined in this namespace.
+ *
+ */
+if (typeof itmill == 'undefined') itmill = new Object();
+if (typeof itmill.html == 'undefined') itmill.html = new Object();
+
 // Constructor
-function MillstoneCommonUtils() {
+itmill.html.CommonUtils = function() {
 	this.debug = false;
 	this.loadedScripts = new Object();
 }
 
 // Check for null object
 //
-MillstoneCommonUtils.prototype.isDebug = function () {
+itmill.html.CommonUtils.prototype.isDebug = function () {
 	return this.debug;
 }
 
 // Check for null object
 //
-MillstoneCommonUtils.prototype.isNull =  function(obj) {
+itmill.html.CommonUtils.prototype.isNull =  function(obj) {
 	return (obj == null || typeof(obj) == 'undefined');
 }
 
 // Format event to string
 //
-MillstoneCommonUtils.prototype.eventToString =  function(e) {
-	return "Event: "+e.type +" from "+Millstone.commons.toString(this.getEventSource(e));
+itmill.html.CommonUtils.prototype.eventToString =  function(e) {
+	return "Event: "+e.type +" from "+itmill.html.utils.commons.toString(this.getEventSource(e));
 }
 
 // Format object to string
 //
-MillstoneCommonUtils.prototype.toString = function (obj, longFormat, indent) {
+itmill.html.CommonUtils.prototype.toString = function (obj, longFormat, indent) {
 	if (!obj || typeof(obj) == 'undefined') {
 		return "Object: "+obj;
 	}
@@ -53,7 +61,7 @@ MillstoneCommonUtils.prototype.toString = function (obj, longFormat, indent) {
 
 // Format object to string
 //
-MillstoneCommonUtils.prototype.toHTML = function (obj, longFormat, indent) {
+itmill.html.CommonUtils.prototype.toHTML = function (obj, longFormat, indent) {
 	if (!obj || typeof(obj) == 'undefined') {
 		return "<b>Object: "+obj+"</b>";
 	}
@@ -74,7 +82,7 @@ MillstoneCommonUtils.prototype.toHTML = function (obj, longFormat, indent) {
 //
 // Extract the event source object from event object
 //
-MillstoneCommonUtils.prototype.getEventSource = function (ev) {
+itmill.html.CommonUtils.prototype.getEventSource = function (ev) {
     var source;
     if (ev == null) {
     	return null;    	
@@ -91,18 +99,18 @@ MillstoneCommonUtils.prototype.getEventSource = function (ev) {
 //
 // Cancel an event by setting the state of event object
 // 
-MillstoneCommonUtils.prototype.cancelKeyEvent = function (ev) {
+itmill.html.CommonUtils.prototype.cancelKeyEvent = function (ev) {
 	var e = this.isNull(ev) ? window.event : ev;
  	e.keyCode = 0;
 	e.returnValue = false;
 	e.cancelBubble = true;
-	if (this.isDebug()) { Millstone.logger.log("[cancelKeyEvent] "+e.type + " from "+this.toString(this.getEventSource(e)),"red"); }	
+	if (this.isDebug()) { itmill.html.utils.logger.log("[cancelKeyEvent] "+e.type + " from "+this.toString(this.getEventSource(e)),"red"); }	
    	return false;
 }
 
 // Extract keycode from event object
 //
-MillstoneCommonUtils.prototype.getKeyCode = function (e) {
+itmill.html.CommonUtils.prototype.getKeyCode = function (e) {
     var key = 0;
     if (document.all) {
         key = e.keyCode;
@@ -113,7 +121,7 @@ MillstoneCommonUtils.prototype.getKeyCode = function (e) {
 
 // Ensures that given javascript library is loaded
 //
-MillstoneCommonUtils.prototype.loadLibraryOnce = function(src) {
+itmill.html.CommonUtils.prototype.loadLibraryOnce = function(src) {
 	var loaded = this.loadedScripts[src];	
 	if (this.isNull(loaded)) {
 		var str = '<scr'+'ipt language="Javascript" src="' + src + '">var iefix=1;</scr'+'ipt>';

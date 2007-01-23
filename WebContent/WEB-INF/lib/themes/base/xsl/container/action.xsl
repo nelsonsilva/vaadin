@@ -16,9 +16,9 @@
     <xsl:for-each select="./action">     
       <DIV ID="{$actionlistid}_{@key}" 
            CLASS="action-item"
-           ONMOUSEOVER="this.className = Millstone.toHighlightClassName(this.className);"
-           ONMOUSEOUT="this.className = Millstone.toUnselectedClassName(this.className);"
-           ONCLICK="Millstone.fireAction('{$actionlistid}','{$actionvariableid}','{@key}');">
+           ONMOUSEOVER="this.className = itmill.html.utils.toHighlightClassName(this.className);"
+           ONMOUSEOUT="this.className = itmill.html.utils.toUnselectedClassName(this.className);"
+           ONCLICK="itmill.html.utils.fireAction('{$actionlistid}','{$actionvariableid}','{@key}');">
         <NOBR><xsl:value-of select="@caption" /></NOBR>
  	  </DIV>
  	</xsl:for-each> 	
@@ -34,7 +34,7 @@
   
   <xsl:if test="./ak">
     <IMG SRC="{wa:resource('img/popup-button.gif')}" CLASS="action" BORDER="0">
-      <xsl:attribute name="onclick">Millstone.actionPopup(event,'<xsl:value-of select="$actionlistid"/>','<xsl:value-of select="$itemid"/>','<xsl:value-of select="$activeactions"/>')</xsl:attribute>
+      <xsl:attribute name="onclick">itmill.html.utils.actionPopup(event,'<xsl:value-of select="$actionlistid"/>','<xsl:value-of select="$itemid"/>','<xsl:value-of select="$activeactions"/>')</xsl:attribute>
     </IMG>
   </xsl:if>
 </xsl:template>

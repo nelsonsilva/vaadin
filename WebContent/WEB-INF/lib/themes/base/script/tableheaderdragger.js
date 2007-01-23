@@ -1,3 +1,11 @@
+/** Declare our own namespace. 
+ * 
+ * All globals should be defined in this namespace.
+ *
+ */
+if (typeof itmill == 'undefined') itmill = new Object();
+if (typeof itmill.html == 'undefined') itmill.html = new Object();
+
 /*
 * Manages draggable table headers.
 * variableId: id of the variable (e.g textfield) to update.
@@ -6,7 +14,7 @@
 * Call addDraggableById(elementId) to add elements to participate in d&d.
 * note: draggable elements should have position:relative
 */
-function TableHeaderDragger(variableId,cidName) {
+itmill.html.TableHeaderDragger = function(variableId,cidName) {
     this.all = new Array();
     this.variableId = variableId;
     this.cidName = (cidName?cidName:"cid");
@@ -157,7 +165,7 @@ function TableHeaderDragger(variableId,cidName) {
 
         o = null;
         document.currentTHD = null;
-        Millstone.submit();
+        itmill.html.utils.submit();
     }
     this.fixE = function(e) {
         if (typeof e == 'undefined') e = window.event;

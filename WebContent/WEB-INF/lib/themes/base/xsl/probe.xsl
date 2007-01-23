@@ -2,8 +2,8 @@
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
-    xmlns:wa="millstone://org.millstone.webadapter.ThemeFunctionLibrary" 
-    xmlns:browser="millstone://org.millstone.webadapter.WebBrowser">
+    xmlns:wa="java://com.itmill.toolkit.terminal.web.ThemeFunctionLibrary" 
+    xmlns:browser="java://com.itmill.toolkit.terminal.web.WebBrowser">
 
 <xsl:template name="client-probe">
 
@@ -74,11 +74,12 @@
 <xsl:comment>
 
     function setVariables() {
-    	document.millstone.wa_clientprobe.value = "1";
-    	document.millstone.wa_jsversion.value = ver;
-    	document.millstone.wa_screenwidth.value = window.screen.width;
-    	document.millstone.wa_screenheight.value =  window.screen.height;
-    	document.millstone.wa_javaenabled.value = navigator.javaEnabled();
+    	var form = document.forms["itmilltoolkit"]; if (typeof form == 'undefined') form = document.forms["mill"+"stone"];
+    	form.wa_clientprobe.value = "1";
+    	form.wa_jsversion.value = ver;
+    	form.wa_screenwidth.value = window.screen.width;
+    	form.wa_screenheight.value =  window.screen.height;
+    	form.wa_javaenabled.value = navigator.javaEnabled();
     }
     
     setVariables();

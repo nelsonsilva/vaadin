@@ -9,7 +9,7 @@
     <xsl:when test="$dhtml and (@style='link')">
       <A CLASS="button-link">
         <xsl:if test="@focusid"><xsl:attribute name="FOCUSID"><xsl:value-of select="@focusid"/></xsl:attribute></xsl:if>
-        <xsl:if test="not(@disabled)"><xsl:attribute name="HREF">javascript:Millstone.setVarById('<xsl:value-of select="./boolean/@id"/>','true',true)</xsl:attribute></xsl:if>
+        <xsl:if test="not(@disabled)"><xsl:attribute name="HREF">javascript:itmill.html.utils.setVarById('<xsl:value-of select="./boolean/@id"/>','true',true)</xsl:attribute></xsl:if>
         <xsl:if test="@disabled"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
         <xsl:if test="@icon"><IMG class="icon" SRC="{@icon}" /></xsl:if>
         <INPUT TYPE="HIDDEN" ID="{./boolean/@id}" NAME="{./boolean/@id}" VALUE="{./boolean/@value}" />
@@ -27,7 +27,7 @@
       </INPUT></xsl:if>
       <xsl:if test="string-length(@caption) &gt; 0">
       <INPUT CLASS="button" TYPE="SUBMIT" ID="{./boolean/@id}" NAME="set:{./boolean/@id}=true" VALUE=" {@caption} ">
-        <xsl:attribute name="ONCLICK">Millstone.showHourglassCursor()</xsl:attribute>    
+        <xsl:attribute name="ONCLICK">itmill.html.utils.showHourglassCursor()</xsl:attribute>    
         <xsl:attribute name="CLASS">button<xsl:if test="string-length(./@style) &gt; 0">-<xsl:value-of select="./@style"/></xsl:if></xsl:attribute>    
    	    <xsl:if test="@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
         <xsl:if test="@readonly='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
@@ -83,7 +83,7 @@
   <NOBR>		
     <xsl:apply-templates select="." mode="core"/>
     <SPAN class="caption">
-      <xsl:if test="not(@disabled) and $dhtml"><xsl:attribute name="ONCLICK">Millstone.toggleCheckbox('<xsl:value-of select="./boolean/@id"/>',<xsl:value-of select="@immediate or false"/>)</xsl:attribute></xsl:if>
+      <xsl:if test="not(@disabled) and $dhtml"><xsl:attribute name="ONCLICK">itmill.html.utils.toggleCheckbox('<xsl:value-of select="./boolean/@id"/>',<xsl:value-of select="@immediate or false"/>)</xsl:attribute></xsl:if>
       <xsl:if test="@disabled"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
       <xsl:if test="@icon"><IMG class="icon" SRC="{@icon}" /></xsl:if>
       <xsl:value-of select="@caption"/>
@@ -109,7 +109,7 @@
   <INPUT TYPE="HIDDEN" NAME="declare:{./boolean/@id}" VALUE="" />
   <INPUT TYPE="CHECKBOX" ID="{./boolean/@id}" NAME="{./boolean/@id}">
     <xsl:if test="@disabled='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
-    <xsl:if test="@immediate='true' and $dhtml"><xsl:attribute name="onclick">Millstone.submit()</xsl:attribute></xsl:if>
+    <xsl:if test="@immediate='true' and $dhtml"><xsl:attribute name="onclick">itmill.html.utils.submit()</xsl:attribute></xsl:if>
     <xsl:if test="./boolean/@value='true'"><xsl:attribute name="CHECKED">true</xsl:attribute></xsl:if>
     <xsl:if test="@readonly='true'"><xsl:attribute name="DISABLED">true</xsl:attribute></xsl:if>
     <xsl:if test="@focusid"><xsl:attribute name="FOCUSID"><xsl:value-of select="@focusid"/></xsl:attribute></xsl:if>

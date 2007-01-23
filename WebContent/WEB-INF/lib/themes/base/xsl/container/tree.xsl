@@ -98,7 +98,7 @@
             <xsl:choose>
               <xsl:when test="$dhtml">           
             	<IMG HEIGHT="13" WIDTH="13" ID="img{$childid}" BORDER="0" CLASS="{$class}">
-            	<xsl:attribute name="ONCLICK">Millstone.treeExpClick('<xsl:value-of select="$expandid"/>','<xsl:value-of select="$collapseid"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="$root/@immediate"/>')</xsl:attribute>
+            	<xsl:attribute name="ONCLICK">itmill.html.utils.treeExpClick('<xsl:value-of select="$expandid"/>','<xsl:value-of select="$collapseid"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="$root/@immediate"/>')</xsl:attribute>
             	<xsl:choose>
               	  <xsl:when test="@expanded">
                 	<xsl:attribute name="SRC"><xsl:value-of select="wa:resource('img/tree/expanded.gif')"/></xsl:attribute>
@@ -245,7 +245,7 @@
       	  	<xsl:variable name="selid"><xsl:value-of select="$selectedvar/@id"/>_<xsl:value-of select="@key"/></xsl:variable>  
 			<xsl:attribute name="ID"><xsl:value-of select="$selid"/></xsl:attribute>
             <xsl:if test="not($root/@readonly)">
-      	  	  <xsl:attribute name="HREF">javascript:Millstone.treeSelClick('<xsl:value-of select="$selectedvar/@id"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="$root/@immediate"/>','<xsl:value-of select="$root/@selectmode"/>');</xsl:attribute>
+      	  	  <xsl:attribute name="HREF">javascript:itmill.html.utils.treeSelClick('<xsl:value-of select="$selectedvar/@id"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="$root/@immediate"/>','<xsl:value-of select="$root/@selectmode"/>');</xsl:attribute>
       	  	</xsl:if>
       		<xsl:if test="@icon"><IMG class="icon" SRC="{@icon}" BORDER="0" /></xsl:if>
       		<xsl:value-of select="@caption" />
@@ -357,7 +357,7 @@
             <xsl:choose>
               <xsl:when test="$dhtml">           
                <A>
-             	<xsl:attribute name="HREF">javascript:Millstone.treeExpClick('<xsl:value-of select="$expandid"/>','<xsl:value-of select="$collapseid"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="$root/@immediate"/>')</xsl:attribute>
+             	<xsl:attribute name="HREF">javascript:itmill.html.utils.treeExpClick('<xsl:value-of select="$expandid"/>','<xsl:value-of select="$collapseid"/>','<xsl:value-of select="@key"/>','<xsl:value-of select="$root/@immediate"/>')</xsl:attribute>
             	<IMG HEIGHT="13" WIDTH="13" ID="img{$childid}" BORDER="0" CLASS="tree-menu-exp">
             	<xsl:choose>
               	  <xsl:when test="@expanded">

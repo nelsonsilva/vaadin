@@ -27,7 +27,7 @@
 	  <xsl:if test="not(@disabled='true')">
         <xsl:choose> 
           <xsl:when test="$dhtml and (string-length(@name) &gt; 0)">
-            <xsl:attribute name="HREF">javascript:Millstone.openWindow('<xsl:value-of select="@src"
+            <xsl:attribute name="HREF">javascript:itmill.html.utils.openWindow('<xsl:value-of select="@src"
             />','<xsl:value-of select="@name"
             />',<xsl:choose><xsl:when test="@width"><xsl:value-of select="@width"/></xsl:when><xsl:otherwise>-1</xsl:otherwise></xsl:choose
             >,<xsl:choose><xsl:when test="@height"><xsl:value-of select="@height"/></xsl:when><xsl:otherwise>-1</xsl:otherwise></xsl:choose
