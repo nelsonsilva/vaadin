@@ -3,6 +3,16 @@
  * ------------------------------------------------- *
  * Corporate theme stylesheet (Ajax-version)         *
  *****************************************************/
+ 
+ /**
+  * Base theme overrides
+  * --------------------
+  */
+  
+ .border {
+ 	background-color: transparent;
+ }
+ 
 
 /**
  * Background 
