@@ -558,7 +558,7 @@ createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 	var li = layoutInfo||target.layoutInfo;
 	if (pid != null && target.getAttribute("id") == pid){
 		div = target;
-        // this a repaint, remove old listeners
+        // this a repaint, remove old listeners to avoid memory leaks
         renderer.client.warn("Removed " + renderer.client.removeAllEventListeners(div) + " event listeners.");
         renderer.client.warn("Removed " + renderer.client.unregisterAllLayoutFunctions(div) + " layout functions.");
 	} else {
