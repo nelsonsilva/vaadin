@@ -1057,6 +1057,8 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	var theme = renderer.theme;
+	
+	// If theme is changed, reload window
 	var currentTheme = div.itmtkTheme;
 	div.itmtkTheme = uidl.getAttribute("theme");
 	if (typeof currentTheme != 'undefined' && div.itmtkTheme != currentTheme)
