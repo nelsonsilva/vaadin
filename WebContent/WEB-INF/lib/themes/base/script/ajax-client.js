@@ -434,7 +434,10 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
 		// Get updates
 		var updates = req.responseXML;
 		if (updates == null) {
-			alert("Server did not return anything: ");
+			
+			// If server no not respond, reload window
+			window.location.href = window.location.href;
+			
 			req.onreadystatechange = new Function();
 			delete req;
 			return;
