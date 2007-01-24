@@ -1057,6 +1057,10 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	var theme = renderer.theme;
+	var currentTheme = div.itmtkTheme;
+	div.itmtkTheme = uidl.getAttribute("theme");
+	if (typeof currentTheme != 'undefined' && div.itmtkTheme != currentTheme)
+		window.location.href = window.location.href;
 	
     theme.addHidePopupListener(theme,renderer.client,div,"click",true);
 	// Render children to div
