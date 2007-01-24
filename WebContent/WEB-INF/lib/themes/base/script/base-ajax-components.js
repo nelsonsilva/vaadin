@@ -1722,7 +1722,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 	var locale = uidl.getAttribute("locale")	
 	if (locale && !disabled && !readonly) {
 		locale = locale.toLowerCase().split("_")[0];
-		var lang = renderer.client.loadDocument(theme.root+"jscalendar/lang/calendar-"+locale+".js",false);
+		var lang = renderer.client.loadDocument(theme.root+"ext/jscalendar/lang/calendar-"+locale+".js",false);
 		if (lang) {			
 			try {
 				window.eval(lang);
