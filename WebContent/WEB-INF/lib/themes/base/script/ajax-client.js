@@ -1617,10 +1617,7 @@ itmill.Client.prototype.createElement = function(nodeName, target) {
 	}
 }
 
-
-
-
-/** Theme class that implements inheritance mechanism for themes */
+/** Class that implements inheritance mechanism for themes */
 
 itmill.Class = function() {};
 
@@ -1647,32 +1644,5 @@ itmill.Class.extend = function(def) {
     //Give this new class the same static extend method    
     classDef.extend = this.extend;        
     return classDef;
-	
-	/* Original one
-	var __Class = function() {
-	this.$ = new this.$(this);
-	this.constructor.apply(this, arguments); 
-	};
-	
-	//Inherited all the properties & methods from super class
-	__Class.prototype = new this;
-	
-	//Create a copy of super class
-	__Class.prototype.$ = function($) {
-	this.$ = $;
-	}
-	
-	//Redirect the pointer, so it cannot reference to super object. 
-	for (var i in this.prototype) {
-		var Item = this.prototype[i];
-		if (!(Item instanceof Function)) continue;
-		eval('__Class.prototype.$.prototype[i] = ' + Item.toString().replace(/this/g, 'this.$'));
-	}
-	
-	//Any inherited with same name will be overwrited.
-	for (var Member in Members) __Class.prototype[Member] = Members[Member];
-	
-	__Class.extend = this.extend;
-	return __Class;
-	*/
+
 }
