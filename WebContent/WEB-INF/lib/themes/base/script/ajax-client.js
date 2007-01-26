@@ -1200,6 +1200,9 @@ itmill.Client.prototype.createPaintableElement = function (uidl, target) {
 	if (target != null && pid != null) {
 		div.setAttribute("id",pid);
 	}
+    
+    // Create a varMap has for elements variables
+    div.varMap = new Object();
 	
 	// Set visibility
 	var invisible = uidl.getAttribute("invisible");

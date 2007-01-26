@@ -406,6 +406,62 @@ listRemoveInt : function(list,number) {
 /* 
 #### Variable helpers #############################################
 */
+
+/**
+ * Fetches reference to elements variable
+ *
+ * @param paintable Element which variable is to be fetched
+ * @param varId variables id or name
+ */
+getVar : function(paintable, varId) {
+    return paintable.varMap[varId];
+}, 
+
+/**
+ * Tells client that variable has changed
+ *
+ * @param paintable Element which variable is to be changed
+ * @param varId variables id or name
+ * @param value value to be stored
+ * @param immediate flag if variable change should be sent to server immediatedly
+ */
+updateVar : function(client,variable, immediate) {
+    client.changeVariable(variable.id, variable.value, immediate);
+},
+
+/**
+ * Creates local variable to paintable from uidl
+ * @param paintable Paintable element where variable is stored
+ * @param variableUidl uidl fraction where variable is parsed
+ * @return varId
+ */
+createVarFromUidl : function(paintable, variableUidl) {
+    if (!variableUidl) {
+        return null;
+    }
+    var variable = new Object();
+    variable.id = variableUidl.getAttribute("id");
+    variable.name = variableUidl.getAttribute("name");
+    variable.type = variableUidl.nodeName;
+    // TODO arrays could be handled as real js arrays and lot of old functions below could be removed
+    if (variable.type == "array") {
+        variable.value = this.arrayToList(variableElement);
+    } else if (variable.type == "string") {
+        var node = this.getFirstTextNode(variableElement);
+        variable.value = (node?node.data:"");
+    } else {
+        variable.value = variableUidl.getAttribute("value");
+    }
+    // variable can be fetched with both id and name
+    paintable.varMap[variable.id] = variable;
+    paintable.varMap[variable.name] = variable;
+    return variable;
+},
+
+
+// variable helpers below are deprecated, move tovards storing variables in paintables varMap object
+// and function above
+
 getVariableElement : function(uidl,type,name) {
 
 	if (uidl == null) return;
@@ -425,16 +481,6 @@ createVariableElementTo : function(target,variableElement) {
 	if (!variableElement) {
 		return null;
 	}
-	/* TODO FF kludge try, does not work - how to prevent flashing hiddens?
-	var d = this.createElementTo(target,"div");
-	d.style.border = "none";
-	d.style.background = "none";
-	d.style.padding = "0px";
-	d.style.margin = "0px;"	
-	d.style.width = "0px";
-	d.style.height = "0px";
-	d.style.overflow = "hidden";
-	*/
 	var input = this.createInputElementTo(target,"hidden");
 	input.variableId = variableElement.getAttribute("id");
 	input.variableName = variableElement.getAttribute("name");
@@ -2671,17 +2717,37 @@ cout : content tables container div, id is in form PID69cout
 cin : content table
 heh && hah : something concerng row headers
 
+aSpacer : spacer above table taking up space for unloaded rows
+bSpacer : spacer below table taking up space for unloaded rows
+
+This is to be added soon
+To make scrolling smoother and make we will save row data to a local data structure
+
+cells.rownro.cellnro
+
 
 */
 
 renderScrollTable : function(renderer,uidl,target,layoutInfo) {
-    // TODO  MT: extract all possible inline css to .css files to make styling possible
+    // TODO colorder too model or straight to div
+
+    // Build a model object of table, that will later be saved to containing div
+    // An update, like scrolling, can then compare changes and update only changed parts of final dom
+    var model = new Object();
+    model.meta = new Object(); // change in here effects total redraw
+    model.state = new Object(); // things like first visible row, selections etc
+    model.headerCache = new Object(); // compare this to original, to detect need for header redraw
+    model.bodyCache = new Object(); // compare this to original cell by cell, to detect need for contents redraw
     
 	// Shortcut variables
 	var theme = renderer.theme;
 	var client = renderer.client;
 	var colWidths;
+    
+    var redraw = false;
 	if (target.colWidths) {
+        // we are repainting existing table
+        redraw = true;
 		colWidths = target.colWidths;
 	} else {
 		colWidths = new Object();
@@ -2689,44 +2755,71 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var wholeWidth = target.wholeWidth;
 	var scrolledLeft = target.scrolledLeft;
     
-    // TODO save these attributes to hash that will be saved to dom
-    // update can then compare changes and update only changed places
-
-	// Get attributes
-	var pid = uidl.getAttribute("id");
-	var immediate = uidl.getAttribute("immediate")||false;
-	var selectmode = uidl.getAttribute("selectmode");
-	var cols = parseInt(uidl.getAttribute("cols"));
-	var rows = parseInt(uidl.getAttribute("rows"));
-	var totalrows = parseInt(uidl.getAttribute("totalrows"));
-	var pagelength = uidl.getAttribute("pagelength");
-	var colheaders = uidl.getAttribute("colheaders")||false;
-	var rowheaders = uidl.getAttribute("rowheaders")||false;
-	var visiblecols = theme.getFirstElement(uidl,"visiblecolumns");
-	var sortkey = theme.getVariableElementValue(theme.getVariableElement(uidl,"string","sortcolumn"));
+    // Get attributes
+    // MT rows vs pagelenth ??
+    // TODO remove separate variables and change function to use variables in model object
+	var pid        = model.pid     = uidl.getAttribute("id");
+	var immediate  = model.meta.immediate = uidl.getAttribute("immediate")||false;
+	var selectmode = model.meta.selectmode = uidl.getAttribute("selectmode");
+	var cols       = model.meta.cols = parseInt(uidl.getAttribute("cols"));
+	var rows       = model.meta.rows = parseInt(uidl.getAttribute("rows"));
+	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
+	var pagelength = model.meta.pagelength = uidl.getAttribute("pagelength");
+	var colheaders = model.meta.colheaders = uidl.getAttribute("colheaders")||false;
+	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
+	var visiblecols= model.meta.visiblecols =  theme.getFirstElement(uidl,"visiblecolumns");
+	var sortkey    = model.meta.sortkey = theme.getVariableElementValue(theme.getVariableElement(uidl,"string","sortcolumn"));
 	
+    // column order
 	var colorder = new Array();
-	var fv = parseInt(theme.getVariableElementValue(theme.getVariableElement(uidl,"integer","firstvisible"))||1);
-	var selected; // Selected map
+	var fv = model.state.fv = parseInt(theme.getVariableElementValue(theme.getVariableElement(uidl,"integer","firstvisible"))||1);
 	if (selectmode != "none") {
-		selected = new Array();
+		model.selected = new Array();
 	}
 	
-    // TODO this needs to be forked if paintable exists (to avoid "blinking")
-    // In that case propably only scrolled, determine that and 
+    // In that case only scrolled, determine that and 
     // fork into other function otherwise continue
     
-	// Create containing DIV
-	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
-	div.colWidths = colWidths;
+    var div = false;
+    // check if this table has been drawn before
+    if(redraw) {
+        // TODO refine determining if we need to skip update and redraw whole component (big changes like totalrows, cols, rows etc)
+        // this will be done by comparing critical parts of model object constructed from uidl and the one stored in target (paintable div)
+        var allowUpdate = true;
+        for(j in model.meta) {
+            if(target.model.meta[j] != model.meta[j]) {
+                allowUpdate = false;
+                continue;
+            }
+        }
+        if (allowUpdate) {
+            div = target;
+            theme.scrollTableScrollUpdate(renderer, div, model, uidl);
+            return;
+        }
+    }
+    // rest of the function is ideally run only when first time painting table
+    if(!div) {
+        // Create containing DIV
+        var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+    }
+    // save reference of model object to dom
+    div.model = model;
+    model.state.firstRendered = model.state.fv
+    model.state.lastRendered = model.state.fv + model.meta.rows;
+    
     
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
 	// Variables
+    // TODO create these only if redrawing, if updating update values
+    
+    
 	var fvVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"integer","firstvisible"));
+    var fvVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","firstvisible"));
 	var ccVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","collapsedcolumns"));
 	var coVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","columnorder"));
-	var selVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
+	var selVar = model.selVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
 	var sortVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"string","sortcolumn"));
 	var sortasc = theme.getVariableElement(uidl,"boolean","sortascending");
 	var sortascVar = theme.createVariableElementTo(div,sortasc);
@@ -2749,18 +2842,21 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	div.wholeWidth = wholeWidth;
 	var offsetLeft = client.getElementPosition(inner).x;
-    	
+    
+    // TODO move building actions object to beginning of the funtion -> redraw if actions change
 	// Actions
 	var actions = null;
 	var actionVar = null;
 	var alNode = theme.getFirstElement(uidl,"actions")
 	if (alNode) {
 		actionVar = theme.createVariableElementTo(div,theme.getVariableElement(alNode,"string","action"));
+        model.actionVar = actionVar;
 		actions = new Object();
 		var ak = alNode.getElementsByTagName("action");
 		for (var i=0;i<ak.length;i++) {
 			actions[ak[i].getAttribute("key")] = ak[i].getAttribute("caption");
 		}
+        model.meta.actions = actions;
 	}
 	delete alNode;
 
@@ -2796,6 +2892,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	
 	// headers
 	var hout = theme.createElementTo(inner.childNodes[1].firstChild.firstChild.firstChild,"div","bg");
+    model.hout = hout; // add reference for later use
 	hout.style.width = (wholeWidth-16)+"px";
 	hout.style.paddingRight = "0px";
 	hout.id = pid+"hout";
@@ -2815,7 +2912,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		}
 		html += "\"></div></td>";
 	}	
-	var chs = theme.getFirstElement(uidl, "cols").getElementsByTagName("ch");
+	var chs = model.headerCache = theme.getFirstElement(uidl, "cols").getElementsByTagName("ch");
 	var len = chs.length;
 	for (var i=0;i<len;i++) {
 		var col = chs[i];
@@ -2872,66 +2969,70 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	hout.innerHTML = html;
 	
 	// content
-	// scroll padding calculations 
-	// TODO these need to be calculated better, perhaps updated after rendering content
-    // one pixel or 22 ( one line height) * first_visible_index
-	var prePad = (fv==1?1:fv*22);
-    // remaining invisible lines * line_height
-	var postPad = (totalrows-fv-rows+1)*22;
-	// html
 	cout = theme.createElementTo(inner,"div");
-	cout.style.width = wholeWidth+"px";
-    // MT why now line height is 18 px ??
-	cout.style.height = (18*rows)+"px";
+    model.cout = cout; // save reference for use in handlers
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
+    // TODO move this to CSS
 	cout.style.overflow = "scroll";
-	html = "<TABLE border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"cin\" id=\""+pid+"cin\"><TBODY>";
-    // first add a row that that takes space to "fool" scrollbar for unloaded rows
-    html += "<TR height=\""+prePad+"\"></TR>";
+    
+    // create spacer elements and save reference to model (needed for webkit bug)
+    model.aSpacer = theme.createElementTo(cout,"div");
+    model.aSpacer.className = "spacer";
+    
+    var d = cout.ownerDocument;
+    var table = d.createElement("table");
+    table.id = pid + "cin";
+    table.className = "cin";
+    var tableB = model.tableBody = d.createElement("tbody");
+    // get rows from uidl
 	var trs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
 	len = trs.length;
-	if (len==0) {
-        // add empty row if table has no rows
-		html += "<TR id=\""+pid+"firstrow\"><td>";
-		html += "<div class=\"cellContent\"></div></td></TR>";
-	}
+    // variables used building table
+    var tr = null;
+    var td = null;
+    var tdDiv = null;
+    var icon = null;
 	for (var i=0;i<len;i++) {
 		var row = trs[i];
 		var cap =  row.getAttribute("caption");
 		var key =  row.getAttribute("key");
 		var seld = row.getAttribute("selected");
 		var iconUrl = row.getAttribute("icon");
-		html += "<TR "+(i==0?"id=\""+pid+"firstrow\"":"");
-		html += " key=\""+key+"\"";
-		if (seld) {
-			html += " selected=\"true\" class=\"selected\" ";
-		} else {
-			html += "class=\""+(i%2!=0?"odd":"even")+"\" ";
-		}
-		html += ">";	
+        tr = d.createElement("tr");
+        tr.key = key;
+        tr.className = ((i + model.state.fv ) %2==0) ? "even" : "odd";
+        if (seld) {
+            tr.selected = true;
+            tr.className = " selected";
+        }
+		
 		if (rowheaders) {
-			html += "<td class=\"tableCell\" ";
+            td = d.createElement("td"); tdDiv = d.createElement("div");
+            td.className = "tablecell";
+            tdDiv.className = "cellContent";
 			if (colWidths["heh"]) {
-				html += "width=\""+colWidths["heh"]+"\" ";
+                td.width = colWidths["heh"];
+                tdDiv.style.width = (colWidths["heh"]-4)+"px;";
 			} 
-			html += "><div class=\"cellContent\" style=\"";
-			if (colWidths["heh"]) {
-                // set container divs width explicitely due IE overflow bug
-                // width - border - margin
-				html += "width:"+(colWidths["heh"]-4)+"px;";
-			}
-			html += ">";
 			if (iconUrl) {
-				html += "<img src=\""+iconUrl+"\" class=\"icon\" />";	
+                icon = d.createElement("img");
+                icon.className = "icon";
+                icon.src = iconUrl;
+                tdDiv.appendChild(icon);
 			}
-			html += row.getAttribute("caption")+"</DIV></TD>";
+            tdDiv.appendChild(d.createTextNode(row.getAttribute("caption")));
+            td.appendChild(tdDiv);
+            tr.appendChild(td);
 		}	
 		var comps = row.childNodes;
 		var l = comps.length;
 		if (l==0) {
             // add empty cell if no cells exists
-			html += "<td class=\"tablecell\"><div class=\"cellContent\" ></div></td>";
+            td = d.createElement("td"); tdDiv = d.createElement("div");
+            td.className = "tablecell"; tdDiv.className = "cellContent";
+            td.appendChild(tdDiv);
+            tr.appenChild(td);
 		}
 		
 		var colNum = -1;
@@ -2940,39 +3041,43 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			if (comp.nodeName == "al"||comp.nodeName == "#text") continue;
 			colNum++;
 			// Placeholder TD, we'll render the content later
-			html += '<td class="tablecell';
+            td = d.createElement("td"); tdDiv = d.createElement("div");
+            td.className = "tablecell"; tdDiv.className = "cellContent";
             if (alignments[colNum]) {
                 switch (alignments[colNum]) {
                     case "e":
-                        html += " align_right";
+                        td.className += " align_right";
                         break;
                     case "c":
-                        html += " align_center";
+                        td.className += " align_center";
                         break;
                     default:
                 }
             }
-            html += '" ';
 			if (colWidths[colorder[colNum]]) {
                 // set container divs width explicitely due IE overflow bug
                 // width - border - margin
-				html += "width=\""+( colWidths[colorder[colNum]] -4 )+"\" ";
-			} 
-			html += '><div class="cellContent"</div></td>';
-		}	
-		html += "</TR>";
+                td.width = colWidths[colorder[colNum]] - 4 ;
+			}
+            td.appendChild(tdDiv);
+            tr.appendChild(td);
+		}
+        tableB.appendChild(tr);
 	}
-    // add a row that that takes space to "fool" scrollbar for unloaded rows
-    // its height will be in metacode: (totalrows - firstrow_index + rows_shown) * row_height 
-	html += "<TR id=\""+pid+"lastrow\" height=\""+postPad+"\"></TR></TBODY></TABLE>";	
-	cout.innerHTML = html;
+    table.appendChild(tableB);
+	cout.appendChild(table);
+    // create spacer elements and save reference to model (needed for webkit bug on table margins)
+    model.bSpacer = theme.createElementTo(cout,"div");
+    model.bSpacer.className = "spacer";
+    
 
 	// SECOND render the sub-components (TD content)
-	var trs = cout.firstChild.firstChild.childNodes;
+    // TODO save uidl content of rows and cells for caching purposes
+	var trs = cout.childNodes[1].firstChild.childNodes;
 	var utrs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
 	for (var i=0;i<len;i++) {
-		var tr = trs[i+1];
-		var key = tr.getAttribute("key");
+		var tr = trs[i];
+		var key = utrs[i].getAttribute("key");
 		var comps = utrs[i].childNodes;
 		var l = comps.length;
 		var currentCol = (rowheaders?1:0);
@@ -2994,7 +3099,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		
 		// selection
 		if (selectmode != "none") {
-			selected[selected.length] = tr;
+			model.selected.push(tr);
 			theme.addCSSClass(tr,"clickable");
 			theme.addToggleClassListener(theme,client,tr,"mouseover","selectable");
 			theme.addToggleClassListener(theme,client,tr,"mouseout","selectable");
@@ -3002,17 +3107,29 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 				theme.addToggleClassListener(theme,client,tr,"click","selected");
 				theme.addToggleVarListener(theme,client,tr,"click",selVar,key,immediate);
 			} else {
-				theme.addAddClassListener(theme,client,tr,"click","selected",tr,selected);
+				theme.addAddClassListener(theme,client,tr,"click","selected",tr,model.selected);
 				theme.addSetVarListener(theme,client,tr,"click",selVar,key,immediate);
 			}
 		}
 	}
 
 	// THIRD do some initial sizing and scrolling
-	var fr = target.ownerDocument.getElementById(pid+"firstrow").offsetTop;
-   	var lr = target.ownerDocument.getElementById(pid+"lastrow").offsetTop;
-	cout.style.height = (lr-fr+20)+"px";	
-    cout.scrollTop = (fv>totalrows-rows?cout.scrollHeight:fr);
+    
+    model.rowheight = table.rows.length ? (table.offsetHeight/table.rows.length) : 22;
+    // scroll padding calculations 
+    var prePad = (model.state.fv - 1) * model.rowheight;
+    // remaining invisible lines * line_height
+    var postPad = (model.meta.totalrows-model.state.fv-model.meta.rows+1)*model.rowheight;
+
+    // fix containers height to initial height of table + scrollbar
+    // TODO px sizeable is going to brake this, maybe add margin to border component of a size of height mod rowheight
+    cout.style.height = table.offsetHeight+16+"px";
+    
+    model.aSpacer.style.height = prePad + "px";
+    model.bSpacer.style.height = postPad + "px";
+    
+    cout.scrollTop = (fv > totalrows - rows ? cout.scrollHeight : prePad);
+    
 	div.recalc = theme.scrollTableRecalc;
 	div.initialWidth = wholeWidth;
  	div.recalc(pid,target);
@@ -3020,14 +3137,15 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	hout.scrollLeft = scrolledLeft;
 
 	var status = target.ownerDocument.getElementById(pid+"status");
+    model.status = status;
 	var p = client.getElementPosition(inner);
 	status.style.top = (p.y + p.h/2) + "px";
 	status.style.left = (p.x + p.w/2 - wholeWidth/4) +"px";
- 	theme.scrollTableAddScrollHandler(client,theme,cout,div,status,lr,fr,rows,totalrows,fv,fvVar,immediate);
- 	theme.scrollTableAddScrollListener(theme,div,pid,lr,fr,rows,totalrows,fv);
+ 	theme.scrollTableAddScrollHandler(client,theme,div);
+ 	theme.scrollTableAddScrollListener(theme,div);
  	
  	
- 		// Column order drag & drop
+ 	// Column order drag & drop
  	var hin = target.ownerDocument.getElementById(pid+"hin");
     var h = hin.getElementsByTagName("td");
     var dragOrderGroup = new Object();
@@ -3056,6 +3174,223 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var hin = target.ownerDocument.getElementById(pid+"hin");
     var cin = target.ownerDocument.getElementById(pid+"cin");
     theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
+    
+},
+
+/**
+ * renderScrollTable passes updating component to this funtion if scrolled and only body changes
+ * @param target main container div
+ * @param model constructed tables model object from uidl
+ */
+scrollTableScrollUpdate : function(renderer,target, model,uidl) {
+    var theme = renderer.theme;
+    var d = target.ownerDocument;
+    var tableBody = target.model.tableBody;
+    
+    /* define function that creates rows */
+    var createRow = function(ruidl, odd, selectmode) {
+        var row = d.createElement("tr");
+        var key = row.key = ruidl.getAttribute("key");
+        row.className = (odd) ? "odd" : "even";
+        if (ruidl.getAttribute("selected")) {
+            row.selected = true;
+            row.className = " selected";
+        }
+        
+        if(model.meta.rowheaders) {
+            var rhCell = d.createElement("td");
+            rhCell.className = "tablecell";
+            var cellContent = d.createElement("div");
+            cellContent.className = "cellContent";
+            cellContent.style.width = (target.colWidths["heh"] - 4) + "px";
+            // TODO row icon ???
+            cellContent.innerHTML = ruidl.getAttribute("caption");
+            rhCell.appendChild(cellContent);
+            row.appendChild(rhCell);
+        }
+        
+        // rows nodes
+        var comps = ruidl.childNodes;
+        var l = comps.length;
+        var currentCol = 0;
+        var al = null; // rows action listeners
+        for (k=0;k<l;k++) {
+            var comp = comps[k];
+            if (comp.nodeName == "#text") continue;
+            if (comp.nodeName == "al") {
+                al = comp;
+                continue;
+            }
+            // create table cell and cellContent div
+            var cell = d.createElement("td");
+            currentCol++;
+            cell.className = "tablecell";
+            
+            var cellContent = d.createElement("div");
+            cellContent.className = "cellContent";
+            // TODO ensure right behaviour when rearranged columns
+            // table cell shoudn't need explicit size, but due IE bug, explicitely set content divs size
+            cellContent.style.width = (target.colWidths[currentCol] - 4) + "px";
+            cell.appendChild(cellContent);
+            // render cell content
+            renderer.client.renderUIDL(comp, cellContent);
+            row.appendChild(cell);
+        }
+        if (al&&row.firstChild) {
+            theme.renderActionPopup(renderer,al,row,target.model.meta.actions,target.model.actionVar,key,"rightclick");
+        }
+        // selection
+        if (model.meta.selectmode != "none") {
+            var client = renderer.client;
+            target.model.selected.push(row);
+            theme.addCSSClass(row,"clickable");
+            theme.addToggleClassListener(theme,client,row,"mouseover","selectable");
+            theme.addToggleClassListener(theme,client,row,"mouseout","selectable");
+            if (selectmode == "multi") {
+                theme.addToggleClassListener(theme,client,row,"click","selected");
+                theme.addToggleVarListener(theme,client,row,"click",target.model.selVar,key,model.meta.immediate);
+            } else {
+                theme.addAddClassListener(theme,client,row,"click","selected",row,target.model.selected);
+                theme.addSetVarListener(theme,client,row,"click",target.model.selVar,key,model.meta.immediate);
+            }
+        }
+        
+        return row;
+    } // end defining createRows function
+    
+    // get array of received row elements
+    var trs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
+    if(target.model.state.fv < model.state.fv ) {
+        var deltaRows = model.state.fv - target.model.state.fv;
+        if(model.state.fv > target.model.state.lastRendered ) {
+            // scrolled more than page lenght
+            // hurry rendering new rows, create spacer row to end of table
+            var  spacerRow = d.createElement("tr");
+            spacerRow.appendChild(d.createElement("td"));
+            var skippedSpace = (model.state.fv - target.model.state.lastRendered)*target.model.rowheight;
+            spacerRow.firstChild.height = skippedSpace;
+            tableBody.appendChild(spacerRow);
+            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - skippedSpace) + "px";
+            
+            // set firstRendered correctly
+            target.model.state.firstRendered = model.state.fv;
+
+            // add new visible rows and resize bSpacer
+            for(var i = 0; i < trs.length; i++) {
+                var row = createRow(trs[i], ((model.state.fv + i)%2 == 1));
+                tableBody.appendChild(row);
+                target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
+                target.model.state.lastRendered = model.state.fv + i + 1;
+            }
+            // remove old rows and resize spacer spacer
+            while(tableBody.childNodes[0] != spacerRow) {
+                tableBody.removeChild(tableBody.childNodes[0]);
+                target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + target.model.rowheight) + "px";
+            }
+            // remove spacer row
+            tableBody.removeChild(spacerRow);
+            target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + skippedSpace) + "px";
+            
+            // reallign scrolling
+            target.model.cout.scrollTop = parseInt(target.model.aSpacer.style.height);
+            
+        } else {
+            // keep some of existing rows and add new ones
+            var oldRows = target.model.state.lastRendered - model.state.fv;
+            for(var i = 0; i < trs.length; i++) {
+                if(i < oldRows) {
+                    // TODO update rows content if uidl changed
+                } else {
+                    // render new row
+                    var row = createRow(trs[i], ((model.state.fv + i)%2 == 1 ));
+                    // add row to table
+                    tableBody.appendChild(row);
+                    // adjust table margin (space for unloaded rows)
+                    target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
+                    target.model.state.lastRendered++;
+                }
+            }
+            // Delete first rows that are no longer visible and expand aSpacer, but
+            // keep one page lenght for more comfortable scrolling back and forward
+            while(target.model.state.firstRendered < model.state.fv - model.meta.pagelength) {
+                tableBody.removeChild(tableBody.firstChild);
+                target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + target.model.rowheight) + "px";
+                target.model.state.firstRendered++;
+            }
+        }
+    } else if(target.model.state.fv > model.state.fv) {
+        if( (target.model.state.firstRendered - model.state.fv  ) > model.meta.pagelength ) {
+            // scrolled up more than page lenght
+            // hurry rendering new rows, create spacer row to end of table
+            var  spacerRow = d.createElement("tr");
+            spacerRow.appendChild(d.createElement("td"));
+            var skippedSpace = (target.model.state.firstRendered - model.state.fv)*target.model.rowheight;
+            spacerRow.firstChild.height = skippedSpace;
+            tableBody.insertBefore(spacerRow, tableBody.firstChild);
+            target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) - skippedSpace) + "px";
+            
+            // set firstRendered correctly
+            target.model.state.firstRendered = model.state.fv;
+
+            // add new visible rows and resize spacerRow
+            for(var i = 0; i < trs.length; i++) {
+                var row = createRow(trs[i], ((model.state.fv + i)%2 == 1));
+                tableBody.insertBefore(row,spacerRow);
+                spacerRow.firstChild.height -= target.model.rowheight;
+                target.model.state.lastRendered = model.state.fv + i + 1;
+            }
+            // remove old rows and resize firstrow spacer
+            while(tableBody.lastChild != spacerRow) {
+                tableBody.removeChild(tableBody.lastChild);
+                target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + target.model.rowheight) + "px";
+            }
+            // remove spacer row and resize bSpacer with its remaining size
+            var spacerRowH = parseInt(spacerRow.firstChild.height);
+            tableBody.removeChild(spacerRow);
+            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + spacerRowH) + "px";
+            
+            // reallign scrolling
+            target.model.cout.scrollTop = parseInt(target.model.aSpacer.style.height);
+            
+        } else {
+            // keep some of existing rows and add new ones
+            var oldRows = model.meta.rows - (target.model.state.firstRendered - model.state.fv);
+            // current row index for last (possibly partially) shows row is same as oldRows
+            var largestNewIndex = trs.length - 1 - oldRows  ; 
+            var row = null;
+            for(var i = trs.length -1 ; i >= 0; i--) {
+                if(i > largestNewIndex) {
+                    // TODO update existing row if uidl changed
+                } else {
+                    // render a new row
+                    row = createRow(trs[i], ((model.state.fv + i)%2 == 1 ));
+                    tableBody.insertBefore(row, tableBody.firstChild);
+                    // adjust top margin
+                    target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) - target.model.rowheight) + "px";
+                    // update firstRendered value
+                    target.model.state.firstRendered--;
+                }
+            }
+            // Delete last rows that are no longer visible and expand bSpacer, but
+            // keep one page lenght for more comfortable scrolling back and forward
+            while(target.model.state.lastRendered > model.state.fv + 2*model.meta.pagelength) {
+                tableBody.removeChild(tableBody.lastChild);
+                target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + target.model.rowheight) + "px";
+                target.model.state.lastRendered--;
+            }
+            
+        }
+    } else {
+        alert("Did not scroll TODO other redraws");
+    }
+
+    // update model object
+    // loop all variables from model to target.model
+    for(var j in model.state) {
+        target.model.state[j] = model.state[j];
+    }
+    delete(model);
+    target.model.status.style.display = "none";
 },
 
 // Header order drag & drop	
@@ -3129,55 +3464,50 @@ scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,c
 	});
 },
 
-scrollTableAddScrollListener : function (theme,target,pid,lr,fr,rows,totalrows,fv) {
-	var hout = target.ownerDocument.getElementById(pid+"hout");
-    var cout = target.ownerDocument.getElementById(pid+"cout"); 		
+scrollTableAddScrollListener : function (theme,target) {
+	var hout = target.model.hout;
+    var cout = target.model.cout;
  	client.addEventListener(cout,"scroll", function (e) {
         if (cout.scrollTimeout) {
  			clearTimeout(cout.scrollTimeout);
 		}
 		hout.scrollLeft = cout.scrollLeft;	
 		target.scrolledLeft = cout.scrollLeft;
-		var status = target.ownerDocument.getElementById(pid+"status");
-		var d = theme.scrollTableGetFV(cout,lr,fr,rows,totalrows,fv);
-		if (d!=fv) {
- 			status.innerHTML = d + "-" + (d+rows-1) + " / " + totalrows;
+		var status = target.model.status;
+		var d = theme.scrollTableGetFV(target);
+		if (d != target.model.state.fv) {
+ 			status.innerHTML = d + "-" + (d+target.model.meta.rows-1) + " / " + target.model.meta.totalrows;
  			status.style.display = "";		
  		}
 		cout.scrollTimeout = setTimeout(function () {
-				var cout = target.ownerDocument.getElementById(pid+"cout");
 				cout.scrollHandler();
 			},500)	
  	});
 },
 
-scrollTableGetFV : function(cout,lr,fr,rows,totalrows,fv) {
- 			var rh = (lr-fr)/rows;
- 			if (cout.scrollTop >= (fr+rh/2) || cout.scrollTop <= (fr-rh/2)) {
- 				var d = Math.round((cout.scrollTop-fr)/rh);
- 				d = (fv+d);
- 				if (d<1) d=1; // scrolled past begin
- 				if (d>(totalrows-rows+1)) d=(totalrows-rows+1); // scrolled past last page
- 				return d;
- 			} else {
- 				return fv;
- 			}
+/* Calculates first totally visible row */
+scrollTableGetFV : function(target) {
+    var m = target.model;
+    var new_fr = Math.ceil(m.cout.scrollTop/m.rowheight) + 1;
+ 	if (new_fr < 1) return 1; // scrolled past begin
+ 	if (new_fr > (m.meta.totalrows - m.meta.rows + 1)) new_fr=(m.meta.totalrows-m.meta.rows + 1); // scrolled past last page
+ 	return new_fr;
  },
  
-scrollTableAddScrollHandler : function(client,theme,cout,target,status,lr,fr,rows,totalrows,fv,fvVar,immediate) {
- 	cout.scrollHandler = function () {
- 			var rh = (lr-fr)/rows;
-			var d = theme.scrollTableGetFV(cout,lr,fr,rows,totalrows,fv);
- 			if (d!=fv) {
+scrollTableAddScrollHandler : function(client,theme,target) {
+    var m = target.model;
+ 	m.cout.scrollHandler = function () {
+			var d = theme.scrollTableGetFV(target);
+ 			if (d != m.state.fv) {
  				// only submit if firstvisible changed
- 				status.innerHTML = d + "-" + (d+rows-1) + " / " + totalrows + "...";
- 				status.style.display = "";				
+ 				m.status.innerHTML = d + "-" + (d+m.meta.rows-1) + " / " + m.meta.totalrows + "...";
+ 				m.status.style.display = "";
+                var fvVar = theme.getVar(target, "firstvisible");
+                fvVar.value = d;
  				// always immediate
- 				theme.setVariable(client, fvVar, d, true);
+                theme.updateVar(client,fvVar, true);
  			} else {
- 				// else realign
- 				status.style.display = "none";
- 				cout.scrollTop = fr;
+ 				m.status.style.display = "none";
  			}
  	};
 },
@@ -3213,9 +3543,7 @@ scrollTableRecalc : function(pid,target) {
         // now text doesn't overlap resizer & sort indicator
         h[i].lastChild.style.width = (w - 15)+"px";
         // enter looping rows only if width is changed
-        var looped = false;
         if(c[i].width != w ) {
-            looped = true
             var rows = c.length/h.length;
             for (var j=0;j<rows;j++) {
                 var idx = j*h.length+i;

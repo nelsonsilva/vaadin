@@ -249,7 +249,7 @@ IMG.overlay {
 	position: absolute;
 	padding: 0.2em 0.4em 0.1em 0.4em;
 	border: 1px solid InfoText;
-	background-color: InfoBackground;
+	background-color: ButtonFace;
 }
 
 .table .colsel {
@@ -288,12 +288,6 @@ IMG.overlay {
 	border-right: 1px solid ButtonShadow; 
 	padding-left: 0.2em;
 }
-/* @deprecated */
-.table .hin .hah img, .table .hin .tableheader img {
-	height: 1em;
-	width: 2px;
-	cursor:w-resize;
-}
 .table .hin td {
 	overflow:hidden;
 }
@@ -325,12 +319,26 @@ html>body .table .hin div.headerContent {
 	 */
 	margin-right:12px;
 }
-.table table {
+.table .cout table.cin {
+	margin:0;
+	padding:0;
+	border:0;
 	border-collapse: collapse;
 	empty-cells: show;
 }
-.table .cin td.tablecell {
+.table .cout table.cin td {
+	border:0;
+	margin:0;
+	padding:0;
+}
+/* spacer for unloaded rows */
+.table .cout div.spacer {
+	/* overcome IE 6 bug in height under line-height */
 	overflow:hidden;
+	background-color: #f00;
+	background-color: ButtonFace;
+}	
+.table .cin td.tablecell {
 	height:100%;
 	white-space:nowrap;
 }
@@ -339,24 +347,27 @@ html>body .table .hin div.headerContent {
 	overflow:hidden;
 	height:100%;
 	white-space:nowrap;
-	border-right:1px solid gray;
+	border:0;
+	border-right:1px solid ButtonShadow;
 }
 
-.table .selected TD DIV {
-	background-color: Highlight;
+.table tr.selected td.tableCell div.cellContent {
 	color: HighlightText;
 }
-.table .selected TD {
-	background-color: Highlight;
-	color: HighlightText;
-	border-left: 1px solid Highlight;
-}
-.table .even TD DIV {
+.table tr.even {
 	background-color: Window;
 }
-.table .odd TD DIV {
+.table tr.odd {
 	background-color: ButtonFace;
 }
+.table tr.selected {
+	background-color: Highlight;
+}
+.table tr.selected td.tableCell div.cellContent {
+	color: HighlightText;
+}
+
+/* sorted header cells */
 .table td.asc {
 	background: url('../img/table/asc.gif') right top no-repeat;
 }
