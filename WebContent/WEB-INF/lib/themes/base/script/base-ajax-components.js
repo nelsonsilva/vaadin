@@ -2789,7 +2789,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         for(j in model.meta) {
             if(target.model.meta[j] != model.meta[j]) {
                 allowUpdate = false;
-                continue;
+                break;
             }
         }
         if (allowUpdate) {
@@ -3115,7 +3115,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 
 	// THIRD do some initial sizing and scrolling
     
-    model.rowheight = table.rows.length ? (table.offsetHeight/table.rows.length) : 22;
+    model.rowheight = table.rows.length ? Math.ceil(table.offsetHeight/table.rows.length) : 22;
     // scroll padding calculations 
     var prePad = (model.state.fv - 1) * model.rowheight;
     // remaining invisible lines * line_height
@@ -3381,7 +3381,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             
         }
     } else {
-        alert("Did not scroll TODO other redraws");
+        renderer.client.debug("Table: no-scroll update (propably select change)");
     }
 
     // update model object
