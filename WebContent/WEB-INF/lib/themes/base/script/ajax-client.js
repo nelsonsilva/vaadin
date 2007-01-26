@@ -182,6 +182,12 @@ itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
 
 	// Check if we are in debug mode
 	if (!this.debugEnabled)	{ return; }
+    
+    // use firebug or native webkit console for debug messages if it exists
+    if("console" in window) {
+        console.log(message);
+        return;
+    }
 
 	// Ensure we have a debug window
 	if (this.debugwindow == null) {
