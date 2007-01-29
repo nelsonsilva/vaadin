@@ -51,6 +51,7 @@
 			<file name="script/ajax-client.js" />
 			<file name="script/base-ajax-components.js" />
 			<file name="ext/jscalendar/calendar.js" />
+			<file name="ext/jscalendar/lang/calendar-en.js" />
 			<file name="ext/jscalendar/calendar-setup.js" />
 			<!-- Firefox fixes -->
 			<fileset>
