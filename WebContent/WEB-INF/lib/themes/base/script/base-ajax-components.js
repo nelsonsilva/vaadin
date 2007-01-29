@@ -4070,8 +4070,9 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 			var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 			if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 			
-			div = renderer.theme.createElementTo(div,"div",(linkStyle?"link clickable":"outset clickable"));;
-			var inner = renderer.theme.createElementTo(div,"div",(linkStyle?"pad":"border pad bg"));
+			div = renderer.theme.createElementTo(div,"div",(linkStyle?"link clickable":"outset clickable"));
+			var outer = renderer.theme.createElementTo(div,"div",(linkStyle?"":"outer"));
+			var inner = renderer.theme.createElementTo(outer,"div",(linkStyle?"pad":"border pad bg"));
 			
 			var caption = theme.renderDefaultComponentHeader(renderer,uidl,inner);
 			theme.addTabtoHandlers(client,theme,caption,div,tabindex,("default"==uidl.getAttribute("style")));
