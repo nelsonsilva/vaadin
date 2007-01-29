@@ -1637,7 +1637,6 @@ itmill.Class.prototype.construct = function() {};
 
 itmill.Class.extend = function(def) {
 	
-	// Thinwire approach
 	 var classDef = function() {
         if (arguments[0] !== itmill.Class) { this.construct.apply(this, arguments); }
     };
