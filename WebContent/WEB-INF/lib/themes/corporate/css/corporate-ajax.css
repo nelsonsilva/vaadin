@@ -124,57 +124,73 @@ input, select, button, html {
  * --------
  */
 
+.tabsheet .tabsheetcaption {
+	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
+	height: 15px;
+	color: white;
+	padding: 5px 7px;
+	spacing: 0;
+	font-weight: bold;
+	border: 1px solid #a3b5ce;
+}
+
+.tabsheet .tabs-container {
+	height: 28px;
+	padding-top: 4px;
+	background: #d4e7fe url(../img/tabsheet/header_bg.png) repeat-x;
+	border-left: solid 2px #d3d4dc;
+	border-right: solid 2px #aaacbc;
+	border-top: solid 2px #d3dce7;
+}
+
 .tabsheet .tabs {
-	position: relative;
-	top: 2px;
-	background-color: auto;
+	border: none;
+	margin: 0;
+	padding: 0;
 }
 
 .tabsheet .tabs td {
-	height: 14px;
-	background-color: white;
-	color: #094582;
-	padding: 4px;
-	padding-left: 8px;
-	padding-right: 8px;	
-	border-top:			2px solid #d8dbe3;
-	border-right:		2px solid #aaacbc;
-	border-left:		2px solid #d3d4dc;
-	border-bottom: 		2px solid white;
+	white-space: nowrap;
+	overflow: hidden;
 }
+
+.tabsheet .tabs .clickable,
+.tabsheet .tabs .tab-on {
+	color: #094582;
+	height: 22px;
+	padding: 0 8px;
+	border: solid 1px #85a2c5;
+	background: #d4e7fe	url(../img/tabsheet/tab_bg.png) repeat-x;
 	
-.tabsheet .tabs .clickable {
-	background-color: #b4d3f0;
-	border-bottom: solid 1px #d8dbe3;
-	background-image: url(../img/tabsheet/tab_bg.png);
+}
+
+.tabsheet .tabs .tab-on {
+	background: #d4e7fe	url(../img/tabsheet/tab_open_bg.png) repeat-x;
+	border-bottom: none;
 }
 
 .tabsheet .tabs .over {
 	background-image: url(../img/tabsheet/tab_hover_bg.png);
-	border-top:			2px solid #d8dbe3;
-	border-right:		2px solid #aaacbc;
-	border-left:		2px solid #d3d4dc;
-	border-bottom: solid 1px #d8dbe3;
 }
 
 .tabsheet .tabs .tab-space {
 	width: 2px;
-	background-color: auto;	
-	padding: 0;
-	padding-left: 0;
-	padding-right: 0;
-	border: 0;
-	border-bottom: solid 2px #d8dbe3;
+	border-bottom: solid 1px #85a2c5;
+	overflow: hidden;
+}
+
+.tabsheet .tabs .tab-last {
+	border-bottom: solid 1px #85a2c5;
+	overflow: hidden;
 }
 
 .tabsheet .tab-content {
 	background-color: white;
-	border: solid 1px #85a2c5;
-	border-top:					solid 2px #d8dbe3;
+	border-top:					none;
 	border-right:				solid 2px #aaacbc;
 	border-bottom:				solid 2px #9193a0;
 	border-left:				solid 2px #d3d4dc;
-	padding: 7px;
+	padding: 8px 5px 5px 5px;
 }
 
 
@@ -226,5 +242,35 @@ input, select, button, html {
 }
 .button .down .border {
 	background: transparent url(../img/button/right_down.png) no-repeat right top;
+}
+
+
+/**
+ * Input (textfield)
+ * -----------------
+ */
+.textfield .border input,
+.newitem input,
+.select input,
+.datefield input[type=text] {
+	background: #f6f9fc	url(../img/common/input_bg.png) repeat-x;
+	border: solid 1px #8fa5b3;
+	padding: 2px 3px;
+}
+
+
+/**
+ * Select (drop down)
+ * -----------------
+ */
+.select select,
+.datefield select {
+	background: #f6f9fc	url(../img/common/input_bg.png) repeat-x;
+	border: solid 1px #8fa5b3;
+	padding: 1px 0;
+}
+.select select option,
+.datefield select option {
+	background: transparent;
 }
 
