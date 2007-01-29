@@ -13,6 +13,7 @@
 	<!--  Corporate theme only supports UIDL mode -->
 	<modes>
 		<mode name="ajax"/>
+		<mode name="html"/>
 	</modes>
 
 	<fileset>
