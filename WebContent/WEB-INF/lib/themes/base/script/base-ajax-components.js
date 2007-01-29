@@ -943,7 +943,7 @@ addStopListener : function(theme,client,element,event) {
 	client.addEventListener(element, event, function(e) { 
 			var evt = client.getEvent(e);
 			evt.stop();
-			return false;				
+			return false;
 		}
 	);
 },
@@ -4082,8 +4082,16 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 				if (v != null) {
 					var varId = v.getAttribute("id");
 					theme.addSetVarListener(theme,client,div,"click",varId,"true",immediate);
+					
+					theme.addAddClassListener(theme,client,div,"mousedown","down",div);
+					theme.addRemoveClassListener(theme,client,div,"mouseup","down",div);
+					theme.addRemoveClassListener(theme,client,div,"mouseout","down",div);
+					
 					theme.addAddClassListener(theme,client,div,"mouseover","over",div);
 					theme.addRemoveClassListener(theme,client,div,"mouseout","over",div);
+					
+					theme.addPreventSelectionListener(theme,client,div,"mousedown");
+					theme.addPreventSelectionListener(theme,client,div,"selectstart");
 				}		
 			}
 				
@@ -4735,6 +4743,19 @@ eventPosition : function(e) {
 	}
 	
 	return {x:posx, y:posy};
+},
+
+
+/**
+ * Prevent text selection in buttons and etc.
+ */
+addPreventSelectionListener : function(theme,client,div,event) {
+	client.addEventListener(div, event, function(e) { 
+			var evt = client.getEvent(e);
+			evt.stop();
+			return false;
+		}
+	);
 }
 
 
