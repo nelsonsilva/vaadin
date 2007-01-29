@@ -178,3 +178,53 @@ input, select, button, html {
 }
 
 
+/**
+ * Button
+ * ------
+ */
+ 
+ .button .border {
+ 	border: none;
+ 	padding: 0;
+ }
+ 
+ .button .over .border {
+ 	border: none;
+ }
+ 
+ .button .outset {
+ 	border: none;
+ }
+
+.button .outer {
+	background: #d1d5d9 url(../img/button/left.png) no-repeat;
+	height: 29px;
+}
+
+.button .border {
+	background: transparent url(../img/button/right.png) no-repeat right top;
+	height: 29px;
+}
+
+.button .caption {
+	padding: 6px 20px 0 20px;
+	white-space: nowrap;
+	color: #2c3437;
+}
+
+/* Hover state */
+.button .over .outer {
+	background: transparent url(../img/button/left_hover.png) no-repeat;
+}
+.button .over .border {
+	background: transparent url(../img/button/right_hover.png) no-repeat right top;
+}
+
+/* Down state */
+.button .down .outer {
+	background: transparent url(../img/button/left_down.png) no-repeat;
+}
+.button .down .border {
+	background: transparent url(../img/button/right_down.png) no-repeat right top;
+}
+
