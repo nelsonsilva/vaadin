@@ -2150,6 +2150,7 @@ renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
 	        client.changeVariable(yearVarId, y, immediate);
 			}          
 	   }); 
+	   unregisterLayoutFunction(div);
    });
  	
 },
