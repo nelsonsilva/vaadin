@@ -37,9 +37,11 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 
 			// Create default header
 			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+			theme.addCSSClass(caption, "tabsheetcaption");
 			
 			//  Render tabs
-			var table = theme.createElementTo(div,"table","tabs");
+			var tabs_container = theme.createElementTo(div,"div","tabs-container");
+			var table = theme.createElementTo(tabs_container,"table","tabs");
 			table.cellSpacing = 0;
 			var tabs = theme.createElementTo(theme.createElementTo(table, "tbody"),"tr");
 			var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");
@@ -47,8 +49,12 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			var tabNodes = theme.getChildElements(uidl,"tabs");
 			if (tabNodes != null && tabNodes.length >0)  tabNodes = theme.getChildElements(tabNodes[0],"tab");
 			var selectedTabNode = null;
+			
+			var space = theme.createElementTo(tabs,"td","tab-space");
+			space.innerHTML = "&nbsp;"
+			
 			if (tabNodes != null && tabNodes.length >0) {
-				for (var i=0; i< tabNodes.length;i++) {
+				for (var i=0; i < tabNodes.length; i++) {
 					var tabNode = tabNodes[i];
 					var tab = theme.createElementTo(tabs,"td");
 					var key = tabNode.getAttribute("key");
@@ -69,6 +75,7 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 						theme.addAddClassListener(theme,client,tab,"mouseover","over",tab);
 						theme.addRemoveClassListener(theme,client,tab,"mouseout","over",tab);
 						theme.addSetVarListener(theme,client,tab,"click",varId,key,true);
+						theme.addPreventSelectionListener(theme,client,tab,"mousedown");
 					}
 					
 					// Icon
@@ -78,8 +85,16 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 						tab.innerHTML = tabNode.getAttribute("caption");
 					}
 				
-					theme.createElementTo(tabs,"td","tab-space");
+					if(i < tabNodes.length-1) {
+						space = theme.createElementTo(tabs,"td","tab-space");
+						space.innerHTML = "&nbsp;"
+					}
 				}
+				
+				// For visual needs
+				var last = theme.createElementTo(tabs,"td","tab-last");
+				last.innerHTML = "&nbsp;";
+				last.width = "100%";
 			}
 			
 			// Render content (IE renderbug need three)
