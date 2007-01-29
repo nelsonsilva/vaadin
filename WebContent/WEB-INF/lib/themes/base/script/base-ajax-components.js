@@ -4091,8 +4091,7 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 					theme.addAddClassListener(theme,client,div,"mouseover","over",div);
 					theme.addRemoveClassListener(theme,client,div,"mouseout","over",div);
 					
-					theme.addPreventSelectionListener(theme,client,div,"mousedown");
-					theme.addPreventSelectionListener(theme,client,div,"selectstart");
+					theme.addPreventSelectionListener(theme,client,div);
 				}		
 			}
 				
@@ -4541,7 +4540,8 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 			iframe.id = "popup-blocker-iframe";
 			iframe.style.position = "absolute";
 			iframe.style.zIndex = "99998";
-			//popupContainer.appendChild(iframe);
+			iframe.style.width = "0";
+			iframe.style.height = "0";
 			
 			doc.body.appendChild(popupContainer);
 			doc.body.appendChild(iframe);
@@ -4751,7 +4751,14 @@ eventPosition : function(e) {
  * Prevent text selection in buttons and etc.
  */
 addPreventSelectionListener : function(theme,client,div,event) {
-	client.addEventListener(div, event, function(e) { 
+	client.addEventListener(div, "mousedown", function(e) { 
+			var evt = client.getEvent(e);
+			evt.stop();
+			return false;
+		}
+	);
+	// For IE
+	client.addEventListener(div, "selectstart", function(e) { 
 			var evt = client.getEvent(e);
 			evt.stop();
 			return false;
