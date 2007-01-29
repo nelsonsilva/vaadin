@@ -2057,7 +2057,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 	 				eval(st); 
 	 			} 
 	 		}
-	 	); 
+	 	);
 	}
 },
 
@@ -2114,73 +2114,43 @@ renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
 	// Render default header
 	renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	
+	// Get attributes
 	var immediate = uidl.getAttribute("immediate") == "true";
 	var enabled = uidl.getAttribute("enabled") == "true";
 	var readonly = uidl.getAttribute("readonly") == "true";
 	var yearVar = theme.getVariableElement(uidl,"integer","year");
     var monthVar = theme.getVariableElement(uidl,"integer","month"); 
     var dayVar = theme.getVariableElement(uidl,"integer","day");
-    var hourVar = theme.getVariableElement(uidl,"integer","hour");
-    var minVar = theme.getVariableElement(uidl,"integer","minutes");
-    var secVar = theme.getVariableElement(uidl,"integer","seconds");
-    var msecVar = theme.getVariableElement(uidl,"integer","millseconds");
+	var yearVarId = yearVar.getAttribute("id");
+    var monthVarId = monthVar.getAttribute("id"); 
+    var dayVarId = dayVar.getAttribute("id");
+    var initDate = new Date();
+    initDate.setFullYear(yearVar.getAttribute("value"));
+    initDate.setMonth(monthVar.getAttribute("value") - 1);
+    initDate.setDate(dayVar.getAttribute("value"));
     
-    var showTime   = hourVar != null;
-    var inputId = yearVar.getAttribute("id") + "_input";
-	
-	// Create container DIV
+ 	// Create container DIV
 	var calDiv = theme.createElementTo(div,"div");
-	calDiv.id = inputId;
-        
-    // Assign the value to textfield
-    var yearValue = yearVar != null? yearVar.getAttribute("value"): -1;
-    var monthValue = monthVar != null? monthVar.getAttribute("value"): -1;
-    var dayValue = dayVar != null? dayVar.getAttribute("value"): -1;
-    var hourValue = hourVar != null? hourVar.getAttribute("value"): -1;
-    var minValue = minVar != null? minVar.getAttribute("value"): -1;
-    var secValue = secVar != null? secVar.getAttribute("value"): -1;
-    var msecValue = msecVar != null? msecVar.getAttribute("value"): -1;
-    if (yearValue >0 && monthValue >0 && dayValue >0) {
-	    //TODO Assign date
-	} else {
-	    //TODO Assign date
-	}	    
-
- 	
- 	//  Create a unique temporary variable
- 	// Dont know if all this is needed, but its purpose is to avoid
- 	// javascript problems with event handlers scopes.
- 	var temp = "datefield_" + (new Date()).getTime();;
-    eval (temp + " = new Object();");
-    
-    // Function that updates the datefield
-    var dateChanged = function (cal) {
-         var y = cal.date.getFullYear();
-         var m = cal.date.getMonth();
-         var d = cal.date.getDate();
-         if (d == null || y == null || m == null || d < 1 ||
-                 d > 31 || m < 1 || m > 12 || y < 0 || y > 5000) alert("Error");
-         client.changeVariable(dayVar.getAttribute("id"), d, false);
-         client.changeVariable(monthVar.getAttribute("id"), m, false);
-         client.changeVariable(yearVar.getAttribute("id"), y, immediate);
- 	};
-    
-    // Calendar setup code
-    (eval (temp)).update = dateChanged;
-    var st = "Calendar.setup({flatCallback : function (cal) { " + temp + 
-                    ".update(cal); } ,showsTime: "+showTime+", flat: '"+inputId+"', firstDay : 1,"+
-                    " ifFormat : '%d.%m.%Y'});";
-    
- 	
-    // Assign initialization to button mouseover (lazy initialization)
-    client.addEventListener(div, "mouseover", function(event) { 
- 			if (!eval(temp).initialized) {
- 				eval(temp).initialized =true; 
- 				eval(st); 
- 				
- 			} 
- 		}
- 	);
+    var calDivId = uidl.getAttribute("id") + "_cal";
+	calDiv.id = calDivId;
+   
+   // In layouting phase, activate the calendar 
+   var pid = uidl.getAttribute("id");
+   client.registerLayoutFunction(div, function() {
+	   Calendar.setup({
+	     firstDay     : 1,
+	     date		  : initDate,
+	     flat         : calDivId, // ID of the parent element
+	     flatCallback : function (cal) {
+	        var y = cal.date.getFullYear();
+	        var m = cal.date.getMonth() + 1;
+	        var d = cal.date.getDate();
+	        client.changeVariable(dayVarId, d, false);
+	        client.changeVariable(monthVarId, m, false);
+	        client.changeVariable(yearVarId, y, immediate);
+			}          
+	   }); 
+   });
  	
 },
 
