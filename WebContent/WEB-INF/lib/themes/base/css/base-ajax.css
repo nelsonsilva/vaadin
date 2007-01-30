@@ -129,7 +129,7 @@ IMG.overlay {
 }
 .popup .border {
 	border: 1px solid InfoText;
-	background-color: #ffffe1; // InfoBackground - doesn't work on Mac (black);
+	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
 	padding: 4px;
 }
 .popup .caption {
@@ -138,7 +138,7 @@ IMG.overlay {
 .popup * {
 	/*white-space: nowrap;*/ /* Really, there's no point doing it like this. If we need nowrap, we define it in the content that needs it, not on all. */
 	color: InfoText;
-	background-color: #ffffe1; // InfoBackground - doesn't work on Mac (black);
+	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
 }
 .popup .error {
 	font-size: 0.9em;
@@ -255,13 +255,15 @@ IMG.overlay {
 
 .table .tablestatus {
 	position: absolute;
+	display:none;
 	padding: 0.2em 0.4em 0.1em 0.4em;
 	border: 1px solid InfoText;
-	background-color: ButtonFace;
+	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
 }
 
 .table .colsel {
-	margin: 0.25em ; 
+	float:right;
+	margin: 0.25em ;
 	width: 0.4em;
 	height: 0.4em;
 	border: 1px solid ButtonText;
@@ -299,7 +301,7 @@ IMG.overlay {
 .table .hin td {
 	overflow:hidden;
 }
-.table .hin td img.colresizer {
+.table .colresizer {
 	display:block;
 	/* header border at the same time */
 	background-color: ButtonShadow;
@@ -310,7 +312,7 @@ IMG.overlay {
 	margin:0;
 	padding:0;
 }
-.table .hin div.headerContent {
+.table .headerContent {
 	overflow:hidden;
 	height:100%;
 	white-space:nowrap;

@@ -634,7 +634,6 @@ createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 	if (this.getFirstElement(uidl,"error")) {
 		this.addCSSClass(div,"error");
 	}
-	
 	return div;	
 },
 
@@ -2723,7 +2722,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         redraw = true;
 		colWidths = target.colWidths;
 	} else {
-		colWidths = new Object();
+		colWidths = model.colWidths = new Object();
 	}
 	var wholeWidth = target.wholeWidth;
 	var scrolledLeft = target.scrolledLeft;
@@ -2740,11 +2739,12 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var pagelength = model.meta.pagelength = uidl.getAttribute("pagelength");
 	var colheaders = model.meta.colheaders = uidl.getAttribute("colheaders")||false;
 	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
-	var visiblecols= model.meta.visiblecols =  theme.getFirstElement(uidl,"visiblecolumns");
+    model.meta.rowsHasActions = theme.getFirstElement(uidl, "ak") || false;
+	var visiblecols= model.visiblecols =  theme.getFirstElement(uidl,"visiblecolumns");
 	var sortkey    = model.meta.sortkey = theme.getVariableElementValue(theme.getVariableElement(uidl,"string","sortcolumn"));
 	
     // column order
-	var colorder = new Array();
+	model.colorder = new Array();
 	var fv = model.state.fv = parseInt(theme.getVariableElementValue(theme.getVariableElement(uidl,"integer","firstvisible"))||1);
 	if (selectmode != "none") {
 		model.selected = new Array();
@@ -2765,7 +2765,24 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                 break;
             }
         }
+        // check that column order, count & collapsing matches
+        if(allowUpdate) {
+            for(var i = 0; i < model.visiblecols.childNodes.length;i++) {
+                var newNode =  model.visiblecols.childNodes[i];
+                var oldNode = target.model.visiblecols.childNodes[i];
+                if( newNode.nodeType == Node.ELEMENT_NODE && 
+                    (
+                        newNode.getAttribute("cid") != oldNode.getAttribute("cid") ||
+                        newNode.getAttribute("collapsed") != oldNode.getAttribute("collapsed")
+                    )
+                ) {
+                    allowUpdate = false;
+                    break;
+                }
+            }
+        }
         if (allowUpdate) {
+            console.info("Update existing table");
             div = target;
             theme.scrollTableScrollUpdate(renderer, div, model, uidl);
             return;
@@ -2803,6 +2820,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	theme.addCSSClass(caption,"tablecaption");
 	
 	// column collapsing
+    
 
 	// main div
 	var inner  = theme.createElementTo(div,"div","border");
@@ -2833,7 +2851,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	delete alNode;
 
-	inner.innerHTML = "<DIV id=\""+pid+"status\" align=\"center\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></DIV><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD align=center width=16></TD></TR></TBODY></TABLE>";
+	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD align=center width=16></TD></TR></TBODY></TABLE>";
 	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
 	if (visiblecols) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div</DIV>";
@@ -2898,7 +2916,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		    				+ iconUrl.substring(8);
 		}		
 		alignments[i] = col.getAttribute("align");		
-		colorder[i] = cid;
+		model.colorder[i] = cid;
 		html += "<TD ";
         var cellClasses = '';
 		if (colWidths[cid]) {
@@ -2952,7 +2970,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // create spacer elements and save reference to model (needed for webkit bug)
     model.aSpacer = theme.createElementTo(cout,"div");
     model.aSpacer.className = "spacer";
-    
+
     var d = cout.ownerDocument;
     var table = d.createElement("table");
     table.id = pid + "cin";
@@ -2967,6 +2985,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var tdDiv = null;
     var icon = null;
 	for (var i=0;i<len;i++) {
+    
 		var row = trs[i];
 		var cap =  row.getAttribute("caption");
 		var key =  row.getAttribute("key");
@@ -2986,7 +3005,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             tdDiv.className = "cellContent";
 			if (colWidths["heh"]) {
                 td.width = colWidths["heh"];
-                tdDiv.style.width = (colWidths["heh"]-4)+"px;";
+                tdDiv.style.width = (colWidths["heh"]-4)+"px";
 			} 
 			if (iconUrl) {
                 icon = d.createElement("img");
@@ -3027,10 +3046,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                     default:
                 }
             }
-			if (colWidths[colorder[colNum]]) {
+			if (colWidths[model.colorder[colNum]]) {
                 // set container divs width explicitely due IE overflow bug
                 // width - border - margin
-                td.width = colWidths[colorder[colNum]] - 4 ;
+                td.width = colWidths[model.colorder[colNum]] - 4 ;
 			}
             td.appendChild(tdDiv);
             tr.appendChild(td);
@@ -3043,6 +3062,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     model.bSpacer = theme.createElementTo(cout,"div");
     model.bSpacer.className = "spacer";
     
+
 
 	// SECOND render the sub-components (TD content)
     // TODO save uidl content of rows and cells for caching purposes
@@ -3085,6 +3105,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			}
 		}
 	}
+    
+    
 
 	// THIRD do some initial sizing and scrolling
     
@@ -3112,8 +3134,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
 	var p = client.getElementPosition(inner);
-	status.style.top = (p.y + p.h/2) + "px";
-	status.style.left = (p.x + p.w/2 - wholeWidth/4) +"px";
+	status.style.top = Math.round(p.y + p.h/2) + "px";
+	status.style.left = Math.round(p.x + p.w/2 - wholeWidth/4) +"px";
  	theme.scrollTableAddScrollHandler(client,theme,div);
  	theme.scrollTableAddScrollListener(theme,div);
  	
@@ -3147,7 +3169,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var hin = target.ownerDocument.getElementById(pid+"hin");
     var cin = target.ownerDocument.getElementById(pid+"cin");
     theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
-    
 },
 
 /**
@@ -3156,9 +3177,11 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
  * @param model constructed tables model object from uidl
  */
 scrollTableScrollUpdate : function(renderer,target, model,uidl) {
+    renderer.client.debug("Updating new rows to existing table");
     var theme = renderer.theme;
     var d = target.ownerDocument;
     var tableBody = target.model.tableBody;
+    var colorder = target.model.colorder;
     
     /* define function that creates rows */
     var createRow = function(ruidl, odd, selectmode) {
@@ -3185,7 +3208,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         // rows nodes
         var comps = ruidl.childNodes;
         var l = comps.length;
-        var currentCol = 0;
+        var currentCol = -1;
         var al = null; // rows action listeners
         for (k=0;k<l;k++) {
             var comp = comps[k];
@@ -3203,7 +3226,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             cellContent.className = "cellContent";
             // TODO ensure right behaviour when rearranged columns
             // table cell shoudn't need explicit size, but due IE bug, explicitely set content divs size
-            cellContent.style.width = (target.colWidths[currentCol] - 4) + "px";
+            cellContent.style.width = (target.colWidths[colorder[currentCol]] - 4) + "px";
             cell.appendChild(cellContent);
             // render cell content
             renderer.client.renderUIDL(comp, cellContent);
@@ -3450,7 +3473,7 @@ scrollTableAddScrollListener : function (theme,target) {
 		var d = theme.scrollTableGetFV(target);
 		if (d != target.model.state.fv) {
  			status.innerHTML = d + "-" + (d+target.model.meta.rows-1) + " / " + target.model.meta.totalrows;
- 			status.style.display = "";		
+ 			status.style.display = "block";
  		}
 		cout.scrollTimeout = setTimeout(function () {
 				cout.scrollHandler();
@@ -3474,7 +3497,7 @@ scrollTableAddScrollHandler : function(client,theme,target) {
  			if (d != m.state.fv) {
  				// only submit if firstvisible changed
  				m.status.innerHTML = d + "-" + (d+m.meta.rows-1) + " / " + m.meta.totalrows + "...";
- 				m.status.style.display = "";
+ 				m.status.style.display = "block";
                 var fvVar = theme.getVar(target, "firstvisible");
                 fvVar.value = d;
  				// always immediate
