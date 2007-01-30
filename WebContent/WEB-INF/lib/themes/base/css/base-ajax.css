@@ -3,12 +3,10 @@
 	position: absolute;
 	z-index: 1001;
 	text-indent: 18px;
-	background-color: white;
-	background-image: url('../img/debug.gif');
-	background-repeat: no-repeat;
-	background-position: 1 1;
+	background: white url('../img/debug.gif') -6px -6px no-repeat;
 	font-weight: normal;
 	white-space: nowrap;
+	color: grey;
 }
 
 div#ajax-wait {
@@ -26,8 +24,8 @@ div#ajax-wait {
 
 .minimized {
 	overflow: hidden;
-	width: 18px;
-	height: 18px;
+	width: 10px;
+	height: 10px;
 	z-index: 1000;
 }
 

@@ -1031,7 +1031,6 @@ itmill.Client.prototype.renderHTML = function (xml, target) {
 
 	var n = this.createElement("div",target);
 	target.appendChild(n);
-	n.setAttribute("style", "padding-left:10px;background-color:white;z-index:9999;position:relative;");
 	var tn = this.createTextNode("<" + xml.nodeName, target);
 	n.appendChild(tn);	
 	if (xml.attributes.length > 0)
