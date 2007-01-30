@@ -53,6 +53,8 @@
 			<file name="ext/jscalendar/calendar.js" />
 			<file name="ext/jscalendar/lang/calendar-en.js" />
 			<file name="ext/jscalendar/calendar-setup.js" />
+			<!-- Firebug console for non Firefox browsers -->
+			<file name="ext/firebug/firebug.js" />
 			<!-- Firefox fixes -->
 			<fileset>
 				<require>
