@@ -228,6 +228,10 @@ input, select, button, html {
 	color: #2c3437;
 }
 
+.button .inline {
+	padding: 0;
+}
+
 /* Hover state */
 .button .over .outer {
 	background: transparent url(../img/button/left_hover.png) no-repeat;
@@ -249,6 +253,7 @@ input, select, button, html {
  * Input (textfield)
  * -----------------
  */
+
 .textfield .border input,
 .newitem input,
 .select input,
@@ -261,7 +266,7 @@ input, select, button, html {
 
 /**
  * Select (drop down)
- * -----------------
+ * ------------------
  */
 .select select,
 .datefield select {
@@ -274,3 +279,73 @@ input, select, button, html {
 	background: transparent;
 }
 
+
+/**
+ * Table / list
+ * ------------
+ */
+
+/* Common styles */
+
+.table,
+.table-paging,
+.list .content {
+	border: none;
+}
+
+.table .border,
+.table-paging .border,
+.list .outset {
+	background-color: white;
+	border-top:					none;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
+}
+
+.table .tablecaption,
+.table-paging .tablecaption,
+.list .listcaption {
+	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
+	height: 15px;
+	color: white;
+	padding: 5px 7px;
+	spacing: 0;
+	font-weight: bold;
+	border: 1px solid #a3b5ce;
+}
+
+/* Scroll table style */
+
+.table .hout {
+	height: 25px;
+	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
+	border-bottom: solid 1px #85a2c5;
+}
+
+.table .hin {
+	height: 25px;
+}
+
+.table .hin .headerContent {
+	height: 18px;
+	padding-top: 7px;
+	color: #48738c;
+	font-weight: bold;
+	overflow: hidden;
+}
+
+.table .hin td img.colresizer {
+	height: 25px;
+	background: #b4cfe9;
+	width: 1px;
+	border-right: solid 1px #f3f9ff;
+}
+
+.table tr.odd {
+	background-color: #f0f4f9;
+}
+
+.table .cin td.tablecell div.cellContent {
+	border-right-color: #e3e7f0;
+}
