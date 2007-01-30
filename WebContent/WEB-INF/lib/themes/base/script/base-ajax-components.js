@@ -3177,7 +3177,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
  * @param model constructed tables model object from uidl
  */
 scrollTableScrollUpdate : function(renderer,target, model,uidl) {
-    renderer.client.debug("Updating new rows to existing table");
+    console.info("Updating new rows to existing table");
+    
     var theme = renderer.theme;
     var d = target.ownerDocument;
     var tableBody = target.model.tableBody;
@@ -3450,8 +3451,9 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 
 scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,cin,hin) {
 	client.registerLayoutFunction(paintableElement,function() {
-		var w = (inner.offsetWidth-2) +"px";
-		cout.style.width = w;
+        // TODO check this if really needed
+		//var w = (inner.offsetWidth-4) +"px";
+		//cout.style.width = w;
 		//cin.style.width = w;
 		//hout.style.width = w;
 		//hin.style.width = w;
@@ -3509,6 +3511,7 @@ scrollTableAddScrollHandler : function(client,theme,target) {
 },
 
 scrollTableRecalc : function(pid,target) {
+    console.info("Table: recalc widths");
 	var defPad = 12;
 	var div = target.ownerDocument.getElementById(pid);
 	var wholeWidth = div.initialWidth;

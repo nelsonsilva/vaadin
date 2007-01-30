@@ -7,6 +7,7 @@
 	font-weight: normal;
 	white-space: nowrap;
 	color: grey;
+	margin-left: -10px;
 }
 
 div#ajax-wait {
@@ -260,7 +261,7 @@ IMG.overlay {
 }
 
 .table .colsel {
-	float:right;
+	position:absolute;
 	margin: 0.25em ;
 	width: 0.4em;
 	height: 0.4em;
@@ -334,7 +335,8 @@ html>body .table .hin div.headerContent {
 	border-collapse: collapse;
 	empty-cells: show;
 }
-.table .cout table.cin td {
+.table .cin td,
+.table .cin tr {
 	border:0;
 	margin:0;
 	padding:0;
@@ -347,8 +349,6 @@ html>body .table .hin div.headerContent {
 	background-color: ButtonFace;
 }	
 .table .cin td.tablecell {
-	height:100%;
-	white-space:nowrap;
 }
 .table .cin td.tablecell div.cellContent {
 	padding-left: 3px;
