@@ -2473,12 +2473,14 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
-	if ("list"==uidl.getAttribute("style")) {
-		theme.removeCSSClass(div,"table");
-		theme.addCSSClass(div,"list");
-	}	
 	// Create default header
 	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	
+	if ("list"==uidl.getAttribute("style")) {
+		theme.removeCSSClass(div,"table-list");
+		theme.addCSSClass(div,"list");
+		theme.addCSSClass(caption,"listcaption");
+	} else theme.addCSSClass(caption,"tablecaption");
 	
 	// Get table attributes
 	var rowheaders = ("true"==uidl.getAttribute("rowheaders"));
