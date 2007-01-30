@@ -318,9 +318,10 @@ input, select, button, html {
 /* Scroll table style */
 
 .table .hout {
-	height: 25px;
+	height: 23px;
 	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
-	border-bottom: solid 1px #85a2c5;
+	border-bottom: none;
+	border-top: solid 2px #d3dce7;
 }
 
 .table .hin {
@@ -328,8 +329,8 @@ input, select, button, html {
 }
 
 .table .hin .headerContent {
-	height: 18px;
-	padding-top: 7px;
+	height: 19px;
+	padding-top: 6px;
 	color: #48738c;
 	font-weight: bold;
 	overflow: hidden;
@@ -342,10 +343,39 @@ input, select, button, html {
 	border-right: solid 1px #f3f9ff;
 }
 
+.table .bg {
+	height: 23px;
+	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
+	border-bottom: solid 1px #85a2c5;
+}
+
 .table tr.odd {
 	background-color: #f0f4f9;
 }
 
 .table .cin td.tablecell div.cellContent {
 	border-right-color: #e3e7f0;
+}
+
+.table .colsel {
+	margin:0;
+	padding:0;
+	width: auto;
+	height: 25px;
+	border: none;
+	border-bottom: solid 1px #85a2c5;
+	float: none;
+	border-top: solid 2px #d3dce7;
+}
+
+.table .colsel div {
+	width: 13px;
+	height: 13px;
+	background: transparent url(../img/table/column_select_arrow.png) no-repeat;
+	float: right;
+	margin: 5px 3px;
+}
+
+.table .cout div.spacer {
+	background-color: #fff;
 }
