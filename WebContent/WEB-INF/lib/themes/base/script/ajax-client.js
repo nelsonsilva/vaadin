@@ -114,53 +114,17 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 }
 
 /** Start the ajax client.
- *  Creates debug window and sends the initial request to server.
+ *  Sends the initial request to server.
  *
  *  @author IT Mill Ltd.
  */
 itmill.Client.prototype.start = function() {
-    
     if (this.debugEnabled) {
     	this.debug("Starting Ajax client");
 	} 
-    
     // Send initial request
 	this.processVariableChanges(true);
 }
-
-
-
-/** Creates new debug window.
- *
- *  @return New debug window instance.
- *  @type Window
- *  @private
- *
- *  @author IT Mill Ltd.
- */
-itmill.Client.prototype.createDebugWindow = function() {
-
-	var dw = window.open("","itmill.toolkitDebugWindow","width=500,height=700,scrollbars=1,menubar=0,status=0,titlebar=0,toolbar=0,resizable=1");
-	if (dw != null) {
-		with (dw.document) {
-		
-			if (dw.document.body != null) {
-				dw.document.body.innerHTML = "";			
-			}
-			
-			write("<html><head>");
-			write("<title>IT Mill Toolkit Adapter Debug</title>");
-			write("<link rel=\"stylesheet\" href=\""+this.clientRoot+"debug.css\" type=\"text/css\" >");
-			write("</head>");
-			write("<body><h2>Debug</h2>");
-			write("</body></html>\n");
-		}
-	} else {
-		return null;
-	}    
-	return dw;
-}
-
 
 itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
 
@@ -184,50 +148,13 @@ itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
 	if (!this.debugEnabled)	{ return; }
     
     // use firebug or native webkit console for debug messages if it exists
-    if("console" in window) {
+    if("console" in window ) {
         console.log(message);
         return;
     }
-
-	// Ensure we have a debug window
-	if (this.debugwindow == null) {
-		this.debugwindow = this.createDebugWindow();
-	}
-
-	// If window is closed disable debug
-	if (this.debugwindow.closed) {
-		alert("Debug window closed. Disabling debug.\n Press reload to re-enable debug window.");
-    	this.debugEnabled = false;
-		return;
-	}
-	
-	// Apply the extra style given
-	if (extraStyle != null) {
-		extraStyle = " "+extraStyle;
-	} else {
-		extraStyle = "";
-	}
-	
-	// Use folded or normal view
-	if (folded) {
-		this.debugwindow.document.write("<div onclick=\"if (this.className == 'folded"+extraStyle+"') this.className = 'unfolded"+extraStyle+"'; else this.className = 'folded"+extraStyle+"';\" class='folded"+extraStyle+"'>");
-	} else {
-		this.debugwindow.document.write("<div class='normal"+extraStyle+"'>");
-	}
-
-	// Print out as html or as preformatted	
-	if (html) {
-		this.debugwindow.document.write(message);
-	} else {
-		this.debugwindow.document.write("<xmp>"+message+"</xmp>");
-	}
-	this.debugwindow.document.write("</div>");
-	
-	// Scroll to end
-	this.debugwindow.document.write("<script>window.scrollTo(0,document.body.scrollHeight);</script>");
 }
 
-/** Write object properties to debug window.
+/** Write object properties to console.
  *
  *  @param obj The object that is debugged.
  *  @param level The recursion level that the properties are inspected.
@@ -449,11 +376,12 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
 			return;
 		}
 		
-			// Debug request load time
+		// Debug request load time
 		if (client.debugEnabled) {
 			var loadedTime = (new Date()).getTime();
 			client.debug("UIDL loaded in " + (loadedTime-client.requestStartTime) + "ms");
-			client.debug("UIDL Changes: \n"+req.responseText,true);
+            // Firebug can show traffic so no need to show responce
+            //client.debug("UIDL Changes: \n"+req.responseText,true);
 		}
 		
 		// Clean up	
