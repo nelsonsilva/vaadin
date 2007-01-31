@@ -678,7 +678,7 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		);	
 	}
 	if (captionText||error||description||icon) {
-		this.addCSSClass(caption,"caption");
+		this.addCSSClass(caption,"caption clickable");
 	} else {
 		return caption;
 	}
@@ -718,6 +718,8 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 			/* overlay icon */
 			this.setCSSClass(icon,"overlay description");
 		} 
+	} else {
+		theme.removeCSSClass(caption,"clickable");
 	}
 	
 	var popupTarget = (captionText)?caption:target;
