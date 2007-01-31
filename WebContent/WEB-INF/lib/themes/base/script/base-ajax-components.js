@@ -3513,7 +3513,6 @@ scrollTableAddScrollHandler : function(client,theme,target) {
 
 scrollTableRecalc : function(pid,target) {
     console.info("Table: recalc widths");
-	var defPad = 12;
 	var div = target.ownerDocument.getElementById(pid);
 	var wholeWidth = div.initialWidth;
 	var colWidths = div.colWidths;
@@ -3528,15 +3527,16 @@ scrollTableRecalc : function(pid,target) {
     var h = hin.getElementsByTagName("td");
     var c = cin.getElementsByTagName("td");           
 
-    var whole = 0;   
+    if(!colWidths[h[0].getAttribute("cid")]) {
+        // this is the initial calculation, we'll sync header and column depending on which is wider
+        // loop headers and columns natural widths, browser may squeeze them to fit whole table
+        var defPad = 10;
+        for (var i = 0;i<h.length;i++) {
+            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].clientWidth > c[i].clientWidth) ? h[i].clientWidth : c[i].clientWidth) + defPad;
+        }
+    }
     for (var i = 0;i<h.length;i++) {
-        // colWidth, or whole width if only one column
-        var cw = (h.length>1?colWidths[h[i].getAttribute("cid")]:hout.clientWidth-20);
-        var w1 = h[i].clientWidth + defPad ; 
-        var w2 = (c[i]? (c[i].firstChild.clientWidth + defPad) : 0 );
-        
-        var w = parseInt((cw?cw:(w1>w2?w1:w2)));
-        
+        var w = colWidths[h[i].getAttribute("cid")];
         h[i].width = w ;
         h[i].style.width = w + "px";
         // set div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
@@ -3555,7 +3555,6 @@ scrollTableRecalc : function(pid,target) {
                     colWidths[h[i].getAttribute("cid")] = w;
                 }
             }
-            whole += parseInt(w);
         }
     }
 },
