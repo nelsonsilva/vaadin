@@ -86,10 +86,15 @@ INPUT, SELECT, SELECT OPTION, TEXTAREA {
     color: ButtonText;
 }
 .caption .icon {
-	width: 1em;
-	height: 1em;	
 	vertical-align: middle;
 	padding-right: 5px;
+}
+
+.caption .description,
+.caption .error {
+	padding-left: 2px;
+	vertical-align: middle;
+	margin-top: -2px;
 }
 
 .clickable {
@@ -128,16 +133,15 @@ IMG.overlay {
 }
 .popup .border {
 	border: 1px solid InfoText;
-	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
+	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black) */
 	padding: 4px;
 }
 .popup .caption {
 	text-align: left;
 }
 .popup * {
-	/*white-space: nowrap;*/ /* Really, there's no point doing it like this. If we need nowrap, we define it in the content that needs it, not on all. */
 	color: InfoText;
-	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
+	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black) */
 }
 .popup .error {
 	font-size: 0.9em;
