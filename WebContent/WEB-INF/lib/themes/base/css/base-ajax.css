@@ -603,5 +603,197 @@ html>body .table .hin div.headerContent {
 	text-align: center;	
 }
 
+/* Select in lazy loading mode */
 
+.filterselect .fslayout {
+	padding: 0px;
+	margin: 2px;
+	border: none;
+}
+
+.filterselect TABLE {
+	border-collapse: separate !important;
+	border-collapse: collapse;
+	padding: 0px;
+	margin: 0px;
+	border-spacing: 0px;
+}
+
+.filterselect .fssearch-layout TD {	
+	padding: 0px;
+	margin: 0px;	
+}
+
+.filterselect .fsinput {
+	width: 150px;
+	padding: 2px;
+	padding-left: 3px;
+	margin-top: 1px !important;
+	margin-top: 1px;	
+	vertical-align: top;
+	border-right: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa;
+	border-top: 1px solid #aaaaaa;
+	border-bottom: 1px solid #aaaaaa;
+}
+
+
+.filterselect .toggle-bg {
+	width: 19px;
+	height: 20px;	
+	margin: 0px;		
+	padding: 0px;
+	background-image: url('../img/filterselect/dropdown.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.filterselect .toggle {
+	width: 19px;
+	height: 20px;	
+	margin: 0px;
+	margin-top: 1px !important;
+	margin-left: 0px; 
+	padding: 0px;
+	background-image: url('../img/filterselect/dropdown.gif');
+	background-repeat: no-repeat;
+}
+
+.filterselect .toggle-selected {
+	width: 19px;
+	height: 20px;	
+	margin: 0px;
+	margin-top: 1px !important;
+	margin-left: 0px; 
+	padding: 0px;
+	background-image: url('../img/filterselect/dropdown-hover.gif');
+	background-repeat: no-repeat;
+}
+
+.filterselect .highlighted {
+	background-image: url('../img/filterselect/dropdown-hover.gif');
+	background-repeat: no-repeat;
+}
+
+.filterselect .over {
+	cursor: hand;
+	cursor: pointer !important;
+}
+
+.filterselect .layout {	
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+.filterselect .fspopup {
+	min-width: 300px;
+	position: absolute;	
+	display: none;
+	z-index: 20000;
+}
+
+.filterselect .fspopup-show {
+	min-width: 300px;
+	position: absolute;	
+	display: visible; /* TODO 'visible' not valid here - block? */
+	z-index: 20000;
+}
+
+.filterselect .layout {
+	border: 1px solid #a0a0a0;
+	background-color: white;
+	margin: 0px;
+	padding: 0px;
+}
+
+.filterselect .fsup {	
+	border: 1px solid;
+	border-color: #aaa #000 #000 #aaa;	
+	height: 10px;
+      min-width: 300px;
+	width: 100%;
+	background: #a6b8d6;
+	background-image: url('../img/filterselect/up.gif');
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: hand;
+	cursor: pointer !important;
+}
+
+.filterselect .fsdown {	
+	border: 1px solid;
+	border-color: #aaa #000 #000 #aaa;	
+	height: 10px;
+      min-width: 300px;
+	width: 100%;
+	background: #a6b8d6;
+	background-image: url('../img/filterselect/down.gif');
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: hand;
+	cursor: pointer !important;
+}
+
+.filterselect .over .fsdown  {	
+	background-color: orange;
+	border-color: #000 #aaa #aaa #000;
+}
+
+.filterselect .over .fsup  {
+	background-color: orange;
+	border-color: #000 #aaa #aaa #000;
+}
+
+.filterselect .layout .disabled, .filterselect .layout .over .disabled {
+	background-color: #8e8e8e;
+	border-color: #000 #aaa #aaa #000;
+	opacity: 1.0;
+    filter: alpha(opacity=100);
+}
+
+.filterselect .selectbox {
+	margin: 0px;
+	padding: 0px;
+	height: 160px;
+	min-width: 300px;
+	width: 100%;
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	background-color: #ffffff;
+	padding: 0px;
+}
+
+.filterselect .selectbox-row {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	background-color: #ffffff;	
+	cursor: hand;
+	cursor: pointer !important;
+}
+
+.filterselect .selectedrow {	
+	background-color: #b1b1b1;	
+	color: white;
+	border: none;
+}
+
+.filterselect .unselectedrow {	
+	background-color: white;	
+}
+
+.filterselect .selectbox .over {	
+	background-color: #DCECFD;
+	color: black;
+	border: none;
+}
+
+.filterselect .statics {
+	font-size: 12px;
+	width: 100%;
+	border: 1px solid #aaaaaa;
+	background-color: #ffffff;
+	text-align: center;
+}
 

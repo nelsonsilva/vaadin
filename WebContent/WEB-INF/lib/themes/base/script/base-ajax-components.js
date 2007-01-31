@@ -3699,10 +3699,18 @@ addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sort
 },
 
 renderSelect : function(renderer,uidl,target,layoutInfo) {
-			
+
 	var theme = renderer.theme;
-	var client = renderer.client;
-	
+	var client = renderer.client;	
+	var options = theme.getFirstElement(uidl,"options");
+			
+	// Filtering lazy loading select mode
+	var loadfrom = options != null ? options.getAttribute("loadfrom") : "";
+	if (loadfrom != null && loadfrom.length > 0) {
+		new FilterSelect(renderer,uidl,target,layoutInfo);
+		return;
+	}
+			
 	// Create containing element
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
@@ -3736,7 +3744,6 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
 			theme.addCSSClass(div,"nobr");
 		} 
 	}
-	var options = theme.getFirstElement(uidl,"options");
 	if (options != null) {
 		options = options.getElementsByTagName("so");
 		if (options && options.length && selectMode == "multi") {
@@ -4155,7 +4162,6 @@ renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 			theme.addSetVarListener(theme,client,input,(immediate?"click":"change"),varId,input,immediate);
 		}
 },
-
 
 ///////
 /* TODO merge or delete the rest
@@ -4790,4 +4796,605 @@ addPreventSelectionListener : function(theme,client,div,event) {
 
 
 
+
+
+
 }); // End of BaseTheme -class
+
+
+
+
+/** Creates new FilterSelect component.
+ *  @param renderer 
+ *  @param uidl 
+ *  @param target 
+ *	@param layoutInfo
+ *  @constructor
+ *
+ *	External resources: filterselect.css, filterselect.js
+ *	
+ *
+ *
+ *  @author Oy IT Mill Ltd / Tomi Virtanen
+ */
+
+FilterSelect = function(renderer,uidl,target,layoutInfo) {
+	
+    // TODO working on undoable & tabbing etc
+    
+	this.parentTheme = renderer.theme;	
+	var parentRenderer = renderer.parentRenderer;
+	this.client = renderer.client;			
+	var options = renderer.theme.getFirstElement(uidl,"options");
+	
+	this.filtering = false;
+	
+	this.id = uidl.getAttribute("id");
+	this.uri = options.getAttribute("loadfrom");
+	//this.size = parseInt(uidl.getAttribute("size"));
+	// TODO
+	this.size = 13;
+	this.total = parseInt(options.getAttribute("total"));
+	this.startIndex = parseInt(0);
+	this.selectedIndex = parseInt(-1);
+	this.immediate = "true"==uidl.getAttribute("immediate");
+	this.focusedIndex = parseInt(0);
+    
+    var style = uidl.getAttribute("style");
+    
+	this.popupSelectsHidden = null;
+	this.agent = navigator.userAgent.toLowerCase();
+	
+	var disabled = "true"==uidl.getAttribute("disabled");
+	var readonly = "true"==uidl.getAttribute("readonly");	
+	var focusid = uidl.getAttribute("focusid");
+	var tabindex = uidl.getAttribute("tabindex");
+	var caption = uidl.getAttribute("caption");
+	this.selectMode = uidl.getAttribute("selectmode");	
+	this.selectable = this.selectMode == "multi" || this.selectMode == "single";
+	
+	var div = this.parentTheme.createPaintableElement(renderer,uidl,target,layoutInfo);
+    this.parentTheme.addCSSClass(div,"filterselect");    
+	if (uidl.getAttribute("invisible")) {
+        // Don't render content if invisible, remove form-style caption as well
+        var li = layoutInfo||target.layoutInfo;
+        if (li&&li.captionNode) {
+            li.captionNode.innerHTML = "";
+        }
+        return; 
+    }
+    
+ 	
+	/* 
+		ops map contains all current options. Key 'keys' contains all keys in array. Key
+	    'values' contains all values in array.
+	*/
+	var value = options.getAttribute("initial");	
+	this.ops = eval("(" + value + ")");		
+
+	this.selectionVariable = this.parentTheme.createVariableElementTo(div,this.parentTheme.getVariableElement(uidl,"array","selected"));	
+
+	var modified = uidl.getAttribute("modified");
+    var oldValue = (modified?target.oldValue:null);
+    var selectedValue = options.getAttribute("selectedValue");
+    if (!div.oldValue) 
+        div.oldValue = selectedValue;
+
+	// Render default header
+	this.parentTheme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	
+	var table = this.parentTheme.createElementTo(div,"table","fslayout");
+	var tbody = this.parentTheme.createElementTo(table,"tbody");
+	var tr = this.parentTheme.createElementTo(tbody,"tr","row");
+	var td = this.parentTheme.createElementTo(tr,"td","cell");
+	table = this.parentTheme.createElementTo(td,"table","fssearch-layout");
+	var slbody = this.parentTheme.createElementTo(table,"tbody");
+	var sltr = this.parentTheme.createElementTo(slbody,"tr");
+	var sltdfield = this.parentTheme.createElementTo(sltr,"td");
+	var sltdtoggle = this.parentTheme.createElementTo(sltr,"td");
+    //undoable
+	var sltdundo = this.parentTheme.createElementTo(sltr,"td");
+	
+	var	input = this.parentTheme.createElementTo(sltdfield,"input","fsinput");
+	input.setAttribute('type','text');
+	if(selectedValue != null)
+		input.value = selectedValue;	
+    //undoable
+	input.oldValue = oldValue;
+	if(modified&&oldValue&&oldValue != div.oldValue) {
+        input.style.background= "#FDFFB3";
+	    var undo = this.parentTheme.createElementTo(sltdundo,"span","undo-button");
+	    undo.title = "Undo";
+        var parentTheme = this.parentTheme;
+        var selectionVariable = this.selectionVariable;
+		client.addEventListener(undo, "click", 
+			function(e) {
+                    target.oldValue = input.oldValue;
+					parentTheme.setVariable(client, selectionVariable, input.oldValue, true);
+				}
+		);
+	}
+    
+	var	imagebg = this.parentTheme.createElementTo(sltdtoggle,"div","toggle-bg");	
+	var	image = this.parentTheme.createElementTo(imagebg,"div","toggle");	
+	this.parentTheme.addAddClassListener(this.parentTheme,this.client,image,"mouseover","highlighted");
+	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,image,"mouseout","highlighted");
+			
+	tr = this.parentTheme.createElementTo(tbody,"tr","row");
+	td = this.parentTheme.createElementTo(tr,"td","cell");
+	td.setAttribute('colspan','2');
+	
+	this.popup = this.parentTheme.createElementTo(td,"div","fspopup");
+	var layout = this.parentTheme.createElementTo(this.popup,"div","layout");
+	this.parentTheme.addAddClassListener(this.parentTheme,this.client,layout,"mouseover","over");
+	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,layout,"mouseout","over");
+	this.upbutton = this.parentTheme.createElementTo(layout,"div","fsup");	
+	
+	var selectdiv = this.parentTheme.createElementTo(this.popup,"div","selectbox");
+	if (focusid) this.popup.focusid = focusid;
+	if (tabindex) this.popup.tabIndex = tabindex;				
+	
+	this.layout = this.parentTheme.createElementTo(this.popup,"div","layout");
+	this.downbutton = this.parentTheme.createElementTo(this.layout,"div","fsdown");
+	this.parentTheme.addAddClassListener(this.parentTheme,this.client,this.layout,"mouseover","over");
+	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,this.layout,"mouseout","over");	
+	this.statics = this.parentTheme.createElementTo(this.popup,"div","statics");
+	this.updateStatistics();
+	
+	this.updateButtons();
+				
+			
+	this.select = selectdiv;
+   	this.toggle = image;
+	this.search = input;	
+	this.visibleList = null;
+	this.isSafari = navigator.userAgent.toLowerCase().indexOf("safari") >=0;
+	
+	// Some browser dependant configuration
+	if (this.isSafari) {
+		this.toggle.style.border = "none"; 	
+	} else {
+		//this.toggle.style.border = "1px solid #7f9db9"; 
+	}
+	
+	// Initial update	
+	this.updateContent();
+	this.focusOption(this.focusedIndex);
+			
+	// add listeners
+		if (!disabled&&!readonly) {
+			
+			var fs = this;	
+			// Add toggle button click listener	
+			this.client.addEventListener(fs.toggle, 'click', function () {					
+				if (fs.visibleList != null) {
+					fs.closeDropdown();    
+	   				fs.focusSearchField();
+				} else {										
+	    			fs.dropdownMode();
+	    			fs.focusSearchField();	    	    			
+				}				
+			});	
+            
+			// Add focus listener	
+			this.client.addEventListener(fs.search, 'focus', function () {					  
+                fs.focusSearchField();				
+			});	
+            // Add blur (unfocus) listener
+            this.client.addEventListener(fs.search, 'change', function (e) {
+                    //var evt = this.client.getEvent(e);
+                    //evt.stop();                    
+                    fs.deselect(fs.selectedIndex%fs.size);					
+					fs.selectedIndex = fs.focusedIndex;		
+					fs.updateSearch();
+					fs.closeDropdown();			
+            });	
+			
+			// Add search field keydown listener	
+			this.client.addEventListener(fs.search, 'keydown', function (e) {			
+				var keyCode = e.keyCode;				
+				if (keyCode == 40) { // down
+					fs.dropdownMode();										
+					fs.rollDown();					
+				} else if (keyCode == 38) { // up
+					fs.dropdownMode();	
+					fs.rollUp();
+				} else if (keyCode == 27) {
+					fs.closeDropdown();
+					fs.updateSearch();
+				} else if (keyCode == 13) {					
+					fs.deselect(fs.selectedIndex%fs.size);					
+					fs.selectedIndex = fs.focusedIndex;		
+					fs.updateSearch();
+					fs.closeDropdown();
+				} else if (keyCode == 9) {
+					fs.closeDropdown();
+                }
+			});
+			
+			// Add search field keyup listener	
+			this.client.addEventListener(fs.search, 'keyup', function (e) {	
+				var keyCode = e.keyCode;
+							
+				if (keyCode != 38 && 					
+					keyCode != 40 && 
+					keyCode != 37 && 
+					keyCode != 39 && 
+					keyCode != 27 && 
+					keyCode != 13) {
+						fs.doSearch();
+				} 
+			});														
+		}			
+}
+
+FilterSelect.prototype.rollDown = function() {	
+	if(this.focusedIndex<this.total-1) {	
+		this.defocusOption(this.focusedIndex);
+		this.focusedIndex++;
+		
+		if(this.focusedIndex%this.size == 0) {
+			this.startIndex = this.focusedIndex;
+			this.moveDown(this);
+		} else
+			this.focusOption(this.focusedIndex);
+	}	
+}
+
+FilterSelect.prototype.rollUp = function() {	
+	if(this.focusedIndex>0) {	
+		this.defocusOption(this.focusedIndex);
+		this.focusedIndex--;
+		
+		if((this.focusedIndex+1)%this.size == 0) {				
+			this.moveUp(this);
+		} else
+			this.focusOption(this.focusedIndex);
+	}	
+}
+
+
+/* Open dropdown box */
+FilterSelect.prototype.dropdownMode = function() {	
+	if(this.visibleList != null)
+		this.hide(this.visibleList);
+	this.visibleList = this.popup;
+		
+		// ie fix. All select components are hidden when popup is open.
+        if (this.agent.indexOf("msie")>=0) {
+			var sels = this.popup.ownerDocument.getElementsByTagName("select");
+			if (sels) {
+				var len = sels.length;
+				var hidden = new Array();
+				for (var i=0;i<len;i++) {
+					var sel = sels[i];
+					if (sel.style&&sel.style.display!="none") {
+						sel.style.visibility = "hidden";
+						hidden[hidden.length] = sel;
+					}
+				}		
+				this.popupSelectsHidden = hidden;
+			}
+		}
+	
+	this.show(this.visibleList);
+	this.parentTheme.removeCSSClass(this.toggle, "toggle");
+	this.parentTheme.addCSSClass(this.toggle, "toggle-selected");				
+	this.adjustWidth(this.layout,this.search.clientWidth);			
+}
+/* Close dropdown box */
+FilterSelect.prototype.closeDropdown = function() {
+	// ie fix.
+	if (this.popupSelectsHidden) {
+		var len = this.popupSelectsHidden.length;
+		for (var i=0;i<len;i++) {
+			var sel = this.popupSelectsHidden[i];
+			sel.style.visibility = "visible";
+		}
+		this.popupSelectsHidden = null;
+	}
+	this.hide(this.visibleList);
+	this.visibleList = null;
+	this.parentTheme.removeCSSClass(this.toggle, "toggle-selected");
+	this.parentTheme.addCSSClass(this.toggle, "toggle");
+}
+
+
+FilterSelect.prototype.focusSearchField = function() {
+	this.search.focus();
+    this.search.select();
+	//TODO: Select the text
+}
+
+
+FilterSelect.prototype.show = function(element) {
+	if (element) {				
+		element.className = 'fspopup-show';		
+	}
+}
+
+FilterSelect.prototype.hide = function(element) {
+	if (element) {				
+		element.className = 'fspopup';		
+	}
+}
+
+
+/* Filter content by server request. Filtering prefix will be added to URL. 
+   Server returns only few first options. */
+FilterSelect.prototype.doSearch = function() {
+	this.defocusOption(this.focusedIndex);
+	this.focusedIndex = 0;
+		
+	// Get the value to search for
+	var searchFor = escape("" + this.search.value.toString().toLowerCase());		
+	
+	var date = new Date();
+	
+	// send request
+	var text = this.client.loadDocument(this.uri + "/" + date.getTime() + "/" + searchFor, true);	
+	this.ops = eval("(" + text + ")");
+	
+	this.total = (this.ops != null && this.ops.total != null)?parseInt(this.ops.total):0;
+	this.startIndex=0;
+	this.updateContent();
+	
+	if(this.total > 0)
+		this.dropdownMode();
+	this.updateButtons();
+	this.focusOption(this.focusedIndex);
+}
+
+FilterSelect.prototype.focusOption = function(index) {
+	
+	var option = this.select.childNodes[index%this.size];	
+	this.parentTheme.addCSSClass(option, "over");
+}
+
+FilterSelect.prototype.defocusOption = function(index) {
+
+	var option = this.select.childNodes[index%this.size];
+	if(option != null)
+		this.parentTheme.removeCSSClass(option, "over");
+}
+
+/* Flash component
+*/
+FilterSelect.prototype.flash = function(el) {
+	
+	if(!this.filtering) {
+		var originalColor = el.style.backgroundColor;
+		var fs = this;
+		var cancelFlash = function() {
+			el.style.backgroundColor = originalColor;						
+			fs.filtering = false;
+		};
+		el.style.backgroundColor = "#FFA0A0";
+		this.filtering = true;
+		setTimeout(cancelFlash,1500);
+	}	
+}
+
+FilterSelect.prototype.adjustWidth = function(el, width) {
+	if (el.clientWidth <= width) {
+		el.style.width = width;
+	} 
+}
+
+
+/* Select option */
+FilterSelect.prototype.selected = function(id) {
+	if (id >=0 && id < this.select.childNodes.length) {		
+		var option = this.select.childNodes[id];							
+		this.parentTheme.removeCSSClass(option,"unselectedrow");	
+		this.parentTheme.addCSSClass(option, "selectedrow");
+				
+		if (this.selectMode == "multi") {
+				// TODO support multiselections
+		} else {														
+			this.parentTheme.setVariable(this.client, this.selectionVariable, option.value, this.immediate);	
+		}
+	}
+}
+
+/* Update search box */
+FilterSelect.prototype.updateSearch = function() {	
+	if (this.selectedIndex >=0) {			
+		var index = this.selectedIndex%this.size;
+		this.selected(index);
+		var option = this.select.childNodes[index];
+		if(option != null && option.caption != null) {			
+			var val = option.caption;
+			this.search.value = val;
+		}
+	} else {
+		this.search.value = "";
+	}		
+}
+
+/* Deselect option */
+FilterSelect.prototype.deselect = function(id) {
+	if (id >=0 && id < this.select.childNodes.length) {		
+		var option = this.select.childNodes[id];						
+		this.parentTheme.removeCSSClass(option, "selectedrow");
+		this.parentTheme.addCSSClass(option,"unselectedrow");					
+	}
+}
+
+/* Update down- and up-buttons listeners and layouts */
+FilterSelect.prototype.updateButtons = function() {		
+	if(this.startIndex<=0) {
+		this.parentTheme.addCSSClass(this.upbutton,"disabled");
+		this.upbutton.fs = this;				
+		this.client.removeEventListener(this.upbutton, 'click', this.upButtonClick);		
+	} else {
+		this.client.removeEventListener(this.upbutton, 'click', this.upButtonClick);
+		this.parentTheme.removeCSSClass(this.upbutton,"disabled");
+		this.upbutton.fs = this;
+		this.client.addEventListener(this.upbutton, 'click', this.upButtonClick);
+	}
+	 
+	if(this.total <= this.size || this.startIndex >= this.total-this.size) {
+		this.parentTheme.addCSSClass(this.downbutton,"disabled");
+		this.downbutton.fs = this;			
+		this.client.removeEventListener(this.downbutton, 'click', this.downButtonClick);		
+	} else {
+		// remove and then add again
+		this.client.removeEventListener(this.downbutton, 'click', this.downButtonClick);	
+		this.parentTheme.removeCSSClass(this.downbutton,"disabled");
+		this.downbutton.fs = this;
+		this.client.addEventListener(this.downbutton, 'click', this.downButtonClick);		
+	}	
+}
+
+/* Update options. Gets new options from server if nesessary. */
+FilterSelect.prototype.updateContent = function() {
+
+	var keys = this.ops.keys;
+	var values = this.ops.values;
+	
+	// Clear
+	this.select.innerHTML = "";
+	
+	// Add first set of matches
+	if (keys != null && values != null && keys.length >0 && keys.length >0) {		
+		this.select.disabled = false;
+		var index = 0;
+		
+		for (var i=this.startIndex; i<keys.length && i<this.startIndex+this.size;i++) {
+			var optionNode = this.parentTheme.createElementTo(this.select,"div");
+			optionNode.id = index;
+			optionNode.value = keys[i];	
+			this.parentTheme.addCSSClass(optionNode,"selectbox-row");
+			// unescape and replace all '+' characters with space. 
+			var caption = this.decodeCaption(values[i]);			
+			optionNode.caption = caption;
+			this.parentTheme.createTextNodeTo(optionNode,caption);									
+			
+			if (this.selectMode == "multi") {
+				// TODO multiselections
+			} else {
+				if(this.selectionVariable.value == keys[i]) {
+					this.deselect(this.selectedIndex%this.size);					
+					this.selected(index);				
+					this.selectedIndex = index;									
+				} else {				
+					this.parentTheme.addAddClassListener(this.parentTheme,this.client,optionNode,"mouseover","over");
+					this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,optionNode,"mouseout","over");
+					this.parentTheme.addCSSClass(optionNode,"unselectedrow");
+				}				
+			}
+			
+			var fs = this;
+			
+			// clicklistener for this option
+			this.client.addEventListener(optionNode, 'click', function () {																											
+				var	id = -1;
+				if(fs.agent.indexOf("msie")==-1) {
+					id = this.id;
+					fs.parentTheme.removeCSSClass(this,"over");
+				} else {											
+					id = this.event.srcElement.id;
+					fs.parentTheme.removeCSSClass(this.event.srcElement,"over");						
+				}
+				fs.deselect(fs.selectedIndex%fs.size);
+				fs.selectedIndex = id;
+				fs.focusedIndex	= id;
+				fs.updateSearch();
+				fs.closeDropdown();
+				fs.focusSearchField();
+			});	
+			index++;
+		}
+		
+	} else {
+		this.closeDropdown();		
+		this.select.disabled = true;
+		this.flash(this.search);		
+	}	
+	this.updateStatistics();
+}
+
+/* Handle up-button click */
+FilterSelect.prototype.upButtonClick = function(e) {	   
+    var agent = navigator.userAgent.toLowerCase();
+	var fs = null;
+	if(agent.indexOf("msie")==-1) {
+		fs = this.fs;
+	} else {											
+		fs = this.event.srcElement.fs;							
+	}
+	fs.focusSearchField();				
+	fs.moveUp(fs);
+}
+
+
+/* Handle down-button click */ 
+FilterSelect.prototype.downButtonClick = function(e) {
+ 	var agent = navigator.userAgent.toLowerCase();
+	var fs = null;
+	if(agent.indexOf("msie")==-1) {
+		fs = this.fs;
+	} else {											
+		fs = this.event.srcElement.fs;							
+	}
+	fs.focusSearchField();
+	fs.startIndex += fs.size;	
+	fs.moveDown(fs);
+}
+
+/* Show previous 'page' */
+FilterSelect.prototype.moveUp = function(fs) {
+	fs.focusedIndex = fs.startIndex-1;
+	fs.startIndex -= fs.size;	
+	if(fs.startIndex<0) {
+		fs.startIndex = 0;
+		fs.focusedIndex = 0;
+	}	
+	
+	fs.updateContent();
+	fs.dropdownMode();
+	fs.updateButtons();
+	fs.focusOption(fs.focusedIndex);
+}
+
+/* Show next 'page' */
+FilterSelect.prototype.moveDown = function(fs) {
+	if(fs.startIndex > fs.total) {
+		fs.startIndex = fs.startIndex - fs.total%fs.size;		
+	}
+	fs.focusedIndex = fs.startIndex;
+	
+	// append new items only when necessary
+	if((fs.ops.keys.length<fs.total) && fs.startIndex >=fs.ops.keys.length) {	
+		// send request
+		var date = new Date();	
+		var text = fs.client.loadDocument(fs.uri + "/feedMoreItems/" + date.getTime() + "/" + fs.startIndex, true);
+		var map = eval("(" + text + ")");
+		fs.appendArray(fs.ops.keys, map.keys); 
+		fs.appendArray(fs.ops.values, map.values);
+	} 
+		
+	fs.updateContent();
+	fs.dropdownMode();
+	fs.updateButtons();
+	fs.focusOption(fs.focusedIndex);		
+}
+
+/* Appends source array to target array. */
+FilterSelect.prototype.appendArray = function(target, source) {	
+	// FIXME any better solution that works?
+	for(var i=0;i<source.length;i++) {
+		target[target.length] = source[i];
+	}
+}
+
+/* Update statistics box */
+FilterSelect.prototype.updateStatistics = function() {
+	var lastpos = (this.startIndex+this.size-1);
+	this.statics.innerHTML = (this.startIndex+1) + "-" + ((lastpos>this.total)?this.total:lastpos+1) + " / " + this.total;
+}
+
+FilterSelect.prototype.decodeCaption = function(encoded) {	
+	return unescape(encoded.replace(/[+]+/g, " "));
+}
