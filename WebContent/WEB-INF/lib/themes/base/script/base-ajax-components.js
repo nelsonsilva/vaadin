@@ -686,6 +686,9 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		this.addCSSClass(caption,"clickable");
 	}
 	
+	// Caption text
+	this.createTextNodeTo(caption,captionText);
+	
 	var iconUrl = uidl.getAttribute("icon");	
 	
 	var errorIcon;
@@ -723,8 +726,6 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		var icon = this.createElementTo(caption,"img","icon");
 		icon.src = iconUrl;
 	}
-	// Caption text
-	this.createTextNodeTo(caption,captionText);
 
 	return caption;
 },
