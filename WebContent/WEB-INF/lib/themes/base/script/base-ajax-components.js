@@ -682,14 +682,23 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	} else {
 		return caption;
 	}
-	if (description || error) {
-		this.addCSSClass(caption,"clickable");
+	
+	
+	var iconUrl = uidl.getAttribute("icon");
+		
+	if (iconUrl) {
+    	if (iconUrl.indexOf("theme://") == 0) {
+    		iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
+    					+ iconUrl.substring(8);
+    	}
+		var icon = this.createElementTo(caption,"img","icon");
+		icon.src = iconUrl;
 	}
+	
 	
 	// Caption text
 	this.createTextNodeTo(caption,captionText);
 	
-	var iconUrl = uidl.getAttribute("icon");	
 	
 	var errorIcon;
 	if (error) {
@@ -697,17 +706,17 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		icon.src = theme.root+"img/icon/error-mini.gif";
 		if (iconUrl) {
 			/* overlay icon */
-			this.setCSSClass(icon,"overlay");
+			this.setCSSClass(icon,"overlay error clickable");
 		} else {
-			this.setCSSClass(icon,"error");
+			this.setCSSClass(icon,"error clickable");
 		}
 		errorIcon = icon;
 	} else if (description) {
-		var icon = this.createElementTo(caption,"img","icon");
+		var icon = this.createElementTo(caption,"img","icon description");
 		icon.src = theme.root+"img/icon/info-mini.gif";
 		if (iconUrl) {
 			/* overlay icon */
-			this.setCSSClass(icon,"overlay");
+			this.setCSSClass(icon,"overlay description");
 		} 
 	}
 	
@@ -716,15 +725,6 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		if(description) popupTarget._descriptionHTML = client.getXMLtext(description);
 		if(error) popupTarget._errorHTML = client.getXMLtext(error);
 		this.addDescriptionAndErrorPopupListener(theme, client, popupTarget, errorIcon);
-	}
-
-	if (iconUrl) {
-    	if (iconUrl.indexOf("theme://") == 0) {
-    		iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
-    					+ iconUrl.substring(8);
-    	}
-		var icon = this.createElementTo(caption,"img","icon");
-		icon.src = iconUrl;
 	}
 
 	return caption;
