@@ -2768,8 +2768,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             }
         }
         // check that column order, count & collapsing matches
-        if(allowUpdate && model.visiblecols) {
-            if(target.model.visiblecols) {
+        if(allowUpdate && (model.visiblecols != null || target.model.visiblecols != null) ) {
+            if(target.model.visiblecols != null && model.visiblecols != null) {
                 for(var i = 0; i < model.visiblecols.childNodes.length;i++) {
                     var newNode =  model.visiblecols.childNodes[i];
                     var oldNode = target.model.visiblecols.childNodes[i];
@@ -2788,8 +2788,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             }
         }
         // check that column order, count & collapsing matches
-        if(allowUpdate && model.columnorder) {
-            if (target.model.columnorder) {
+        if(allowUpdate && (model.columnorder != null || target.model.columnorder != null)) {
+            if (target.model.columnorder != null && model.columnorder != null) {
                 for(var i = 0; i < model.columnorder.childNodes.length;i++) {
                     var newNode =  model.columnorder.childNodes[i];
                     var oldNode = target.model.columnorder.childNodes[i];
