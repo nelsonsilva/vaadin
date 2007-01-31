@@ -364,15 +364,14 @@ input, select, button, html {
 	height: 25px;
 	border: none;
 	border-bottom: solid 1px #85a2c5;
-	float: none;
 	border-top: solid 2px #d3dce7;
+	position: static;
 }
 
 .table .colsel div {
 	width: 13px;
 	height: 13px;
 	background: transparent url(../img/table/column_select_arrow.png) no-repeat;
-	float: right;
 	margin: 5px 3px;
 }
 
