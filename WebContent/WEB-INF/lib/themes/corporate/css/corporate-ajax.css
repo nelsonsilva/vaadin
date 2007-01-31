@@ -9,17 +9,13 @@
   * --------------------
   */
   
- .border {
- 	background-color: transparent;
- }
+.border {
+	background-color: transparent;
+}
  
- .caption .description {
- 	display: none;
- }
- 
- .caption {
- 	cursor: default;
- }
+.caption .description {
+	display: none;
+}
  
 
 /**
@@ -64,7 +60,7 @@ h2 {
 
 h3 {
 	font-size: 1.7em;
-	color: #57859e;
+	color: #5a6f73;
 	font-weight: normal;
 	letter-spacing: 0.02em;
 }
@@ -230,6 +226,31 @@ h4 {
 }
 
 
+
+/**
+ * Link
+ * ----
+ */
+ 
+.link .caption {
+	color: #256ac1;
+	font-style: normal;
+	border-bottom: dotted 1px #26a8de;
+}
+
+.link .over .caption {
+	border-bottom: solid 1px #26a8de;
+	background-color: #e6f0fb;
+	text-decoration: none;
+}
+
+/* No underline for button links */
+.button-link .link .caption {
+	border-bottom: none;
+}
+
+
+
 /**
  * Button
  * ------
@@ -287,6 +308,7 @@ h4 {
 /* Checkbox bg override from base theme */
 .button .nocappad input {
 	background: transparent;
+	vertical-align: middle;
 }
 
 
@@ -434,4 +456,24 @@ h4 {
 .table .tablestatus {
 	text-align: center;
 	background-color: #fbffdc;
+}
+
+
+
+
+/**
+ * Tree
+ * ----
+ */
+
+/* Normal style */
+
+
+/* Menu style */
+
+.tree-menu .selected {
+	font-weight: normal;
+	background-color: #e4f2ff;
+	border: solid 1px #d3d4dc;
+	margin: -1px;
 }
