@@ -2742,6 +2742,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
     model.meta.rowsHasActions = theme.getFirstElement(uidl, "ak") || false;
 	var visiblecols= model.visiblecols =  theme.getFirstElement(uidl,"visiblecolumns");
+    model.columnorder = theme.getVariableElement(uidl,"array","columnorder");
 	var sortkey    = model.meta.sortkey = theme.getVariableElementValue(theme.getVariableElement(uidl,"string","sortcolumn"));
 	
     // column order
@@ -2767,19 +2768,39 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             }
         }
         // check that column order, count & collapsing matches
-        if(allowUpdate) {
-            for(var i = 0; i < model.visiblecols.childNodes.length;i++) {
-                var newNode =  model.visiblecols.childNodes[i];
-                var oldNode = target.model.visiblecols.childNodes[i];
-                if( newNode.nodeType == Node.ELEMENT_NODE && 
-                    (
-                        newNode.getAttribute("cid") != oldNode.getAttribute("cid") ||
-                        newNode.getAttribute("collapsed") != oldNode.getAttribute("collapsed")
-                    )
-                ) {
-                    allowUpdate = false;
-                    break;
+        if(allowUpdate && model.visiblecols) {
+            if(target.model.visiblecols) {
+                for(var i = 0; i < model.visiblecols.childNodes.length;i++) {
+                    var newNode =  model.visiblecols.childNodes[i];
+                    var oldNode = target.model.visiblecols.childNodes[i];
+                    if( newNode.nodeType == Node.ELEMENT_NODE && 
+                        (
+                            newNode.getAttribute("cid") != oldNode.getAttribute("cid") ||
+                            newNode.getAttribute("collapsed") != oldNode.getAttribute("collapsed")
+                        )
+                    ) {
+                        allowUpdate = false;
+                        break;
+                    }
                 }
+            } else {
+                allowUpdate = false;
+            }
+        }
+        // check that column order, count & collapsing matches
+        if(allowUpdate && model.columnorder) {
+            if (target.model.columnorder) {
+                for(var i = 0; i < model.columnorder.childNodes.length;i++) {
+                    var newNode =  model.columnorder.childNodes[i];
+                    var oldNode = target.model.columnorder.childNodes[i];
+                    if( newNode.nodeType == Node.ELEMENT_NODE && 
+                        newNode.firstChild.data != oldNode.firstChild.data ) {
+                        allowUpdate = false;
+                        break;
+                    }
+                }
+            } else {
+                allowUpdate = false;
             }
         }
         if (allowUpdate) {
