@@ -663,6 +663,7 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	
 	// Caption container	
 	var caption = this.createElementTo(target,"div");
+	
 	// Create debug-mode UIDL div
 	if (renderer.client.debugEnabled) {
 		var uidlDebug = this.createElementTo(caption,"div","uidl minimized");
@@ -677,8 +678,9 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 			}
 		);	
 	}
+	
 	if (captionText||error||description||icon) {
-		this.addCSSClass(caption,"caption clickable");
+		//this.addCSSClass(caption,"caption clickable");
 	} else {
 		return caption;
 	}
@@ -698,31 +700,35 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	
 	// Caption text
 	this.createTextNodeTo(caption,captionText);
-	
+	this.setCSSClass(caption,"caption");
 	
 	var errorIcon;
 	if (error) {
+		this.addCSSClass(caption,"clickable");
 		var icon = this.createElementTo(caption,"img","icon");
 		icon.src = theme.root+"img/icon/error-mini.gif";
 		if (iconUrl) {
 			/* overlay icon */
-			this.setCSSClass(icon,"overlay error clickable");
+			this.setCSSClass(icon,"overlay error");
 		} else {
-			this.setCSSClass(icon,"error clickable");
+			this.setCSSClass(icon,"error");
 		}
 		errorIcon = icon;
 	} else if (description) {
+	
+		this.addCSSClass(caption,"clickable");
+		if(!captionText) this.addCSSClass(caption,"hide");
+		
 		var icon = this.createElementTo(caption,"img","icon description");
 		icon.src = theme.root+"img/icon/info-mini.gif";
 		if (iconUrl) {
 			/* overlay icon */
 			this.setCSSClass(icon,"overlay description");
+			this.removeCSSClass(caption,"hide");
 		} 
-	} else {
-		theme.removeCSSClass(caption,"clickable");
 	}
 	
-	var popupTarget = (captionText)?caption:target;
+	var popupTarget = (captionText || iconUrl || error)?caption:target;
 	if (error||description) {
 		if(description) popupTarget._descriptionHTML = client.getXMLtext(description);
 		if(error) popupTarget._errorHTML = client.getXMLtext(error);
@@ -1369,7 +1375,7 @@ renderGridLayout : function(renderer,uidl,target,layoutInfo) {
 },
 
 renderPanel : function(renderer,uidl,target,layoutInfo) {
-    // Supports styles "light" and "none"
+			// Supports styles "light" and "none"
 
 			// Shortcuts
 			var theme = renderer.theme;
@@ -1401,6 +1407,11 @@ renderPanel : function(renderer,uidl,target,layoutInfo) {
 			theme.addCSSClass(caption,"panelcaption");
             if ("light"==style) {
 				theme.addCSSClass(caption,"panelcaptionlight");
+			}
+			
+			// If no actual caption, remove description popup listener
+			if(caption && caption.className.indexOf("hide") > -1) {
+				client.removeEventListener(div,undefined,null,"descriptionPopup");
 			}
 
 			// Create content DIV
@@ -1569,6 +1580,11 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 
 	// Create default header
 	var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	
+	// If no actual caption, remove description popup listener
+	if(caption && caption.className.indexOf("hide") > -1) {
+		client.removeEventListener(div,undefined,null,"descriptionPopup");
+	}
 
 	// Content DIV
 	var content = theme.createElementTo(div,"div","content"); 
@@ -2478,6 +2494,11 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	// Create default header
 	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	
+	// If no actual caption, remove description popup listener
+	if(caption && caption.className.indexOf("hide") > -1) {
+		client.removeEventListener(div,undefined,null,"descriptionPopup");
+	}
+	
 	if ("list"==uidl.getAttribute("style")) {
 		theme.removeCSSClass(div,"table-list");
 		theme.addCSSClass(div,"list");
@@ -2839,13 +2860,18 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var sortascVar = theme.createVariableElementTo(div,sortasc);
 	sortasc = (sortasc != null && "true"==sortasc.getAttribute("value"));
 
+
 	// Create default header
 	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
-	theme.addCSSClass(caption,"tablecaption");
+	theme.addCSSClass(caption, "tablecaption");
+	
+	// If no actual caption, remove description popup listener
+	if(caption && caption.className.indexOf("hide") > -1) {
+		client.removeEventListener(div,undefined,null,"descriptionPopup");
+	}
+	
 	
 	// column collapsing
-    
-
 	// main div
 	var inner  = theme.createElementTo(div,"div","border");
     // MT Shouldn't div expand automatically to full available width ??
@@ -4500,7 +4526,7 @@ addDescriptionAndErrorPopupListener : function(theme, client, target, errorIcon)
 			var pos = theme.calculateAbsoluteEventPosition(theme, client, e);
 			theme.showDescriptionAndErrorPopup(theme, target, pos, 500); // 500 = delay
 		}
-	);
+	, "descriptionPopup");
 	client.addEventListener(target, "mouseout", 
 		function(e) {
 			if(!target._forcedOpen) theme.hideDescriptionAndErrorPopup(target);
