@@ -1173,10 +1173,11 @@ itmill.Client.prototype.setElementClassName = function(element,className) {
  *   @param element      The element
  *   @param type         Type of event to listen for [click|mouseover|mouseout|...]
  *   @param func         The function to call. Called with single parameter: event.
+ *   @param id			 A unique id for the function (element-scope) for easy removal (optional).
  *  
  *   @return the listener function added
  */
-itmill.Client.prototype.addEventListener = function(element,type,func) {
+itmill.Client.prototype.addEventListener = function(element,type,func,id) {
 	if (element.addEventListener) {
 		element.addEventListener(type, func, false);
 		
@@ -1188,10 +1189,14 @@ itmill.Client.prototype.addEventListener = function(element,type,func) {
 	}
 		
 	//  TODO add only to paintable?
-		
+	
+	// ID-to-type map
+	if (!element.eventIDMap) element.eventIDMap = new Object();
+	element.eventIDMap[id] = type;
+	
 	if (!element.eventMap) element.eventMap = new Object();
-	if (!element.eventMap[type]) element.eventMap[type] = new Array();
-	element.eventMap[type][element.eventMap[type].length] = func;
+	if (!element.eventMap[id||type]) element.eventMap[id||type] = new Array();
+	element.eventMap[id||type][element.eventMap[id||type].length] = func;
 	
 	return func;
 }
@@ -1201,26 +1206,41 @@ itmill.Client.prototype.addEventListener = function(element,type,func) {
  *   @param element      The element
  *   @param type         Type of event to listen for [click|mouseover|mouseout|...]
  *   @param func         The listener function to remove.
+ *   @param id			 Id of the function to remove (optional).
  *  
  */
-itmill.Client.prototype.removeEventListener = function(element,type,func) {
-	if (element.removeEventListener) {
-		element.removeEventListener(type, func, false);
-		
-	} else if (element.detachEvent) {
-		element.detachEvent("on" + type, func);
+itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
+	
+	if(id) {
+	
+		if (element.eventMap && element.eventMap[id]) {
+			func = element.eventMap[id][0];
+			type = element.eventIDMap[id];
+		}
 		
 	} else {
-		element['on'+type] =  null;
-	}
-	if (element.eventMap && element.eventMap[type]) {
-		for (var f in element.eventMap[type]) {
-			if (element.eventMap[type][f]==func) {
-				element.eventMap[type][f] = null;
-				break;
+		
+		if (element.eventMap && element.eventMap[type]) {
+			for (var f in element.eventMap[type]) {
+				if (element.eventMap[type][f]==func) {
+					element.eventMap[type][f] = null;
+					break;
+				}
 			}
 		}
+		
 	}
+	
+	if (element.removeEventListener) {
+			element.removeEventListener(type, func, false);
+			
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, func);
+			
+		} else {
+			element['on'+type] =  null;
+		}
+		
 }
 
 /**
