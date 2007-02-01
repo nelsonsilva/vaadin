@@ -39,6 +39,12 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 			theme.addCSSClass(caption, "tabsheetcaption");
 			
+			// If no actual caption, remove description popup listener
+			if(caption && caption.className.indexOf("hide") > -1) {
+				client.removeEventListener(div,undefined,null,"descriptionPopup");
+			}
+
+			
 			//  Render tabs
 			var tabs_container = theme.createElementTo(div,"div","tabs-container");
 			var table = theme.createElementTo(tabs_container,"table","tabs");
