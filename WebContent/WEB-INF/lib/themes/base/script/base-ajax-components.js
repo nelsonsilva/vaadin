@@ -1490,6 +1490,11 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			// Create default header
 			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 			
+			// If no actual caption, remove description popup listener
+			if(caption && caption.className.indexOf("hide") > -1) {
+				client.removeEventListener(div,undefined,null,"descriptionPopup");
+			}
+			
 			//  Render tabs
 			var tabs = theme.createElementTo(div,"div","tabs");
 			var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");
