@@ -2724,7 +2724,6 @@ bSpacer : spacer below table taking up space for unloaded rows
 This is to be added soon
 To make scrolling smoother and make we will save row data to a local data structure
 
-cells.rownro.cellnro
 
 
 */
@@ -2737,6 +2736,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var model = new Object();
     model.meta = new Object(); // change in here effects total redraw
     model.state = new Object(); // things like first visible row, selections etc
+    model.request = new Object(); // firstrow, rows
+    
+    // TODO consider if really necessary to implement these
     model.headerCache = new Object(); // compare this to original, to detect need for header redraw
     model.bodyCache = new Object(); // compare this to original cell by cell, to detect need for contents redraw
     
@@ -2763,15 +2765,23 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var immediate  = model.meta.immediate = uidl.getAttribute("immediate")||false;
 	var selectmode = model.meta.selectmode = uidl.getAttribute("selectmode");
 	var cols       = model.meta.cols = parseInt(uidl.getAttribute("cols"));
-	var rows       = model.meta.rows = parseInt(uidl.getAttribute("rows"));
 	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
-	var pagelength = model.meta.pagelength = uidl.getAttribute("pagelength");
+	var pagelength = model.meta.pagelength = parseInt(uidl.getAttribute("pagelength"));
 	var colheaders = model.meta.colheaders = uidl.getAttribute("colheaders")||false;
 	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
+    model.request.rows = parseInt(uidl.getAttribute("rows"));
+    model.request.firstrow = parseInt(uidl.getAttribute("firstrow"));
     model.meta.rowsHasActions = theme.getFirstElement(uidl, "ak") || false;
 	var visiblecols= model.visiblecols =  theme.getFirstElement(uidl,"visiblecolumns");
     model.columnorder = theme.getVariableElement(uidl,"array","columnorder");
 	var sortkey    = model.meta.sortkey = theme.getVariableElementValue(theme.getVariableElement(uidl,"string","sortcolumn"));
+    
+    
+    
+    model.meta.cacheRate = 2; // means times pagelength
+    model.meta.cacheReactRate = 1; // means threshold when new cache row fetch is instantiated
+    model.meta.cacheSize = Math.ceil(2*model.meta.pagelength); // means times pagelength
+    model.meta.cacheReactTh = Math.ceil(1*model.meta.pagelength); // means threshold when new cache row fetch is instantiated
 	
     // column order
 	model.colorder = new Array();
@@ -2784,9 +2794,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // fork into other function otherwise continue
     
     var div = false;
-    // check if this table has been drawn before
+    // check if this table has been drawn before and this is just a scroll update
     if(redraw) {
-        // TODO refine determining if we need to skip update and redraw whole component (big changes like totalrows, cols, rows etc)
         // this will be done by comparing critical parts of model object constructed from uidl and the one stored in target (paintable div)
         var allowUpdate = true;
         for(j in model.meta) {
@@ -2795,41 +2804,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                 break;
             }
         }
-        // check that column order, count & collapsing matches
-        if(allowUpdate && (model.visiblecols != null || target.model.visiblecols != null) ) {
-            if(target.model.visiblecols != null && model.visiblecols != null) {
-                for(var i = 0; i < model.visiblecols.childNodes.length;i++) {
-                    var newNode =  model.visiblecols.childNodes[i];
-                    var oldNode = target.model.visiblecols.childNodes[i];
-                    if( newNode.nodeType == Node.ELEMENT_NODE && 
-                        (
-                            newNode.getAttribute("cid") != oldNode.getAttribute("cid") ||
-                            newNode.getAttribute("collapsed") != oldNode.getAttribute("collapsed")
-                        )
-                    ) {
-                        allowUpdate = false;
-                        break;
-                    }
-                }
-            } else {
-                allowUpdate = false;
-            }
-        }
-        // check that column order, count & collapsing matches
-        if(allowUpdate && (model.columnorder != null || target.model.columnorder != null)) {
-            if (target.model.columnorder != null && model.columnorder != null) {
-                for(var i = 0; i < model.columnorder.childNodes.length;i++) {
-                    var newNode =  model.columnorder.childNodes[i];
-                    var oldNode = target.model.columnorder.childNodes[i];
-                    if( newNode.nodeType == Node.ELEMENT_NODE && 
-                        newNode.firstChild.data != oldNode.firstChild.data ) {
-                        allowUpdate = false;
-                        break;
-                    }
-                }
-            } else {
-                allowUpdate = false;
-            }
+        if (model.request.firstrow == target.model.state.fv) {
+            // this is not a scroll event, redraw whole table
+            allowUpdate = false;
         }
         if (allowUpdate) {
             console.info("Update existing table");
@@ -2846,7 +2823,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // save reference of model object to dom
     div.model = model;
     model.state.firstRendered = model.state.fv
-    model.state.lastRendered = model.state.fv + model.meta.rows;
+    model.state.lastRendered = model.state.fv + model.request.rows - 1;
     
     
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
@@ -2855,8 +2832,11 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // TODO create these only if redrawing, if updating update values
     
     
-	var fvVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"integer","firstvisible"));
     var fvVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","firstvisible"));
+    var reqrowsVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","reqrows"));
+    var reqfirstrowVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","reqfirstrow"));
+
+
 	var ccVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","collapsedcolumns"));
 	var coVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","columnorder"));
 	var selVar = model.selVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
@@ -3169,7 +3149,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // scroll padding calculations 
     var prePad = (model.state.fv - 1) * model.rowheight;
     // remaining invisible lines * line_height
-    var postPad = (model.meta.totalrows-model.state.fv-model.meta.rows+1)*model.rowheight;
+    var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+1)*model.rowheight;
 
     // fix containers height to initial height of table + scrollbar
     // TODO px sizeable is going to brake this, maybe add margin to border component of a size of height mod rowheight
@@ -3178,7 +3158,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     model.aSpacer.style.height = prePad + "px";
     model.bSpacer.style.height = postPad + "px";
     
-    cout.scrollTop = (fv > totalrows - rows ? cout.scrollHeight : prePad);
+    cout.scrollTop = prePad;
     
 	div.recalc = theme.scrollTableRecalc;
 	div.initialWidth = wholeWidth;
@@ -3189,8 +3169,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
 	var p = client.getElementPosition(inner);
-	status.style.top = Math.round(p.y + p.h/2) + "px";
-	status.style.left = Math.round(p.x + p.w/2 - wholeWidth/4) +"px";
+	status.style.top = Math.round(p.y + p.h/2 - 40) + "px";
+	status.style.left = Math.round(p.x + p.w/2 - 50 ) +"px";
  	theme.scrollTableAddScrollHandler(client,theme,div);
  	theme.scrollTableAddScrollListener(theme,div);
  	
@@ -3224,6 +3204,14 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var hin = target.ownerDocument.getElementById(pid+"hin");
     var cin = target.ownerDocument.getElementById(pid+"cin");
     theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
+    
+    // send request to fetch cache rows
+    if (model.meta.totalrows > model.state.lastRendered) {
+        reqfirstrowVar.value = model.state.lastRendered + 1;
+        reqrowsVar.value = model.meta.cacheSize;
+        theme.updateVar(client,reqfirstrowVar, false);
+        theme.updateVar(client,reqrowsVar, true);
+    }
 },
 
 /**
@@ -3280,7 +3268,6 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             
             var cellContent = d.createElement("div");
             cellContent.className = "cellContent";
-            // TODO ensure right behaviour when rearranged columns
             // table cell shoudn't need explicit size, but due IE bug, explicitely set content divs size
             cellContent.style.width = (target.colWidths[colorder[currentCol]] - 4) + "px";
             cell.appendChild(cellContent);
@@ -3309,131 +3296,89 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         
         return row;
     } // end defining createRows function
-    
+
     // get array of received row elements
     var trs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
-    if(target.model.state.fv < model.state.fv ) {
-        var deltaRows = model.state.fv - target.model.state.fv;
-        if(model.state.fv > target.model.state.lastRendered ) {
-            // scrolled more than page lenght
-            // hurry rendering new rows, create spacer row to end of table
-            var  spacerRow = d.createElement("tr");
-            spacerRow.appendChild(d.createElement("td"));
-            var skippedSpace = (model.state.fv - target.model.state.lastRendered)*target.model.rowheight;
-            spacerRow.firstChild.height = skippedSpace;
-            tableBody.appendChild(spacerRow);
-            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - skippedSpace) + "px";
-            
-            // set firstRendered correctly
-            target.model.state.firstRendered = model.state.fv;
-
-            // add new visible rows and resize bSpacer
-            for(var i = 0; i < trs.length; i++) {
-                var row = createRow(trs[i], ((model.state.fv + i)%2 == 1));
-                tableBody.appendChild(row);
-                target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
-                target.model.state.lastRendered = model.state.fv + i + 1;
-            }
-            // remove old rows and resize spacer spacer
-            while(tableBody.childNodes[0] != spacerRow) {
-                tableBody.removeChild(tableBody.childNodes[0]);
-                target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + target.model.rowheight) + "px";
-            }
-            // remove spacer row
-            tableBody.removeChild(spacerRow);
-            target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + skippedSpace) + "px";
-            
-            // reallign scrolling
-            target.model.cout.scrollTop = parseInt(target.model.aSpacer.style.height);
-            
-        } else {
-            // keep some of existing rows and add new ones
-            var oldRows = target.model.state.lastRendered - model.state.fv;
-            for(var i = 0; i < trs.length; i++) {
-                if(i < oldRows) {
-                    // TODO update rows content if uidl changed
-                } else {
-                    // render new row
-                    var row = createRow(trs[i], ((model.state.fv + i)%2 == 1 ));
-                    // add row to table
-                    tableBody.appendChild(row);
-                    // adjust table margin (space for unloaded rows)
-                    target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
-                    target.model.state.lastRendered++;
-                }
-            }
-            // Delete first rows that are no longer visible and expand aSpacer, but
-            // keep one page lenght for more comfortable scrolling back and forward
-            while(target.model.state.firstRendered < model.state.fv - model.meta.pagelength) {
+    
+    if (model.request.rows == 0) {
+        console.info("No new rows were loaded");
+    } else if(model.request.firstrow == target.model.state.lastRendered + 1) {
+        // if first received row == lastRendered + 1 we have moderate update to end of table
+        // -> add received rows to the end of the table and resize bSpacer
+        for(var i = 0; i < trs.length; i++) {
+            var row = createRow(trs[i], ((model.state.fv + i)%2 == 1));
+            tableBody.appendChild(row);
+            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
+            target.model.state.lastRendered++;
+        }
+        // remove rows from beginning not to put browser to its knees in case of verybigmillionlinetable
+        while( target.model.meta.cacheSize < (model.state.fv - target.model.state.firstRendered) ) {
                 tableBody.removeChild(tableBody.firstChild);
                 target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + target.model.rowheight) + "px";
                 target.model.state.firstRendered++;
-            }
         }
-    } else if(target.model.state.fv > model.state.fv) {
-        if( (target.model.state.firstRendered - model.state.fv  ) > model.meta.pagelength ) {
-            // scrolled up more than page lenght
-            // hurry rendering new rows, create spacer row to end of table
-            var  spacerRow = d.createElement("tr");
-            spacerRow.appendChild(d.createElement("td"));
-            var skippedSpace = (target.model.state.firstRendered - model.state.fv)*target.model.rowheight;
-            spacerRow.firstChild.height = skippedSpace;
-            tableBody.insertBefore(spacerRow, tableBody.firstChild);
-            target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) - skippedSpace) + "px";
-            
-            // set firstRendered correctly
-            target.model.state.firstRendered = model.state.fv;
-
-            // add new visible rows and resize spacerRow
-            for(var i = 0; i < trs.length; i++) {
-                var row = createRow(trs[i], ((model.state.fv + i)%2 == 1));
-                tableBody.insertBefore(row,spacerRow);
-                spacerRow.firstChild.height -= target.model.rowheight;
-                target.model.state.lastRendered = model.state.fv + i + 1;
-            }
-            // remove old rows and resize firstrow spacer
-            while(tableBody.lastChild != spacerRow) {
-                tableBody.removeChild(tableBody.lastChild);
-                target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + target.model.rowheight) + "px";
-            }
-            // remove spacer row and resize bSpacer with its remaining size
-            var spacerRowH = parseInt(spacerRow.firstChild.height);
-            tableBody.removeChild(spacerRow);
-            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + spacerRowH) + "px";
-            
-            // reallign scrolling
-            target.model.cout.scrollTop = parseInt(target.model.aSpacer.style.height);
-            
-        } else {
-            // keep some of existing rows and add new ones
-            var oldRows = model.meta.rows - (target.model.state.firstRendered - model.state.fv);
-            // current row index for last (possibly partially) shows row is same as oldRows
-            var largestNewIndex = trs.length - 1 - oldRows  ; 
-            var row = null;
-            for(var i = trs.length -1 ; i >= 0; i--) {
-                if(i > largestNewIndex) {
-                    // TODO update existing row if uidl changed
-                } else {
-                    // render a new row
-                    row = createRow(trs[i], ((model.state.fv + i)%2 == 1 ));
-                    tableBody.insertBefore(row, tableBody.firstChild);
-                    // adjust top margin
-                    target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) - target.model.rowheight) + "px";
-                    // update firstRendered value
-                    target.model.state.firstRendered--;
-                }
-            }
-            // Delete last rows that are no longer visible and expand bSpacer, but
-            // keep one page lenght for more comfortable scrolling back and forward
-            while(target.model.state.lastRendered > model.state.fv + 2*model.meta.pagelength) {
+    } else if(model.request.firstrow + model.request.rows == target.model.state.firstRendered) {
+        // moderate update to beginning of the table
+        for(var i = trs.length -1 ; i >= 0; i--) {
+            // render a new row
+            row = createRow(trs[i], ((model.state.fv + i)%2 == 1 ));
+            tableBody.insertBefore(row, tableBody.firstChild);
+            // adjust top margin
+            target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) - target.model.rowheight) + "px";
+            // update firstRendered value
+            target.model.state.firstRendered--;
+        }
+        // remove rows from the end not to put browser to its knees in case of verybigmillionlinetable
+        while( target.model.meta.cacheSize < (target.model.state.lastRendered - model.state.fv -model.meta.pagelength ) ) {
                 tableBody.removeChild(tableBody.lastChild);
                 target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + target.model.rowheight) + "px";
                 target.model.state.lastRendered--;
-            }
-            
+        }
+    } else if(model.request.firstrow > target.model.state.lastRendered) {
+        // truncate old tbody and resize aSpacer + bSpacer to fit whole space
+        var tmp = d.createElement("tbody");
+        tableBody.parentNode.replaceChild(tmp, tableBody);
+        tableBody = target.model.tableBody = tmp;
+        target.model.aSpacer.style.height = (
+            parseInt(target.model.aSpacer.style.height) + 
+            target.model.rowheight * ( 
+                (model.request.firstrow - target.model.state.firstRendered)
+                ) ) + "px";
+        target.model.bSpacer.style.height = (
+            parseInt(target.model.bSpacer.style.height) - target.model.rowheight * (model.request.firstrow - target.model.state.lastRendered) ) + "px";
+        
+        // build tbody from received rows
+        target.model.state.firstRendered = model.request.firstrow;
+        target.model.state.lastRendered = model.request.firstrow - 1;
+        for(var i = 0; i < trs.length; i++) {
+            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
+            tableBody.appendChild(row);
+            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
+            target.model.state.lastRendered++;
+        }
+    
+    } else if(model.request.firstrow + model.request.rows < target.model.state.firstRendered) {
+        // big scroll up
+        //  truncate old tbody and resize aSpacer + bSpacer to fit whole space
+        var tmp = d.createElement("tbody");
+        tableBody.parentNode.replaceChild(tmp, tableBody);
+        tableBody = target.model.tableBody = tmp;
+        target.model.bSpacer.style.height = ( 
+            target.model.rowheight * ( model.meta.totalrows - (model.request.firstrow + model.request.rows) )
+                 ) + "px";
+        target.model.aSpacer.style.height = ( target.model.rowheight * (model.request.firstrow - 1)) + "px";
+        
+        // build tbody from received rows
+        target.model.state.firstRendered = model.request.firstrow;
+        target.model.state.lastRendered = model.request.firstrow - 1;
+        for(var i = 0; i < trs.length; i++) {
+            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
+            tableBody.appendChild(row);
+            target.model.state.lastRendered++;
         }
     } else {
-        renderer.client.debug("Table: no-scroll update (propably select change)");
+        // "overscroll not yet handled
+        console.error("Unexpected update to table!");
     }
 
     // update model object
@@ -3507,7 +3452,7 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,cin,hin) {
 	client.registerLayoutFunction(paintableElement,function() {
         // TODO check this if really needed
-		//var w = (inner.offsetWidth-4) +"px";
+		var w = (inner.offsetWidth-4) +"px";
 		//cout.style.width = w;
 		//cin.style.width = w;
 		//hout.style.width = w;
@@ -3528,8 +3473,8 @@ scrollTableAddScrollListener : function (theme,target) {
 		target.scrolledLeft = cout.scrollLeft;
 		var status = target.model.status;
 		var d = theme.scrollTableGetFV(target);
-		if (d != target.model.state.fv) {
- 			status.innerHTML = d + "-" + (d+target.model.meta.rows-1) + " / " + target.model.meta.totalrows;
+		if (d + target.model.meta.pagelength > target.model.state.lastRendered || d < target.model.state.firstRendered) {
+ 			status.innerHTML = d + "-" + (d+target.model.meta.pagelength-1) + " / " + target.model.meta.totalrows;
  			status.style.display = "block";
  		}
 		cout.scrollTimeout = setTimeout(function () {
@@ -3543,7 +3488,7 @@ scrollTableGetFV : function(target) {
     var m = target.model;
     var new_fr = Math.ceil(m.cout.scrollTop/m.rowheight) + 1;
  	if (new_fr < 1) return 1; // scrolled past begin
- 	if (new_fr > (m.meta.totalrows - m.meta.rows + 1)) new_fr=(m.meta.totalrows-m.meta.rows + 1); // scrolled past last page
+ 	if (new_fr > (m.meta.totalrows - m.meta.pagelength + 1)) new_fr=(m.meta.totalrows-m.meta.pagelength + 1); // scrolled past last page
  	return new_fr;
  },
  
@@ -3553,11 +3498,58 @@ scrollTableAddScrollHandler : function(client,theme,target) {
 			var d = theme.scrollTableGetFV(target);
  			if (d != m.state.fv) {
  				// only submit if firstvisible changed
- 				m.status.innerHTML = d + "-" + (d+m.meta.rows-1) + " / " + m.meta.totalrows + "...";
- 				m.status.style.display = "block";
+ 				m.status.innerHTML = d + "-" + (d+m.meta.pagelength-1) + " / " + m.meta.totalrows + "...";
                 var fvVar = theme.getVar(target, "firstvisible");
+                
+                // determine how many rows for chache is needed
+                var reqfirstrowVar = theme.getVar(target, "reqfirstrow");
+                var reqrowsVar = theme.getVar(target, "reqrows");
+                // if up scroll and gone over react Threshold
+                if( (d < m.state.fv) && (d - m.state.firstRendered) < m.meta.cacheReactTh) {
+                    if ( (d + m.meta.cacheSize + m.meta.pagelength) < m.state.firstRendered ) {
+                        // if very big scroll up, skip some rows and redraw whole tbody
+                        reqfirstrowVar.value = d - m.meta.cacheSize;
+                        reqrowsVar.value = m.meta.cacheSize*2 + m.meta.pagelength;
+                    } else {
+                        // Need some rows to top of the existing table
+                        reqrowsVar.value = m.meta.cacheSize - ( d - m.state.firstRendered ) ;
+                        reqfirstrowVar.value = m.state.firstRendered - reqrowsVar.value;
+                    }
+                    if(reqfirstrowVar.value < 1) {
+                        // case 1 - firstRendered
+                        // we are quite close to top, fix values to be sane
+                        reqrowsVar.value = reqrowsVar.value + reqfirstrowVar.value - 1
+                        reqfirstrowVar.value = 1;
+                    }
+                    theme.updateVar(client,reqrowsVar, false);
+                    theme.updateVar(client,reqfirstrowVar, false);
+                } else if ( (m.state.lastRendered - d - m.meta.pagelength ) < m.meta.cacheReactTh ) {
+                    if(m.state.lastRendered < m.meta.totalrows) {
+                        if (d > (m.state.lastRendered + m.meta.cacheSize) ) {
+                            // A very big scroll down, skip some rows and redraw whole tbody
+                            reqfirstrowVar.value = d - m.meta.cacheSize;
+                            reqrowsVar.value = m.meta.cacheSize*2 + m.meta.pagelength;
+                        } else {
+                            // Just need more cache rows down
+                            reqfirstrowVar.value = m.state.lastRendered + 1;
+                            reqrowsVar.value = d + m.meta.pagelength + m.meta.cacheSize - m.state.lastRendered - 1;
+                        }
+                    } else {
+                        // already rendered all rows, just update fv to server
+                        reqfirstrowVar.value = m.state.lastRendered;
+                        reqrowsVar.value = 0;
+                    }
+                    theme.updateVar(client,reqfirstrowVar, false);
+                    theme.updateVar(client,reqrowsVar, false);
+                } else {
+                    // scroll was so small that don't bother to get any new rows
+                    console.info("Small scroll withing reactTh, no request made.")
+                    m.status.style.display = "none";
+                    return;
+                }
+                
+ 				// always immediate to update first visible to server
                 fvVar.value = d;
- 				// always immediate
                 theme.updateVar(client,fvVar, true);
  			} else {
  				m.status.style.display = "none";
