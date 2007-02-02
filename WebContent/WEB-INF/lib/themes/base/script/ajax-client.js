@@ -373,9 +373,9 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
 		
 		// Debug request load time
 		if (client.debugEnabled) {
-			var loadedTime = (new Date()).getTime();
-			client.debug("UIDL loaded in " + (loadedTime-client.requestStartTime) + "ms");
-            // Firebug can show traffic so no need to show responce
+			console.timeEnd("UIDL loaded in ");
+            // Firebug can show traffic so no need to show responce, 
+            // uncomment if you need to see uidl in other browsers
             //client.debug("UIDL Changes: \n"+req.responseText,true);
 		}
 		
@@ -417,7 +417,9 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
 	}
 	
 	// Request start time
-	this.requestStartTime = (new Date()).getTime();
+    if(client.debugEnabled) {
+        console.time("UIDL loaded in ");
+    }
 	
 	// Build variable change query string
 	var changes = "";
@@ -782,6 +784,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 	if (this.debugEnabled) {
         console.group("Changes from server");
         console.profile("Changes profiling");
+        console.time("All changes in");
 	}
 
 	try {
@@ -900,9 +903,8 @@ itmill.Client.prototype.processUpdates = function (updates) {
 	
 	this.processAllLayoutFunctions();
 	
-    var endTime = (new Date()).getTime();
     if (this.debugEnabled) {
-        console.info("Changes done.");
+        console.timeEnd("All changes in");
         console.profileEnd("Changes profiling");
         console.groupEnd();
 	}	
@@ -945,21 +947,12 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 		for(var i=3; i<arguments.length; i++) {
             args[args.length] = arguments[i];
         }
-        if (this.debugEnabled) {
-	        console.group("Theme '"+ renderer.theme.themeName + "' rendering '"+ uidl.nodeName + "' into '"+target.nodeName+"' (id="+target.id+")");
-	    }
         try {      
 			var res = renderer.renderFunction.apply(this,args);
-            if (this.debugEnabled) {
-                console.groupEnd();
-            }
 			return res;
 		} catch (e) {
 			// Print out the exception
         	this.error("Could not render "+ uidl.nodeName +" using '"+ renderer.theme.themeName + "': "+e.message,e);
-            if (this.debugEnabled) {
-                console.groupEnd();
-            }
 		}
 		
 		
