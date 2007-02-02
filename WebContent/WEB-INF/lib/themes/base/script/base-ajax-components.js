@@ -2892,7 +2892,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div</DIV>";
 		var icon = vcols.firstChild; 
 		vcols.id = pid+"vcols";
-		var popup = theme.createElementTo(div,"div","border popup hide");
+		var popup = theme.createElementTo(vcols,"div","border popup hide");
 		theme.addTogglePopupListener(theme,client,icon,"click",popup);
 		theme.addStopListener(theme,client,icon,"mouseover");
 		theme.addStopListener(theme,client,icon,"mouseout");
