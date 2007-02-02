@@ -613,13 +613,6 @@ createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 		div = renderer.client.createPaintableElement(uidl,target);
 	}
 	div.layoutInfo = li;
-	
-	// Remove possible previous content from target
-	/* TODO remove when tested
-	while (div.firstChild != null) {
-		div.removeChild(div.firstChild);
-	}
-	*/
 	div.innerHTML = "";
 	if (li&&li.captionNode) {
 		// caption placed elsewhere (form); see renderDefaultComponentHeader()
@@ -4858,7 +4851,7 @@ itmill.themes.Base.FilterSelect = function(renderer,uidl,target,layoutInfo) {
 	this.uri = options.getAttribute("loadfrom");
 	//this.size = parseInt(uidl.getAttribute("size"));
 	// TODO
-	this.size = 13;
+	this.size = 10;
 	this.total = parseInt(options.getAttribute("total"));
 	this.startIndex = parseInt(0);
 	this.selectedIndex = parseInt(-1);
