@@ -22,8 +22,7 @@ div#ajax-wait {
 	padding: 3px;
 	font-weight: bold;
 }
-
-.minimized {
+.itmtk .minimized {
 	overflow: hidden;
 	width: 10px;
 	height: 10px;
@@ -34,87 +33,89 @@ div#ajax-wait {
 html {
     background-color: ThreeDFace;
 }
-input, select, button, html {
+.itmtk input,
+.itmtk select,
+.itmtk button, html {
     font-family: Tahoma, sans-serif; 
     font-size: 8pt;
     font-weight: normal;
 }
 
-.abs {
+.itmtk .abs {
 	position: absolute;
 }
 
-.inline {
+.itmtk .inline {
     display: inline;
 }
 
-.hidden, .hide {
+.itmtk .hidden, .hide {
     display: none;
 }
 
-.border {
+.itmtk .border {
     background-color: ButtonFace;
     border-width: 1px;
     border-style: solid;
     border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;    
 }
 
-.outset {
+.itmtk .outset {
 	border: 1px solid ButtonFace;
 }
 /* DISABLED */
-.disabled {
+.itmtk .disabled {
     color: GrayText;
     opacity: 0.5;
     filter: alpha(opacity=50);
 }
-.disabled .caption {
+.itmtk .disabled .caption {
     color: GrayText;
 }
-.disabled .border .caption {
+.itmtk .disabled .border .caption {
     color: GrayText;
 }
 INPUT, SELECT, SELECT OPTION, TEXTAREA {
 	background-color: ThreeDHighlight;
 }
-.disabled INPUT, .disabled SELECT, .disabled SELECT OPTION {
+.itmtk .disabled INPUT, .disabled SELECT, .disabled SELECT OPTION {
 	background-color: ThreeDFace;
 }
 
 /* CAPTION */
-.caption {
+.itmtk .caption {
     color: ButtonText;
 }
-.caption .icon {
+.itmtk .caption .icon {
 	vertical-align: middle;
 	padding-right: 5px;
 }
 
-.caption .description,
-.caption .error {
+.itmtk .caption .description,
+.itmtk .caption .error {
 	padding-left: 2px;
 	vertical-align: middle;
 	margin-top: -2px;
 }
 
-.clickable {
+.itmtk .clickable {
     cursor: hand;
     cursor: pointer;
 }
 
-.over {
+.itmtk .over {
 	border: 1px solid ThreeDDarkShadow;
 }
-.over .caption {
+.itmtk .over .caption {
  	/* color: ActiveCaption; */
 }
 
-.selected {
+.itmtk .selected {
 	font-weight: bold;
 	background: #aaaaaa;
 }
 
-.content {
+.itmtk .content {
     padding: 7px;
 }
 
@@ -123,27 +124,27 @@ IMG.overlay {
 	position: absolute;
 	z-index: 5;
 }
-.popup {
+.itmtk .popup {
 	position: absolute;
 	z-index: 99999;
 	overflow: hidden;
 }
-.popup.hide {
+.itmtk .popup.hide {
 	display: none;
 }
-.popup .border {
+.itmtk .popup .border {
 	border: 1px solid InfoText;
 	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black) */
 	padding: 4px;
 }
-.popup .caption {
+.itmtk .popup .caption {
 	text-align: left;
 }
-.popup * {
+.itmtk .popup * {
 	color: InfoText;
 	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black) */
 }
-.popup .error {
+.itmtk .popup .error {
 	font-size: 0.9em;
 	overflow: auto;
 }
@@ -155,10 +156,10 @@ IMG.overlay {
 /* COMPONENTS */
 
 /* Button */
-.button INPUT {
+.itmtk .button INPUT {
 	background-color: ThreeDFace;
 }
-.button .border {
+.itmtk .button .border {
 	height: 1.2em;
 	overflow: hidden;
 	padding: 0.2em 0.4em 0.2em 0.4em;
@@ -166,18 +167,18 @@ IMG.overlay {
     border-width: 2px;
 }
 
-.button-link .caption {
+.itmtk .button-link .caption {
 	color: ActiveCaption;
 	font-style: italic;
 }
-.button-link .over {
+.itmtk .button-link .over {
 	border: none;
 }
-.button-link .over .caption {
+.itmtk .button-link .over .caption {
 	text-decoration: underline;
 }
 
-.button .down .border {
+.itmtk .button .down .border {
 	border-top-color: ButtonShadow;
 	border-left-color: ButtonShadow;
 	border-bottom-color: ThreeDHighlight;
@@ -186,68 +187,68 @@ IMG.overlay {
 }
 
 /* DateField */
-.datefield .btn {
+.itmtk .datefield .btn {
 	background-color: ButtonFace;
 	margin-right: 3px;
 }
 
 /* Link */
-.link .caption {
+.itmtk .link .caption {
 	color: ActiveCaption;
 	font-style: italic;
 }
-.link .over {
+.itmtk .link .over {
 	border: none;
 }
-.link .over .caption {
+.itmtk .link .over .caption {
 	text-decoration: underline;
 }
-.link .description {
+.itmtk .link .description {
 	font-size: 0.8em;
 	text-indent: 1.5em;
 }
 
 /* Panel */
-.panelcaption {
+.itmtk .panelcaption {
 	padding: 0.2em 0.4em 0.2em 0.4em;
 }
-.panel .panelcaption {
+.itmtk .panel .panelcaption {
 	border-bottom: 2px groove ThreeDHighlight;
 }
-.panel-strong .panelcaption {
+.itmtk .panel-strong .panelcaption {
 	border-bottom: 2px groove ButtonShadow;
 	color: CaptionText;
 	background-color: ActiveCaption;
 }
-.panel .panelborder, .panel-strong .panelborder, .panel-light .panelborder {
+.itmtk .panel .panelborder, .panel-strong .panelborder, .panel-light .panelborder {
 	border: 2px groove ThreeDHighlight;
 }
 
 /* Select */
-.select-optiongroup INPUT.option {
+.itmtk .select-optiongroup INPUT.option {
 	background-color: ThreeDFace;
 }
-.select-optiongroup DIV.newitem {
+.itmtk .select-optiongroup DIV.newitem {
 	margin-left: 1.2em;
 	margin-top: 0.3em;
 }
-.select-twincol {
+.itmtk .select-twincol {
 	width: 350px;
 }
-.select-twincol div.buttons {
+.itmtk .select-twincol div.buttons {
 	text-align:center;
 }
-.select-twincol div.buttons button {
+.itmtk .select-twincol div.buttons button {
 	text-align:center;
 	width:35px;
 }
-.select-twincol select.unselected {
+.itmtk .select-twincol select.unselected {
 	float:left;
 	width: 150px;
 	/* force white, may be grey if empty initially */
 	background-color: white;
 }
-.select-twincol select.selected {
+.itmtk .select-twincol select.selected {
 	float:right;
 	width: 150px;
 	/* force white, may be grey if empty initially */
@@ -256,7 +257,7 @@ IMG.overlay {
 
 /* Table */
 
-.table .tablestatus {
+.itmtk .table .tablestatus {
 	position: absolute;
 	display:none;
 	padding: 0.2em 0.4em 0.1em 0.4em;
@@ -264,7 +265,7 @@ IMG.overlay {
 	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
 }
 
-.table .colsel {
+.itmtk .table .colsel {
 	position:absolute;
 	margin: 0.25em ;
 	width: 0.4em;
@@ -274,37 +275,37 @@ IMG.overlay {
 	cursor: hand;
 	cursor: pointer;
 }
-.table .popup {
+.itmtk .table .popup {
 	position: absolute;
 
 }
-.table {
+.itmtk .table {
 	border: 1px solid;
 	border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
-.table .cout, .table .cin {
+.itmtk .table .cout, .table .cin {
 	background-color: Window;
 }
-.table .tablecaption {
+.itmtk .table .tablecaption {
 	border: 1px solid;
 	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 	padding: 0.0em 0.4em 0.1em 0.4em;
 }
 
-.table .hout {
+.itmtk .table .hout {
 	height: 1em;
 	overflow: hidden;
 	padding-bottom: 0.2em;
 	border-bottom: 1px solid ButtonShadow;
 }
-.table .hin .hah {
+.itmtk .table .hin .hah {
 	border-right: 1px solid ButtonShadow; 
 	padding-left: 0.2em;
 }
-.table .hin td {
+.itmtk .table .hin td {
 	overflow:hidden;
 }
-.table .colresizer {
+.itmtk .table .colresizer {
 	display:block;
 	/* header border at the same time */
 	background-color: ButtonShadow;
@@ -315,7 +316,7 @@ IMG.overlay {
 	margin:0;
 	padding:0;
 }
-.table .headerContent {
+.itmtk .table .headerContent {
 	overflow:hidden;
 	height:100%;
 	white-space:nowrap;
@@ -332,29 +333,29 @@ html>body .table .hin div.headerContent {
 	 */
 	margin-right:12px;
 }
-.table .cout table.cin {
+.itmtk .table .cout table.cin {
 	margin:0;
 	padding:0;
 	border:0;
 	border-collapse: collapse;
 	empty-cells: show;
 }
-.table .cin td,
-.table .cin tr {
+.itmtk .table .cin td,
+.itmtk .table .cin tr {
 	border:0;
 	margin:0;
 	padding:0;
 }
 /* spacer for unloaded rows */
-.table .cout div.spacer {
+.itmtk .table .cout div.spacer {
 	/* overcome IE 6 bug in height under line-height */
 	overflow:hidden;
 	background-color: #f00;
 	background-color: ButtonFace;
 }	
-.table .cin td.tablecell {
+.itmtk .table .cin td.tablecell {
 }
-.table .cin td.tablecell div.cellContent {
+.itmtk .table .cin td.tablecell div.cellContent {
 	padding-left: 3px;
 	overflow:hidden;
 	height:100%;
@@ -363,43 +364,43 @@ html>body .table .hin div.headerContent {
 	border-right:1px solid ButtonShadow;
 }
 
-.table tr.selected td.tableCell div.cellContent {
+.itmtk .table tr.selected td.tableCell div.cellContent {
 	color: HighlightText;
 }
-.table tr.even {
+.itmtk .table tr.even {
 	background-color: Window;
 }
-.table tr.odd {
+.itmtk .table tr.odd {
 	background-color: ButtonFace;
 }
-.table tr.selected {
+.itmtk .table tr.selected {
 	background-color: Highlight;
 }
-.table tr.selected td.tableCell div.cellContent {
+.itmtk .table tr.selected td.tableCell div.cellContent {
 	color: HighlightText;
 }
 
 /* sorted header cells */
-.table td.asc {
+.itmtk .table td.asc {
 	background: url('../img/table/asc.gif') right top no-repeat;
 }
-.table td.desc {
+.itmtk .table td.desc {
 	background: url('../img/table/desc.gif') right top no-repeat;
 }
 
 /* Paging table */
 
-.table-paging {
+.itmtk .table-paging {
 	border: 1px solid;
 	border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
-.table-paging .tablecaption {
+.itmtk .table-paging .tablecaption {
 	border: 1px solid;
 	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 	padding: 0.0em 0.4em 0.1em 0.4em;
 }
 
-.table-paging .header IMG.sort {
+.itmtk .table-paging .header IMG.sort {
 	Xposition: absolute;
 	Xmargin-top: 0.5em;
 	Xmargin-left: 2px;
@@ -407,52 +408,52 @@ html>body .table .hin div.headerContent {
 	height: 5px;
 	background-repeat: no-repeat;
 }
-.table-paging .header IMG.sortasc {
+.itmtk .table-paging .header IMG.sortasc {
 	background-image: url('../img/table/asc.gif');
 }
-.table-paging .header IMG.sortdesc {
+.itmtk .table-paging .header IMG.sortdesc {
 	background-image: url('../img/table/desc.gif');
 }
-.table-paging .header {
+.itmtk .table-paging .header {
 	border-left: 1px solid ButtonHighlight;
 	border-right: 1px solid ButtonShadow;
 	padding-left: 0.2em;
 }
-.table-paging table {
+.itmtk .table-paging table {
 	border-collapse: collapse;
 	empty-cells: show;
 }
 
-.table-paging .selected TD DIV {
+.itmtk .table-paging .selected TD DIV {
 	background-color: Highlight;
 	color: HighlightText;
 }
-.table-paging .selected TD {
+.itmtk .table-paging .selected TD {
 	background-color: Highlight;
 	color: HighlightText;
 	border-left: 1px solid Highlight;
 }
-.table-paging .even TD DIV {
+.itmtk .table-paging .even TD DIV {
 	border-left: 1px solid Window;
 	background-color: Window;
 }
-.table-paging .odd TD DIV {
+.itmtk .table-paging .odd TD DIV {
 	border-left: 1px solid ButtonFace;
 	background-color: ButtonFace;
 }
 
 /* "List" table, very simple table */
 
-.table-list {
+.itmtk .table-list {
 	border: 0;
 }
-.table-list .tablecaption {
+.itmtk .table-list .tablecaption {
 	border: 1px solid;
 	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 	padding: 0.0em 0.4em 0.1em 0.4em;
 }
 
-.table-list .header IMG.sort {
+.itmtk .table-list .header IMG.sort {
 	Xposition: absolute;
 	Xmargin-top: 0.5em;
 	Xmargin-left: 2px;
@@ -460,25 +461,25 @@ html>body .table .hin div.headerContent {
 	height: 5px;
 	background-repeat: no-repeat;
 }
-.table-list .header IMG.sortasc {
+.itmtk .table-list .header IMG.sortasc {
 	background-image: url('../img/table/asc.gif');
 }
-.table-list .header IMG.sortdesc {
+.itmtk .table-list .header IMG.sortdesc {
 	background-image: url('../img/table/desc.gif');
 }
-.table-list table {
+.itmtk .table-list table {
 	border-collapse: collapse;
 	empty-cells: hide;
 }
-.table-list td {
+.itmtk .table-list td {
 	border:0;
 }
 
-.table-list .selected TD DIV {
+.itmtk .table-list .selected TD DIV {
 	background-color: Highlight;
 	color: HighlightText;
 }
-.table-list .selected TD {
+.itmtk .table-list .selected TD {
 	background-color: Highlight;
 	color: HighlightText;
 	border-left: 1px solid Highlight;
@@ -486,74 +487,74 @@ html>body .table .hin div.headerContent {
 
 
 /* TabSheet */
-.tabsheet .tabs {
+.itmtk .tabsheet .tabs {
 	margin-top: 0.5em;
 }
-.tabsheet .tabs .tab .caption, .tabsheet .tabs .tab-on .caption {
+.itmtk .tabsheet .tabs .tab .caption, .tabsheet .tabs .tab-on .caption {
 	margin-left: 1px;
 	margin-right: 1px;
 	padding: 0.2em 0.4em 0.1em 0.4em;
 }
-.tabsheet .tabs .tab .border {
+.itmtk .tabsheet .tabs .tab .border {
 	border-bottom: 1px solid ThreeDHighlight;
 }
-.tabsheet .tabs .tab-on .border {
+.itmtk .tabsheet .tabs .tab-on .border {
 	border-bottom: 1px solid ThreeDFace;
 }
-.tabsheet .tabs .over {
+.itmtk .tabsheet .tabs .over {
 	border: none;
 }
-.tabsheet .tabs .over .border {
+.itmtk .tabsheet .tabs .over .border {
 	border-bottom: 1px solid ThreeDFace;
 }
 
 /* TextField */
-.textfield {
+.itmtk .textfield {
 	margin-top: 0.05em;
 }
-.textfield .border {
+.itmtk .textfield .border {
 	border: none;
 }
-.textfield INPUT {
+.itmtk .textfield INPUT {
 	padding: 0.12em 0.4em 0.12em 0.4em;
 }
 
 /* Tree */
-.tree {
+.itmtk .tree {
 	border: 1px solid;
 	border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
-.tree .caption {
+.itmtk .tree .caption {
 	border: 1px solid;
 	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 	padding: 0.0em 0.4em 0.1em 0.4em;
 }
-.tree .content, .tree .content .node, .tree .content .nodes, .tree .content .node IMG {
+.itmtk .tree .content, .tree .content .node, .tree .content .nodes, .tree .content .node IMG {
 	background-color: Window;
 }
 
-.tree .node, .tree-menu .node {
+.itmtk .tree .node, .tree-menu .node {
 	border: none;
 	padding: 0px;
 	height: 16px;
 	white-space: nowrap;
 }
 
-.tree-menu .node span , .tree .node span {
+.itmtk .tree-menu .node span , .tree .node span {
 	line-height: 16px;
 	white-space: nowrap;
 	position: relative;
 	bottom: 3px;
 }
 
-.tree .nodes {
+.itmtk .tree .nodes {
 	padding-left: 16px;
 }
-.tree .over  {
+.itmtk .tree .over  {
 	text-decoration: underline;
 	color: Highlight;
 }
-.tree .content DIV.selected, .tree .content .selected IMG {
+.itmtk .tree .content DIV.selected, .tree .content .selected IMG {
 	background-color: Highlight;
 	color: HighlightText;
 	font-weight: normal;
@@ -561,32 +562,32 @@ html>body .table .hin div.headerContent {
 
 /* ACTIONS */
 
-.actions {
+.itmtk .actions {
 	position: absolute;
 	border: 1px solid;
 	border-color: ButtonShadow ButtonText ButtonText ButtonShadow;
 }
-.actions .border {
+.itmtk .actions .border {
 	background-color: ButtonFace;
 	border: 1px solid;
 	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 		
 }
-.actions .item {
+.itmtk .actions .item {
 	padding: 0.2em 1em 0.2em 1em;
 	color: ButtonText;
 	white-space: nowrap;
 }
-.actions .over {
+.itmtk .actions .over {
 	border: none;
 	text-decoration: none;
 	color: HighlightText;
 	background-color: Highlight;
 }
-.table .actions .over {
+.itmtk .table .actions .over {
 	background-color: Highlight;
 }
-.upload-iframe {
+.itmtk .upload-iframe {
 	width: 450px;
 	height: 30px;
 	border: none;
@@ -596,22 +597,22 @@ html>body .table .hin div.headerContent {
 }
 
 /* COMPONENT INDEPENDENT CLASSES */
-.align_right {
+.itmtk .align_right {
 	text-align: right;	
 }
-.align_center {
+.itmtk .align_center {
 	text-align: center;	
 }
 
 /* Select in lazy loading mode */
 
-.filterselect .fslayout {
+.itmtk .filterselect .fslayout {
 	padding: 0px;
 	margin: 2px;
 	border: none;
 }
 
-.filterselect TABLE {
+.itmtk .filterselect TABLE {
 	border-collapse: separate !important;
 	border-collapse: collapse;
 	padding: 0px;
@@ -619,12 +620,12 @@ html>body .table .hin div.headerContent {
 	border-spacing: 0px;
 }
 
-.filterselect .fssearch-layout TD {	
+.itmtk .filterselect .fssearch-layout TD {	
 	padding: 0px;
 	margin: 0px;	
 }
 
-.filterselect .fsinput {
+.itmtk .filterselect .fsinput {
 	width: 150px;
 	padding: 2px;
 	padding-left: 3px;
@@ -638,7 +639,7 @@ html>body .table .hin div.headerContent {
 }
 
 
-.filterselect .toggle-bg {
+.itmtk .filterselect .toggle-bg {
 	width: 19px;
 	height: 20px;	
 	margin: 0px;		
@@ -648,7 +649,7 @@ html>body .table .hin div.headerContent {
 	background-position: center;
 }
 
-.filterselect .toggle {
+.itmtk .filterselect .toggle {
 	width: 19px;
 	height: 20px;	
 	margin: 0px;
@@ -659,7 +660,7 @@ html>body .table .hin div.headerContent {
 	background-repeat: no-repeat;
 }
 
-.filterselect .toggle-selected {
+.itmtk .filterselect .toggle-selected {
 	width: 19px;
 	height: 20px;	
 	margin: 0px;
@@ -670,44 +671,44 @@ html>body .table .hin div.headerContent {
 	background-repeat: no-repeat;
 }
 
-.filterselect .highlighted {
+.itmtk .filterselect .highlighted {
 	background-image: url('../img/filterselect/dropdown-hover.gif');
 	background-repeat: no-repeat;
 }
 
-.filterselect .over {
+.itmtk .filterselect .over {
 	cursor: hand;
 	cursor: pointer !important;
 }
 
-.filterselect .layout {	
+.itmtk .filterselect .layout {	
 	height: 100%;
 	margin: 0px;
 	padding: 0px;
 }
 
-.filterselect .fspopup {
+.itmtk .filterselect .fspopup {
 	min-width: 300px;
 	position: absolute;	
 	display: none;
 	z-index: 20000;
 }
 
-.filterselect .fspopup-show {
+.itmtk .filterselect .fspopup-show {
 	min-width: 300px;
 	position: absolute;	
 	display: visible; /* TODO 'visible' not valid here - block? */
 	z-index: 20000;
 }
 
-.filterselect .layout {
+.itmtk .filterselect .layout {
 	border: 1px solid #a0a0a0;
 	background-color: white;
 	margin: 0px;
 	padding: 0px;
 }
 
-.filterselect .fsup {	
+.itmtk .filterselect .fsup {	
 	border: 1px solid;
 	border-color: #aaa #000 #000 #aaa;	
 	height: 10px;
@@ -721,7 +722,7 @@ html>body .table .hin div.headerContent {
 	cursor: pointer !important;
 }
 
-.filterselect .fsdown {	
+.itmtk .filterselect .fsdown {	
 	border: 1px solid;
 	border-color: #aaa #000 #000 #aaa;	
 	height: 10px;
@@ -735,24 +736,24 @@ html>body .table .hin div.headerContent {
 	cursor: pointer !important;
 }
 
-.filterselect .over .fsdown  {	
+.itmtk .filterselect .over .fsdown  {	
 	background-color: orange;
 	border-color: #000 #aaa #aaa #000;
 }
 
-.filterselect .over .fsup  {
+.itmtk .filterselect .over .fsup  {
 	background-color: orange;
 	border-color: #000 #aaa #aaa #000;
 }
 
-.filterselect .layout .disabled, .filterselect .layout .over .disabled {
+.itmtk .filterselect .layout .disabled, .filterselect .layout .over .disabled {
 	background-color: #8e8e8e;
 	border-color: #000 #aaa #aaa #000;
 	opacity: 1.0;
     filter: alpha(opacity=100);
 }
 
-.filterselect .selectbox {
+.itmtk .filterselect .selectbox {
 	margin: 0px;
 	padding: 0px;
 	height: 160px;
@@ -764,7 +765,7 @@ html>body .table .hin div.headerContent {
 	padding: 0px;
 }
 
-.filterselect .selectbox-row {
+.itmtk .filterselect .selectbox-row {
 	margin: 0px;
 	padding: 0px;
 	border: none;
@@ -773,23 +774,23 @@ html>body .table .hin div.headerContent {
 	cursor: pointer !important;
 }
 
-.filterselect .selectedrow {	
+.itmtk .filterselect .selectedrow {	
 	background-color: #b1b1b1;	
 	color: white;
 	border: none;
 }
 
-.filterselect .unselectedrow {	
+.itmtk .filterselect .unselectedrow {	
 	background-color: white;	
 }
 
-.filterselect .selectbox .over {	
+.itmtk .filterselect .selectbox .over {	
 	background-color: #DCECFD;
 	color: black;
 	border: none;
 }
 
-.filterselect .statics {
+.itmtk .filterselect .statics {
 	font-size: 12px;
 	width: 100%;
 	border: 1px solid #aaaaaa;
