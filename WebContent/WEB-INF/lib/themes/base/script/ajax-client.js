@@ -196,9 +196,9 @@ itmill.Client.prototype.error = function (message, causeException) {
 				message += "  " + prop + "=" +causeException[prop] + "\n";
 			}
 		}
+        console.error(message);
+        console.error(causeException);
 	}
-    console.error("message");
-    console.error(causeException);
 }
 
 /** Creates new XMLHttpRequest object.
