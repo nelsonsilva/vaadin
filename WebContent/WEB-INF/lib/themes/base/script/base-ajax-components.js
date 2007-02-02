@@ -2902,8 +2902,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		for (var i=0;i<cols.length;i++) {
 			var row = theme.createElementTo(popup,"div","item clickable pad border");
 			var collapsed = "true"==cols[i].getAttribute("collapsed");
-			icon = theme.createElementTo(row,"img","icon");
-			icon.src = theme.root+"img/table/"+(collapsed?"off.gif":"on.gif");				
+			row.className += (collapsed ? " off" : " on")
 			theme.createTextNodeTo(row,cols[i].getAttribute("caption"));
 			theme.addAddClassListener(theme,client,row,"mouseover","over");
 			theme.addRemoveClassListener(theme,client,row,"mouseout","over");
