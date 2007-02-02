@@ -2585,8 +2585,9 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 			var cap = theme.createElementTo(td,"div","caption");
 			theme.createTextNodeTo(cap,ch != null? ch : "");
 			if (sortkey==key) {
-				var icon = theme.createElementTo(cap,"IMG","icon");
-				icon.src = theme.root+"img/table/"+(sortasc?"asc.gif":"desc.gif");
+				//var icon = theme.createElementTo(cap,"IMG","icon");
+				//icon.src = theme.root+"img/table/"+(sortasc?"asc.gif":"desc.gif");
+				theme.addCSSClass(td,sortasc?"asc":"desc");
 			}
 		}
 		
@@ -2610,8 +2611,7 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 			for (var i=0;i<cols.length;i++) {
 				var row = theme.createElementTo(inner,"div","item clickable pad border");
 				var collapsed = "true"==cols[i].getAttribute("collapsed");
-				icon = theme.createElementTo(row,"img","icon");
-				icon.src = theme.root+"img/table/"+(collapsed?"off.gif":"on.gif");				
+				theme.addCSSClass(row,collapsed?"off":"on");				
 				theme.createTextNodeTo(row,cols[i].getAttribute("caption"));
 
 				theme.addToggleClassListener(theme,client,row,"mouseover","over");
@@ -2672,6 +2672,7 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 				}
 			}	
 			// SCROLLBAR
+			/*
 			if (i==0) {
 				td = theme.createElementTo(tr,"td", "scroll border");
 				// TODO:
@@ -2679,7 +2680,8 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 				
 				td.setAttribute("rowSpan",rows.length);
 				var inner = theme.createElementTo(td,"div", "scroll");
-			}		
+			}
+			*/		
 		}
 	}
 	delete rows;
@@ -2687,7 +2689,7 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	var paging = theme.createElementTo(div,"div","nav pad");
 	var button = theme.createElementTo(paging,"div","pad caption inline");
 	if (firstvisible > 1) {
-		theme.addCSSClass(button,"clickable");
+		theme.addCSSClass(button,"clickable prev");
 		theme.addAddClassListener(theme,client,button,"mouseover","bg");
 		theme.addRemoveClassListener(theme,client,button,"mouseout","bg");
 		theme.addSetVarListener(theme,client,button,"click",firstvisibleVar,(String) (parseInt(firstvisible)-parseInt(pagelength)),true);
@@ -2696,12 +2698,12 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	theme.createTextNodeTo(button,"<<");
 	
-	button = theme.createElementTo(paging,"div","small pad inline");
+	button = theme.createElementTo(paging,"div","current pad inline");
 	theme.createTextNodeTo(button,firstvisible+" - "+(firstvisible-1+parseInt(rowCount))+ " / " + totalrows);
 	
 	button = theme.createElementTo(paging,"div","pad caption inline");
 	if (parseInt(firstvisible)+parseInt(pagelength)<=parseInt(totalrows)) {
-		theme.addCSSClass(button,"clickable");
+		theme.addCSSClass(button,"clickable next");
 		theme.addAddClassListener(theme,client,button,"mouseover","bg");
 		theme.addRemoveClassListener(theme,client,button,"mouseout","bg");
 		theme.addSetVarListener(theme,client,button,"click",firstvisibleVar, (String) (parseInt(firstvisible)+parseInt(pagelength)),true);
