@@ -144,7 +144,7 @@ itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
  */
 itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
 	// Check if we are in debug mode
-	if (this.debugEnabled && console)	{ 
+	if (console && this.debugEnabled)	{ 
         console.log(message);
     }
 }
