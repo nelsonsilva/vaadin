@@ -3221,11 +3221,11 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
  */
 scrollTableScrollUpdate : function(renderer,target, model,uidl) {
     console.info("Updating new rows to existing table");
-    
+    var tm = target.model;
     var theme = renderer.theme;
     var d = target.ownerDocument;
-    var tableBody = target.model.tableBody;
-    var colorder = target.model.colorder;
+    var tableBody = tm.tableBody;
+    var colorder = tm.colorder;
     
     /* define function that creates rows */
     var createRow = function(ruidl, odd, selectmode) {
@@ -3276,21 +3276,21 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             row.appendChild(cell);
         }
         if (al&&row.firstChild) {
-            theme.renderActionPopup(renderer,al,row,target.model.meta.actions,target.model.actionVar,key,"rightclick");
+            theme.renderActionPopup(renderer,al,row,tm.meta.actions,tm.actionVar,key,"rightclick");
         }
         // selection
         if (model.meta.selectmode != "none") {
             var client = renderer.client;
-            target.model.selected.push(row);
+            tm.selected.push(row);
             theme.addCSSClass(row,"clickable");
             theme.addToggleClassListener(theme,client,row,"mouseover","selectable");
             theme.addToggleClassListener(theme,client,row,"mouseout","selectable");
             if (selectmode == "multi") {
                 theme.addToggleClassListener(theme,client,row,"click","selected");
-                theme.addToggleVarListener(theme,client,row,"click",target.model.selVar,key,model.meta.immediate);
+                theme.addToggleVarListener(theme,client,row,"click",tm.selVar,key,model.meta.immediate);
             } else {
-                theme.addAddClassListener(theme,client,row,"click","selected",row,target.model.selected);
-                theme.addSetVarListener(theme,client,row,"click",target.model.selVar,key,model.meta.immediate);
+                theme.addAddClassListener(theme,client,row,"click","selected",row,tm.selected);
+                theme.addSetVarListener(theme,client,row,"click",tm.selVar,key,model.meta.immediate);
             }
         }
         
@@ -3302,79 +3302,79 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
     
     if (model.request.rows == 0) {
         console.info("No new rows were loaded");
-    } else if(model.request.firstrow == target.model.state.lastRendered + 1) {
+    } else if(model.request.firstrow == tm.state.lastRendered + 1) {
         // if first received row == lastRendered + 1 we have moderate update to end of table
         // -> add received rows to the end of the table and resize bSpacer
         for(var i = 0; i < trs.length; i++) {
             var row = createRow(trs[i], ((model.state.fv + i)%2 == 1));
             tableBody.appendChild(row);
-            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
-            target.model.state.lastRendered++;
+            tm.bSpacer.style.height = (parseInt(tm.bSpacer.style.height) - tm.rowheight) + "px";
+            tm.state.lastRendered++;
         }
         // remove rows from beginning not to put browser to its knees in case of verybigmillionlinetable
-        while( target.model.meta.cacheSize < (model.state.fv - target.model.state.firstRendered) ) {
+        while( tm.meta.cacheSize < (model.state.fv - tm.state.firstRendered) ) {
                 tableBody.removeChild(tableBody.firstChild);
-                target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) + target.model.rowheight) + "px";
-                target.model.state.firstRendered++;
+                tm.aSpacer.style.height = (parseInt(tm.aSpacer.style.height) + tm.rowheight) + "px";
+                tm.state.firstRendered++;
         }
-    } else if(model.request.firstrow + model.request.rows == target.model.state.firstRendered) {
+    } else if(model.request.firstrow + model.request.rows == tm.state.firstRendered) {
         // moderate update to beginning of the table
         for(var i = trs.length -1 ; i >= 0; i--) {
             // render a new row
             row = createRow(trs[i], ((model.state.fv + i)%2 == 1 ));
             tableBody.insertBefore(row, tableBody.firstChild);
             // adjust top margin
-            target.model.aSpacer.style.height = (parseInt(target.model.aSpacer.style.height) - target.model.rowheight) + "px";
+            tm.aSpacer.style.height = (parseInt(tm.aSpacer.style.height) - tm.rowheight) + "px";
             // update firstRendered value
-            target.model.state.firstRendered--;
+            tm.state.firstRendered--;
         }
         // remove rows from the end not to put browser to its knees in case of verybigmillionlinetable
-        while( target.model.meta.cacheSize < (target.model.state.lastRendered - model.state.fv -model.meta.pagelength ) ) {
+        while( tm.meta.cacheSize < (tm.state.lastRendered - model.state.fv -model.meta.pagelength ) ) {
                 tableBody.removeChild(tableBody.lastChild);
-                target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) + target.model.rowheight) + "px";
-                target.model.state.lastRendered--;
+                tm.bSpacer.style.height = (parseInt(tm.bSpacer.style.height) + tm.rowheight) + "px";
+                tm.state.lastRendered--;
         }
-    } else if(model.request.firstrow > target.model.state.lastRendered) {
+    } else if(model.request.firstrow > tm.state.lastRendered) {
         // truncate old tbody and resize aSpacer + bSpacer to fit whole space
         var tmp = d.createElement("tbody");
         tableBody.parentNode.replaceChild(tmp, tableBody);
-        tableBody = target.model.tableBody = tmp;
-        target.model.aSpacer.style.height = (
-            parseInt(target.model.aSpacer.style.height) + 
-            target.model.rowheight * ( 
-                (model.request.firstrow - target.model.state.firstRendered)
+        tableBody = tm.tableBody = tmp;
+        tm.aSpacer.style.height = (
+            parseInt(tm.aSpacer.style.height) + 
+            tm.rowheight * ( 
+                (model.request.firstrow - tm.state.firstRendered)
                 ) ) + "px";
-        target.model.bSpacer.style.height = (
-            parseInt(target.model.bSpacer.style.height) - target.model.rowheight * (model.request.firstrow - target.model.state.lastRendered) ) + "px";
+        tm.bSpacer.style.height = (
+            parseInt(tm.bSpacer.style.height) - tm.rowheight * (model.request.firstrow - tm.state.lastRendered) ) + "px";
         
         // build tbody from received rows
-        target.model.state.firstRendered = model.request.firstrow;
-        target.model.state.lastRendered = model.request.firstrow - 1;
+        tm.state.firstRendered = model.request.firstrow;
+        tm.state.lastRendered = model.request.firstrow - 1;
         for(var i = 0; i < trs.length; i++) {
             var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
             tableBody.appendChild(row);
-            target.model.bSpacer.style.height = (parseInt(target.model.bSpacer.style.height) - target.model.rowheight) + "px";
-            target.model.state.lastRendered++;
+            tm.bSpacer.style.height = (parseInt(tm.bSpacer.style.height) - tm.rowheight) + "px";
+            tm.state.lastRendered++;
         }
     
-    } else if(model.request.firstrow + model.request.rows < target.model.state.firstRendered) {
+    } else if(model.request.firstrow + model.request.rows < tm.state.firstRendered) {
         // big scroll up
         //  truncate old tbody and resize aSpacer + bSpacer to fit whole space
         var tmp = d.createElement("tbody");
         tableBody.parentNode.replaceChild(tmp, tableBody);
-        tableBody = target.model.tableBody = tmp;
-        target.model.bSpacer.style.height = ( 
-            target.model.rowheight * ( model.meta.totalrows - (model.request.firstrow + model.request.rows) )
+        tableBody = tm.tableBody = tmp;
+        tm.bSpacer.style.height = ( 
+            tm.rowheight * ( model.meta.totalrows - (model.request.firstrow + model.request.rows) )
                  ) + "px";
-        target.model.aSpacer.style.height = ( target.model.rowheight * (model.request.firstrow - 1)) + "px";
+        tm.aSpacer.style.height = ( tm.rowheight * (model.request.firstrow - 1)) + "px";
         
         // build tbody from received rows
-        target.model.state.firstRendered = model.request.firstrow;
-        target.model.state.lastRendered = model.request.firstrow - 1;
+        tm.state.firstRendered = model.request.firstrow;
+        tm.state.lastRendered = model.request.firstrow - 1;
         for(var i = 0; i < trs.length; i++) {
             var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
             tableBody.appendChild(row);
-            target.model.state.lastRendered++;
+            tm.state.lastRendered++;
         }
     } else {
         // "overscroll not yet handled
@@ -3382,12 +3382,12 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
     }
 
     // update model object
-    // loop all variables from model to target.model
+    // loop all variables from model to tm
     for(var j in model.state) {
-        target.model.state[j] = model.state[j];
+        tm.state[j] = model.state[j];
     }
     delete(model);
-    target.model.status.style.display = "none";
+    tm.status.style.display = "none";
 },
 
 // Header order drag & drop	
