@@ -45,6 +45,9 @@
 
 .itmtk {
     background: #e7eaf0 url(../img/common/application_bg.png) repeat-x 0 0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 .itmtk .popup *,
 .itmtk .popup .border {
