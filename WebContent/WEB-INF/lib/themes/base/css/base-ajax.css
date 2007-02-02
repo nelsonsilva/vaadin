@@ -278,7 +278,14 @@ IMG.overlay {
 }
 .itmtk .table .popup {
 	position: absolute;
-
+}
+.itmtk .table .popup .off {
+	padding-left: 16px;
+	background: #ffffe1 url(../img/table/off.gif) no-repeat 0 0.2em;
+}
+.itmtk .table .popup .on {
+	padding-left: 16px;
+	background: #ffffe1 url(../img/table/on.gif) no-repeat 0 0.2em;
 }
 .itmtk .table {
 	border: 1px solid;
