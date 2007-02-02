@@ -3732,7 +3732,7 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
 	// Filtering lazy loading select mode
 	var loadfrom = options != null ? options.getAttribute("loadfrom") : "";
 	if (loadfrom != null && loadfrom.length > 0) {
-		new FilterSelect(renderer,uidl,target,layoutInfo);
+		new itmill.themes.Base.FilterSelect(renderer,uidl,target,layoutInfo);
 		return;
 	}
 			
@@ -4843,7 +4843,7 @@ addPreventSelectionListener : function(theme,client,div,event) {
  *  @author Oy IT Mill Ltd / Tomi Virtanen
  */
 
-FilterSelect = function(renderer,uidl,target,layoutInfo) {
+itmill.themes.Base.FilterSelect = function(renderer,uidl,target,layoutInfo) {
 	
     // TODO working on undoable & tabbing etc
     
@@ -5053,7 +5053,7 @@ FilterSelect = function(renderer,uidl,target,layoutInfo) {
 		}			
 }
 
-FilterSelect.prototype.rollDown = function() {	
+itmill.themes.Base.FilterSelect.prototype.rollDown = function() {	
 	if(this.focusedIndex<this.total-1) {	
 		this.defocusOption(this.focusedIndex);
 		this.focusedIndex++;
@@ -5066,7 +5066,7 @@ FilterSelect.prototype.rollDown = function() {
 	}	
 }
 
-FilterSelect.prototype.rollUp = function() {	
+itmill.themes.Base.FilterSelect.prototype.rollUp = function() {	
 	if(this.focusedIndex>0) {	
 		this.defocusOption(this.focusedIndex);
 		this.focusedIndex--;
@@ -5080,7 +5080,7 @@ FilterSelect.prototype.rollUp = function() {
 
 
 /* Open dropdown box */
-FilterSelect.prototype.dropdownMode = function() {	
+itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {	
 	if(this.visibleList != null)
 		this.hide(this.visibleList);
 	this.visibleList = this.popup;
@@ -5108,7 +5108,7 @@ FilterSelect.prototype.dropdownMode = function() {
 	this.adjustWidth(this.layout,this.search.clientWidth);			
 }
 /* Close dropdown box */
-FilterSelect.prototype.closeDropdown = function() {
+itmill.themes.Base.FilterSelect.prototype.closeDropdown = function() {
 	// ie fix.
 	if (this.popupSelectsHidden) {
 		var len = this.popupSelectsHidden.length;
@@ -5125,20 +5125,20 @@ FilterSelect.prototype.closeDropdown = function() {
 }
 
 
-FilterSelect.prototype.focusSearchField = function() {
+itmill.themes.Base.FilterSelect.prototype.focusSearchField = function() {
 	this.search.focus();
     this.search.select();
 	//TODO: Select the text
 }
 
 
-FilterSelect.prototype.show = function(element) {
+itmill.themes.Base.FilterSelect.prototype.show = function(element) {
 	if (element) {				
 		element.className = 'fspopup-show';		
 	}
 }
 
-FilterSelect.prototype.hide = function(element) {
+itmill.themes.Base.FilterSelect.prototype.hide = function(element) {
 	if (element) {				
 		element.className = 'fspopup';		
 	}
@@ -5147,7 +5147,7 @@ FilterSelect.prototype.hide = function(element) {
 
 /* Filter content by server request. Filtering prefix will be added to URL. 
    Server returns only few first options. */
-FilterSelect.prototype.doSearch = function() {
+itmill.themes.Base.FilterSelect.prototype.doSearch = function() {
 	this.defocusOption(this.focusedIndex);
 	this.focusedIndex = 0;
 		
@@ -5170,13 +5170,13 @@ FilterSelect.prototype.doSearch = function() {
 	this.focusOption(this.focusedIndex);
 }
 
-FilterSelect.prototype.focusOption = function(index) {
+itmill.themes.Base.FilterSelect.prototype.focusOption = function(index) {
 	
 	var option = this.select.childNodes[index%this.size];	
 	this.parentTheme.addCSSClass(option, "over");
 }
 
-FilterSelect.prototype.defocusOption = function(index) {
+itmill.themes.Base.FilterSelect.prototype.defocusOption = function(index) {
 
 	var option = this.select.childNodes[index%this.size];
 	if(option != null)
@@ -5185,7 +5185,7 @@ FilterSelect.prototype.defocusOption = function(index) {
 
 /* Flash component
 */
-FilterSelect.prototype.flash = function(el) {
+itmill.themes.Base.FilterSelect.prototype.flash = function(el) {
 	
 	if(!this.filtering) {
 		var originalColor = el.style.backgroundColor;
@@ -5200,7 +5200,7 @@ FilterSelect.prototype.flash = function(el) {
 	}	
 }
 
-FilterSelect.prototype.adjustWidth = function(el, width) {
+itmill.themes.Base.FilterSelect.prototype.adjustWidth = function(el, width) {
 	if (el.clientWidth <= width) {
 		el.style.width = width;
 	} 
@@ -5208,7 +5208,7 @@ FilterSelect.prototype.adjustWidth = function(el, width) {
 
 
 /* Select option */
-FilterSelect.prototype.selected = function(id) {
+itmill.themes.Base.FilterSelect.prototype.selected = function(id) {
 	if (id >=0 && id < this.select.childNodes.length) {		
 		var option = this.select.childNodes[id];							
 		this.parentTheme.removeCSSClass(option,"unselectedrow");	
@@ -5223,7 +5223,7 @@ FilterSelect.prototype.selected = function(id) {
 }
 
 /* Update search box */
-FilterSelect.prototype.updateSearch = function() {	
+itmill.themes.Base.FilterSelect.prototype.updateSearch = function() {	
 	if (this.selectedIndex >=0) {			
 		var index = this.selectedIndex%this.size;
 		this.selected(index);
@@ -5238,7 +5238,7 @@ FilterSelect.prototype.updateSearch = function() {
 }
 
 /* Deselect option */
-FilterSelect.prototype.deselect = function(id) {
+itmill.themes.Base.FilterSelect.prototype.deselect = function(id) {
 	if (id >=0 && id < this.select.childNodes.length) {		
 		var option = this.select.childNodes[id];						
 		this.parentTheme.removeCSSClass(option, "selectedrow");
@@ -5247,7 +5247,7 @@ FilterSelect.prototype.deselect = function(id) {
 }
 
 /* Update down- and up-buttons listeners and layouts */
-FilterSelect.prototype.updateButtons = function() {		
+itmill.themes.Base.FilterSelect.prototype.updateButtons = function() {		
 	if(this.startIndex<=0) {
 		this.parentTheme.addCSSClass(this.upbutton,"disabled");
 		this.upbutton.fs = this;				
@@ -5273,7 +5273,7 @@ FilterSelect.prototype.updateButtons = function() {
 }
 
 /* Update options. Gets new options from server if nesessary. */
-FilterSelect.prototype.updateContent = function() {
+itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 
 	var keys = this.ops.keys;
 	var values = this.ops.values;
@@ -5341,7 +5341,7 @@ FilterSelect.prototype.updateContent = function() {
 }
 
 /* Handle up-button click */
-FilterSelect.prototype.upButtonClick = function(e) {	   
+itmill.themes.Base.FilterSelect.prototype.upButtonClick = function(e) {	   
     var agent = navigator.userAgent.toLowerCase();
 	var fs = null;
 	if(agent.indexOf("msie")==-1) {
@@ -5355,7 +5355,7 @@ FilterSelect.prototype.upButtonClick = function(e) {
 
 
 /* Handle down-button click */ 
-FilterSelect.prototype.downButtonClick = function(e) {
+itmill.themes.Base.FilterSelect.prototype.downButtonClick = function(e) {
  	var agent = navigator.userAgent.toLowerCase();
 	var fs = null;
 	if(agent.indexOf("msie")==-1) {
@@ -5369,7 +5369,7 @@ FilterSelect.prototype.downButtonClick = function(e) {
 }
 
 /* Show previous 'page' */
-FilterSelect.prototype.moveUp = function(fs) {
+itmill.themes.Base.FilterSelect.prototype.moveUp = function(fs) {
 	fs.focusedIndex = fs.startIndex-1;
 	fs.startIndex -= fs.size;	
 	if(fs.startIndex<0) {
@@ -5384,7 +5384,7 @@ FilterSelect.prototype.moveUp = function(fs) {
 }
 
 /* Show next 'page' */
-FilterSelect.prototype.moveDown = function(fs) {
+itmill.themes.Base.FilterSelect.prototype.moveDown = function(fs) {
 	if(fs.startIndex > fs.total) {
 		fs.startIndex = fs.startIndex - fs.total%fs.size;		
 	}
@@ -5407,7 +5407,7 @@ FilterSelect.prototype.moveDown = function(fs) {
 }
 
 /* Appends source array to target array. */
-FilterSelect.prototype.appendArray = function(target, source) {	
+itmill.themes.Base.FilterSelect.prototype.appendArray = function(target, source) {	
 	// FIXME any better solution that works?
 	for(var i=0;i<source.length;i++) {
 		target[target.length] = source[i];
@@ -5415,11 +5415,11 @@ FilterSelect.prototype.appendArray = function(target, source) {
 }
 
 /* Update statistics box */
-FilterSelect.prototype.updateStatistics = function() {
+itmill.themes.Base.FilterSelect.prototype.updateStatistics = function() {
 	var lastpos = (this.startIndex+this.size-1);
 	this.statics.innerHTML = (this.startIndex+1) + "-" + ((lastpos>this.total)?this.total:lastpos+1) + " / " + this.total;
 }
 
-FilterSelect.prototype.decodeCaption = function(encoded) {	
+itmill.themes.Base.FilterSelect.prototype.decodeCaption = function(encoded) {	
 	return unescape(encoded.replace(/[+]+/g, " "));
 }
