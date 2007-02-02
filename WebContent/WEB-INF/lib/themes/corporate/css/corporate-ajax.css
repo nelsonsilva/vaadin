@@ -9,6 +9,7 @@
  * Feature browser specific
  * ------------------------
  */
+/*
 .itmtk .tree-menu {
 	height: 400px;
 	width: 200px;
@@ -17,7 +18,7 @@
 	border: solid 1px #d8e2f3;
 	background-color: #fff;
 }
-
+*/
 
 
 
@@ -29,6 +30,9 @@
  */
 .itmtk .border {
 	background-color: transparent;
+}
+.itmtk .caption {
+	color: #2c3437;
 }
 .itmtk .caption .description {
 	display: none;
@@ -411,6 +415,12 @@
 	padding-top: 1px;
 	padding-bottom: 1px;
 }
+.itmtk .table td.asc {
+	background: transparent url(../img/table/order_asc.png) no-repeat 95% 50%;
+}
+.itmtk .table td.desc {
+	background: transparent url(../img/table/order_desc.png) no-repeat 95% 50%;
+}
 .itmtk .table .cin td.tablecell div.cellContent {
 	border-right-color: #e3e7f0;
 }
@@ -437,6 +447,36 @@
 	text-align: center;
 	background-color: #fbffdc;
 }
+.itmtk .table .colsel-container {
+	
+}
+.itmtk .table .popup {
+	border: solid 1px #d3d4dc;
+	/* TODO IE7 hack, fix */
+	width: 110px;
+	overflow: visible;
+}
+.itmtk .table .popup .border {
+	border: none;
+}
+.itmtk .table .popup .item {
+	border-top: solid 1px #d3d4dc;
+	text-align: left;
+	padding: 3px 18px;
+	color: #2c3437;
+}
+.itmtk .table .popup .off {
+	background: transparent url(../img/common/unchecked.png) no-repeat 1px 0.2em;
+}
+.itmtk .table .popup .on {
+	background: transparent url(../img/common/checked.png) no-repeat 1px 0.2em;
+}
+.itmtk .table .popup .item img {
+	display: none;
+}
+.itmtk .table .popup .item.over {
+	background-color: #faffd1;
+}
 
 
 
@@ -448,6 +488,43 @@
 
 /* Normal style */
 
+.itmtk .tree {
+	border: none;
+}
+.itmtk .tree .treecaption {
+	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
+	height: 15px;
+	color: white;
+	padding: 5px 7px;
+	spacing: 0;
+	font-weight: bold;
+	border: 1px solid #a3b5ce;
+}
+.itmtk .tree .content, 
+.tree .content .node, 
+.tree .content .nodes, 
+.tree .content .node IMG {
+	background-color: #fff;
+}
+.itmtk .tree-menu .node span, 
+.tree .node span {
+	line-height: 16px;
+	white-space: nowrap;
+	position: relative;
+	bottom: 3px;
+}
+.itmtk .tree .nodes {
+	padding-left: 16px;
+}
+.itmtk .tree .over  {
+	text-decoration: none;
+}
+.itmtk .tree .content DIV.selected, 
+.tree .content .selected IMG {
+	background-color: #faffd1;
+	color: #2c3437;
+	font-weight: normal;
+}
 
 /* Menu style */
 .itmtk .tree-menu .selected {
