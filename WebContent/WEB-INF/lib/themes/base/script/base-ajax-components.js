@@ -1585,6 +1585,7 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 
 	// Create default header
 	var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	theme.addCSSClass(caption,"treecaption");
 	
 	// If no actual caption, remove description popup listener
 	if(caption && caption.className.indexOf("hide") > -1) {
@@ -2886,7 +2887,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	delete alNode;
 
-	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD align=center width=16></TD></TR></TBODY></TABLE>";
+	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD class=\"colsel-container\" align=center width=16></TD></TR></TBODY></TABLE>";
 	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
 	if (visiblecols) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div</DIV>";
