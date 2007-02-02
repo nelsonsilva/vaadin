@@ -129,9 +129,9 @@ itmill.Client.prototype.start = function() {
 itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
 
 	// Check if we are in debug mode
-	if (!this.debugEnabled)	{ return; }
-
-	this.debug(message, folded, "warn "+(extraStyle?extraStyle:""), html);
+	if (this.debugEnabled)	{
+        console.warn(message);
+    }
 }
 /** Write debug message to debug window.
  *
@@ -143,14 +143,9 @@ itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
  *
  */
 itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
-
 	// Check if we are in debug mode
-	if (!this.debugEnabled)	{ return; }
-    
-    // use firebug or native webkit console for debug messages if it exists
-    if("console" in window ) {
+	if (this.debugEnabled && console)	{ 
         console.log(message);
-        return;
     }
 }
 
@@ -202,8 +197,8 @@ itmill.Client.prototype.error = function (message, causeException) {
 			}
 		}
 	}
-	this.debug(message,causeException != null, "error");
-	
+    console.error("message");
+    console.error(causeException);
 }
 
 /** Creates new XMLHttpRequest object.
@@ -785,17 +780,19 @@ itmill.Client.prototype.findPaintableById = function (paintableId) {
  */
 itmill.Client.prototype.processUpdates = function (updates) {
 	if (this.debugEnabled) {
-		this.debug("Processing updates.");
+        console.group("Changes from server");
+        console.profile("Changes profiling");
 	}
 
 	try {
 		// Iterate through the received changes
 		var changes = updates.getElementsByTagName("change");
-		var cLen = changes.length;		
+		var cLen = changes.length;
 		for (var i=0; i<cLen; i++) {
-		
 			// Render start time
-			var renderStartTime = (new Date()).getTime();
+            if (this.debugEnabled) {
+                console.time("Change");
+            }
 			var change = changes.item(i);
 			var paintableId = change.getAttribute("pid");
 			var windowName = change.getAttribute("windowname");
@@ -805,8 +802,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 			var paintableName = (changeContent!= null?changeContent.nodeName:"(unknown)");
 	
 			if (this.debugEnabled) {
-				this.debug(" ");
-				this.debug("Change "+i+" Id='"+paintableId+"' Paintable='"+paintableName+"'");
+				console.group("Change "+i+" Id='"+paintableId+"' Paintable='"+paintableName+"'");
 			}
 					
 			// Get the containing element from all current windows
@@ -841,7 +837,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 						try {
 							var url = win.location.href;
 						} catch (e) {
-							alert("Could not open window.");
+							console.error("Could not open window:" + winName);
 							win = window.open("about:blank",winName);
 						}
 						
@@ -887,14 +883,16 @@ itmill.Client.prototype.processUpdates = function (updates) {
 			}
 			
 			if (this.debugEnabled) {
-				var renderEndTime = (new Date()).getTime();
-				this.debug("Change " + i + " Id='"+ paintableId+ "'. Paintable='"+ paintableName +"' rendered in " + (renderEndTime-renderStartTime) + "ms");
+                console.info("Change " + i + " Id='"+ paintableId+ "'. Paintable='"+ paintableName +"' rendered");
+                console.timeEnd("Change");
+                console.groupEnd();
 			}
 		}
 	} catch (e) {
 		// Print out the exception
 		if (this.debugEnabled) {
-        	this.error("Could not process changes: "+e.message,e);
+        	console.error("Could not process changes: "+e.message);
+            console.error(e);
  		} else {
 			alert("Failed to process all changes. \n Please enable debug logging to get detailed error description");
 		}
@@ -903,8 +901,10 @@ itmill.Client.prototype.processUpdates = function (updates) {
 	this.processAllLayoutFunctions();
 	
     var endTime = (new Date()).getTime();
-    if (this.debugEnabled && this.requestStartTime > 0 ) {
-		this.debug("Total time for update " + (endTime-this.requestStartTime) + "ms");
+    if (this.debugEnabled) {
+        console.info("Changes done.");
+        console.profileEnd("Changes profiling");
+        console.groupEnd();
 	}	
 	if (this.waitElement) {
 		this.waitElement.style.display = "none";
@@ -946,14 +946,20 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
             args[args.length] = arguments[i];
         }
         if (this.debugEnabled) {
-	        this.debug("Theme '"+ renderer.theme.themeName + "' rendering '"+ uidl.nodeName + "' into '"+target.nodeName+"' (id="+target.id+")");
+	        console.group("Theme '"+ renderer.theme.themeName + "' rendering '"+ uidl.nodeName + "' into '"+target.nodeName+"' (id="+target.id+")");
 	    }
         try {      
 			var res = renderer.renderFunction.apply(this,args);
+            if (this.debugEnabled) {
+                console.groupEnd();
+            }
 			return res;
 		} catch (e) {
 			// Print out the exception
         	this.error("Could not render "+ uidl.nodeName +" using '"+ renderer.theme.themeName + "': "+e.message,e);
+            if (this.debugEnabled) {
+                console.groupEnd();
+            }
 		}
 		
 		
