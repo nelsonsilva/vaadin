@@ -114,15 +114,30 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 	// Props
 	target = document.getElementById("featurebrowser-properties")
 	theme.removeAllChildNodes(target);
-	var buttonVar = theme.elementByIndex(theme.elementByIndex(theme.elementByIndex(uidl.childNodes,2).childNodes,0).childNodes,0);
-	target.buttonId = buttonVar.getAttribute("id");
-	target.buttonState = buttonVar.getAttribute("value");
-	target.targetWidth = target.buttonState == "true" ? 200 : 10;
+	var buttonContainer = theme.createElementTo(target,"div",null);
+	buttonContainer.style.display='none';
+	buttonContainer.propPanelDummy = true;
+	var buttonUIDL = theme.elementByIndex(theme.elementByIndex(uidl.childNodes,2).childNodes,0);
+	renderer.client.renderUIDL(buttonUIDL,buttonContainer);
 	var propsUIDL = theme.elementByIndex(theme.elementByIndex(uidl.childNodes,2).childNodes,1);
 	if (propsUIDL != null)
 		renderer.client.renderUIDL(propsUIDL,target);
-	theme.recalcFeatureBrowserLayout();
 
+},
+
+renderCheckBox : function(renderer,uidl,target,layoutInfo) {
+
+		arguments.callee.$.renderCheckBox.call(this,renderer,uidl,target,layoutInfo);
+		
+		if (target.propPanelDummy || target.parentNode.propPanelDummy) {
+			var theme = renderer.theme;
+			target = document.getElementById("featurebrowser-properties")
+			var buttonVar = theme.elementByIndex(uidl.childNodes,0);
+			target.buttonId = buttonVar.getAttribute("id");
+			target.buttonState = buttonVar.getAttribute("value");
+			target.targetWidth = target.buttonState == "true" ? 200 : 10;
+			theme.recalcFeatureBrowserLayout();
+		}
 },
 
 recalcFeatureBrowserLayout : function() {
