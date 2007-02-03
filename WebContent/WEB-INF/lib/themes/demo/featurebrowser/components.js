@@ -152,6 +152,9 @@ recalcFeatureBrowserLayout : function() {
 		var controlDiv = document.getElementById("featurebrowser-control");
 		var dividerDiv = document.getElementById("featurebrowser-divider");
 
+		// Logobar
+		var logoBarHeight = 0; // TODO ADJUST THIS TO LOGO HEIGHT
+
 		// Recalc main div dimensions
 		mainDiv.style.position="absolute";
 		mainDiv.style.overflow="hidden";
@@ -176,10 +179,10 @@ recalcFeatureBrowserLayout : function() {
 		var controlHeight = 50;
 		featuresDiv.style.position="absolute";
 		featuresDiv.style.overflow="scroll";
-		featuresDiv.style.top="0";
+		featuresDiv.style.top="" + logoBarHeight + "px";
 		featuresDiv.style.left="0";
 		featuresDiv.style.width="" + featuresWidth + "px";
-		featuresDiv.style.height="" + (height-controlHeight) + "px";
+		featuresDiv.style.height="" + (height-controlHeight-logoBarHeight) + "px";
 		
 		// Recalc properties div dimensions
 		var propWidth = Math.floor((propertiesDiv.offsetWidth + propertiesDiv.targetWidth)/2);
@@ -189,20 +192,20 @@ recalcFeatureBrowserLayout : function() {
 		var centerWidth = width - propWidth - featuresWidth;
 		propertiesDiv.style.position="absolute";
 		propertiesDiv.style.overflow=propWidth>50?"auto":"hidden";
-		propertiesDiv.style.top="0";
+		propertiesDiv.style.top="" + logoBarHeight + "px";
 		propertiesDiv.style.left="" + (centerWidth + featuresWidth) + "px";
 		propertiesDiv.style.width=propWidth + "px";
-		propertiesDiv.style.height="" + height + "px";	
+		propertiesDiv.style.height="" + (height - logoBarHeight) + "px";	
 		
 		// Recalc divider div dimensions
 		if (typeof dividerDiv.demoHeight == 'undefined') dividerDiv.demoHeight = Math.floor(height/2);
 		if (dividerDiv.isActive) {
-			dividerDiv.demoHeight = dividerDiv.mouseY+3;
+			dividerDiv.demoHeight = dividerDiv.mouseY+3 - logoBarHeight;
 		} 
 		var dividerHeight = 8;
 		dividerDiv.style.position="absolute";
 		dividerDiv.style.overflow="hidden";
-		dividerDiv.style.top="" + dividerDiv.demoHeight + "px";
+		dividerDiv.style.top="" + (dividerDiv.demoHeight + logoBarHeight)+ "px";
 		dividerDiv.style.left="" + featuresWidth +"px";
 		dividerDiv.style.width="" + centerWidth + "px";
 		dividerDiv.style.height="" + dividerHeight + "px";		
@@ -210,15 +213,15 @@ recalcFeatureBrowserLayout : function() {
 		// Recalc tabs div dimensions
 		tabsDiv.style.position="absolute";
 		tabsDiv.style.overflow="auto";
-		tabsDiv.style.top="" + (dividerDiv.demoHeight + dividerHeight) + "px";
+		tabsDiv.style.top="" + (dividerDiv.demoHeight + dividerHeight + logoBarHeight) + "px";
 		tabsDiv.style.left="" + featuresWidth + "px";
 		tabsDiv.style.width="" + centerWidth + "px";
-		tabsDiv.style.height="" + (height - dividerDiv.demoHeight - dividerHeight) + "px";		
+		tabsDiv.style.height="" + (height - dividerDiv.demoHeight - dividerHeight - logoBarHeight) + "px";		
 		
 		// Recalc demo div dimensions
 		demoDiv.style.position="absolute";
 		demoDiv.style.overflow="scroll";
-		demoDiv.style.top="0";
+		demoDiv.style.top="" + logoBarHeight + "px";
 		demoDiv.style.left="" + featuresWidth + "px";
 		demoDiv.style.width="" + centerWidth + "px";
 		demoDiv.style.height="" + dividerDiv.demoHeight + "px";	
