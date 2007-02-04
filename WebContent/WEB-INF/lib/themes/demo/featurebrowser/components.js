@@ -129,7 +129,7 @@ renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 
 		arguments.callee.$.renderCheckBox.call(this,renderer,uidl,target,layoutInfo);
 		
-		if (target.propPanelDummy || target.parentNode.propPanelDummy) {
+		if (target.propPanelDummy || target.parentNode.propPanelDummy) {
 			var theme = renderer.theme;
 			target = document.getElementById("featurebrowser-properties")
 			var buttonVar = theme.elementByIndex(uidl.childNodes,0);
@@ -164,7 +164,7 @@ recalcFeatureBrowserLayout : function() {
 		mainDiv.style.height="100%";
 		var width = mainDiv.offsetWidth;
 		var height = mainDiv.offsetHeight;
-		if (height < 400 || width < 600) {
+		if (height < 400 || width < 600) {
 			height = 400;
 			width = 600;
 			if (document.body.offsetWidth > width) width = document.body.offsetWidth;
@@ -242,7 +242,7 @@ recalcFeatureBrowserLayout : function() {
 
 renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 	arguments.callee.$.renderTabSheet.call(this,renderer,uidl,target,layoutInfo);
-	if (target.id == "featurebrowser-tabs" || target.parentNode.id ==  "featurebrowser-tabs") {
+	if (target.id == "featurebrowser-tabs" || target.parentNode.id ==  "featurebrowser-tabs") {
 		var content = renderer.theme.elementByIndex(
 				target.id == "featurebrowser-tabs" ? 
 				renderer.theme.elementByIndex(target.childNodes,0).childNodes : 
