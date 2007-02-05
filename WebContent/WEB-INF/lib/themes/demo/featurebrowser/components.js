@@ -126,19 +126,21 @@ renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 
 		arguments.callee.$.renderCheckBox.call(this,renderer,uidl,target,layoutInfo);
 		
+		
 		if (target.propPanelDummy || target.parentNode.propPanelDummy) {
+			var propertiesMaxWidth = 265;
 			var theme = renderer.theme;
 			var propertiesDiv = document.getElementById("featurebrowser-properties");
 			var buttonDiv = document.getElementById("featurebrowser-properties-toggler");
 			buttonDiv.onclick=function() {			
-				propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? 200 : 0;
+				propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? propertiesMaxWidth : 0;
 				theme.recalcFeatureBrowserLayout()
 				renderer.client.changeVariable(propertiesDiv.buttonId,propertiesDiv.buttonState == "false" ? "true" : "false",true);
 			}	
 			var buttonVar = theme.elementByIndex(uidl.childNodes,0);
 			propertiesDiv.buttonId = buttonVar.getAttribute("id");
 			propertiesDiv.buttonState = buttonVar.getAttribute("value");
-			propertiesDiv.targetWidth = propertiesDiv.buttonState == "true" ? 200 : 0;
+			propertiesDiv.targetWidth = propertiesDiv.buttonState == "true" ? propertiesMaxWidth : 0;
 			theme.recalcFeatureBrowserLayout();
 		}
 },
