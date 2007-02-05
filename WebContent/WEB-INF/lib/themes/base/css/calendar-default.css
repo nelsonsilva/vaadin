@@ -20,9 +20,11 @@ div.calendar { position: relative; }
   border: 1px solid #aaaaaa;
 }
 
+/*
 .calendar .nav {
   background: #ffffff url(menuarrow.gif) no-repeat 100% 100%;
 }
+*/
 
 .calendar thead .title { /* This holds the current "month, year" */
   font-weight: bold;      /* Pressing it will take you to the current date */
