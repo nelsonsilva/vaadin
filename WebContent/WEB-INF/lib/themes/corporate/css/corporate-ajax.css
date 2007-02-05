@@ -67,8 +67,8 @@
 .itmtk select, 
 .itmtk button, 
 .itmtk {
-    font-family: Helvetica, Arial, Tahoma, Verdana, sans-serif; 
-    font-size: 8pt;
+    font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif; 
+    font-size: 11px;
     font-weight: normal;
     color: #2c3437;
 }
@@ -351,8 +351,7 @@
 
 .itmtk .table,
 .itmtk .table-paging,
-.itmtk .list .content,
-.itmtk .popup .border {
+.itmtk .list .content {
 	border: none;
 	padding: 0;
 }
@@ -414,6 +413,7 @@
 .itmtk .table-paging .popup .border,
 .itmtk .list .popup .border {
 	border: none;
+	padding: 0;
 }
 .itmtk .table .popup .item,
 .itmtk .table-paging .popup .item,
@@ -433,9 +433,12 @@
 .itmtk .list .popup .on {
 	background: transparent url(../img/common/checked.png) no-repeat 1px 0.2em;
 }
-.itmtk .table .popup .item.over {
+.itmtk .table .popup .item.over,
+.itmtk .table-paging .popup .item.over,
+.itmtk .list .popup .item.over {
 	background-color: #faffd1;
 }
+
 
 /* Scroll table style */
 
@@ -472,6 +475,7 @@
 .itmtk .table tr.selected {
 	font-weight: normal;
 	background-color: #faffd1;
+	color: #2c3437;
 }
 .itmtk .table .cin td.tablecell {
 	padding-top: 1px;
@@ -496,6 +500,7 @@
 
 
 /* Paging table styles */
+
 .itmtk .table-paging .content {
 	padding: 0;
 }
@@ -513,13 +518,27 @@
 .itmtk .table-paging .cheader {
 	border-right: solid 1px #b4cfe9;
 	border-left: solid 1px #f3f9ff;
-	padding: 0 0 0 4px;
+	padding: 0 15px 0 4px;
+}
+.itmtk .table-paging .scroll {
+	padding-right: 4px;
+}
+.itmtk .table-paging .scroll img {
+	display: none;
+}
+.itmtk .table-paging .scroll div {
+	width: 13px;
+	height: 13px;
+	background: transparent url(../img/table/column_select_arrow.png) no-repeat;
 }
 .itmtk .table-paging td.asc {
 	background: transparent url(../img/table/order_asc.png) no-repeat 95% 50%;
 }
 .itmtk .table-paging td.desc {
 	background: transparent url(../img/table/order_desc.png) no-repeat 95% 50%;
+}
+.itmtk .table-paging .selected td {
+	border-left: none;
 }
 .itmtk .table-paging .odd td,
 .itmtk .table-paging .even td {
@@ -554,7 +573,33 @@
 	padding: 0 20px;
 	font-weight: normal;
 }
+.itmtk .table-paging tr.selected .caption {
+	color: #2c3437;
+}
 
+
+/* Action popup */
+
+.itmtk .actions .border {
+	border: none;
+}
+.itmtk .actions .outset {
+	border: none;
+}
+.itmtk .odd td div.actions,
+.itmtk .even td div.actions {
+	background-color: #fff;
+	border: solid 1px #d3d4dc;
+}
+.itmtk .actions .item {
+	color: #2c3437;
+	border-top: solid 1px #d3d4dc;
+}
+.itmtk .table .actions .over,
+.itmtk .table-paging .actions .over {
+	color: #2c3437;
+	background-color: #faffd1;
+}
 
 
 /**
