@@ -503,6 +503,7 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 	}    
 
 	// Create HTML content
+	var winElementId = "itmtk-window";
 	var html="";
 	if (framewindow) {
 		html = this.createFramesetHtml(uidl,theme)
@@ -510,16 +511,18 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 		html = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"+
 				"<HTML><HEAD id=\"html-head\"><TITLE>"+caption+"</TITLE>";
 
-    // Add stylesheets
+    // Add stylesheets if safari
+    	if (typeof navigator.vendor != 'undefined' && navigator.vendor.indexOf('Apple') >= 0)
 		for (var i=0; i<this.mainDocument.styleSheets.length; i++) {	
 			var ss = this.mainDocument.styleSheets[i];	
 			if (typeof ss.href != 'undefined') 
 				html += "<link href='" + ss.href + "' type='text/css' rel='stylesheet' />"
 		}
 		
-		html +="</HEAD>\n"+"<BODY STYLE=\" overflow: hidden; border: none; margin: 0px; padding: 0px;\" class='itmtk'><div id=\"itmtk-window\" class=\"window\" SCROLL='yes'></div><\/BODY><\/HTML>\n";			
+		html +="</HEAD>\n"+"<BODY STYLE=\" overflow: hidden; border: none; margin: 0px; padding: 0px;\" class='itmtk' SCROLL='yes'>"+
+		"<div id=\""+winElementId+"\" class=\"window\"></div><\/BODY><\/HTML>\n";			
 	}
-	//win.document.open();
+	win.document.open();
     win.document.write(html);
     win.document.close();
     win.document.ownerWindow = win;
@@ -546,6 +549,20 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 			}
 		});
 		
+	}
+	
+	// Add stylesheets for others than safari
+    if (!framewindow && !(typeof navigator.vendor != 'undefined' && navigator.vendor.indexOf('Apple') >= 0)) {
+		for (var si in this.mainDocument.styleSheets) {	
+			var ss = this.mainDocument.styleSheets[si];	
+			var nss = win.document.createElement('link');
+			nss.rel = 'stylesheet';
+			nss.type = 'text/css';
+			nss.media = ss.media;
+			nss.href = ss.href;
+			if (ss.href != null)
+				win.document.getElementById('html-head').appendChild(nss);
+		}
 	}
 		
     // Register it to client
@@ -864,8 +881,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 					// Make sure we are visible
 					if (currentNode.style) currentNode.style.display = "";
 				}
-	
-									
+					
 				// Process all uidl nodes inside a change
 				var uidl = change.firstChild;
 				while (uidl) {
