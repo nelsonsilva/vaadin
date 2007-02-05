@@ -196,9 +196,10 @@ recalcFeatureBrowserLayout : function() {
 		
 		// Recalc properties div dimensions
 		var propWidth = Math.floor((propertiesDiv.offsetWidth + propertiesDiv.targetWidth)/2);
+		if (Math.abs(propWidth - propertiesDiv.targetWidth) <= 1) propWidth = propertiesDiv.targetWidth;
 		if (propWidth >width-featuresWidth) propWidth = width-featuresWidth; 
 		if (propWidth < 0) propWidth = 0; 
-		if (propWidth != propertiesDiv.targetWidth) animationNeeded=true;
+		if ((propWidth+1) != (propertiesDiv.targetWidth+1)) animationNeeded=true;
 		var centerWidth = width - propWidth - featuresWidth;
 		propertiesDiv.style.position="absolute";
 		propertiesDiv.style.overflow=propWidth>50?"auto":"hidden";
