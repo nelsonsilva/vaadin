@@ -153,9 +153,7 @@ getFirstTextNode : function(parent) {
  *   @return the element with children removed
  */
 removeAllChildNodes : function(element) {
-	//TODO event listener leakage prevention, verify
-	// MOVED to client
-	//this.removeAllEventListeners(element);
+	client.removeAllEventListeners(element);
 	while (element.childNodes&&element.childNodes.length > 0) {
 		element.removeChild(element.childNodes[0]);
 	}
@@ -1201,6 +1199,7 @@ renderFramewindow : function(renderer,uidl,target,layoutInfo) {
 renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
 	// Shortcuts
 	var theme = renderer.theme;
+	var client = renderer.client;
 	
 	// Get style
     var style = uidl.getAttribute("style");    
@@ -1251,6 +1250,7 @@ renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
                 var parent = div.parentNode;               
                 // TODO
                 if (parent != null) {
+                	client.removeAllEventListeners(div);
                 	theme.removeAllChildNodes(div);
                 	var newNode = renderer.client.renderUIDL(cc,div);
                 }

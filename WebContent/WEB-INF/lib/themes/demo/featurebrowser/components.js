@@ -60,30 +60,10 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 		// Divider resize
 		var dividerDiv = document.getElementById("featurebrowser-divider");
 		dividerDiv.isActive = false;
-		dividerDiv.onmousedown = function() {
-			dividerDiv.isActive = true;
-			// Hilight divider
-			dividerDiv.style.background="black";
-			div.onmouseup = function() {
-				dividerDiv.isActive = false;
-				// Reset divider to its original color
-				dividerDiv.style.background="gray";
-				div.onmouseup = null;
-				div.onmousemove = null;
-			}
-			div.onmousemove = function(e) {
-				dividerDiv.mouseY = typeof e != 'undefined' ? e.clientY : window.event.clientY;
-				itmill.themes.Demo.prototype.recalcFeatureBrowserLayout()
-			}
-			return false;
-		}
+		dividerDiv.onmousedown = itmill.themes.Demo.prototype.dividerUpdate;
 		
 		// Resize layout
-		var prevWindowResizeFunc = window.onresize;
-		window.onresize=function () { 
-			theme.recalcFeatureBrowserLayout(); 
-			if (prevWindowResizeFunc != null) prevWindowResizeFunc.call(this);
-		};
+		window.onresize=itmill.themes.Demo.prototype.recalcFeatureBrowserLayout; 
 		theme.recalcFeatureBrowserLayout();
 	}
 	
@@ -127,27 +107,48 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 
 },
 
+dividerUpdate : function() {
+	var dividerDiv = document.getElementById("featurebrowser-divider");
+	var div = document.getElementById("featurebrowser-mainlayout");
+	dividerDiv.isActive = true;
+	// Hilight divider
+	dividerDiv.style.background="black";
+	div.onmouseup = function() {
+		dividerDiv.isActive = false;
+		// Reset divider to its original color
+		dividerDiv.style.background="gray";
+		div.onmouseup = null;
+		div.onmousemove = null;
+	}
+	div.onmousemove = function(e) {
+		dividerDiv.mouseY = typeof e != 'undefined' ? e.clientY : window.event.clientY;
+		itmill.themes.Demo.prototype.recalcFeatureBrowserLayout();
+	}
+	return false;
+},
+
 renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 
 		arguments.callee.$.renderCheckBox.call(this,renderer,uidl,target,layoutInfo);
 		
-		
 		if (target.propPanelDummy || target.parentNode.propPanelDummy) {
-			var propertiesMaxWidth = 265;
 			var theme = renderer.theme;
 			var propertiesDiv = document.getElementById("featurebrowser-properties");
 			var buttonDiv = document.getElementById("featurebrowser-properties-toggler");
-			buttonDiv.onclick=function() {			
-				propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? propertiesMaxWidth : 0;
-				theme.recalcFeatureBrowserLayout()
-				renderer.client.changeVariable(propertiesDiv.buttonId,propertiesDiv.buttonState == "false" ? "true" : "false",true);
-			}	
+			buttonDiv.onclick=itmill.themes.Demo.prototype.propertiesButtonClick;
 			var buttonVar = theme.elementByIndex(uidl.childNodes,0);
 			propertiesDiv.buttonId = buttonVar.getAttribute("id");
 			propertiesDiv.buttonState = buttonVar.getAttribute("value");
-			propertiesDiv.targetWidth = propertiesDiv.buttonState == "true" ? propertiesMaxWidth : 0;
-			theme.recalcFeatureBrowserLayout();
+			propertiesDiv.targetWidth = propertiesDiv.buttonState == "true" ? 265 : 0;
+			itmill.themes.Demo.prototype.recalcFeatureBrowserLayout();
 		}
+},
+
+propertiesButtonClick : function() {
+	var propertiesDiv = document.getElementById("featurebrowser-properties");
+	propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? 265 : 0;
+	itmill.themes.Demo.prototype.recalcFeatureBrowserLayout();
+	client.changeVariable(propertiesDiv.buttonId,propertiesDiv.buttonState == "false" ? "true" : "false",true);
 },
 
 recalcFeatureBrowserLayout : function() {
