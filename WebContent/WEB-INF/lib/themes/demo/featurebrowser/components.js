@@ -34,6 +34,11 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 
 	// Paint layout if needed
 	if (document.getElementById(pid) == null) {
+		
+		// Try to disable window scrollbars on IEs
+	    if (document.all) document.body.scroll = "no";
+	    else document.body.style.overflow = "hidden";
+		
 		// Create container element
 		var paintableDiv = renderer.theme.createPaintableElement(renderer,uidl,document.body,layoutInfo);
 	 	var div = theme.createElementTo(paintableDiv,"div",null);
@@ -41,7 +46,7 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 		
 		// Build layout
 		div.innerHTML = "<div id=\"featurebrowser-features\" style='background: white;'>features</div>"+
-		"<div id=\"featurebrowser-demo\"><table border='0' cellpadding='0' cellspacing='0' height='100%' width='100%'><tr><td align='center' valign='middle' id='featurebrowser-demo-td'> </td></tr></table></div>"+
+		"<div id=\"featurebrowser-demo\"><table border='0' cellpadding='0' cellspacing='0' height='100%' width='100%'><tr><td align='center' valign='middle'><table><tr><td style='text-align: left;' id='featurebrowser-demo-td'> </td></tr></table></td></tr></table></div>"+
 		"<div id=\"featurebrowser-tabs\" style='background: white'>tabs</div>"+
 		"<div id=\"featurebrowser-properties\" style='border-left: 1px solid #909090; width: 10px;'>properties</div>"+
 		"<div id=\"featurebrowser-properties-toggler\" style='border: 1px solid #909090; width: 10px; height: 10px; background-color: gray; position: absolute; top: 20px; right: 10px;'> </div>"+
@@ -159,8 +164,6 @@ recalcFeatureBrowserLayout : function() {
 
 		// Logobar
 		var logoBarHeight = 40; // TODO ADJUST THIS TO LOGO HEIGHT
-
-		document.body.scroll='no';
 
 		// Recalc main div dimensions
 		mainDiv.style.position="absolute";
