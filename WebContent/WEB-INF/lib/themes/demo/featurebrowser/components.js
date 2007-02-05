@@ -41,7 +41,7 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 		
 		// Build layout
 		div.innerHTML = "<div id=\"featurebrowser-features\" style='background: white;'>features</div>"+
-		"<div id=\"featurebrowser-demo\"><table border='0' height='100%' width='100%'><tr><td align='center' valign='middle' id='featurebrowser-demo-td'> </td></tr></table></div>"+
+		"<div id=\"featurebrowser-demo\"><table border='0' cellpadding='0' cellspacing='0' height='100%' width='100%'><tr><td align='center' valign='middle' id='featurebrowser-demo-td'> </td></tr></table></div>"+
 		"<div id=\"featurebrowser-tabs\" style='background: white'>tabs</div>"+
 		"<div id=\"featurebrowser-properties\" style='border-left: 1px solid #909090; width: 10px;'>properties</div>"+
 		"<div id=\"featurebrowser-properties-toggler\" style='border: 1px solid #909090; width: 10px; height: 10px; background-color: gray; position: absolute; top: 20px; right: 10px;'> </div>"+
@@ -160,6 +160,8 @@ recalcFeatureBrowserLayout : function() {
 		// Logobar
 		var logoBarHeight = 40; // TODO ADJUST THIS TO LOGO HEIGHT
 
+		document.body.scroll='no';
+
 		// Recalc main div dimensions
 		mainDiv.style.position="absolute";
 		mainDiv.style.overflow="hidden";
@@ -205,7 +207,7 @@ recalcFeatureBrowserLayout : function() {
 		// Recalc divider div dimensions
 		if (typeof dividerDiv.demoHeight == 'undefined') dividerDiv.demoHeight = Math.floor(height/2);
 		if (dividerDiv.isActive) {
-			dividerDiv.demoHeight = dividerDiv.mouseY+3 - logoBarHeight;
+			dividerDiv.demoHeight = dividerDiv.mouseY-7 - logoBarHeight;
 		} 
 		var dividerHeight = 8;
 		dividerDiv.style.position="absolute";
@@ -225,7 +227,7 @@ recalcFeatureBrowserLayout : function() {
 		
 		// Recalc demo div dimensions
 		demoDiv.style.position="absolute";
-		demoDiv.style.overflow="scroll";
+		demoDiv.style.overflow="auto";
 		demoDiv.style.top="" + logoBarHeight + "px";
 		demoDiv.style.left="" + featuresWidth + "px";
 		demoDiv.style.width="" + centerWidth + "px";
