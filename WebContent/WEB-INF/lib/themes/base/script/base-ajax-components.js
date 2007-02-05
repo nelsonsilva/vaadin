@@ -2600,7 +2600,7 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 		// Collapsing
 		td = theme.createElementTo(tr,"td","cheader scroll bg");
 		if (visibleCols) {
-			var iconDiv = theme.createElementTo(td,"div");
+			var iconDiv = theme.createElementTo(td,"div","img");
 			var icon = theme.createElementTo(iconDiv,"img","icon");
 			icon.src = theme.root+"img/table/colsel.gif";
 			var popup = theme.createElementTo(td,"div","outset popup hide");
