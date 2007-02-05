@@ -449,7 +449,7 @@
 	border-top: solid 2px #d3dce7;
 }
 .itmtk .table .hin {
-	height: 25px;
+	height: 23px;
 }
 .itmtk .table .hin .headerContent {
 	height: 19px;
@@ -526,10 +526,11 @@
 .itmtk .table-paging .scroll img {
 	display: none;
 }
-.itmtk .table-paging .scroll div {
+.itmtk .table-paging .scroll div.img {
 	width: 13px;
 	height: 13px;
 	background: transparent url(../img/table/column_select_arrow.png) no-repeat;
+	cursor: pointer;
 }
 .itmtk .table-paging td.asc {
 	background: transparent url(../img/table/order_asc.png) no-repeat 95% 50%;
