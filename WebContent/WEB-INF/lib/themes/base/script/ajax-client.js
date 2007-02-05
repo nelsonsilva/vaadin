@@ -519,7 +519,7 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 				html += "<link href='" + ss.href + "' type='text/css' rel='stylesheet' />"
 		}
 		
-		html +="</HEAD>\n"+"<BODY STYLE=\" overflow: hidden; border: none; margin: 0px; padding: 0px;\" class='itmtk' SCROLL='yes'>"+
+		html +="</HEAD>\n"+"<BODY STYLE=\" overflow: auto; border: none; margin: 0px; padding: 0px;\" class='itmtk'>"+
 		"<div id=\""+winElementId+"\" class=\"window\"></div><\/BODY><\/HTML>\n";			
 	}
 	win.document.open();
@@ -587,7 +587,6 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 			this.warn("Window element not found!");
 	}
 	win.document.itmtkWindowElement = winElement;
-	
 	
 	if (!win.png) {
 		var clientRoot = this.clientRoot;
