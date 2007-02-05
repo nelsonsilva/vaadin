@@ -2764,7 +2764,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	} else {
 		colWidths = model.colWidths = new Object();
 	}
-	var wholeWidth = target.wholeWidth;
+
+    // TODO remove this if possible
 	var scrolledLeft = target.scrolledLeft;
     
     // Get attributes
@@ -2775,7 +2776,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var selectmode = model.meta.selectmode = uidl.getAttribute("selectmode");
 	var cols       = model.meta.cols = parseInt(uidl.getAttribute("cols"));
 	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
+    
 	var pagelength = model.meta.pagelength = parseInt(uidl.getAttribute("pagelength"));
+    model.meta.sizeableW = uidl.getAttribute("width"); 
+    model.meta.sizeableH = uidl.getAttribute("height"); 
 	var colheaders = model.meta.colheaders = uidl.getAttribute("colheaders")||false;
 	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
     model.request.rows = parseInt(uidl.getAttribute("rows"));
@@ -2868,14 +2872,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	// column collapsing
 	// main div
 	var inner  = theme.createElementTo(div,"div","border");
-    // MT Shouldn't div expand automatically to full available width ??
-	inner.innerHTML = "<TABLE width=\"100%\"><TR><TD></TD></TR></TABLE>";
-	if (!wholeWidth) {
-		wholeWidth = inner.offsetWidth||inner.clientWidth||300;
-		wholeWidth -= 2; // Leave room for border, TODO: more dynamic
-		if (wholeWidth<200) wholeWidth = 300;
-	}
-	div.wholeWidth = wholeWidth;
+
+    // TODO check if this is needed
 	var offsetLeft = client.getElementPosition(inner).x;
     
     // TODO move building actions object to beginning of the funtion -> redraw if actions change
@@ -2895,7 +2893,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	delete alNode;
 
-	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD class=\"colsel-container\" align=center width=16></TD></TR></TBODY></TABLE>";
+	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD class=\"colsel-container\" align=center width=16></TD></TR></TBODY></TABLE>";
 	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
 	if (visiblecols) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div></DIV>";
@@ -2928,7 +2926,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	// headers
 	var hout = theme.createElementTo(inner.childNodes[1].firstChild.firstChild.firstChild,"div","bg");
     model.hout = hout; // add reference for later use
-	hout.style.width = (wholeWidth-16)+"px";
 	hout.style.paddingRight = "0px";
 	hout.id = pid+"hout";
 	hout.style.overflow = "hidden";	
@@ -3160,9 +3157,17 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // remaining invisible lines * line_height
     var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+1)*model.rowheight;
 
-    // fix containers height to initial height of table + scrollbar
-    // TODO px sizeable is going to brake this, maybe add margin to border component of a size of height mod rowheight
-    cout.style.height = table.offsetHeight+16+"px";
+    // set height defined by sizeable interface
+    // TODO refine (works only for pixels atm)
+    if(model.meta.sizeableH) {
+        var extraH = div.offsetHeight - cout.offsetHeight;
+        // snip or grow size from "scrolling" part
+        cout.style.height = ( parseInt(model.meta.sizeableH) - extraH ) + "px";
+        div.style.height = model.meta.sizeableH + "px";
+    } else {
+        // fix containers height to initial height of table + scrollbar
+        cout.style.height = table.offsetHeight+16+"px";
+    }
     
     model.aSpacer.style.height = prePad + "px";
     model.bSpacer.style.height = postPad + "px";
@@ -3170,10 +3175,22 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     cout.scrollTop = prePad;
     
 	div.recalc = theme.scrollTableRecalc;
-	div.initialWidth = wholeWidth;
  	div.recalc(pid,target);
 	cout.scrollLeft = scrolledLeft;
 	hout.scrollLeft = scrolledLeft;
+    
+    // fix width of table component to its initial width if not explicetely set via Sizeable interface
+    if(!model.meta.sizeableW) {
+        model.state.width = div.offsetWidth + "px";
+        div.style.width = model.state.width;
+    } else {
+        if(model.meta.sizeableW.indexOf("%") < 0) {
+            model.state.width = model.meta.sizeableW + "px";
+        } else {
+            model.state.width = model.meta.sizeableW;
+        }
+        div.style.width = model.state.width;
+    }
 
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
@@ -3461,7 +3478,7 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,cin,hin) {
 	client.registerLayoutFunction(paintableElement,function() {
         // TODO check this if really needed
-		var w = (inner.offsetWidth-4) +"px";
+		// var w = (inner.offsetWidth-4) +"px";
 		//cout.style.width = w;
 		//cin.style.width = w;
 		//hout.style.width = w;
@@ -3569,7 +3586,6 @@ scrollTableAddScrollHandler : function(client,theme,target) {
 scrollTableRecalc : function(pid,target) {
     console.info("Table: recalc widths");
 	var div = target.ownerDocument.getElementById(pid);
-	var wholeWidth = div.initialWidth;
 	var colWidths = div.colWidths;
 	if (!colWidths) {
 		colWidths = new Object();
