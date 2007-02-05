@@ -49,7 +49,7 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 		"<div id=\"featurebrowser-demo\"><table border='0' cellpadding='0' cellspacing='0' height='100%' width='100%'><tr><td align='center' valign='middle'><table><tr><td style='text-align: left;' id='featurebrowser-demo-td'> </td></tr></table></td></tr></table></div>"+
 		"<div id=\"featurebrowser-tabs\" style='background: white'>tabs</div>"+
 		"<div id=\"featurebrowser-properties\" style='border-left: 1px solid #909090; width: 10px;'>properties</div>"+
-		"<div id=\"featurebrowser-properties-toggler\" style='border: 1px solid #909090; width: 10px; height: 10px; background-color: gray; position: absolute; top: 20px; right: 10px;'> </div>"+
+		"<div id=\"featurebrowser-properties-toggler\" style='overflow: hidden; border: 1px solid #909090; width: 10px; height: 10px; background-color: gray; position: absolute; top: 20px; right: 10px;'> </div>"+
 		"<div id=\"featurebrowser-control\" style='border-right: 1px solid #909090; border-top: 1px solid #909090;'><table border='0' height='100%' width='100%'><tr><td width='50%' align='center' valign='middle' id='featurebrowser-control-left'></td><td align='center' width='50%' valign='middle' id='featurebrowser-control-right'></td></tr></table></div>" + 
 		"<div id=\"featurebrowser-divider\" style='background: gray;'> </div>";
 		
