@@ -149,7 +149,8 @@ IMG.overlay {
 	font-size: 0.9em;
 	overflow: auto;
 }
-#popup-blocker-iframe {
+#popup-blocker-iframe,
+.popup-blocker-iframe {
 	border: none;
 	background-color: transparent;
 }
@@ -374,7 +375,7 @@ html>body .table .hin div.headerContent {
 	border-right:1px solid ButtonShadow;
 }
 
-.itmtk .table tr.selected td.tableCell div.cellContent {
+.itmtk .table .selected td.tableCell div.cellContent {
 	color: HighlightText;
 }
 .itmtk .table tr.even {
@@ -385,6 +386,7 @@ html>body .table .hin div.headerContent {
 }
 .itmtk .table tr.selected {
 	background-color: Highlight;
+	color: HighlightText;
 }
 .itmtk .table tr.selected td.tableCell div.cellContent {
 	color: HighlightText;
@@ -434,7 +436,7 @@ html>body .table .hin div.headerContent {
 	empty-cells: show;
 }
 
-.itmtk .table-paging .selected TD DIV {
+.itmtk .table-paging .selected {
 	background-color: Highlight;
 	color: HighlightText;
 }
@@ -443,11 +445,14 @@ html>body .table .hin div.headerContent {
 	color: HighlightText;
 	border-left: 1px solid Highlight;
 }
-.itmtk .table-paging .even TD DIV {
+.itmtk .table-paging tr.selected .caption {
+	color: HighlightText;
+}
+.itmtk .table-paging .even {
 	border-left: 1px solid Window;
 	background-color: Window;
 }
-.itmtk .table-paging .odd TD DIV {
+.itmtk .table-paging .odd {
 	border-left: 1px solid ButtonFace;
 	background-color: ButtonFace;
 }
@@ -576,6 +581,7 @@ html>body .table .hin div.headerContent {
 	position: absolute;
 	border: 1px solid;
 	border-color: ButtonShadow ButtonText ButtonText ButtonShadow;
+	z-index: 999999;
 }
 .itmtk .actions .border {
 	background-color: ButtonFace;
