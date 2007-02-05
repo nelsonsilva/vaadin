@@ -120,8 +120,9 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 	var buttonUIDL = theme.elementByIndex(theme.elementByIndex(uidl.childNodes,2).childNodes,0);
 	renderer.client.renderUIDL(buttonUIDL,buttonContainer);
 	var propsUIDL = theme.elementByIndex(theme.elementByIndex(uidl.childNodes,2).childNodes,1);
-	if (propsUIDL != null)
+	if (propsUIDL != null) {
 		renderer.client.renderUIDL(propsUIDL,target);
+	}
 
 },
 
@@ -153,7 +154,7 @@ recalcFeatureBrowserLayout : function() {
 		var dividerDiv = document.getElementById("featurebrowser-divider");
 
 		// Logobar
-		var logoBarHeight = 0; // TODO ADJUST THIS TO LOGO HEIGHT
+		var logoBarHeight = 40; // TODO ADJUST THIS TO LOGO HEIGHT
 
 		// Recalc main div dimensions
 		mainDiv.style.position="absolute";
