@@ -888,13 +888,26 @@ hidePopup : function() {
  *  @param y			vertical popup position
  *  @param delay		delay before popping up
  *  @param defWidth		(optional) default width for the popup
+ *  @param blocker		Blocker element (usually an iframe) to hide underlying browser chrome
  *  
  */
-togglePopup : function(popup, x, y, delay, defWidth) {
+togglePopup : function(popup, x, y, delay, defWidth, blocker) {
 	if (this.popup == popup && this.popupShowing) {
 		this.hidePopup();
+		if(blocker) this.addCSSClass(blocker,"hide");
 	} else {
 		this.showPopup(client,popup,x,y,delay,defWidth);
+		if(blocker) {
+			blocker.style.position = "absolute";
+			// TODO fix this hack (position and size calculated rather randomly)
+			blocker.style.width = popup.clientWidth + 20 + "px";
+			blocker.style.height = popup.clientHeight + 2 + "px";
+			blocker.style.left = x - 220 + "px";
+			blocker.style.background = "transparent";
+			blocker.style.filter = "alpha(opacity=0)";
+			blocker.style.opacity = "0";
+			this.removeCSSClass(blocker,"hide");
+		}
 	}
 },
 
@@ -1015,17 +1028,17 @@ addExpandNodeListener : function(theme,client,img,event,subnodes,expandVariable,
 		);
 },
 
-addTogglePopupListener : function(theme,client,element,event,popup,delay,defWidth,popupAt) {
+addTogglePopupListener : function(theme,client,element,event,popup,delay,defWidth,popupAt,blocker) {
 	client.addEventListener(element,(event=="rightclick"?"mouseup":event), function(e) {
 			var evt = client.getEvent(e);
 			if (event=="rightclick"&&!evt.rightclick) return;
-			if(evt.target.nodeName == "INPUT" || evt.target.nodeName == "SELECT") return;
+			if (evt.target.nodeName == "INPUT" || evt.target.nodeName == "SELECT") return;
             if (evt.alt) return;
             if (popupAt) {
             	var p = client.getElementPosition(popupAt);
- 				theme.togglePopup(popup,p.x,(p.y+p.h),(delay?delay:0),(defWidth?defWidth:100));           	
+ 				theme.togglePopup(popup,p.x,(p.y+p.h),(delay?delay:0),(defWidth?defWidth:100),blocker);
             } else {
-				theme.togglePopup(popup,evt.mouseX,evt.mouseY,(delay?delay:0),(defWidth?defWidth:100));
+				theme.togglePopup(popup,evt.mouseX,evt.mouseY,(delay?delay:0),(defWidth?defWidth:100),blocker);
 			}
 			evt.stop();
 		}
@@ -2885,11 +2898,12 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"width:"+(wholeWidth/2)+"px;display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD class=\"colsel-container\" align=center width=16></TD></TR></TBODY></TABLE>";
 	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
 	if (visiblecols) {
-		vcols.innerHTML = "<DIV class=\"colsel\"><div></div</DIV>";
+		vcols.innerHTML = "<DIV class=\"colsel\"><div></div></DIV>";
 		var icon = vcols.firstChild; 
 		vcols.id = pid+"vcols";
+		var popup_blocker = theme.createElementTo(vcols,"iframe","popup-blocker-iframe hide");
 		var popup = theme.createElementTo(vcols,"div","border popup hide");
-		theme.addTogglePopupListener(theme,client,icon,"click",popup);
+		theme.addTogglePopupListener(theme,client,icon,"click",popup,null,null,null,popup_blocker);
 		theme.addStopListener(theme,client,icon,"mouseover");
 		theme.addStopListener(theme,client,icon,"mouseout");
 		var row = theme.createElementTo(popup,"div","item clickable pad border");
@@ -4535,7 +4549,7 @@ addDescriptionAndErrorPopupListener : function(theme, client, target, errorIcon)
 		client.addEventListener(errorIcon, "click", 
 			function(e) {
 				var ev = e? e:window.event;
-				var pos = theme.calculateAbsoluteEventPosition(theme, client, e);
+				var pos = theme.calculateAbsoluteEventPosition(theme, client, ev);
 				theme.showDescriptionAndErrorPopup(theme, target, pos, null, true); // null = no delay, true = force open
 				if(e.stopPropagation) e.stopPropagation();
 				ev.cancelBubble = true;
@@ -4548,7 +4562,7 @@ addDescriptionAndErrorPopupListener : function(theme, client, target, errorIcon)
 showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 
 	if(target._descriptionPopupTimeout) clearTimeout(target._descriptionPopupTimeout);
-	
+
 	var descHTML = target._descriptionHTML;
 	var errorHTML = target._errorHTML;
 	if(!descHTML && !errorHTML) return;
@@ -4680,7 +4694,7 @@ calculateAbsoluteEventPosition : function(theme, client, e, modFF) {
 	
 	if (!e) var e = window.event;
 	
-	if(window.screenY) { // Firefox
+	if(window.screenY || window.screenY === 0) { // Firefox
 		
 		// Calculate with default DOM calculation
 		if(!modFF) return theme.eventPosition(e);
