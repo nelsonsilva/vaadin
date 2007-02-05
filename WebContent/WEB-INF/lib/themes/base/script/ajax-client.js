@@ -1,6 +1,5 @@
 
 /** Declare our own namespace. 
- * 
  * All globals should be defined in this namespace.
  *
  */
@@ -499,7 +498,6 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 	var framewindow = uidl.nodeName == "framewindow";	
 	var name = uidl.getAttribute("name");	
 	var caption = uidl.getAttribute("caption")||"";	
-
 	if (this.debugEnabled) {
 			this.debug("Initializing new "+(framewindow?"frame-":"")+"window '"+name+"' (PID="+uidl.getAttribute("id")+")");
 	}    
@@ -509,9 +507,19 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 	if (framewindow) {
 		html = this.createFramesetHtml(uidl,theme)
 	} else {
-		html = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><HTML><HEAD id=\"html-head\"><TITLE>"+caption+"</TITLE></HEAD>"+"<BODY STYLE=\" overflow: hidden; border: none; margin: 0px; padding: 0px;\" class='itmtk'><div id=\"itmtk-window\" class=\"window\"></div><\/BODY><\/HTML>";			
+		html = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"+
+				"<HTML><HEAD id=\"html-head\"><TITLE>"+caption+"</TITLE>";
+
+    // Add stylesheets
+		for (var i=0; i<this.mainDocument.styleSheets.length; i++) {	
+			var ss = this.mainDocument.styleSheets[i];	
+			if (typeof ss.href != 'undefined') 
+				html += "<link href='" + ss.href + "' type='text/css' rel='stylesheet' />"
+		}
+		
+		html +="</HEAD>\n"+"<BODY STYLE=\" overflow: hidden; border: none; margin: 0px; padding: 0px;\" class='itmtk'><div id=\"itmtk-window\" class=\"window\" SCROLL='yes'></div><\/BODY><\/HTML>\n";			
 	}
-    win.document.open();
+	//win.document.open();
     win.document.write(html);
     win.document.close();
     win.document.ownerWindow = win;
@@ -538,19 +546,6 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 			}
 		});
 		
-	}
-    // Add stylesheets
-    if (!framewindow) {
-		for (var si in this.mainDocument.styleSheets) {	
-			var ss = this.mainDocument.styleSheets[si];	
-			var nss = win.document.createElement('link');
-			nss.rel = 'stylesheet';
-			nss.type = 'text/css';
-			nss.media = ss.media;
-			nss.href = ss.href;
-			if (typeof ss.href != 'undefined')
-				win.document.getElementById('html-head').appendChild(nss);
-		}
 	}
 		
     // Register it to client
@@ -828,7 +823,11 @@ itmill.Client.prototype.processUpdates = function (updates) {
 					} else {						
 						// Open a new window if no document was found						
 						var limit = new Date().getTime() + (1000*3);
-						var win = window.open("about:blank",winName);
+						var height = itmill.themes.Base.prototype.getVariableElement(changeContent,"integer", "height").getAttribute("value");
+						var width = itmill.themes.Base.prototype.getVariableElement(changeContent,"integer", "width").getAttribute("value");
+						var features = "location=no,menubar=no,status=no,toolbar=no,resizable=yes,scrollbars=yes";
+						if (height > 0 && width > 0) features += ",height=" + height + ",width=" + width;
+						var win = window.open("about:blank",winName,features);
 						while (new Date().getTime() < limit) {
 							try  {
 								var url = win.location.href;
