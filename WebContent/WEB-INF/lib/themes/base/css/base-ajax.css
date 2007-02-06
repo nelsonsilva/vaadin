@@ -188,6 +188,13 @@ IMG.overlay {
 	
 }
 
+.button .nobr {
+	white-space: nowrap;
+}
+.button .nobr input {
+	float:left;
+}
+
 /* DateField */
 .itmtk .datefield .btn {
 	background-color: ButtonFace;
