@@ -514,6 +514,7 @@
 }
 .itmtk .table-paging .header .caption {
 	color: #48738c;
+	font-weight: bold;
 }
 .itmtk .table-paging .cheader {
 	border-right: solid 1px #b4cfe9;
@@ -622,6 +623,14 @@
 	font-weight: bold;
 	border: 1px solid #a3b5ce;
 }
+.itmtk .tree .content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px 5px 5px;
+}
 .itmtk .tree .content, 
 .tree .content .node, 
 .tree .content .nodes, 
@@ -632,11 +641,14 @@
 .tree .node span {
 	line-height: 16px;
 	white-space: nowrap;
-	position: relative;
-	bottom: 3px;
+	position: static;
 }
 .itmtk .tree .nodes {
 	padding-left: 16px;
+}
+.itmtk .tree-menu .node img, 
+.tree .node img {
+	vertical-align: middle;
 }
 .itmtk .tree .over  {
 	text-decoration: none;
