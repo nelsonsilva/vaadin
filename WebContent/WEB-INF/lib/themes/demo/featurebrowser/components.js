@@ -52,7 +52,7 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 		"<div id=\"featurebrowser-demo\"><table border='0' cellpadding='0' cellspacing='0' height='100%' width='100%'><tr><td align='center' valign='middle'><table><tr><td style='text-align: left;' id='featurebrowser-demo-td'> </td></tr></table></td></tr></table></div>"+
 		"<div id=\"featurebrowser-tabs\" style='background: white'>tabs</div>"+
 		"<div id=\"featurebrowser-properties\" style='width: 0px;'>properties</div>"+
-		"<div id=\"featurebrowser-properties-toggler\" style='overflow: hidden; border: 1px solid #909090; width: 10px; height: 10px; background-color: gray; position: absolute; top: 20px; right: 10px;'> </div>"+
+		"<img id=\"featurebrowser-properties-toggler\" src=\""+theme.root+"featurebrowser/img/show_properties.png\" style='position: absolute; top: 10px;'> </div>"+
 		"<div id=\"featurebrowser-control\"><table border='0' height='100%' width='100%'><tr><td width='50%' align='center' valign='middle' id='featurebrowser-control-left'></td><td align='center' width='50%' valign='middle' id='featurebrowser-control-right'></td></tr></table></div>" + 
 		"<div id=\"featurebrowser-divider\" style='background-image: url("+theme.root+"featurebrowser/img/tab_handle.png);'> </div>";
 		
@@ -138,14 +138,17 @@ renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 			var buttonVar = theme.elementByIndex(uidl.childNodes,0);
 			propertiesDiv.buttonId = buttonVar.getAttribute("id");
 			propertiesDiv.buttonState = buttonVar.getAttribute("value");
-			propertiesDiv.targetWidth = propertiesDiv.buttonState == "true" ? 265 : 0;
+			buttonDiv.hidePng = theme.root+"featurebrowser/img/hide_properties.png";
+			buttonDiv.showPng = theme.root+"featurebrowser/img/show_properties.png";
+			propertiesDiv.maxWidth = 265;
+			propertiesDiv.targetWidth = propertiesDiv.buttonState == "true" ? propertiesDiv.maxWidth : 0;
 			itmill.themes.Demo.prototype.recalcFeatureBrowserLayout();
 		}
 },
 
 propertiesButtonClick : function() {
 	var propertiesDiv = document.getElementById("featurebrowser-properties");
-	propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? 265 : 0;
+	propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? propertiesDiv.maxWidth : 0;
 	itmill.themes.Demo.prototype.recalcFeatureBrowserLayout();
 	client.changeVariable(propertiesDiv.buttonId,propertiesDiv.buttonState == "false" ? "true" : "false",true);
 },
@@ -202,11 +205,16 @@ recalcFeatureBrowserLayout : function() {
 		if ((propWidth+1) != (propertiesDiv.targetWidth+1)) animationNeeded=true;
 		var centerWidth = width - propWidth - featuresWidth - 20;
 		propertiesDiv.style.position="absolute";
-		propertiesDiv.style.overflow=propWidth>50?"auto":"hidden";
-		propertiesDiv.style.top="" + logoBarHeight + "px";
+		propertiesDiv.style.overflow="hidden";
+		propertiesDiv.style.top="" + 10 + "px";
 		propertiesDiv.style.left="" + (centerWidth + featuresWidth + 20) + "px";
 		propertiesDiv.style.width=propWidth + "px";
-		propertiesDiv.style.height="" + (height - logoBarHeight) + "px";	
+		propertiesDiv.style.height="" + (height - 10) + "px";	
+		var buttonDiv = document.getElementById("featurebrowser-properties-toggler");
+		buttonDiv.style.left = "" + (centerWidth + featuresWidth) + "px"
+		if (propWidth == 0) buttonDiv.src = buttonDiv.showPng;
+		if (propWidth == propertiesDiv.maxWidth) buttonDiv.src = buttonDiv.hidePng;
+		itmill.themes.Demo.prototype.updatePropertiesContentHeight();
 		
 		// Recalc divider div dimensions
 		if (typeof dividerDiv.demoHeight == 'undefined') dividerDiv.demoHeight = Math.floor(height/2);
@@ -259,6 +267,12 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 		itmill.themes.Demo.prototype.updateTabsContentHeight();
 },
 
+renderPanel : function(renderer,uidl,target,layoutInfo) {
+	arguments.callee.$.renderPanel.call(this,renderer,uidl,target,layoutInfo);
+	if (target.id == "featurebrowser-properties" || target.parentNode.id ==  "featurebrowser-properties") 
+		itmill.themes.Demo.prototype.updatePropertiesContentHeight();
+},
+
 updateTabsContentHeight : function() {
 	try {
 		var tabsDiv = document.getElementById("featurebrowser-tabs");
@@ -267,6 +281,18 @@ updateTabsContentHeight : function() {
 		var content = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,1);
 		content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight) + "px";
 		content.style.borderBottom="0";
+		content.style.overflow='auto';
+	} catch (e) {}
+},
+
+updatePropertiesContentHeight : function() {
+	try {
+		var propsDiv = document.getElementById("featurebrowser-properties");
+		var panel = itmill.themes.Demo.prototype.elementByIndex(propsDiv.childNodes,1);
+		var content = itmill.themes.Demo.prototype.elementByIndex(itmill.themes.Demo.prototype.elementByIndex(panel.childNodes,0).childNodes,1);
+		content.style.height="" + (propsDiv.offsetHeight - 30) + "px";
+		content.style.borderBottom="0";
+		content.style.borderRight="0";
 		content.style.overflow='auto';
 	} catch (e) {}
 },
