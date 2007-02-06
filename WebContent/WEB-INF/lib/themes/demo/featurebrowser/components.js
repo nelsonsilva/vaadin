@@ -43,15 +43,18 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 		var paintableDiv = renderer.theme.createPaintableElement(renderer,uidl,document.body,layoutInfo);
 	 	var div = theme.createElementTo(paintableDiv,"div",null);
 		div.id="featurebrowser-mainlayout";
+		div.style.background="white";
+		div.style.backgroundImage="url("+theme.root+"featurebrowser/img/m_bg.png)";
+		div.style.backgroundRepeat="no-repeat";
 		
 		// Build layout
-		div.innerHTML = "<div id=\"featurebrowser-features\" style='background: white;'>features</div>"+
+		div.innerHTML = "<img src=\""+theme.root+"featurebrowser/img/header.png\"/><div id=\"featurebrowser-features\"'>features</div>"+
 		"<div id=\"featurebrowser-demo\"><table border='0' cellpadding='0' cellspacing='0' height='100%' width='100%'><tr><td align='center' valign='middle'><table><tr><td style='text-align: left;' id='featurebrowser-demo-td'> </td></tr></table></td></tr></table></div>"+
 		"<div id=\"featurebrowser-tabs\" style='background: white'>tabs</div>"+
-		"<div id=\"featurebrowser-properties\" style='border-left: 1px solid #909090; width: 10px;'>properties</div>"+
+		"<div id=\"featurebrowser-properties\" style='width: 0px;'>properties</div>"+
 		"<div id=\"featurebrowser-properties-toggler\" style='overflow: hidden; border: 1px solid #909090; width: 10px; height: 10px; background-color: gray; position: absolute; top: 20px; right: 10px;'> </div>"+
-		"<div id=\"featurebrowser-control\" style='border-right: 1px solid #909090; border-top: 1px solid #909090;'><table border='0' height='100%' width='100%'><tr><td width='50%' align='center' valign='middle' id='featurebrowser-control-left'></td><td align='center' width='50%' valign='middle' id='featurebrowser-control-right'></td></tr></table></div>" + 
-		"<div id=\"featurebrowser-divider\" style='background: gray;'> </div>";
+		"<div id=\"featurebrowser-control\"><table border='0' height='100%' width='100%'><tr><td width='50%' align='center' valign='middle' id='featurebrowser-control-left'></td><td align='center' width='50%' valign='middle' id='featurebrowser-control-right'></td></tr></table></div>" + 
+		"<div id=\"featurebrowser-divider\" style='background-image: url("+theme.root+"featurebrowser/img/tab_handle.png);'> </div>";
 		
 		// Properties hiddening
 		var propertiesDiv = document.getElementById("featurebrowser-properties");
@@ -111,12 +114,8 @@ dividerUpdate : function() {
 	var dividerDiv = document.getElementById("featurebrowser-divider");
 	var div = document.getElementById("featurebrowser-mainlayout");
 	dividerDiv.isActive = true;
-	// Hilight divider
-	dividerDiv.style.background="black";
 	div.onmouseup = function() {
 		dividerDiv.isActive = false;
-		// Reset divider to its original color
-		dividerDiv.style.background="gray";
 		div.onmouseup = null;
 		div.onmousemove = null;
 	}
@@ -164,7 +163,7 @@ recalcFeatureBrowserLayout : function() {
 		var dividerDiv = document.getElementById("featurebrowser-divider");
 
 		// Logobar
-		var logoBarHeight = 40; // TODO ADJUST THIS TO LOGO HEIGHT
+		var logoBarHeight = 62; // TODO ADJUST THIS TO LOGO HEIGHT
 
 		// Recalc main div dimensions
 		mainDiv.style.position="absolute";
@@ -189,7 +188,7 @@ recalcFeatureBrowserLayout : function() {
 		var featuresWidth = 200;
 		var controlHeight = 50;
 		featuresDiv.style.position="absolute";
-		featuresDiv.style.overflow="scroll";
+		featuresDiv.style.overflow="auto";
 		featuresDiv.style.top="" + logoBarHeight + "px";
 		featuresDiv.style.left="0";
 		featuresDiv.style.width="" + featuresWidth + "px";
@@ -201,40 +200,42 @@ recalcFeatureBrowserLayout : function() {
 		if (propWidth >width-featuresWidth) propWidth = width-featuresWidth; 
 		if (propWidth < 0) propWidth = 0; 
 		if ((propWidth+1) != (propertiesDiv.targetWidth+1)) animationNeeded=true;
-		var centerWidth = width - propWidth - featuresWidth;
+		var centerWidth = width - propWidth - featuresWidth - 20;
 		propertiesDiv.style.position="absolute";
 		propertiesDiv.style.overflow=propWidth>50?"auto":"hidden";
 		propertiesDiv.style.top="" + logoBarHeight + "px";
-		propertiesDiv.style.left="" + (centerWidth + featuresWidth) + "px";
+		propertiesDiv.style.left="" + (centerWidth + featuresWidth + 20) + "px";
 		propertiesDiv.style.width=propWidth + "px";
 		propertiesDiv.style.height="" + (height - logoBarHeight) + "px";	
 		
 		// Recalc divider div dimensions
 		if (typeof dividerDiv.demoHeight == 'undefined') dividerDiv.demoHeight = Math.floor(height/2);
 		if (dividerDiv.isActive) {
-			dividerDiv.demoHeight = dividerDiv.mouseY-7 - logoBarHeight;
+			dividerDiv.demoHeight = dividerDiv.mouseY-10 - logoBarHeight;
+			if (dividerDiv.demoHeight < 0) dividerDiv.demoHeight = 0;
 		} 
-		var dividerHeight = 8;
+		var dividerHeight = 17;
 		dividerDiv.style.position="absolute";
 		dividerDiv.style.overflow="hidden";
 		dividerDiv.style.top="" + (dividerDiv.demoHeight + logoBarHeight)+ "px";
-		dividerDiv.style.left="" + featuresWidth +"px";
-		dividerDiv.style.width="" + centerWidth + "px";
+		dividerDiv.style.left="" + (10+featuresWidth+Math.round((centerWidth-137)/2)) +"px";
+		dividerDiv.style.width="" + 137 + "px";
 		dividerDiv.style.height="" + dividerHeight + "px";		
 		
 		// Recalc tabs div dimensions
 		tabsDiv.style.position="absolute";
-		tabsDiv.style.overflow="auto";
+		tabsDiv.style.overflow="hidden";
 		tabsDiv.style.top="" + (dividerDiv.demoHeight + dividerHeight + logoBarHeight) + "px";
-		tabsDiv.style.left="" + featuresWidth + "px";
+		tabsDiv.style.left="" + (featuresWidth + 10) + "px";
 		tabsDiv.style.width="" + centerWidth + "px";
-		tabsDiv.style.height="" + (height - dividerDiv.demoHeight - dividerHeight - logoBarHeight) + "px";		
+		tabsDiv.style.height="" + (height - dividerDiv.demoHeight - dividerHeight - logoBarHeight) + "px";	
+		itmill.themes.Demo.prototype.updateTabsContentHeight();	
 		
 		// Recalc demo div dimensions
 		demoDiv.style.position="absolute";
 		demoDiv.style.overflow="auto";
 		demoDiv.style.top="" + logoBarHeight + "px";
-		demoDiv.style.left="" + featuresWidth + "px";
+		demoDiv.style.left="" + (featuresWidth + 10) + "px";
 		demoDiv.style.width="" + centerWidth + "px";
 		demoDiv.style.height="" + dividerDiv.demoHeight + "px";	
 		
@@ -254,13 +255,20 @@ recalcFeatureBrowserLayout : function() {
 
 renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 	arguments.callee.$.renderTabSheet.call(this,renderer,uidl,target,layoutInfo);
-	if (target.id == "featurebrowser-tabs" || target.parentNode.id ==  "featurebrowser-tabs") {
-		var content = renderer.theme.elementByIndex(
-				target.id == "featurebrowser-tabs" ? 
-				renderer.theme.elementByIndex(target.childNodes,0).childNodes : 
-				target.childNodes,1);
-		content.style.border='0';
-	}
+	if (target.id == "featurebrowser-tabs" || target.parentNode.id ==  "featurebrowser-tabs") 
+		itmill.themes.Demo.prototype.updateTabsContentHeight();
+},
+
+updateTabsContentHeight : function() {
+	try {
+		var tabsDiv = document.getElementById("featurebrowser-tabs");
+		var tabsComponent = itmill.themes.Demo.prototype.elementByIndex(tabsDiv.childNodes,0);
+		var tabs = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,0);
+		var content = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,1);
+		content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight) + "px";
+		content.style.borderBottom="0";
+		content.style.overflow='auto';
+	} catch (e) {}
 },
 
 elementByIndex : function(nodeArray, index) {
