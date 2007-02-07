@@ -3172,13 +3172,11 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         var extraH = div.offsetHeight - cout.offsetHeight;
         // snip or grow size from "scrolling" part
         cout.style.height = ( parseInt(model.meta.sizeableH) - extraH ) + "px";
-        div.style.height = model.meta.sizeableH + "px";
     } else {
         // fix containers height to initial height of table + scrollbar
         cout.style.height = table.offsetHeight+16+"px";
     }
-    
-    
+
     model.aSpacer.style.height = prePad + "px";
     model.bSpacer.style.height = postPad + "px";
     
@@ -3188,6 +3186,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
  	div.recalc(pid,target);
 	cout.scrollLeft = scrolledLeft;
 	hout.scrollLeft = scrolledLeft;
+
+
     
     // fix width of table component to its initial width if not explicetely set via Sizeable interface
     if(!model.meta.sizeableW) {
