@@ -5,21 +5,6 @@
  *****************************************************/
 
 
-/** TODO REMOVE
- * Feature browser specific
- * ------------------------
- */
-/*
-.itmtk .tree-menu {
-	height: 400px;
-	width: 200px;
-	overflow: auto;
-	padding: 3px;
-	border: solid 1px #d8e2f3;
-	background-color: #fff;
-}
-*/
-
 
 
 
@@ -611,10 +596,10 @@
 
 /* Normal style */
 
-.itmtk .tree {
+.itmtk .tree, .itmtk .tree-menu {
 	border: none;
 }
-.itmtk .tree .treecaption {
+.itmtk .tree .treecaption, .itmtk .tree-menu .treecaption {
 	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
 	height: 15px;
 	color: white;
@@ -623,7 +608,7 @@
 	font-weight: bold;
 	border: 1px solid #a3b5ce;
 }
-.itmtk .tree .content {
+.itmtk .tree .content, .itmtk .tree-menu .content {
 	border-top:					solid 0px #d8dbe3;
 	border-right:				solid 2px #aaacbc;
 	border-bottom:				solid 2px #9193a0;
@@ -631,30 +616,30 @@
 	background: #fff url(../img/common/panel_bg.png) repeat-x;
 	padding: 8px 5px 5px 5px;
 }
-.itmtk .tree .content, 
-.tree .content .node, 
-.tree .content .nodes, 
-.tree .content .node IMG {
+.itmtk .tree .content, .itmtk .tree .content .node, .itmtk .tree .content .nodes, .itmtk .tree .content .node IMG, 
+.itmtk .tree-menu .content, .itmtk .tree-menu .content .node, .itmtk .tree-menu .content .nodes, .itmtk .tree-menu .content .node IMG {
 	background-color: #fff;
 }
 .itmtk .tree-menu .node span, 
-.tree .node span {
+.itmtk .tree .node span {
 	line-height: 16px;
 	white-space: nowrap;
 	position: static;
 }
-.itmtk .tree .nodes {
+.itmtk .tree .nodes, .itmtk .tree-menu .nodes,  {
 	padding-left: 16px;
 }
 .itmtk .tree-menu .node img, 
-.tree .node img {
+.itmtk .tree .node img {
 	vertical-align: middle;
 }
-.itmtk .tree .over  {
+.itmtk .tree .over, .itmtk .tree-menu .over  {
 	text-decoration: none;
 }
 .itmtk .tree .content DIV.selected, 
-.tree .content .selected IMG {
+.itmtk .tree .content .selected IMG,
+.itmtk .tree-menu .content DIV.selected, 
+.itmtk .tree-menu .content .selected IMG {
 	background-color: #faffd1;
 	color: #2c3437;
 	font-weight: normal;

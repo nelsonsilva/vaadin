@@ -1,0 +1,9 @@
+
+.itmtk .tree-menu .content, 
+.itmtk .tree-menu .content .node, 
+.itmtk .tree-menu .content .nodes, 
+.itmtk .tree-menu .content .node IMG {
+	background: none;
+	border: 0;
+}
+

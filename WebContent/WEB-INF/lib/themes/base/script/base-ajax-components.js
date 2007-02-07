@@ -1,4 +1,3 @@
-// IE DOM Node support
 if(document.all) {
 	Node = new Object();
 	Node.ELEMENT_NODE = 1; 
@@ -80,7 +79,6 @@ registerTo : function(client) {
     client.registerRenderer(this,"table","list",this.renderPagingTable);
 	client.registerRenderer(this,"tree",null,this.renderTree);
 	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
-	//client.registerRenderer(this,"tree","menu",this.renderTreeMenu);
 },
 
 

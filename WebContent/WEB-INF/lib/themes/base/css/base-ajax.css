@@ -548,41 +548,35 @@ IMG.overlay {
 }
 
 /* Tree */
-.itmtk .tree {
+.itmtk .tree, itmtk .tree-menu {
 	border: 1px solid;
 	border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
-.itmtk .tree .caption {
+.itmtk .tree .caption, .itmtk .tree-menu .caption {
 	border: 1px solid;
 	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 	padding: 0.0em 0.4em 0.1em 0.4em;
 }
-.itmtk .tree .content, .tree .content .node, .tree .content .nodes, .tree .content .node IMG {
+.itmtk .tree .content, .itmtk .tree .content .node, .itmtk .tree .content .nodes, .itmtk .tree .content .node IMG, 
+.itmtk .tree-menu .content, .itmtk .tree-menu .content .node, .itmtk .tree-menu .content .nodes, .itmtk .tree-menu .content .node IMG {
 	background-color: Window;
 }
 
-.itmtk .tree .node, .tree-menu .node {
+.itmtk .tree .node, .itmtk .tree-menu .node {
 	border: none;
 	padding: 0px;
 	height: 16px;
 	white-space: nowrap;
 }
 
-.itmtk .tree-menu .node span , .tree .node span {
-	line-height: 16px;
-	white-space: nowrap;
-	position: relative;
-	bottom: 3px;
-}
-
-.itmtk .tree .nodes {
+.itmtk .tree .nodes, .itmtk .tree-menu .nodes {
 	padding-left: 16px;
 }
-.itmtk .tree .over  {
+.itmtk .tree .over,.itmtk .tree-menu .over  {
 	text-decoration: underline;
 	color: Highlight;
 }
-.itmtk .tree .content DIV.selected, .tree .content .selected IMG {
+.itmtk .tree .content DIV.selected, .itmtk .tree .content .selected IMG, .itmtk .tree-menu .content DIV.selected, .itmtk .tree-menu .content .selected IMG {
 	background-color: Highlight;
 	color: HighlightText;
 	font-weight: normal;

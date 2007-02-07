@@ -21,6 +21,7 @@
 		<!-- UIDL Mode support files -->
 		<fileset mode="ajax">
 			<file name="featurebrowser/components.js" />
+			<file name="featurebrowser/featurebrowser.css" />
 		</fileset>
 	</fileset>
 	
