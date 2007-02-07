@@ -2793,7 +2793,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     
     model.meta.cacheRate = 3; // means times pagelength
-    model.meta.cacheReactRate = 0.6; // means threshold when new cache row fetch is instantiated
+    // means threshold when new cache row fetch is instantiated 
+    // if 0 fetches only when really needed, 
+    // when same as reactRate fetches even if scrolled only one row
+    model.meta.cacheReactRate = 2.3; 
     model.meta.cacheSize = Math.ceil(model.meta.cacheRate*model.meta.pagelength); // means times pagelength
     model.meta.cacheReactTh = Math.ceil(model.meta.cacheReactRate*model.meta.pagelength); // means threshold when new cache row fetch is instantiated
 	
