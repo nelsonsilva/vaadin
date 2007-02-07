@@ -1,6 +1,7 @@
 
 /* Feature browser styles */
 
+
 .itmtk .tree-menu .content, 
 .itmtk .tree-menu .content .node, 
 .itmtk .tree-menu .content .nodes, 
@@ -19,12 +20,6 @@
 }
 
 #featurebrowser-mainlayout {
-	position: absolute;
-	overflow: hidden;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
 	background: white;
 	background-image: url(img/m_bg.png);
 	background-repeat: no-repeat;

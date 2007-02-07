@@ -171,22 +171,22 @@ recalcFeatureBrowserLayout : function() {
 	var logoBarHeight = 62;
 
 	// Get whole window contents size
+	mainDiv.style.width="100%";
+	mainDiv.style.height="100%";
+	mainDiv.style.position="absolute";
+	mainDiv.style.top="0";
+	mainDiv.style.left="0";
 	var width = mainDiv.offsetWidth;
 	var height = mainDiv.offsetHeight;
-	
-	// Set minimum size for window
+	if (document.body.offsetWidth > 10) width = document.body.offsetWidth;
+	if (document.body.offsetHeight > 10) height = document.body.offsetHeight;
 	if (height < 400 || width < 600) {
 		height = 400;
 		width = 600;
-		
-		// Fix IE bugs
-		if (document.body.offsetWidth > width) width = document.body.offsetWidth;
-		if (document.body.offsetHeight > height) height = document.body.offsetHeight;
-
 		mainDiv.style.width="" + width + "px";
 		mainDiv.style.height="" + height + "px";
 	}
-	
+		
 	// Recalc features div dimensions
 	var featuresWidth = 200;
 	var controlHeight = 50;
@@ -280,7 +280,7 @@ updateTabsContentHeight : function() {
 		var tabsComponent = itmill.themes.Demo.prototype.elementByIndex(tabsDiv.childNodes,0);
 		var tabs = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,0);
 		var content = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,1);
-		content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight) + "px";
+		content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight-13) + "px";
 		content.style.borderBottom="0";
 		content.style.overflow='auto';
 	} catch (e) {}
