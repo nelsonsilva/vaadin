@@ -265,19 +265,35 @@ IMG.overlay {
 }
 
 /* Table */
+.itmtk .table td,
+.itmtk .table tr {
+	border:0;
+	margin:0;
+	padding:0;
+}
 
 .itmtk .table .tablestatus {
 	position: absolute;
 	display:none;
 	padding: 0.2em 0.4em 0.1em 0.4em;
+	width: 150px;
 	border: 1px solid InfoText;
 	background-color: #ffffe1; /* InfoBackground - doesn't work on Mac (black); */
 }
 
-.itmtk .table .colsel {
+.itmtk .table .colsel-container {
 	position:absolute;
-	margin: 0.25em ;
-	width: 0.4em;
+	height:20px;
+}
+
+* html .itmtk .table .colsel-container {
+	margin-left:10px;
+}
+
+.itmtk .table .colsel {
+	z-index:2;
+	width: 10px;
+	height: 14px;
 	height: 0.4em;
 	border: 1px solid ButtonText;
 	border-top: 2px solid ButtonText;
@@ -316,10 +332,6 @@ IMG.overlay {
 	padding-bottom: 0.2em;
 	border-bottom: 1px solid ButtonShadow;
 }
-.itmtk .table .hin .hah {
-	border-right: 1px solid ButtonShadow; 
-	padding-left: 0.2em;
-}
 .itmtk .table .hin td {
 	overflow:hidden;
 }
@@ -335,34 +347,28 @@ IMG.overlay {
 	padding:0;
 }
 .itmtk .table .headerContent {
+	float:right;
 	overflow:hidden;
 	height:100%;
 	white-space:nowrap;
+	margin:0;
+	padding:0;
 	/* same margin as for normal cells */
 	padding-left: 3px;
-	/* extra margin to fill empty pixels in cell, 
-	otherwice d n' d will fail when increasing wider than visible area,
-	value on next line is for IE */
-	margin-right:13px;
-}
-html>body .table .hin div.headerContent {
-	/* for IE this needs to be 1px wider for some unknown reason, set thinner for real browsers
-	TODO: IE7 has the same problem but goes here :( Introduce IE spesific fix CSS file
-	 */
 	margin-right:12px;
+	/* Due IE 6 oddities element must be inline to be floated and respect margin
+	 * Shouln't brake other browsers
+	 */
+	display:inline;
 }
+
+
 .itmtk .table .cout table.cin {
 	margin:0;
 	padding:0;
 	border:0;
 	border-collapse: collapse;
 	empty-cells: show;
-}
-.itmtk .table .cin td,
-.itmtk .table .cin tr {
-	border:0;
-	margin:0;
-	padding:0;
 }
 /* spacer for unloaded rows */
 .itmtk .table .cout div.spacer {

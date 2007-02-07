@@ -2893,8 +2893,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	delete alNode;
 
-	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"display:none;\"></div><TABLE cellpadding=0 cellspacing=0 border=0 width=100%><TBODY><TR valign=top class=bg><TD></TD><TD class=\"colsel-container\" align=center width=16></TD></TR></TBODY></TABLE>";
-	var vcols = inner.childNodes[1].firstChild.firstChild.childNodes[1];
+	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"display:none;\"></div>";
+    inner.innerHTML += '<div class="colsel-container"></div><div class="hcontainer"></div>';
+	var vcols = model.vcols = inner.childNodes[1];
 	if (visiblecols) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div></DIV>";
 		var icon = vcols.firstChild; 
@@ -2924,13 +2925,12 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var alignments = new Array();
 	
 	// headers
-	var hout = theme.createElementTo(inner.childNodes[1].firstChild.firstChild.firstChild,"div","bg");
+	var hout = theme.createElementTo(inner.childNodes[2],"div","bg");
     model.hout = hout; // add reference for later use
-	hout.style.paddingRight = "0px";
 	hout.id = pid+"hout";
 	hout.style.overflow = "hidden";	
 	theme.addCSSClass(hout,"hout");
-	var html = "<TABLE id=\""+pid+"hin\" class=\"hin\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><TBODY><TR>";	
+	var html = "<div><TABLE id=\""+pid+"hin\" class=\"hin\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><TBODY><TR>";	
 	if (rowheaders) {
 		html += "<td ";
 		if (colWidths["heh"]) {
@@ -2962,7 +2962,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         var cellClasses = '';
 		if (colWidths[cid]) {
             // set width explicitely
-			html += 'width="'+colWidths[cid]+ '" style="width:'+colWidths[cid]+'px;" ';
+			html += 'width="'+colWidths[cid]+'"';
 		} 
 		if (sortkey == cid) {
             html += "sorted=\"true\" ";
@@ -2992,12 +2992,12 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		if (colWidths[cid]) {
         // header contents widht needs to be explicitely set to WIDTH - COL_RESIZER_WIDTH
         // to enable grabbing resizer when header cells content overflows
-			html += 'style="width:'+(colWidths[cid] - 15)+'px;"';
+			html += 'style="width:'+(colWidths[cid] - 17)+'px;"';
 		} 
 		html += ">";
         html += (iconUrl?"<img src=\""+iconUrl+"\" class=\"icon\">":"")+cap+"</div></TD>";
 	}
-	html += "</TR></TBODY></TABLE>";
+	html += '</TR></TBODY></TABLE><div>';
 	hout.innerHTML = html;
 	
 	// content
@@ -3169,6 +3169,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         cout.style.height = table.offsetHeight+16+"px";
     }
     
+    
     model.aSpacer.style.height = prePad + "px";
     model.bSpacer.style.height = postPad + "px";
     
@@ -3191,16 +3192,22 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         }
         div.style.width = model.state.width;
     }
+    cout.style.width = (div.offsetWidth - 4) + "px";
+    hout.style.width = (div.offsetWidth - 4) + "px";
+    // ensure browsers don't make any intelligent cell resizing
+    hout.firstChild.style.width = "6000px";
+    
 
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
-	var p = client.getElementPosition(inner);
-	status.style.top = Math.round(p.y + p.h/2 - 40) + "px";
-	status.style.left = Math.round(p.x + p.w/2 - 50 ) +"px";
+	var p = client.getElementPosition(hout);
+	status.style.top = Math.round(p.y + p.h/2 -20 ) + "px";
+	status.style.left = Math.round(p.x + div.offsetWidth/2 - vcols.offsetParent.offsetLeft -75 ) +"px";
  	theme.scrollTableAddScrollHandler(client,theme,div);
  	theme.scrollTableAddScrollListener(theme,div);
  	
- 	
+    vcols.style.left = (div.offsetWidth + p.x - vcols.offsetParent.offsetLeft - 20) + "px";
+    
  	// Column order drag & drop
  	var hin = target.ownerDocument.getElementById(pid+"hin");
     var h = hin.getElementsByTagName("td");
@@ -3432,9 +3439,8 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
             // minimum height = scrollresizer + space for sort indicator + margin
 			if (w < 17) w = 17;
 			try {
-                td.width = w;
-				td.style.width = w+"px";
-				td.lastChild.style.width = (w-15)+"px";
+				td.width = w;
+                td.lastChild.style.width = (w-17)+"px";
 				colWidths[cid] = w;
 			} catch (err) {
 				client.debug("Failed: d&d target.style.left="+ offset+"px");
@@ -3450,7 +3456,6 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 			evt.stop();
 			element.ownerDocument.onselectstart = null;
 			element.dragging = false;
-			// TODO apply for all rows
 			table.recalc(pid,table);
 			return false;
 	};
@@ -3483,7 +3488,7 @@ scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,c
 		//cin.style.width = w;
 		//hout.style.width = w;
 		//hin.style.width = w;
-		hout.style.width = hout.offsetParent.offsetWidth + "px";
+		//hout.style.width = hout.offsetParent.offsetWidth + "px";
 		//div.recalc();
 	});
 },
@@ -3596,34 +3601,37 @@ scrollTableRecalc : function(pid,target) {
  	var hin = target.ownerDocument.getElementById(pid+"hin");
     var cin = target.ownerDocument.getElementById(pid+"cin");
     var h = hin.getElementsByTagName("td");
-    var c = cin.getElementsByTagName("td");           
+    var c = cin.getElementsByTagName("td");
+    var m = div.model;
+    
 
     if(!colWidths[h[0].getAttribute("cid")]) {
         // this is the initial calculation, we'll sync header and column depending on which is wider
         // loop headers and columns natural widths, browser may squeeze them to fit whole table
         var defPad = 10;
         for (var i = 0;i<h.length;i++) {
-            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].clientWidth > c[i].clientWidth) ? h[i].clientWidth : c[i].clientWidth) + defPad;
+            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].lastChild.clientWidth > c[i].clientWidth) ? (h[i].clientWidth) : c[i].clientWidth) + defPad;
         }
     }
-    for (var i = 0;i<h.length;i++) {
-        var w = colWidths[h[i].getAttribute("cid")];
-        h[i].width = w ;
-        h[i].style.width = w + "px";
+    for (var i = 0;i< h.length ;i++) {
+        var cell = h[i];
+        var cid = cell.getAttribute("cid");
+        var w = colWidths[cid];
+        cell.width = w;
         // set div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
         // now text doesn't overlap resizer & sort indicator
-        h[i].lastChild.style.width = (w - 15)+"px";
+        cell.lastChild.style.width = (w - 17)+"px";
+
         // enter looping rows only if width is changed
-        if(c[i].width != w ) {
+        if(c[i].offsetWidth != w ) {
             var rows = c.length/h.length;
             for (var j=0;j<rows;j++) {
                 var idx = j*h.length+i;
                 if (c[idx]) {
-                    c[idx].width = w;
                     // workaround for IE overflow bug, set width explicitely for container div
                     // w - (borderwidth + margin/padding)
                     c[idx].firstChild.style.width = (w-4)+"px";
-                    colWidths[h[i].getAttribute("cid")] = w;
+                    c[idx].width = w;
                 }
             }
         }
