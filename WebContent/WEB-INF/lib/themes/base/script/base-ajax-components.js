@@ -2791,10 +2791,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     
     
-    model.meta.cacheRate = 2; // means times pagelength
-    model.meta.cacheReactRate = 1; // means threshold when new cache row fetch is instantiated
-    model.meta.cacheSize = Math.ceil(2*model.meta.pagelength); // means times pagelength
-    model.meta.cacheReactTh = Math.ceil(1*model.meta.pagelength); // means threshold when new cache row fetch is instantiated
+    model.meta.cacheRate = 3; // means times pagelength
+    model.meta.cacheReactRate = 0.6; // means threshold when new cache row fetch is instantiated
+    model.meta.cacheSize = Math.ceil(model.meta.cacheRate*model.meta.pagelength); // means times pagelength
+    model.meta.cacheReactTh = Math.ceil(model.meta.cacheReactRate*model.meta.pagelength); // means threshold when new cache row fetch is instantiated
 	
     // column order
 	model.colorder = new Array();
@@ -3201,7 +3201,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
 	var p = client.getElementPosition(hout);
-	status.style.top = Math.round(p.y + p.h/2 -20 ) + "px";
+	status.style.top = Math.round(p.y + p.h/2 - vcols.offsetParent.offsetTop ) + "px";
 	status.style.left = Math.round(p.x + div.offsetWidth/2 - vcols.offsetParent.offsetLeft -75 ) +"px";
  	theme.scrollTableAddScrollHandler(client,theme,div);
  	theme.scrollTableAddScrollListener(theme,div);
@@ -3510,7 +3510,7 @@ scrollTableAddScrollListener : function (theme,target) {
  		}
 		cout.scrollTimeout = setTimeout(function () {
 				cout.scrollHandler();
-			},500)	
+			},250)	
  	});
 },
 
