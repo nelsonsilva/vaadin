@@ -210,8 +210,8 @@ recalcFeatureBrowserLayout : function() {
 	propertiesDiv.style.height="" + (height - 15) + "px";	
 	var buttonDiv = document.getElementById("featurebrowser-properties-toggler");
 	buttonDiv.style.left = "" + (centerWidth + featuresWidth - 20 + 40) + "px"
-	if (propWidth == 0) buttonDiv.src = buttonDiv.showPng;
-	if (propWidth == propertiesDiv.maxWidth) buttonDiv.src = buttonDiv.hidePng;
+	if (propWidth == 0) { buttonDiv.src = buttonDiv.showPng; buttonDiv.style.height = "92px"; }
+	if (propWidth == propertiesDiv.maxWidth) { buttonDiv.src = buttonDiv.hidePng; buttonDiv.style.height = "23px"; }
 	itmill.themes.Demo.prototype.updatePropertiesContentHeight();
 	
 	// Recalc divider div dimensions
