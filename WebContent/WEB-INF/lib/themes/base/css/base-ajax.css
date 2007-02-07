@@ -221,6 +221,17 @@ IMG.overlay {
 .itmtk .panelcaption {
 	padding: 0.2em 0.4em 0.2em 0.4em;
 }
+
+.itmtk .panel {
+	overflow: auto;	
+}
+.itmtk .panel .panelborder {
+	margin-bottom:0;
+}
+.itmtk .panel .content {
+	margin-bottom:0;
+}
+
 .itmtk .panel .panelcaption {
 	border-bottom: 2px groove ThreeDHighlight;
 }
@@ -355,13 +366,18 @@ IMG.overlay {
 	padding:0;
 	/* same margin as for normal cells */
 	padding-left: 3px;
-	margin-right:12px;
+	padding-right:12px;
 	/* Due IE 6 oddities element must be inline to be floated and respect margin
 	 * Shouln't brake other browsers
 	 */
 	display:inline;
 }
 
+.itmtk .table .asc .headerContent,
+.itmtk .table .desc .headerContent {
+	padding-right:0px;
+	margin-right:12px;
+}
 
 .itmtk .table .cout table.cin {
 	margin:0;
