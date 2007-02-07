@@ -2781,7 +2781,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var pagelength = model.meta.pagelength = parseInt(uidl.getAttribute("pagelength"));
     model.meta.sizeableW = uidl.getAttribute("width"); 
     model.meta.sizeableH = uidl.getAttribute("height"); 
-	var colheaders = model.meta.colheaders = uidl.getAttribute("colheaders")||false;
+	model.meta.colheaders = uidl.getAttribute("colheaders")||false;
 	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
     model.request.rows = parseInt(uidl.getAttribute("rows"));
     model.request.firstrow = parseInt(uidl.getAttribute("firstrow"));
@@ -2947,8 +2947,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			html += "width:"+(colWidths["heh"] - 15)+"px;";
 		}
 		html += "\"></div></td>";
-	}	
-	var chs = model.headerCache = theme.getFirstElement(uidl, "cols").getElementsByTagName("ch");
+	}
+
+	var chs = theme.getFirstElement(uidl, "cols").getElementsByTagName("ch");
 	var len = chs.length;
 	for (var i=0;i<len;i++) {
 		var col = chs[i];
@@ -3003,7 +3004,11 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 	html += '</TR></TBODY></TABLE><div>';
 	hout.innerHTML = html;
-	
+	if(!model.meta.colheaders) {
+        hout.style.display = "none";
+        vcols.style.display = "none";
+    }
+    
 	// content
 	cout = theme.createElementTo(inner,"div");
     model.cout = cout; // save reference for use in handlers
@@ -3205,12 +3210,12 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
 	var p = client.getElementPosition(hout);
-	status.style.top = Math.round(p.y + p.h/2 - vcols.offsetParent.offsetTop ) + "px";
-	status.style.left = Math.round(p.x + div.offsetWidth/2 - vcols.offsetParent.offsetLeft -75 ) +"px";
- 	theme.scrollTableAddScrollHandler(client,theme,div);
- 	theme.scrollTableAddScrollListener(theme,div);
- 	
-    vcols.style.left = (div.offsetWidth + p.x - vcols.offsetParent.offsetLeft - 20) + "px";
+	status.style.marginTop = 35 + "px";
+	status.style.marginLeft = Math.round(div.offsetWidth/2 - 75 ) +"px";
+    vcols.style.marginLeft = (div.offsetWidth - 22) + "px";
+
+    theme.scrollTableAddScrollHandler(client,theme,div);
+    theme.scrollTableAddScrollListener(theme,div);
     
  	// Column order drag & drop
  	var hin = target.ownerDocument.getElementById(pid+"hin");
