@@ -2471,11 +2471,13 @@ renderLink : function(renderer,uidl,target,layoutInfo) {
 	theme.renderDefaultComponentHeader(renderer,uidl,link);
 	
 	// Description under link
+	/* Unnecessary, tooltip description already.
 	var descriptionText = theme.getElementContent(uidl,"description");
 	if (descriptionText) {
 		var desc = theme.createElementTo(link,"div", "description");
 		theme.createTextNodeTo(desc,descriptionText);
 	}
+	*/
 },
 
 addLinkOpenWindowListener : function(theme,client,element,event,url,target,features) {
