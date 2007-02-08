@@ -2210,16 +2210,9 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 	// Get the window object of the iframe		
 	var ifr = window.frames[frameName];	
 	
-	// TODO: FF fix. The above does not work in FF, so we
-	// have to work our way around it. Iterate all frames.
+    // FF don't have iframes in frames object
 	if (ifr == null) {
-		var fi = 0;
-		while (fi < window.frames.length) {
-			if (window.frames[fi].frameElement != null && window.frames[fi].frameElement.name == frameName) {
-				ifr = window.frames[fi];
-			}
-			fi++;
-		}
+        ifr = iframe.contentWindow;
 	} 
 		
 	if (ifr != null) {
@@ -2251,6 +2244,7 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
         submit.disabled = true;
         submit.onclick = function() {
             iframe.style.visibility='hidden';
+            iframe.submitted = true;
         }
         upload.onchange = function() {
             if(upload.value) {
@@ -2264,17 +2258,13 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 
 		// Attach event listeners for processing the chencges after upload.
 		if (document.all && !window.opera) {
-			iframe.onreadystatechange = function() {			
-				if (iframe.readyState == "complete") {
-                    iframe.onreadystatechange = null;
-                    client.processVariableChanges(true);
-                    // FIXME next line is workaround to 'iframe is not instantly updated after upload is done' bug.
-                    // location.reload();   
-				}
+			iframe.onreadystatechange = function() {
+                iframe.onreadystatechange = null;
+                client.processVariableChanges(true);
 			};
 		} else {
-			iframe.onload = function() {				
-				if (ifr.document != null) {
+			iframe.onload = function() {
+				if (iframe.submitted) {
                     iframe.onload = null;
                     client.processVariableChanges(true);
                     // FIXME next line is workaround to 'iframe is not instantly updated after upload is done' bug.
