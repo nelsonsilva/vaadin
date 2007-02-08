@@ -295,6 +295,8 @@ IMG.overlay {
 .itmtk .table .colsel-container {
 	position:absolute;
 	height:20px;
+	/* Needed for Safari */
+	z-index: 1;
 }
 
 * html .itmtk .table .colsel-container {
@@ -302,7 +304,7 @@ IMG.overlay {
 }
 
 .itmtk .table .colsel {
-	z-index:2;
+	display:absolute;
 	width: 10px;
 	height: 14px;
 	height: 0.4em;
