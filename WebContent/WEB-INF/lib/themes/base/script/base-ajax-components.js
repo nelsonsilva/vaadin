@@ -767,14 +767,16 @@ renderActionPopup : function(renderer, uidl, to, actions, actionVar, id, popupEv
  *  @param y			vertical popup position
  *  @param delay		delay before popping up
  *  @param defWidth		(optional) default width for the popup
+ *  @param dontHideSelects (optional) set true if there's no need to hide browsers select components (for IE).
  *  
  */
-showPopup : function(client,popup, x, y, delay, defWidth) {
+showPopup : function(client,popup, x, y, delay, defWidth, dontHideSelects) {
+
 	if (this.popupTimeout) {
 		clearTimeout(this.popupTimeout);
 		delete this.popupTimeout;
 	}
-	if (!popup) { 
+	if (!popup) {
 		var popup = this.popup;
 		this.popupShowing = true;
 		var scrollTop = (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
@@ -783,20 +785,22 @@ showPopup : function(client,popup, x, y, delay, defWidth) {
 		var docHeight = document.body.clientHeight;
 		this.removeCSSClass(popup,"hide");
 		
-		var ua = navigator.userAgent.toLowerCase();
-        if (ua.indexOf("msie")>=0) {
-			var sels = popup.ownerDocument.getElementsByTagName("select");
-			if (sels) {
-				var len = sels.length;
-				var hidden = new Array();
-				for (var i=0;i<len;i++) {
-					var sel = sels[i];
-					if (sel.style&&sel.style.display!="none") {
-						sel.style.visibility = "hidden";
-						hidden[hidden.length] = sel;
-					}
-				}		
-				this.popupSelectsHidden = hidden;
+		if(popup.dontHideSelects) {
+			var ua = navigator.userAgent.toLowerCase();
+	        if (ua.indexOf("msie")>=0) {
+				var sels = popup.ownerDocument.getElementsByTagName("select");
+				if (sels) {
+					var len = sels.length;
+					var hidden = new Array();
+					for (var i=0;i<len;i++) {
+						var sel = sels[i];
+						if (sel.style&&sel.style.display!="none") {
+							sel.style.visibility = "hidden";
+							hidden[hidden.length] = sel;
+						}
+					}		
+					this.popupSelectsHidden = hidden;
+				}
 			}
 		}
 		/* TODO fix popup width & position */
@@ -838,7 +842,7 @@ showPopup : function(client,popup, x, y, delay, defWidth) {
 		posX -= 20;
 	}
     
-    
+    popup.dontHideSelects = dontHideSelects;
 	popup.style.left = posX+"px";
 	popup.style.top = posY+"px";
 */
@@ -892,13 +896,12 @@ togglePopup : function(popup, x, y, delay, defWidth, blocker) {
 		this.hidePopup();
 		if(blocker) this.addCSSClass(blocker,"hide");
 	} else {
-		this.showPopup(client,popup,x,y,delay,defWidth);
+		this.showPopup(client,popup,x,y,delay,defWidth,blocker?true:false);
 		if(blocker) {
 			blocker.style.position = "absolute";
 			// TODO fix this hack (position and size calculated rather randomly)
 			blocker.style.width = popup.clientWidth + 20 + "px";
 			blocker.style.height = popup.clientHeight + 2 + "px";
-			//blocker.style.left = x - 220 + "px";
 			blocker.style.background = "transparent";
 			blocker.style.filter = "alpha(opacity=0)";
 			blocker.style.opacity = "0";
