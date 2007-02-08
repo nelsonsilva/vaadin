@@ -899,13 +899,11 @@ togglePopup : function(popup, x, y, delay, defWidth, blocker) {
 		this.showPopup(client,popup,x,y,delay,defWidth,blocker?true:false);
 		if(blocker) {
 			blocker.style.position = "absolute";
-			// TODO fix this hack (position and size calculated rather randomly)
-			blocker.style.width = popup.clientWidth + 20 + "px";
-			blocker.style.height = popup.clientHeight + 2 + "px";
+			blocker.style.width = popup.offsetWidth + "px";
+			blocker.style.height = popup.offsetHeight + "px";
 			blocker.style.background = "transparent";
 			blocker.style.filter = "alpha(opacity=0)";
 			blocker.style.opacity = "0";
-			blocker.style.left = "-10px";
 			this.removeCSSClass(blocker,"hide");
 		}
 	}
