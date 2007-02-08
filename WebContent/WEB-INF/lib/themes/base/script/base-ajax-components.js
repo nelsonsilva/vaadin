@@ -3455,6 +3455,7 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 				td.width = w;
                 td.lastChild.style.width = (w-17)+"px";
 				colWidths[cid] = w;
+                table.recalc(pid,table);
 			} catch (err) {
 				client.debug("Failed: d&d target.style.left="+ offset+"px");
 			}
@@ -3469,7 +3470,6 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 			evt.stop();
 			element.ownerDocument.onselectstart = null;
 			element.dragging = false;
-			table.recalc(pid,table);
 			return false;
 	};
 	
