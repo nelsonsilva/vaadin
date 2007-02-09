@@ -2912,9 +2912,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	if (rowheaders) {
 		html += "<td ";
 		if (colWidths["heh"]) {
-			html += "style=\"width:"+colWidths["heh"]+"px;\" ";
+			html += "width="+colWidths["heh"]+"\" ";
 		}
-		html += "cid=\"heh\" id=\""+pid+"heh\" class=\"\">";
+		html += "cid=\"heh\" id=\""+pid+"heh\" class=\"heh\">";
         html += "<img id=\""+pid+"hah\" src=\""+theme.root+"img/table/handle.gif\" class=\"colresizer\" >";
         html += "<div class=\"headerContent\" style=\"";
     	if (colWidths["heh"]) {

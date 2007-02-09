@@ -375,6 +375,7 @@ IMG.overlay {
 	display:inline;
 }
 
+.itmtk .table .heh .headerContent,
 .itmtk .table .asc .headerContent,
 .itmtk .table .desc .headerContent {
 	padding-right:0px;
