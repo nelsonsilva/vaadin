@@ -30,7 +30,6 @@
         <Item></Item>
         <Item>127.0.0.1</Item>
         <Item>localhost</Item>
-        <Item>www.acme.com</Item>
       </Array>
     </Set>
   </Call>
