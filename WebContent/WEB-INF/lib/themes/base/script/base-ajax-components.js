@@ -2201,79 +2201,46 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 
 	// Unique name for iframes
 	var frameName = "upload_"+varNode.getAttribute("id")+"_iframe";
-	
-	var iframe = theme.createElementTo(div, "iframe","upload-iframe");
-	iframe.id = frameName;
-	iframe.name = frameName;
-	iframe.src = 'about:blank';	
+    
+    var hIframeContainer = renderer.theme.createElementTo(div,"div");
+    hIframeContainer.innerHTML = '<iframe style="height:0px;width:0px;0;margin:0;padding:0;" name="'+frameName+'"></iframe>'
 
-	// Get the window object of the iframe		
-	var ifr = window.frames[frameName];	
-	
-    // FF don't have iframes in frames object
-	if (ifr == null) {
-        ifr = iframe.contentWindow;
-	} 
-		
-	if (ifr != null) {
-	
-		// Put some initial content to IFRAME.
-		// Nasty, but without this the browsers fail 
-		// to create any elements into window.
-        // TODO import CSS file to get right background-color for IE
-		var code="<HTML><HEAD><STYLE TYPE=\"text/css\">html,body {overflow: hidden; border: none; margin: 0px; padding: 0px;background: transparent;}</STYLE></HEAD><BODY><\/BODY><\/HTML>";
-	    ifr.document.open();
-	    ifr.document.write(code);
-	    ifr.document.close();
-	        
-	    // Ok. Now we are ready render the actual upload form and 
-	    // inputs.
-	    var form = ifr.document.createElement('form');		    
-		form.setAttribute("action",client.ajaxAdapterServletUrl);
-		form.setAttribute("method", "post");
-		form.setAttribute("enctype", "multipart/form-data");
-		if (document.all && !window.opera) {
-		    form = ifr.document.createElement('<form action="'+client.ajaxAdapterServletUrl+'" method="post" enctype="multipart/form-data">');		    
-		}
-		var upload  = theme.createInputElementTo(form, "file");
-		upload.id = varNode.getAttribute("id");
-		upload.name = varNode.getAttribute("id");
-		var submit  = theme.createInputElementTo(form, "submit");	
-		submit.value = "Send";
-        // submit.value = caption
-        submit.disabled = true;
-        submit.onclick = function() {
-            iframe.style.visibility='hidden';
-            iframe.submitted = true;
-        }
-        upload.onchange = function() {
-            if(upload.value) {
-                submit.disabled = false;
-            } else {
-                submit.disabled = true;
-            }
-        }
-        
-		ifr.document.body.appendChild(form);
+    iframe = hIframeContainer.firstChild;
+    ifr = iframe.contentWindow;
 
-		// Attach event listeners for processing the chencges after upload.
-		if (document.all && !window.opera) {
-			iframe.onreadystatechange = function() {
+    // Ok. Now we are ready render the actual upload form and 
+    // inputs.
+    var formContainer = renderer.theme.createElementTo(div,"div");
+    formContainer.innerHTML = 
+    '<form action="'+client.ajaxAdapterServletUrl +
+    '" method="post" enctype="multipart/form-data" target="'+frameName+'">'+
+    '<input type="file" name="'+varNode.getAttribute("id")+'" />'+
+    '<input type="submit" value="Send" />' +
+    '</form>'
+    ;
+    
+    var form = formContainer.firstChild;
+    form.onsubmit = function() {
+        iframe.submitted = true;
+    };
+
+    iframe.submitted = false;
+	// Attach event listeners for processing the chencges after upload.
+	if (document.all && !window.opera) {
+		iframe.onreadystatechange = function() {
+            if (iframe.submitted == true) {
                 iframe.onreadystatechange = null;
                 client.processVariableChanges(true);
-			};
-		} else {
-			iframe.onload = function() {
-				if (iframe.submitted) {
-                    iframe.onload = null;
-                    client.processVariableChanges(true);
-                    // FIXME next line is workaround to 'iframe is not instantly updated after upload is done' bug.
-                    // location.reload();
-				}
-			};
-		}
-	
-	}	
+            }
+		};
+	} else {
+		iframe.onload = function() {
+			if (iframe.submitted) {
+                iframe.onload = null;
+                client.processVariableChanges(true);
+			}
+		};
+	}
 },
 
 renderEmbedded : function(renderer,uidl,target,layoutInfo) {
