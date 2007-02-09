@@ -2186,7 +2186,7 @@ renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
 	   Calendar.setup({
 	     firstDay     : 1,
 	     date		  : initDate,
-	     flat         : calDivId, // ID of the parent element
+	     flat         : calDiv, // ID of the parent element
 	     flatCallback : function (cal) {
 	        var y = cal.date.getFullYear();
 	        var m = cal.date.getMonth() + 1;
