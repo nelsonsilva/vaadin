@@ -432,6 +432,11 @@ IMG.overlay {
 	background: url('../img/table/desc.gif') right top no-repeat;
 }
 
+.itmtk .table .popup {
+	width:110px;
+	overflow: visible;	
+}
+
 /* Paging table */
 
 .itmtk .table-paging {
