@@ -2732,6 +2732,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var colWidths;
     
     var redraw = false;
+    var allowUpdate = true;
 	if (target.colWidths) {
         // we are repainting existing table
         redraw = true;
@@ -2753,8 +2754,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
     
 	var pagelength = model.meta.pagelength = parseInt(uidl.getAttribute("pagelength"));
-    model.meta.sizeableW = uidl.getAttribute("width"); 
-    model.meta.sizeableH = uidl.getAttribute("height"); 
+    model.meta.sizeableW = uidl.getAttribute("width") || false;
+    model.meta.sizeableH = uidl.getAttribute("height") || false; 
 	model.meta.colheaders = uidl.getAttribute("colheaders")||false;
 	var rowheaders = model.meta.rowheaders = uidl.getAttribute("rowheaders")||false;
     model.request.rows = parseInt(uidl.getAttribute("rows"));
@@ -2788,9 +2789,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // check if this table has been drawn before and this is just a scroll update
     if(redraw) {
         // this will be done by comparing critical parts of model object constructed from uidl and the one stored in target (paintable div)
-        var allowUpdate = true;
         for(j in model.meta) {
-            if(target.model.meta[j] != model.meta[j]) {
+            if(target.model.meta[j] != model.meta[j] || typeof(target.model.meta[j]) != typeof(model.meta[j])) {
                 allowUpdate = false;
                 break;
             }
@@ -3165,8 +3165,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     // fix width of table component to its initial width if not explicetely set via Sizeable interface
     if(!model.meta.sizeableW) {
-        model.state.width = div.offsetWidth + "px";
-        div.style.width = model.state.width;
+        model.state.width = div.style.width = (cout.scrollWidth + 20 ) + "px";
     } else {
         if(model.meta.sizeableW.indexOf("%") < 0) {
             model.state.width = model.meta.sizeableW + "px";
@@ -3175,8 +3174,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         }
         div.style.width = model.state.width;
     }
-    cout.style.width = (div.offsetWidth - 4) + "px";
-    hout.style.width = (div.offsetWidth - 4) + "px";
+    cout.style.width = (parseInt(model.state.width) - 4) + "px";
+    hout.style.width = (parseInt(model.state.width) - 4) + "px";
     // ensure browsers don't make any intelligent cell resizing
     hout.firstChild.style.width = "6000px";
     
