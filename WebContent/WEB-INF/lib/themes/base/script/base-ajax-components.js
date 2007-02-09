@@ -1424,12 +1424,27 @@ renderPanel : function(renderer,uidl,target,layoutInfo) {
 			// Create content DIV
 			var content = theme.createElementTo(div,"div");
 			theme.setCSSClass(content,"content");
-			
+
+            // Apply width and height
+            theme.applyWidthAndHeight(uidl,outer);
+            
+            // TODO looks ugly, refactor
+            var w = parseInt(theme.getVariableElement(uidl,"integer","width").getAttribute("value"));
+            var h = parseInt(theme.getVariableElement(uidl,"integer","height").getAttribute("value"));
+            if (h && h > 0) {
+                console.info(outer.scrollHeight);
+                console.info(caption.offsetHeight);
+                content.style.height = (outer.scrollHeight - caption.offsetHeight) + "px";
+            }
+            if (w && w > 0 && !window.XMLHttpRequest) {
+                // fix width for IE 6
+                // offsetwidht - scrollbar + border
+                content.style.width = (content.offsetWidth - 14) + "px";
+            }
+ 			
 			// Render children to div
 			theme.renderChildNodes(renderer, uidl, content);
 
-			// Apply width and height
-			theme.applyWidthAndHeight(uidl,outer);		
 },
 
 /** under development

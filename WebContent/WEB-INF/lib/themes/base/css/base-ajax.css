@@ -223,13 +223,13 @@ IMG.overlay {
 }
 
 .itmtk .panel {
-	overflow: auto;	
 }
 .itmtk .panel .panelborder {
 	margin-bottom:0;
 }
 .itmtk .panel .content {
 	margin-bottom:0;
+	overflow: auto;
 }
 
 .itmtk .panel .panelcaption {
