@@ -4934,8 +4934,8 @@ itmill.themes.Base.FilterSelect = function(renderer,uidl,target,layoutInfo) {
 	table = this.parentTheme.createElementTo(td,"table","fssearch-layout");
 	var slbody = this.parentTheme.createElementTo(table,"tbody");
 	var sltr = this.parentTheme.createElementTo(slbody,"tr");
-	var sltdfield = this.parentTheme.createElementTo(sltr,"td");
-	var sltdtoggle = this.parentTheme.createElementTo(sltr,"td");
+	var sltdfield = this.parentTheme.createElementTo(sltr,"td","input");
+	var sltdtoggle = this.parentTheme.createElementTo(sltr,"td","dropdown");
     //undoable
 	var sltdundo = this.parentTheme.createElementTo(sltr,"td");
 	
