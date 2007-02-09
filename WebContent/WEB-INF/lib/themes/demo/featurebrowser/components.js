@@ -283,6 +283,14 @@ updateTabsContentHeight : function() {
 		content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight-13) + "px";
 		content.style.borderBottom="0";
 		content.style.overflow='auto';
+		var iframe = content.getElementsByTagName("iframe").item(0);
+		if (iframe != null) { 
+			content.style.overflow='hidden';
+			content.style.padding='0';	
+			content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight) + "px";
+			iframe.height=content.style.height;
+			iframe.style.border='0';
+		}
 	} catch (e) {}
 },
 
