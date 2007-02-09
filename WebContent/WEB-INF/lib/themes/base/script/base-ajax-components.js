@@ -3138,7 +3138,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // scroll padding calculations 
     var prePad = (model.state.fv - 1) * model.rowheight;
     // remaining invisible lines * line_height
-    var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+1)*model.rowheight;
+    var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+2)*model.rowheight;
 
     // set height defined by sizeable interface
     // TODO refine (works only for pixels atm)
@@ -3351,6 +3351,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
                 tm.state.lastRendered--;
         }
     } else if(model.request.firstrow > tm.state.lastRendered) {
+        // big scroll down
         // truncate old tbody and resize aSpacer + bSpacer to fit whole space
         var tmp = d.createElement("tbody");
         tableBody.parentNode.replaceChild(tmp, tableBody);
