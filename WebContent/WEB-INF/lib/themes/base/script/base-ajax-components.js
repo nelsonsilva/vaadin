@@ -3138,7 +3138,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // scroll padding calculations 
     var prePad = (model.state.fv - 1) * model.rowheight;
     // remaining invisible lines * line_height
-    var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+2)*model.rowheight;
+    var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+1)*model.rowheight;
 
     // set height defined by sizeable interface
     // TODO refine (works only for pixels atm)
@@ -3361,8 +3361,8 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             tm.rowheight * ( 
                 (model.request.firstrow - tm.state.firstRendered)
                 ) ) + "px";
-        tm.bSpacer.style.height = (
-            parseInt(tm.bSpacer.style.height) - tm.rowheight * (model.request.firstrow - tm.state.lastRendered) ) + "px";
+        // set bSpacer to downloaded rows + remaining rows
+        tm.bSpacer.style.height = (tm.rowheight * (tm.meta.totalrows - model.request.firstrow + 1) ) + "px";
         
         // build tbody from received rows
         tm.state.firstRendered = model.request.firstrow;
@@ -3381,7 +3381,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         tableBody.parentNode.replaceChild(tmp, tableBody);
         tableBody = tm.tableBody = tmp;
         tm.bSpacer.style.height = ( 
-            tm.rowheight * ( model.meta.totalrows - (model.request.firstrow + model.request.rows) )
+            tm.rowheight * ( model.meta.totalrows - (model.request.firstrow + model.request.rows) + 1 )
                  ) + "px";
         tm.aSpacer.style.height = ( tm.rowheight * (model.request.firstrow - 1)) + "px";
         
