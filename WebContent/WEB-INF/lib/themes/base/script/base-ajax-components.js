@@ -3394,8 +3394,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             tm.state.lastRendered++;
         }
     } else {
-        // "overscroll not yet handled
-        console.error("Unexpected update to table!");
+        // renderer.client.debug("Unhandled update to table (scrolled back, scrolled again shortly or something)");
     }
 
     // update model object
