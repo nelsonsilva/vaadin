@@ -333,7 +333,7 @@ styleToCSSClass : function(prefix,style) {
   		if (s.length > 0) {
   			s = s + "-";
   		}
-  		s = s + style;
+  		s = s + style + " " + prefix;
   	}
   	return s
 },
@@ -2914,7 +2914,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		if (colWidths["heh"]) {
 			html += "style=\"width:"+colWidths["heh"]+"px;\" ";
 		}
-		html += "cid=\"heh\" id=\""+pid+"heh\">";
+		html += "cid=\"heh\" id=\""+pid+"heh\" class=\"\">";
         html += "<img id=\""+pid+"hah\" src=\""+theme.root+"img/table/handle.gif\" class=\"colresizer\" >";
         html += "<div class=\"headerContent\" style=\"";
     	if (colWidths["heh"]) {
