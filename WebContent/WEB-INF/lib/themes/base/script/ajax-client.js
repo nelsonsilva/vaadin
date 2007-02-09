@@ -944,6 +944,13 @@ itmill.Client.prototype.processUpdates = function (updates) {
  */
 itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuffer) {
 
+	// Text nodes
+	if (uidl.nodeType == Node.TEXT_NODE) {
+		var text = target.ownerDocument.createTextNode(uidl.nodeValue);
+		target.appendChild(text);
+		return null;
+	}
+
 	// Sanity check
 	if (uidl == null || uidl.nodeType != Node.ELEMENT_NODE) return;
 
@@ -976,6 +983,20 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 		// Lookup for renderer
 		var style = uidl.getAttribute("style");
 		var tag = uidl.nodeName;
+		
+		
+		// Render standard uidl formatting
+		if (tag == "b" || tag == "br" || tag == "i" || tag == 'li' || tag == 'u' ||
+			tag ==  'ul' || tag == 'h1' || tag == 'h2' || tag == 'h3' || tag == 'h4' ||
+			tag ==  'h5' ||  tag == 'h6' || tag == 'pre') {
+			var elem = target.ownerDocument.createElement(tag);
+			target.appendChild(elem);
+			var retval = null;
+			for (var j=0; j<uidl.childNodes.length; j++) 
+				var retval = this.renderUIDL(uidl.childNodes.item(j), elem, renderer, doublebuffer);
+        	return retval;
+        }
+				
 		var renderer = this.findRenderer(tag,style);
 
 		// Render the UIDL using the found renderer  
