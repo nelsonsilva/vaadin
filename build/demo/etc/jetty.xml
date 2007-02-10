@@ -22,10 +22,10 @@
     <Arg></Arg>
     <Arg><New class="org.mortbay.http.HttpContext">
       <Call name="setContextPath">
-        <Arg>/</Arg>
+        <Arg>/doc</Arg>
       </Call>    
       <Call name="setResourceBase">
-        <Arg>..</Arg>
+        <Arg>../doc</Arg>
       </Call>
       <Call name="addHandler">
         <Arg>
@@ -43,7 +43,7 @@
 </Call>
 
 <Call name="addWebApplication">
-    <Arg>/demo</Arg>
+    <Arg>/</Arg>
     <Arg>./itmill-toolkit.war</Arg>
     <Set name="extractWAR">true</Set> 
     <Set name="classLoaderJava2Compliant">true</Set> 
