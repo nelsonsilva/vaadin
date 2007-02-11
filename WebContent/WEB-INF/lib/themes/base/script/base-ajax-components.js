@@ -2288,32 +2288,44 @@ renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 		
 		// ALT-attribute
 		img.alt = theme.getElementContent(uidl,"description");
-	} else {
+	} else if (uidl.getAttribute("mimetype") == "application/x-shockwave-flash") {
 	
-		/*
-		// Object mode
-		var embedded = renderer.theme.createElementTo(div,"object","embedded");
-		// SRC
-		var val = uidl.getAttribute("src");
-		if (val) embedded.src = val;
-		
-		
-		// Width
-		val = uidl.getAttribute("width");
-		if (val != null && val > 0) embedded.width = val;
-		
-		// Height
+		var html = "<object ";
+
+		var val = uidl.getAttribute("width");
+		if (val) html += " width=\""+val+"\" ";
 		val = uidl.getAttribute("height");
-		if (val != null && val > 0) embedded.height = val;
+		if (val) html += " height=\""+val+"\" ";
 		
-		// Codebase
-		val = uidl.getAttribute("codebase");
-		if (val != null) embedded.codebase = val;
+		html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" '+
+		  'codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"> ';
+
+		val = uidl.getAttribute("src");
+		if (val) 
+			html += '<param name="movie" value="'+val+'" /> ';
+
+		var params = theme.getChildElements(uidl,"embeddedparams");
+		if (params != null) {
+			var len = params.length;
+			for (var i=0;i<len;i++) {
+				html += "<param name=\""+params[i].getAttribute("name")+"\" value=\""+params[i].getAttribute("name")+"\" />"
+			}
+		}
 		
-		// Standby
-		val = uidl.getAttribute("standby");
-		if (val != null) embedded.codebase = val;
-		*/
+		html += '<embed ';
+		val = uidl.getAttribute("width");
+		if (val) html += " width=\""+val+"\" ";
+		val = uidl.getAttribute("height");
+		if (val) html += " height=\""+val+"\" ";
+		val = uidl.getAttribute("src");
+		if (val) html += " src=\""+val+"\" ";
+		html += 'type="application/x-shockwave-flash" '+
+			'pluginspage="http://www.macromedia.com/go/getflashplayer" />'
+		html += '</object>';
+		
+		div.innerHTML = html;		
+
+	} else {
 		
 		var html = "<object ";
 		var val = uidl.getAttribute("src");
@@ -2330,6 +2342,9 @@ renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 		
 		val = uidl.getAttribute("standby");
 		if (val) html += " standby=\""+val+"\" ";
+		
+		val = uidl.getAttribute("mimetype");
+		if (val) html += " type=\""+val+"\" ";
 		
 		html += ">";
 		
