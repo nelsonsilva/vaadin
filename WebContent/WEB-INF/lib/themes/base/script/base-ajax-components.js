@@ -3810,15 +3810,15 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
 		theme.addSetVarListener(theme,client,select,"change",selectionVariable,select,immediate);
 	}
 	// Empty selection for WA compatibility
-	var optionNode = theme.createElementTo(select,"option");
-	theme.createTextNodeTo(optionNode,"-");
+	var nullOptionNode = theme.createElementTo(select,"option");
+	theme.createTextNodeTo(nullOptionNode,"-");
 	
 	// Selected options
 	if (options != null && options.length >0) {
 		for (var i=0; i<options.length;i++) {
             var optionNode = new Option(
                 options[i].getAttribute("caption"),
-                options[i].getAttribute("key")
+                options[i].getAttribute("key")                
             );
             select.options[select.options.length] = optionNode;
 			if (options[i].getAttribute("selected") == "true") {
@@ -3827,6 +3827,9 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
                 if(document.all) {
                     window.scrollBy(0,0);
                 }
+			}
+			if (options[i].getAttribute("nullselection") == "true") {
+				try {select.removeChild(nullOptionNode);} catch (e) {alert(e);}
 			}
 		}
 	}
