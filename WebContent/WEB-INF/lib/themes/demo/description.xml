@@ -23,6 +23,10 @@
 			<file name="featurebrowser/components.js" />
 			<file name="featurebrowser/featurebrowser.css" />
 		</fileset>
+		<fileset mode="html">
+			<file name="featurebrowser/html-mode.xsl" />
+			<file name="featurebrowser/html-mode.css" />
+		</fileset>
 	</fileset>
 	
 </theme>
