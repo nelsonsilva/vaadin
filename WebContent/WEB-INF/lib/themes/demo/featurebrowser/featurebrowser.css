@@ -19,7 +19,8 @@
 	background-image: url(img/tab_handle.png);
 }
 
-#featurebrowser-mainlayout {
+body.itmtk
+{
 	background: white;
 	background-image: url(img/m_bg.png);
 	background-repeat: no-repeat;
