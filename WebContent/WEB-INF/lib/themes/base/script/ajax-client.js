@@ -345,11 +345,11 @@ itmill.Client.prototype.unregisterAllRenderers = function () {
  */
 itmill.Client.prototype.createRequestChangeListener = function(client, req) {
 	
-	return (function()  {
+	return (function()  { 
 		if (req.readyState != 4 || req.status == null) {
 			return;
 		}
-		
+
 		// Check status code
 		if (req.status != 200) {
 			alert("Server request failed: ("+req.status+", "+req.statusText+")");
@@ -357,10 +357,11 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
 			delete req;
 			return;
 		}
-		
+
 		// Get updates
-		var updates = req.responseXML;
-		if (updates == null) {
+		var updates = null;
+		try { updates = req.responseXML; } catch(e) {}
+		if (updates == null || updates.getElementsByTagName("changes").length == 0) {
 			
 			// If server no not respond, reload window
 			window.location.href = window.location.href;
