@@ -1890,7 +1890,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 				} else {
 			    	var year = theme.createElementTo(div,"select");
 			    	year.options[0] = new Option("",-1);
-			    	for (var i=0;i<2000;i++) {
+			    	for (var i=0;i<500;i++) {
 			    		year.options[i+1] = new Option(i+1900,i+1900);
 			    		if (yearValue == (i+1900)) {
 			    			year.options[i+1].selected = true;
@@ -1910,8 +1910,8 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 			    	month = theme.createElementTo(div,"select");
 			    	month.options[0] = new Option("",-1);
 			    	for (var i=0;i<12;i++) {
-			    		month.options[i+1] = new Option(i+2,i+2);
-			    		if (monthValue == i+2) {
+			    		month.options[i+1] = new Option(i+1,i+1);
+			    		if (monthValue == i+1) {
 			    			month.options[i+1].selected = true;
 			    		}
 			    	}
