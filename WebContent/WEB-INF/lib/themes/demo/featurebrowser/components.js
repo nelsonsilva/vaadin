@@ -180,12 +180,6 @@ recalcFeatureBrowserLayout : function() {
 	var height = mainDiv.offsetHeight;
 	if (document.body.offsetWidth > 10) width = document.body.offsetWidth;
 	if (document.body.offsetHeight > 10) height = document.body.offsetHeight;
-	if (height < 400 || width < 600) {
-		height = 400;
-		width = 600;
-		mainDiv.style.width="" + width + "px";
-		mainDiv.style.height="" + height + "px";
-	}
 		
 	// Recalc features div dimensions
 	var featuresWidth = 200;
@@ -219,7 +213,10 @@ recalcFeatureBrowserLayout : function() {
 	if (dividerDiv.isActive) {
 		dividerDiv.demoHeight = dividerDiv.mouseY-10 - logoBarHeight;
 		if (dividerDiv.demoHeight < 0) dividerDiv.demoHeight = 0;
-	} 
+	} else {
+		if (dividerDiv.demoHeight + logoBarHeight > height - 20) dividerDiv.demoHeight = height - 20 - logoBarHeight;
+		if (dividerDiv.demoHeight < 0) dividerDiv.demoHeight = 0;
+	}
 	var dividerHeight = 17;
 	dividerDiv.style.position="absolute";
 	dividerDiv.style.overflow="hidden";
