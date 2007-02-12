@@ -989,13 +989,28 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 		// Render standard uidl formatting
 		if (tag == "b" || tag == "br" || tag == "i" || tag == 'li' || tag == 'u' ||
 			tag ==  'ul' || tag == 'h1' || tag == 'h2' || tag == 'h3' || tag == 'h4' ||
-			tag ==  'h5' ||  tag == 'h6' || tag == 'pre') {
+			tag ==  'h5' ||  tag == 'h6') {
 			var elem = target.ownerDocument.createElement(tag);
 			target.appendChild(elem);
 			var retval = null;
 			for (var j=0; j<uidl.childNodes.length; j++) 
 				var retval = this.renderUIDL(uidl.childNodes.item(j), elem, renderer, doublebuffer);
         	return retval;
+        }
+				
+		// Render pre uidl formatting
+		if (tag == 'pre') {
+			var elem = target.ownerDocument.createElement(tag);
+			target.appendChild(elem);
+			elem.style.whiteSpace='pre';
+			for (var j=0; j<uidl.childNodes.length; j++) { 
+				try {
+					var text = uidl.childNodes.item(j).nodeValue;
+					text = text.replace(/(^\r)?\n/g, '\r\n');
+					elem.appendChild(target.ownerDocument.createTextNode(text));
+				} catch (e) {}
+			}
+        	return null;
         }
 				
 		var renderer = this.findRenderer(tag,style);
