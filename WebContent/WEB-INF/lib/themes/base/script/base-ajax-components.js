@@ -2218,7 +2218,7 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 	var frameName = "upload_"+varNode.getAttribute("id")+"_iframe";
     
     var hIframeContainer = renderer.theme.createElementTo(div,"div");
-    hIframeContainer.innerHTML = '<iframe style="height:0px;width:0px;0;margin:0;padding:0;" name="'+frameName+'"></iframe>'
+    hIframeContainer.innerHTML = '<iframe style="height:0px;width:0px;0;margin:0;padding:0;border:0;" name="'+frameName+'"></iframe>'
 
     iframe = hIframeContainer.firstChild;
     ifr = iframe.contentWindow;
