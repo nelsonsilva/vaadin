@@ -976,6 +976,7 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 		} catch (e) {
 			// Print out the exception
         	this.error("Could not render "+ uidl.nodeName +" using '"+ renderer.theme.themeName + "': "+e.message,e);
+        	return;
 		}
 		
 		
