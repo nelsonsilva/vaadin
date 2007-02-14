@@ -2760,7 +2760,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var scrolledLeft = target.scrolledLeft;
     
     // Get attributes
-    // MT rows vs pagelenth ??
     // TODO remove separate variables and change function to use variables in model object
 	var pid        = model.pid     = uidl.getAttribute("id");
 	var immediate  = model.meta.immediate = uidl.getAttribute("immediate")||false;
@@ -2999,7 +2998,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         vcols.style.display = "none";
     }
     
-	// content
+	// Render CONTENT
 	cout = theme.createElementTo(inner,"div");
     model.cout = cout; // save reference for use in handlers
 	cout.id = pid+"cout";
@@ -3024,6 +3023,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var td = null;
     var tdDiv = null;
     var icon = null;
+    
+    var df = d.createDocumentFragment();
+    // TODO check for optimizations 
 	for (var i=0;i<len;i++) {
     
 		var row = trs[i];
@@ -3066,11 +3068,15 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             td.appendChild(tdDiv);
             tr.appenChild(td);
 		}
-		
+		var al = null;
 		var colNum = -1;
 		for (j=0;j<l;j++) {
 			var comp = comps[j];
-			if (comp.nodeName == "al"||comp.nodeName == "#text") continue;
+			if (comp.nodeName == "#text") continue;
+            if (comp.nodeName == "al" ) {
+                al = comp;
+                continue;
+            }
 			colNum++;
 			// Placeholder TD, we'll render the content later
             td = d.createElement("td"); tdDiv = d.createElement("div");
@@ -3091,11 +3097,31 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                 // width - border - margin
                 td.width = colWidths[model.colorder[colNum]] - 4 ;
 			}
+            // render content
+            client.renderUIDL(comp, tdDiv);
             td.appendChild(tdDiv);
             tr.appendChild(td);
 		}
-        tableB.appendChild(tr);
+        if (al && tr.firstChild) {
+            theme.renderActionPopup(renderer,al,tr,actions,actionVar,key,"rightclick");
+        }
+        // selection
+        if (model.meta.selectmode != "none"  && ! model.meta.readonly ) {
+            model.selected.push(tr);
+            theme.addCSSClass(tr,"clickable");
+            theme.addToggleClassListener(theme,client,tr,"mouseover","selectable");
+            theme.addToggleClassListener(theme,client,tr,"mouseout","selectable");
+            if (selectmode == "multi") {
+                theme.addToggleClassListener(theme,client,tr,"click","selected");
+                theme.addToggleVarListener(theme,client,tr,"click",selVar,key,immediate);
+            } else {
+                theme.addAddClassListener(theme,client,tr,"click","selected",tr,model.selected);
+                theme.addSetVarListener(theme,client,tr,"click",selVar,key,immediate);
+            }
+        }
+        df.appendChild(tr);
 	}
+    tableB.appendChild(df);
     table.appendChild(tableB);
 	cout.appendChild(table);
     // create spacer elements and save reference to model (needed for webkit bug on table margins)
@@ -3103,52 +3129,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     model.bSpacer.className = "spacer";
     
 
-
-	// SECOND render the sub-components (TD content)
-    // TODO save uidl content of rows and cells for caching purposes
-	var trs = cout.childNodes[1].firstChild.childNodes;
-	var utrs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
-	for (var i=0;i<len;i++) {
-		var tr = trs[i];
-		var key = utrs[i].getAttribute("key");
-		var comps = utrs[i].childNodes;
-		var l = comps.length;
-		var currentCol = (rowheaders?1:0);
-		var al = null;
-		for (j=0;j<l;j++) {
-			var comp = comps[j];
-			if (comp.nodeName == "#text") continue;
-			if (comp.nodeName == "al") {
-				al = comp;
-				continue;
-			}
-			var trg = tr.childNodes[currentCol++].firstChild;
-			client.renderUIDL(comp, trg);
-		}
-		
-		if (al&&tr.firstChild) {
-			theme.renderActionPopup(renderer,al,tr,actions,actionVar,key,"rightclick");
-		}	
-		
-		// selection
-		if (selectmode != "none"  && ! model.meta.readonly ) {
-			model.selected.push(tr);
-			theme.addCSSClass(tr,"clickable");
-			theme.addToggleClassListener(theme,client,tr,"mouseover","selectable");
-			theme.addToggleClassListener(theme,client,tr,"mouseout","selectable");
-			if (selectmode == "multi") {
-				theme.addToggleClassListener(theme,client,tr,"click","selected");
-				theme.addToggleVarListener(theme,client,tr,"click",selVar,key,immediate);
-			} else {
-				theme.addAddClassListener(theme,client,tr,"click","selected",tr,model.selected);
-				theme.addSetVarListener(theme,client,tr,"click",selVar,key,immediate);
-			}
-		}
-	}
-    
-    
-
-	// THIRD do some initial sizing and scrolling
+	// Do some initial sizing and scrolling
     
     model.rowheight = table.rows.length ? Math.ceil(table.offsetHeight/table.rows.length) : 22;
     // scroll padding calculations 
