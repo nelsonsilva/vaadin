@@ -2912,8 +2912,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
 
 
-	// FIRST render the table 	
-	var alignments = new Array();
+	var alignments = model.alignments = new Array();
 	
 	// headers
 	var hout = theme.createElementTo(inner.childNodes[2],"div","bg");
@@ -3275,6 +3274,19 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             var cell = d.createElement("td");
             currentCol++;
             cell.className = "tablecell";
+            
+            if (tm.alignments[currentCol]) {
+                switch (tm.alignments[currentCol]) {
+                    case "e":
+                        cell.className += " align_right";
+                        break;
+                    case "c":
+                        cell.className += " align_center";
+                        break;
+                    default:
+                }
+            }
+            
             
             var cellContent = d.createElement("div");
             cellContent.className = "cellContent";
