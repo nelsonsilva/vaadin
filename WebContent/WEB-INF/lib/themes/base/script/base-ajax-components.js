@@ -2769,6 +2769,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
     
 	var pagelength = model.meta.pagelength = parseInt(uidl.getAttribute("pagelength"));
+    model.meta.readonly = uidl.getAttribute("readonly") || false;
     model.meta.sizeableW = uidl.getAttribute("width") || false;
     model.meta.sizeableH = uidl.getAttribute("height") || false; 
 	model.meta.colheaders = uidl.getAttribute("colheaders")||false;
@@ -3130,7 +3131,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		}	
 		
 		// selection
-		if (selectmode != "none") {
+		if (selectmode != "none"  && ! model.meta.readonly ) {
 			model.selected.push(tr);
 			theme.addCSSClass(tr,"clickable");
 			theme.addToggleClassListener(theme,client,tr,"mouseover","selectable");
@@ -3309,7 +3310,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             theme.renderActionPopup(renderer,al,row,tm.meta.actions,tm.actionVar,key,"rightclick");
         }
         // selection
-        if (model.meta.selectmode != "none") {
+        if (model.meta.selectmode != "none" && ! model.meta.readonly) {
             var client = renderer.client;
             tm.selected.push(row);
             theme.addCSSClass(row,"clickable");
