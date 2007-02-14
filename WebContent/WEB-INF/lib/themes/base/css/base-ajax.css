@@ -407,6 +407,16 @@ IMG.overlay {
 	border-right:1px solid ButtonShadow;
 }
 
+/* on specially aligned cells, add margin to contained elements to comfort with header */
+.itmtk .table .cin .tablecell.align_center div.cellContent div,
+.itmtk .table .cin .tablecell.align_right div.cellContent div {
+	margin-right:12px;
+}
+.itmtk .table .cin .tablecell.align_center div.cellContent div div,
+.itmtk .table .cin .tablecell.align_right div.cellContent div div{
+	margin-right:0;
+}
+
 .itmtk .table .selected td.tableCell div.cellContent {
 	color: HighlightText;
 }
