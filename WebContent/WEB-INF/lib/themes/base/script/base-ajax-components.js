@@ -653,19 +653,17 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	// Caption container	
 	var caption = this.createElementTo(target,"div");
 	
-	// Create debug-mode UIDL div
+	// Create debug-mode UIDL printing button
 	if (renderer.client.debugEnabled) {
-		var uidlDebug = this.createElementTo(caption,"div","uidl minimized");
-		renderer.client.renderHTML(uidl,uidlDebug);
-		var t = this;
+		var uidlDebug = this.createElementTo(caption,"div","uidl");
+        uidlDebug.uidl = uidl;
 		client.addEventListener(uidlDebug,"click", function (e) {
-				if (uidlDebug.className.indexOf("minimized") >=0) {
-					t.removeCSSClass(uidlDebug,"minimized"); 
-				} else {
-					t.addCSSClass(uidlDebug,"minimized");
-				}
-			}
-		);	
+            if(window.confirm("Print components UIDL to console?")) {
+                var event = client.getEvent(e);
+                console.info("Printing components UIDL");
+                console.dirxml(event.target.uidl);
+            }
+		});
 	}
 	
 	if (captionText||error||description||icon) {

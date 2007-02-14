@@ -1,13 +1,12 @@
 /* Debug styles */
 .itmtk .uidl {
 	position: absolute;
-	z-index: 1001;
-	text-indent: 18px;
-	background: white url('../img/debug.gif') -6px -6px no-repeat;
-	font-weight: normal;
-	white-space: nowrap;
-	color: grey;
+	background: url('../img/debug.gif') -6px -6px no-repeat;
 	margin-left: -10px;
+	overflow: hidden;
+	width: 10px;
+	height: 10px;
+	z-index: 1000;
 }
 
 .itmtk div#ajax-wait {
@@ -21,12 +20,6 @@
 	border: 1px solid #cccc00;
 	padding: 3px;
 	font-weight: bold;
-}
-.itmtk .minimized {
-	overflow: hidden;
-	width: 10px;
-	height: 10px;
-	z-index: 1000;
 }
 
 /* General styles */

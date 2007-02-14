@@ -1033,8 +1033,11 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 		}
 	}
 
-	// If no renderer is specified, render the UIDL as-is.
-	return this.renderHTML(uidl, target);  
+	// If no renderer is specified, render the UIDL as-is to console
+    console.error("No renderer spesified");
+    console.dirxml(uidl);
+    
+	return null;
 }
 
 /** Search the internal renderer registry for matching renderer. 
@@ -1068,41 +1071,6 @@ itmill.Client.prototype.findRenderer = function (tag, componentStyle) {
 	return renderer;
 }
 
-
-/** Renders given XML as redable HTML.
- *
- *  @param xml The XML node to be rendered as readable HTML.
- *  @param target The node where the result should be appended as child.
- *  @return The rendered element
- *  @type Node
- *	
- *  @author IT Mill Ltd.
- * 
- */
-itmill.Client.prototype.renderHTML = function (xml, target) {
-
-	var n = this.createElement("div",target);
-	target.appendChild(n);
-	var tn = this.createTextNode("<" + xml.nodeName, target);
-	n.appendChild(tn);	
-	if (xml.attributes.length > 0)
-		for(var i=0; i<xml.attributes.length; i++) {
-		var a = xml.attributes.item(i);
-		n.appendChild(this.createTextNode(" " + a.name + "=\"" + a.value+"\"",target));
-	}
-	n.appendChild(this.createTextNode(">",target));
-	if (xml.hasChildNodes())
-	for (var i=0; i<xml.childNodes.length; i++) { 
-		var c = xml.childNodes.item(i);
-		if (c.nodeType == Node.ELEMENT_NODE) {
-			this.renderHTML(c,n);
-		} else if (c.nodeType == Node.TEXT_NODE && c.data != null) {
-			n.appendChild(this.createTextNode(c.data, target));
-		}
-	}
-	n.appendChild(this.createTextNode("</"+xml.nodeName+">",target));  
-  return n;
-}
 /** Returns given XML as text.
  *
  *  @param xml The XML node to be rendered as HTML.
@@ -1113,25 +1081,32 @@ itmill.Client.prototype.renderHTML = function (xml, target) {
  * 
  */
 itmill.Client.prototype.getXMLtext = function(xml) {
-	var n = "";
-	n += "<" + xml.nodeName;
+    var h = new Array();
+    h.push("<");
+    h.push(xml.nodeName);
 	if (xml.attributes.length > 0)
 		for(var i=0; i<xml.attributes.length; i++) {
 		var a = xml.attributes.item(i);
-		n += " " + a.name + "=\"" + a.value+"\"";
+        h.push(" ");
+        h.push(a.name);
+        h.push('="');
+        h.push(a.value);
+        h.push('"');
 	}
-	n += ">";
+    h.push(">");
 	if (xml.hasChildNodes())
 	for (var i=0; i<xml.childNodes.length; i++) { 
 		var c = xml.childNodes.item(i);
 		if (c.nodeType == Node.ELEMENT_NODE) {
-			n += this.getXMLtext(c);
+            h.push(this.getXMLtext(c));
 		} else if (c.nodeType == Node.TEXT_NODE && c.data != null) {
-			n += c.data;
+            h.push(c.data);
 		}
 	}
-	n += "</"+xml.nodeName+">";  
-  return n;
+    h.push("</");
+    h.push(xml.nodeName);
+    h.push(">");
+    return h.join("");
 }
 
 /** Send a change variable event to server.
