@@ -694,6 +694,7 @@
 	height: 16px;
 	border: none;
 	vertical-align: middle;
+	margin: -1px 0;
 }
 .itmtk .tree ul.tree .last {
 	background: #fff url(../img/tree/lastnode.png) no-repeat 7px 0;
