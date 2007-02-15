@@ -814,10 +814,10 @@ itmill.Client.prototype.findPaintableById = function (paintableId) {
 itmill.Client.prototype.processUpdates = function (updates) {
 	if (this.debugEnabled) {
         console.group("Changes from server");
-        if(this.profilingEnabled)
-            console.profile("Changes profiling");
         console.time("All changes in");
 	}
+    if(this.profilingEnabled)
+        console.profile("Changes profiling");
 
 	try {
 		// Iterate through the received changes
@@ -943,7 +943,10 @@ itmill.Client.prototype.processUpdates = function (updates) {
         if(this.profilingEnabled)
             console.profileEnd("Changes profiling");
         console.groupEnd();
-	}	
+	} else {
+        if(this.profilingEnabled)
+            console.profileEnd("Changes profiling");
+    }
 	if (this.waitElement) {
 		this.waitElement.style.display = "none";
 	}
