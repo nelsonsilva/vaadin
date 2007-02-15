@@ -345,58 +345,64 @@ itmill.Client.prototype.unregisterAllRenderers = function () {
  */
 itmill.Client.prototype.createRequestChangeListener = function(client, req) {
 	
-	return (function()  { 
-		if (req.readyState != 4 || req.status == null) {
-			return;
-		}
+    return (function() {
+        try {
+            // wrap everything in try-catch to get better user experience
+            // in case of session timeout, server error etc
+            
+            if (req.readyState != 4 || req.status == null) {
+                return;
+            }
+    
+            // Check status code
+            if (req.status != 200) {
+                console.error(req);
+                req.onreadystatechange = new Function();
+                delete req;
+                return;
+            }
+    
+            // Get updates
+            updates = req.responseXML;
+            // responseXML should be null if not valid XML, but sadly not, validate
+            // by detecting count of changes element
+            if (!updates || updates.getElementsByTagName("changes").length == 0) {
+                throw("Invalid UIDL response");
+            }
+            
+            // Debug request load time
+            if (client.debugEnabled) {
+                console.timeEnd("UIDL loaded in ");
+                // Firebug can show traffic so no need to show responce, 
+                // uncomment if you need to see uidl in other browsers
+                //client.debug("UIDL Changes: \n"+req.responseText,true);
+            }
+            
+            // Clean up 
+            client.variableStates = new Object();
+            req.onreadystatechange = new Function();
+            delete req;
+            
+            // Process the updates
+            try {
+                if (updates.normalize) updates.normalize();
+            } catch (e) {
+                if (client.debugEnabled) {
+                    client.debug("normalize() FAILED");
+                }
+            }
+            client.processUpdates(updates); 
+            client.requestStartTime = -1;
 
-		// Check status code
-		if (req.status != 200) {
-			alert("Server request failed: ("+req.status+", "+req.statusText+")");
-			req.onreadystatechange = new Function();
-			delete req;
-			return;
-		}
-
-		// Get updates
-		var updates = null;
-		try { updates = req.responseXML; } catch(e) {}
-		if (updates == null || updates.getElementsByTagName("changes").length == 0) {
-			
-			// If server no not respond, reload window
-			window.location.href = window.location.href;
-			
-			req.onreadystatechange = new Function();
-			delete req;
-			return;
-		}
-		
-		// Debug request load time
-		if (client.debugEnabled) {
-			console.timeEnd("UIDL loaded in ");
-            // Firebug can show traffic so no need to show responce, 
-            // uncomment if you need to see uidl in other browsers
-            //client.debug("UIDL Changes: \n"+req.responseText,true);
-		}
-		
-		// Clean up	
-		client.variableStates = new Object();
-		req.onreadystatechange = new Function();
-		delete req;
-		
-		// Process the updates
-		try {
-			if (updates.normalize) updates.normalize();
-		} catch (e) {
-			if (client.debugEnabled) {
-				client.debug("normalize() FAILED");
-			}
-		}
-		client.processUpdates(updates);	
-		client.requestStartTime = -1;	
-	
+        } catch(e) {
+            // If server no not respond or content not uidl -> reload window
+            console.error("Bad UIDL response:" + e);
+            console.log(req.responseText);
+            req.onreadystatechange = new Function();
+            delete req;
+            return;
+        }
 	});
-	
 }
 
 /** Send pending variable changes to server.
