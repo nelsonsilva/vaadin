@@ -1678,31 +1678,39 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 	} 
 	
 	// Actions
-	if (!disabled && !readonly) {
-		for (var i = 0; i< node.childNodes.length;i++) {
-			var childNode = node.childNodes[i];
-			if (childNode.nodeName == "al" ) {
-				theme.renderActionPopup(renderer,childNode,n,actions,actionVar,key); // TODO check
-			} 
-		}	
+	// and does node have subnodes/leafs?
+	var hasChildren = false;
+	for (var i=0; i<node.childNodes.length; i++) {
+		var childNode = node.childNodes[i];
+		if(!hasChildren && (childNode.nodeName == "node" || childNode.nodeName == "leaf")) {
+			hasChildren = true;
+		}
+		if (!disabled && !readonly && childNode.nodeName == "al" ) {
+			theme.renderActionPopup(renderer,childNode,n,actions,actionVar,key);
+		} 
 	}
 	
 	// Render all sub-nodes
 	if (node.nodeName == "node") {
-		var subnodes = theme.createElementTo(target,"div","nodes");
-		if (node.childNodes != null && node.childNodes.length >0) {
+		
+		if (hasChildren) {
 			img.src = theme.root + "img/tree/on.gif";
 			img.expanded = "true";
 		} else {
 			img.src = theme.root + "img/tree/off.gif";
 			img.expanded = "false";
 		}
-		for (var i = 0; i< node.childNodes.length;i++) {
-			var childNode = node.childNodes[i];
-			if (childNode.nodeName == "node" || childNode.nodeName == "leaf") {
-				theme.renderTreeNode(renderer,childNode,subnodes,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly);
-			} 
-		}	
+		
+		var subnodes = theme.createElementTo(target,"div","nodes");
+		
+		if(hasChildren) {
+			for (var i = 0; i< node.childNodes.length;i++) {
+				var childNode = node.childNodes[i];
+				if (childNode.nodeName == "node" || childNode.nodeName == "leaf") {
+					theme.renderTreeNode(renderer,childNode,subnodes,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly);
+				}
+			}
+		}
 		
 		// Add event listener
 		if (!disabled) {
