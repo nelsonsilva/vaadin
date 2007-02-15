@@ -43,6 +43,10 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 
 	// Debugging is disabled by default
 	this.debugEnabled = false;
+    
+    if(window.location.hash.indexOf("profiling") > 0) {
+        this.profilingEnabled = true;
+    }
 
 	// Initialize variableChangeQueue
 	this.variableStates = new Object();
@@ -810,7 +814,8 @@ itmill.Client.prototype.findPaintableById = function (paintableId) {
 itmill.Client.prototype.processUpdates = function (updates) {
 	if (this.debugEnabled) {
         console.group("Changes from server");
-        console.profile("Changes profiling");
+        if(this.profilingEnabled)
+            console.profile("Changes profiling");
         console.time("All changes in");
 	}
 
@@ -935,7 +940,8 @@ itmill.Client.prototype.processUpdates = function (updates) {
 	
     if (this.debugEnabled) {
         console.timeEnd("All changes in");
-        console.profileEnd("Changes profiling");
+        if(this.profilingEnabled)
+            console.profileEnd("Changes profiling");
         console.groupEnd();
 	}	
 	if (this.waitElement) {
