@@ -367,7 +367,15 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
             // responseXML should be null if not valid XML, but sadly not, validate
             // by detecting count of changes element
             if (!updates || updates.getElementsByTagName("changes").length == 0) {
-                throw("Invalid UIDL response");
+                // check if response was a redirect instruction (application end)
+                if(updates.getElementsByTagName("redirect").length > 0) {
+                    var redirect = updates.getElementsByTagName("redirect")[0];
+                    window.location = redirect.getAttribute("url");
+                    return;
+                } else {
+                    // something unexpected returned as uidl
+                    throw("Invalid UIDL response");
+                }
             }
             
             // Debug request load time
