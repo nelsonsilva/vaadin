@@ -658,51 +658,85 @@
 	border: 1px solid #a3b5ce;
 }
 .itmtk .tree .content, .itmtk .tree-menu .content {
-	border-top:					solid 0px #d8dbe3;
-	border-right:				solid 2px #aaacbc;
-	border-bottom:				solid 2px #9193a0;
-	border-left:				solid 2px #d3d4dc;
+	border-top: solid 0px #d8dbe3;
+	border-right: solid 2px #aaacbc;
+	border-bottom: solid 2px #9193a0;
+	border-left: solid 2px #d3d4dc;
 	background: #fff url(../img/common/panel_bg.png) repeat-x;
 	padding: 8px 5px 5px 5px;
 }
-.itmtk .tree .content, .itmtk .tree .content .node, .itmtk .tree .content .nodes, .itmtk .tree .content .node IMG, 
-.itmtk .tree-menu .content, .itmtk .tree-menu .content .node, .itmtk .tree-menu .content .nodes, .itmtk .tree-menu .content .node IMG {
-	background-color: #fff;
+
+.itmtk .tree ul.tree, ul.tree ul {
+	list-style-type: none;
+	background: url(../img/tree/2x2-dotline.png) repeat-y 7px 0;
+	margin: 0;
+	padding: 0;
 }
-.itmtk .tree-menu .node span, 
-.itmtk .tree .node span {
+.itmtk ul.tree ul {
+	margin-left: 0px;
+	clear: left;
+}
+.itmtk .tree ul.tree li {
+	margin: 0;
+	padding: 0 0 0 17px;
 	line-height: 16px;
+	background: url(../img/tree/node.png) no-repeat 7px 0;
+	clear: left;
 	white-space: nowrap;
-	position: static;
 }
-.itmtk .tree .nodes, .itmtk .tree-menu .nodes,  {
-	padding-left: 16px;
+.itmtk .tree ul.tree .caption {
+	background-color: transparent;
+	border: none;
+	padding: 1px 2px;
 }
-.itmtk .tree-menu .node img, 
-.itmtk .tree .node img {
+.itmtk .tree ul.tree li .icon {
+	width: 16px;
+	height: 16px;
+	border: none;
 	vertical-align: middle;
 }
-.itmtk .tree .over, .itmtk .tree-menu .over  {
-	text-decoration: none;
-	color: #0165cb;
+.itmtk .tree ul.tree .last {
+	background: #fff url(../img/tree/lastnode.png) no-repeat 7px 0;
 }
-.itmtk .tree .content DIV.selected, 
-.itmtk .tree .content .selected IMG,
-.itmtk .tree-menu .content DIV.selected, 
-.itmtk .tree-menu .content .selected IMG {
-	background-color: #faffd1;
-	color: #2c3437;
+.itmtk .tree ul.tree .collapse {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin-left: -16px;
+	float: left;
+	display: inline; /* IE6 float fix */
+	background: url(../img/tree/collapse.png) no-repeat;
+	cursor: pointer;
+}
+.itmtk .tree ul.tree .expand {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin-left: -16px;
+	float: left;
+	display: inline; /* IE6 float fix */
+	background: url(../img/tree/expand.png) no-repeat;
+	cursor: pointer;
+}
+.itmtk .tree ul.tree .selected {
+	background-color: #f9ffc6;
 	font-weight: normal;
+	color: #2c3437;
+}
+.itmtk .tree .tree span.over,
+.itmtk .tree-menu .tree span.over {
+	border: none;
+	text-decoration: none;
+	color: #3e9dff;
 }
 
-/* Menu style 
-.itmtk .tree-menu .selected {
-	font-weight: normal;
-	background-color: #e4f2ff;
-	border: solid 1px #d3d4dc;
-	margin: -1px;
+/* Feature browser specific styles for menu style */
+.itmtk .tree-menu ul.tree, .itmtk .tree-menu ul.tree ul {
+	background: transparent;
 }
-*/
+.itmtk .tree-menu ul.tree li, .itmtk .tree-menu ul.tree .last {
+	background: transparent;
+}
 
 
 
