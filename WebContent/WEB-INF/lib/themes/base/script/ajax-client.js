@@ -177,31 +177,9 @@ itmill.Client.prototype.error = function (message, causeException) {
 	// Check if we are in debug mode
 	if (!this.debugEnabled)	{ return; }
 
-	if (causeException != null) {
-		// If filename and line number is avaiable, append to output.
-		if (causeException.fileName != null) {
-			message += "\n\n  FILE= '" 
-				+ causeException.fileName +"'"
-				+ (causeException.lineNumber != null ? 
-					" LINE="+causeException.lineNumber: 
-					"");				
-		}
-		
-		// If stack trace is available, append it to output.
-		if (causeException.stack != null) {
-			message += "\n\n" + causeException.stack;
-		}
-
-		// Dump all exception properties
-		message += "\n\nException properties:\n";
-		for (var prop in causeException) {
-			if (prop != "stack") {
-				message += "  " + prop + "=" +causeException[prop] + "\n";
-			}
-		}
-        console.error(message);
-        console.error(causeException);
-	}
+    console.error(message);
+    console.dir(causeException);
+    console.trace();
 }
 
 /** Creates new XMLHttpRequest object.
@@ -998,7 +976,7 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 			return res;
 		} catch (e) {
 			// Print out the exception
-        	this.error("Could not render "+ uidl.nodeName +" using '"+ renderer.theme.themeName + "': "+e.message,e);
+        	this.error("Could not render "+ uidl.nodeName +" using '"+ renderer.theme.themeName +"'", e);
         	return;
 		}
 		
