@@ -36,10 +36,6 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 	// Paint layout if it is not done already
 	if (document.getElementById(pid) == null) {
 		
-		// Try to disable window scrollbars on IEs
-	    if (document.all) document.body.scroll = "no";
-	    else document.body.style.overflow = "hidden";
-		
 		// Create container element
 		var paintableDiv = renderer.theme.createPaintableElement(renderer,uidl,document.body,layoutInfo);
 	 	var div = theme.createElementTo(paintableDiv,"div",null);
@@ -180,6 +176,10 @@ recalcFeatureBrowserLayout : function() {
 	var height = mainDiv.offsetHeight;
 	if (document.body.offsetWidth > 10) width = document.body.offsetWidth;
 	if (document.body.offsetHeight > 10) height = document.body.offsetHeight;
+
+	// Set the minimum size for the window
+	if (width < 640) { width=640; mainDiv.style.width=""+width+"px";}
+	if (height < 480) { height=480; mainDiv.style.height=""+height+"px";}
 		
 	// Recalc features div dimensions
 	var featuresWidth = 200;
