@@ -331,11 +331,9 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
         try {
             // wrap everything in try-catch to get better user experience
             // in case of session timeout, server error etc
-            
-            if (req.readyState != 4 || req.status == null) {
+            if (req.readyState != 4 || typeof req.status == 'undefined' || req.status == null)
                 return;
-            }
-    
+        
             // Check status code
             if (req.status != 200) {
                 console.error(req);
@@ -435,7 +433,7 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
 	activeRequest.open("POST",url, true);
 	activeRequest.setRequestHeader('Content-Type',
                       'application/x-www-form-urlencoded; charset=UTF-8');
-	activeRequest.send(changes);	
+	activeRequest.send(changes);
 	
 }
 
