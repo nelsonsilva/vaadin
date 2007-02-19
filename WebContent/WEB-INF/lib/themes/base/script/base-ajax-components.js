@@ -3103,7 +3103,13 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                 td.width = colWidths[model.colorder[colNum]] - 4 ;
 			}
             // render content
-            client.renderUIDL(comp, tdDiv);
+            // render content
+            if(comp.nodeName == 'label') {
+                // skip heavy renderUIDL function if only text
+                tdDiv.appendChild(d.createTextNode(comp.firstChild.data));
+            } else {
+                client.renderUIDL(comp, tdDiv);
+            }
             td.appendChild(tdDiv);
             tr.appendChild(td);
 		}
@@ -3302,7 +3308,13 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             cellContent.style.width = (target.colWidths[colorder[currentCol]] - 4) + "px";
             cell.appendChild(cellContent);
             // render cell content
-            renderer.client.renderUIDL(comp, cellContent);
+            if(comp.nodeName == 'label') {
+                // skip heavy renderUIDL function if only text
+                cellContent.appendChild(d.createTextNode(comp.firstChild.data));
+            } else {
+                renderer.client.renderUIDL(comp, cellContent);
+            }
+            
             row.appendChild(cell);
         }
         if (al&&row.firstChild) {
