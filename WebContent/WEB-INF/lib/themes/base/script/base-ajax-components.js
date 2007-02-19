@@ -2938,7 +2938,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         html += "<img id=\""+pid+"hah\" src=\""+theme.root+"img/table/handle.gif\" class=\"colresizer\" >";
         html += "<div class=\"headerContent\" style=\"";
     	if (colWidths["heh"]) {
-			html += "width:"+(colWidths["heh"] - 15)+"px;";
+			html += "width:"+(colWidths["heh"] - 17)+"px;";
 		}
 		html += "\"></div></td>";
 	}
@@ -3100,7 +3100,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			if (colWidths[model.colorder[colNum]]) {
                 // set container divs width explicitely due IE overflow bug
                 // width - border - margin
-                td.width = colWidths[model.colorder[colNum]] - 4 ;
+                td.width = colWidths[model.colorder[colNum]];
+                tdDiv.style.width = (colWidths[model.colorder[colNum]] - 4) + "px";
 			}
             // render content
             // render content
