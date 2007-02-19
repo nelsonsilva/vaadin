@@ -963,11 +963,11 @@ itmill.Client.prototype.renderUIDL = function (uidl, target, renderer, doublebuf
 		// Create arguments array and add all callers extra parameters 
 		// to the end of arguments.
 		var args = new Array();
-		args[args.length] = renderer;
-		args[args.length] = uidl;
-		args[args.length] = target;
+		args.push(renderer);
+		args.push(uidl);
+		args.push(target);
 		for(var i=3; i<arguments.length; i++) {
-            args[args.length] = arguments[i];
+            args.push(arguments[i]);
         }
         try {      
 			var res = renderer.renderFunction.apply(this,args);
