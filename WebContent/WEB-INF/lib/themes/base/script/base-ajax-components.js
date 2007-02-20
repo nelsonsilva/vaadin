@@ -3021,8 +3021,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     table.className = "cin";
     var tableB = model.tableBody = d.createElement("tbody");
     // get rows from uidl
-	var trs = theme.getFirstElement(uidl, "rows").getElementsByTagName("tr");
-	len = trs.length;
+    var rows = theme.getFirstElement(uidl, "rows");
     // variables used building table
     var tr = null;
     var td = null;
@@ -3030,10 +3029,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var icon = null;
     
     var df = d.createDocumentFragment();
-    // TODO check for optimizations 
-	for (var i=0;i<len;i++) {
-    
-		var row = trs[i];
+    // TODO check for optimizations
+    var len = rows.childNodes.length; 
+	for (var i = 0; i <len;i++) {
+        var row = rows.childNodes[i];
 		var cap =  row.getAttribute("caption");
 		var key =  row.getAttribute("key");
 		var seld = row.getAttribute("selected");
@@ -3077,7 +3076,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		var colNum = -1;
 		for (j=0;j<l;j++) {
 			var comp = comps[j];
-			if (comp.nodeName == "#text") continue;
             if (comp.nodeName == "al" ) {
                 al = comp;
                 continue;
