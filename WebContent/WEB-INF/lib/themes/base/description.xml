@@ -24,11 +24,12 @@
 			<require>
 				<supports javascript="ECMA-262" />
 				<or>
-					<supports agent="Safari/4" />
+					<supports agent="AppleWebKit" />
 					<supports agent="Firefox" />
 					<supports agent="Camino/1" />
 					<supports agent="MSIE 6." />
 					<supports agent="MSIE 7." />
+					<supports agent="Opera/9" />
 				</or>
 			</require>
 		</mode>
