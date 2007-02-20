@@ -416,13 +416,22 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
     }
 	
 	// Build variable change query string
-	var changes = "";
+	var changes = (repaintAll ? "repaintAll=1" : "");
 	for (var i in this.variableStates) {
-		changes  += i + "=" + encodeURIComponent(this.variableStates[i]) + "&";
+		changes  += (changes==""?"":"&") + 
+		i + "=" + encodeURIComponent(this.variableStates[i]);
 	}
 	
 	// Build up request URL
-    var url = this.ajaxAdapterServletUrl + (repaintAll ? "?repaintAll=1" : "?") + "&requestid=" +this.requestStartTime;
+    var url = this.ajaxAdapterServletUrl;
+    
+    // Use get parameters for Nokia Reindeer, other browsers use post
+    var useGetParams = false;
+    if (navigator.appName=="Netscape"&&navigator.appVersion=="7.0") useGetParams=true;
+    
+    // Get requests require unique requestid to avoid caching
+    if (useGetParams)
+    	url += "?requestid=" + Math.random() + "&" + changes; 
     
      // Run the HTTP request
 	this.debug("Send variable changes: " + url);
@@ -430,11 +439,10 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
     // Create callback for request state changes
     var changeListener = this.createRequestChangeListener(this,activeRequest);  
 	activeRequest.onreadystatechange = changeListener;
-	activeRequest.open("POST",url, true);
+	activeRequest.open(useGetParams?"GET":"POST",url, true);
 	activeRequest.setRequestHeader('Content-Type',
                       'application/x-www-form-urlencoded; charset=UTF-8');
-	activeRequest.send(changes);
-	
+	activeRequest.send(useGetParams?null:changes);
 }
 
 /** Get first child element in given parent.
