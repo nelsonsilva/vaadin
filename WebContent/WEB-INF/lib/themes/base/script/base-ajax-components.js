@@ -3035,8 +3035,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     }
     
 	// Render CONTENT
-	cout = theme.createElementTo(inner,"div");
-    model.cout = cout; // save reference for use in handlers
+	var cout = model.cout = theme.createElementTo(inner,"div");
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
     // TODO move this to CSS
@@ -3105,7 +3104,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		}
 		var al = null;
 		var colNum = -1;
-		for (j=0;j<l;j++) {
+		for (var j=0;j<l;j++) {
 			var comp = comps[j];
             if (comp.nodeName == "al" ) {
                 al = comp;
@@ -3307,7 +3306,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         var l = comps.length;
         var currentCol = -1;
         var al = null; // rows action listeners
-        for (k=0;k<l;k++) {
+        for (var k=0;k<l;k++) {
             var comp = comps[k];
             if (comp.nodeName == "#text") continue;
             if (comp.nodeName == "al") {
