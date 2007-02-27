@@ -873,6 +873,8 @@ hidePopup : function() {
 
 	if (this.popup) {
 		this.addCSSClass(this.popup,"hide");
+        if(this.popup.blocker)
+            this.addCSSClass(this.popup.blocker, "hide");
 		this.popupShowing = false;
 	}
 	if (this.popupTimeout) {
@@ -901,6 +903,7 @@ togglePopup : function(popup, x, y, delay, defWidth, blocker) {
 	} else {
 		this.showPopup(this.client,popup,x,y,delay,defWidth,blocker?true:false);
 		if(blocker) {
+            popup.blocker = blocker;
 			blocker.style.position = "absolute";
 			blocker.style.width = popup.offsetWidth + "px";
 			blocker.style.height = popup.offsetHeight + "px";
