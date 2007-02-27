@@ -4676,7 +4676,7 @@ showDescriptionAndErrorPopup : function(theme, target, pos, delay, forceOpen) {
 			doc.body.appendChild(iframe);
 			
 			// Enable clicking on container
-			client.addEventListener(popupContainer, "click", 
+			theme.client.addEventListener(popupContainer, "click", 
 				function(e) {
 					var ev = e? e:window.event;
 					if(e.stopPropagation) e.stopPropagation();
