@@ -79,6 +79,10 @@ registerTo : function(client) {
     client.registerRenderer(this,"table","list",this.renderPagingTable);
 	client.registerRenderer(this,"tree",null,this.renderTree);
 	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
+    
+    // Usually functions here are run so that "this" means client, but
+    // some of functions are run from themes Scope and need client reference
+    this.client = client;
 },
 
 
@@ -151,7 +155,7 @@ getFirstTextNode : function(parent) {
  *   @return the element with children removed
  */
 removeAllChildNodes : function(element) {
-	client.removeAllEventListeners(element);
+	this.client.removeAllEventListeners(element);
 	while (element.childNodes&&element.childNodes.length > 0) {
 		element.removeChild(element.childNodes[0]);
 	}
@@ -352,9 +356,9 @@ styleToCSSClass : function(prefix,style) {
  */
 listContainsInt : function(list,number) {
   if (!list) return false;
-  a = list.split(",");
+  var a = list.split(",");
 
-  for (i=0;i<a.length;i++) {
+  for (var i = 0;i<a.length;i++) {
     if (a[i] == number) return true;
   }
   
@@ -388,9 +392,9 @@ listAddInt : function(list,number) {
 listRemoveInt : function(list,number) {
 	if (!list) return "";
 	retval = "";
-	a = list.split(',');
+	var a = list.split(',');
 
-	for (i=0;i<a.length;i++) {
+	for (var i=0;i<a.length;i++) {
 		if (a[i] != number) {
   			if (i == 0) retval += a[i];
   			else retval += "," + a[i];
@@ -890,11 +894,12 @@ hidePopup : function() {
  *  
  */
 togglePopup : function(popup, x, y, delay, defWidth, blocker) {
+	// presuming "this" is theme
 	if (this.popup == popup && this.popupShowing) {
 		this.hidePopup();
 		if(blocker) this.addCSSClass(blocker,"hide");
 	} else {
-		this.showPopup(client,popup,x,y,delay,defWidth,blocker?true:false);
+		this.showPopup(this.client,popup,x,y,delay,defWidth,blocker?true:false);
 		if(blocker) {
 			blocker.style.position = "absolute";
 			blocker.style.width = popup.offsetWidth + "px";
@@ -936,21 +941,21 @@ addAddClassListener : function(theme,client,element,event,className,target,curre
 },
 
 addRemoveClassListener : function(theme,client,element,event,className,target) {
-	client.addEventListener(element,event, function(e) {
+	this.client.addEventListener(element,event, function(e) {
 			theme.removeCSSClass((target?target:element),className);
 		}
 	);
 },
 
 addToggleClassListener : function(theme,client,element,event,className,target) {
-	client.addEventListener(element,event, function(e) {
+	this.client.addEventListener(element,event, function(e) {
 			theme.toggleCSSClass((target?target:element),className);
 		}
 	);
 },
 
 addStopListener : function(theme,client,element,event) {
-	client.addEventListener(element, event, function(e) { 
+	this.client.addEventListener(element, event, function(e) { 
 			var evt = client.getEvent(e);
 			evt.stop();
 			return false;
@@ -959,7 +964,7 @@ addStopListener : function(theme,client,element,event) {
 },
 
 addSetVarListener : function(theme,client,element,event,variable,key,immediate) {
-	client.addEventListener(element,event, function(e) {
+	this.client.addEventListener(element,event, function(e) {
 			var value = "";
 			if (typeof(key)=="string") {
 				value = key;
@@ -1541,9 +1546,9 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 						theme.setCSSClass(tab,"tab disabled inline");
 					} else {
 						theme.setCSSClass(tab,"tab clickable inline");
-						theme.addAddClassListener(theme,client,tab,"mouseover","over",tab);
-						theme.addRemoveClassListener(theme,client,tab,"mouseout","over",tab);
-						theme.addSetVarListener(theme,client,tab,"click",varId,key,true);
+						theme.addAddClassListener(theme,this,tab,"mouseover","over",tab);
+						theme.addRemoveClassListener(theme,this,tab,"mouseout","over",tab);
+						theme.addSetVarListener(theme,this,tab,"click",varId,key,true);
 					}
 					// Extra div in tab
 					tab = theme.createElementTo(tab,"div","caption border pad inline");
@@ -1825,7 +1830,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 			try {
 				window.eval(lang);
 			} catch (e) {
-				client.error("Could not eval DateField lang ("+locale+"):"+e );
+				this.error("Could not eval DateField lang ("+locale+"):"+e );
 			}
 		}
 	}		
@@ -1884,6 +1889,8 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 			// Create button
 		    var button = theme.createInputElementTo(div,"button","btn clickable");
 		    button.id =buttonId;
+		    button.inputId = inputId;
+		    
 		    button.value = "...";
 		    if (disabled||readonly) {
 		    	button.disabled = true;
@@ -1905,7 +1912,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 				    if (disabled) {
 				    	year.disabled = true;
 				    }
-			    	if (!readonly) theme.addSetVarListener(theme,client,year,"change",yearVar.getAttribute("id"),year,immediate);
+			    	if (!readonly) theme.addSetVarListener(theme,this,year,"change",yearVar.getAttribute("id"),year,immediate);
 		    	}
 			}
 			if (monthVar) {
@@ -1924,7 +1931,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 				    if (disabled) {
 				    	month.disabled = true;
 				    }
-			    	if (!readonly) theme.addSetVarListener(theme,client,month,"change",monthVar.getAttribute("id"),month,immediate);
+			    	if (!readonly) theme.addSetVarListener(theme,this,month,"change",monthVar.getAttribute("id"),month,immediate);
 			    }
 			}
 		}
@@ -1949,7 +1956,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 		    if (disabled) {
 		    	hour.disabled = true;
 		    }
-	    	if (!readonly) theme.addSetVarListener(theme,client,hour,"change",hourVar.getAttribute("id"),hour,immediate);
+	    	if (!readonly) theme.addSetVarListener(theme,this,hour,"change",hourVar.getAttribute("id"),hour,immediate);
 	    }
     }
     if (minVar) {
@@ -1969,7 +1976,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 		    if (disabled) {
 		    	min.disabled = true;
 		    }
-	    	if (!readonly) theme.addSetVarListener(theme,client,min,"change",minVar.getAttribute("id"),min,immediate);
+	    	if (!readonly) theme.addSetVarListener(theme,this,min,"change",minVar.getAttribute("id"),min,immediate);
 	    }
     }
     if (secVar) {
@@ -1989,7 +1996,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 		    if (disabled) {
 		    	sec.disabled = true;
 		    }
-	    	if (!readonly) theme.addSetVarListener(theme,client,sec,"change",secVar.getAttribute("id"),sec,immediate);
+	    	if (!readonly) theme.addSetVarListener(theme,this,sec,"change",secVar.getAttribute("id"),sec,immediate);
 	    }
     }
     if (msecVar) {
@@ -2023,18 +2030,18 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 		    if (disabled) {
 		    	msec.disabled = true;
 		    }
-	    	if (!readonly) theme.addSetVarListener(theme,client,msec,"change",msecVar.getAttribute("id"),msec,immediate);
+	    	if (!readonly) theme.addSetVarListener(theme,this,msec,"change",msecVar.getAttribute("id"),msec,immediate);
 	    }	    
    }
    
    if (!readonly) {
-   		if (msec) theme.addDateFieldNullListener(client,msec,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
-   		if (sec) theme.addDateFieldNullListener(client,sec,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
-   		if (min) theme.addDateFieldNullListener(client,min,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
-   		if (hour) theme.addDateFieldNullListener(client,hour,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
-   		if (day) theme.addDateFieldNullListener(client,day,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
-   		if (month) theme.addDateFieldNullListener(client,month,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
-   		if (year) theme.addDateFieldNullListener(client,year,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (msec) theme.addDateFieldNullListener(this,msec,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (sec) theme.addDateFieldNullListener(this,sec,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (min) theme.addDateFieldNullListener(this,min,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (hour) theme.addDateFieldNullListener(this,hour,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (day) theme.addDateFieldNullListener(this,day,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (month) theme.addDateFieldNullListener(this,month,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
+   		if (year) theme.addDateFieldNullListener(this,year,text,msec,sec,min,hour,day,month,year,yearVar,immediate);
    		 
    }
    
@@ -2061,60 +2068,88 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
    			}
    			//client.changeVariable(dayVar.getAttribute("id"), -1, false);
    			//client.changeVariable(monthVar.getAttribute("id"), -1, false);
-   			client.changeVariable(yearVar.getAttribute("id"), -1, immediate);
+   			this.changeVariable(yearVar.getAttribute("id"), -1, immediate);
    }
-    
-    // Function that updates the datefield
-    var updateFunc = function (event) { 
-   		if (text.value == null || text.value == "") {
-   			nullFunc();
-   			return;
-   		}
-    	if (dayVar) {
-         var d = text.value.split(".")[0];
-         if (d == null || d < 1 || d > 31 ) alert("Error");
-         client.changeVariable(dayVar.getAttribute("id"), d, false);
-        }
-        if (monthVar) {
-         var m = text.value.split(".")[1];
-         if (m == null || m < 1 || m > 12) alert("Error");
-         client.changeVariable(monthVar.getAttribute("id"), m, false);
-        }
-         var y = text.value.split(".")[2];
-         if (y == null || y < 0 || y > 5000) alert("Error");
-         client.changeVariable(yearVar.getAttribute("id"), y, immediate);
-         
-         
- 	};
- 	
- 	if (!readonly && !disabled && style != "time" && dayVar) {
-	 	//  Create a unique temporary variable
-	 	// Dont know if all this is needed, but its purpose is to avoid
-	 	// javascript problems with event handlers scopes.
-	 	var temp = "datefield_" + (new Date()).getTime();;
-	    eval (temp + " = new Object();");
-	    (eval (temp)).update = function () { updateFunc() };
-	    var st = "Calendar.setup({onUpdate : function () { " + temp + 
-	                    ".update(); } ,inputField : '"+inputId+"', firstDay : 1,"+
-	                    " ifFormat : '%d.%m.%Y', button : '"+buttonId+"'});";
-	    
-	    // Assign update function to textfield
-	    text.onchange = updateFunc;
-	
-		// TODO externalize:
-	    // Assign initialization to button mouseover (lazy initialization)
-	    client.addEventListener(button, "mouseover", function(event) { 
-	 			if (!eval(temp).initialized) {
-	 				eval(temp).initialized =true; 
-	 				eval(st); 
-	 			} 
-	 		}
-	 	);
+
+	if (!readonly && !disabled && style != "time" && dayVar) {
+		button.onclick = theme.dateFieldShowCalendar;
+		button.updateField = theme.dateFieldUpdateFromCalendar;
+		text.dayVarId = dayVar.getAttribute("id");
+		text.monthVarId = monthVar.getAttribute("id");
+		text.yearVarId = yearVar.getAttribute("id");
+		text.immediate = immediate;
+		text.updateVariables = theme.dateFieldUpdateVariables;
+		text.onchange = text.updateVariables;
+		text.client = this;
 	}
 },
 
+dateFieldShowCalendar : function (cal) {
+	// "this" is triggering element that has inputs id in inputId
+	var inputField = document.getElementById(this.inputId);
+	
+	// This uses Calendar object directly, DO NOT USE setup() helper methods - it will leak
+	var cal = window.calendar;
+
+	var dValue = Date.parseDate(inputField.value, "%d,%m,%Y");
+
+	console.debug("show calendar");
+	
+	var mustCreate = false;
+	if(!cal) {
+		// popping up calendar first time for this page on any field
+		window.calendar = cal = new Calendar(
+			1,
+			dValue,
+			itmill.themes.Base.prototype.dateFieldUpdateFromCalendar,
+			itmill.themes.Base.prototype.dateFieldCloseCalendar
+		);
+		cal.setDateFormat("%d.%m.%Y");
+		mustCreate = true;
+	} else {
+		// modifying existing calendar Object
+		cal.setDate(dValue);
+	}
+	
+	if(mustCreate)
+		cal.create();
+	
+	cal.showAtElement(this);
+	cal.triggerElement = this;
+	
+},
+
+/** Called on Calendars  "close click" */
+dateFieldCloseCalendar : function() {
+	this.hide();
+},
+
+dateFieldUpdateFromCalendar : function (){
+	// this is calendar object
+	if(this.dateClicked) {
+		// we have doped it with triggerElement that points to "..." Button
+		var field = document.getElementById(this.triggerElement.inputId);
+		field.value = this.date.print(this.dateFormat);
+		field.updateVariables();
+		this.hide();
+	}
+},
+
+dateFieldUpdateVariables : function () {
+	// "this" must be textField
+	if (this.value == null || this.value == "") {
+		return;
+	}
+	var a = this.value.split(".");
+	
+	this.client.changeVariable(this.dayVarId, a[0], false);
+	this.client.changeVariable(this.monthVarId, a[1], false);
+	this.client.changeVariable(this.yearVarId, a[2], this.immediate);
+	
+},
+
 addDateFieldNullListener : function (client,elm,text,msec,sec,min,hour,day,month,year,yearVar,immediate) {
-	client.addEventListener(elm, "change", function(event) {
+	this.client.addEventListener(elm, "change", function(event) {
 
 		if ( !elm || elm.value != -1) return;
 
@@ -2186,25 +2221,21 @@ renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
     var calDivId = uidl.getAttribute("id") + "_cal";
 	calDiv.id = calDivId;
    
-   // In layouting phase, activate the calendar 
+   // TODO this most likely leaks in IE, refactor like in normal field
    var pid = uidl.getAttribute("id");
-   client.registerLayoutFunction(div, function() {
-	   Calendar.setup({
-	     firstDay     : 1,
-	     date		  : initDate,
-	     flat         : calDiv, // ID of the parent element
-	     flatCallback : function (cal) {
-	        var y = cal.date.getFullYear();
-	        var m = cal.date.getMonth() + 1;
-	        var d = cal.date.getDate();
-	        client.changeVariable(dayVarId, d, false);
-	        client.changeVariable(monthVarId, m, false);
-	        client.changeVariable(yearVarId, y, immediate);
-			}          
-	   }); 
-	   unregisterLayoutFunction(div);
+   Calendar.setup({
+   		firstDay     : 1,
+   		date		  : initDate,
+   		flat         : calDiv, // ID of the parent element
+   		flatCallback : function (cal) {
+   			var y = cal.date.getFullYear();
+   			var m = cal.date.getMonth() + 1;
+   			var d = cal.date.getDate();
+   			theme.client.changeVariable(dayVarId, d, false);
+   			theme.client.changeVariable(monthVarId, m, false);
+   			theme.client.changeVariable(yearVarId, y, immediate);
+   		}       
    });
- 	
 },
 
 renderUpload : function(renderer,uidl,target,layoutInfo) {
@@ -3504,7 +3535,7 @@ scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,c
 scrollTableAddScrollListener : function (theme,target) {
 	var hout = target.model.hout;
     var cout = target.model.cout;
- 	client.addEventListener(cout,"scroll", function (e) {
+	theme.client.addEventListener(cout,"scroll", function (e) {
         if (cout.scrollTimeout) {
  			clearTimeout(cout.scrollTimeout);
 		}
@@ -3597,7 +3628,6 @@ scrollTableAddScrollHandler : function(client,theme,target) {
 },
 
 scrollTableRecalc : function(pid,target) {
-    console.info("Table: recalc widths");
 	var div = target.ownerDocument.getElementById(pid);
 	var colWidths = div.colWidths;
 	if (!colWidths) {
@@ -4851,14 +4881,14 @@ eventPosition : function(e) {
  * Prevent text selection in buttons and etc.
  */
 addPreventSelectionListener : function(theme,client,div,event) {
-	client.addEventListener(div, "mousedown", function(e) { 
+	this.client.addEventListener(div, "mousedown", function(e) { 
 			var evt = client.getEvent(e);
 			evt.stop();
 			return false;
 		}
 	);
 	// For IE
-	client.addEventListener(div, "selectstart", function(e) { 
+	this.client.addEventListener(div, "selectstart", function(e) { 
 			var evt = client.getEvent(e);
 			evt.stop();
 			return false;

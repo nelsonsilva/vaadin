@@ -43,7 +43,7 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 			
 			// If no actual caption, remove description popup listener
 			if(caption && caption.className.indexOf("hide") > -1) {
-				client.removeEventListener(div,undefined,null,"descriptionPopup");
+				this.removeEventListener(div,undefined,null,"descriptionPopup");
 			}
 
 			
@@ -80,10 +80,10 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 						theme.setCSSClass(tab,"tab disabled inline");
 					} else {
 						theme.setCSSClass(tab,"tab clickable");
-						theme.addAddClassListener(theme,client,tab,"mouseover","over",tab);
-						theme.addRemoveClassListener(theme,client,tab,"mouseout","over",tab);
-						theme.addSetVarListener(theme,client,tab,"click",varId,key,true);
-						theme.addPreventSelectionListener(theme,client,tab,"mousedown");
+						theme.addAddClassListener(theme,this,tab,"mouseover","over",tab);
+						theme.addRemoveClassListener(theme,this,tab,"mouseout","over",tab);
+						theme.addSetVarListener(theme,this,tab,"click",varId,key,true);
+						theme.addPreventSelectionListener(theme,this,tab,"mousedown");
 					}
 					
 					// Icon
@@ -154,7 +154,7 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 	
 	// If no actual caption, remove description popup listener from the container
 	if(caption && caption.className.indexOf("hide") > -1) {
-		client.removeEventListener(div,undefined,null,"descriptionPopup");
+		this.removeEventListener(div,undefined,null,"descriptionPopup");
 	}
 
 	// Content DIV

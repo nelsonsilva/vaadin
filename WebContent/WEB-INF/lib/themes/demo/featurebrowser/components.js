@@ -145,7 +145,8 @@ propertiesButtonClick : function() {
 	var propertiesDiv = document.getElementById("featurebrowser-properties");
 	propertiesDiv.targetWidth = propertiesDiv.buttonState == "false" ? propertiesDiv.maxWidth : 0;
 	itmill.themes.Demo.prototype.recalcFeatureBrowserLayout();
-	client.changeVariable(propertiesDiv.buttonId,propertiesDiv.buttonState == "false" ? "true" : "false",true);
+    // this is a rude hack to find right client
+	itmill.clients[0].changeVariable(propertiesDiv.buttonId,propertiesDiv.buttonState == "false" ? "true" : "false",true);
 },
 
 /** Recalculate feature browser main layout dimensions for all components */

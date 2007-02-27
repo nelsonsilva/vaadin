@@ -8,6 +8,8 @@ if (typeof itmill == 'undefined') itmill = new Object();
 /** List of themes */
 itmill.themes = new Object();
 
+/** List of clients */
+itmill.clients = new Array();
 
 /** Creates new itmill.toolkit ajax client.
  *  @param windowElementNode Reference to element that will contain the 
@@ -19,6 +21,8 @@ itmill.themes = new Object();
  *  @author IT Mill Ltd.
  */
 itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement) {
+    itmill.clients.push(this);
+    this.clientId = itmill.clients.length;
 
 	// Store parameters
 	this.mainWindowElement = windowElementNode;
@@ -92,6 +96,7 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 		
 	}
 	
+	// TODO remove global
 	window.png = function(img) {
        var src = img.src;
         if (!src || src.indexOf("pixel.gif")>0) return;
@@ -122,10 +127,10 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
  *  @author IT Mill Ltd.
  */
 itmill.Client.prototype.start = function() {
-    if (this.debugEnabled) {
-    	this.debug("Starting Ajax client");
+	if (this.debugEnabled) {
+		this.debug("Starting Ajax client");
 	} 
-    // Send initial request
+	// Send initial request
 	this.processVariableChanges(true);
 }
 
@@ -343,7 +348,7 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
             }
     
             // Get updates
-            updates = req.responseXML;
+            var updates = req.responseXML;
             // responseXML should be null if not valid XML, but sadly not, validate
             // by detecting count of changes element
             if (!updates || updates.getElementsByTagName("changes").length == 0) {
@@ -411,7 +416,7 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
 	}
 	
 	// Request start time
-    if(client.debugEnabled) {
+    if(this.debugEnabled) {
         console.time("UIDL loaded in ");
     }
 	
@@ -529,6 +534,8 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
     win.document.write(html);
     win.document.close();
     win.document.ownerWindow = win;
+    
+    // TODO ILLEGAL global
     win.document.renderUIDL = function(uidl,currentNode) {
     	this.client.renderUIDL(uidl,currentNode);
     }
