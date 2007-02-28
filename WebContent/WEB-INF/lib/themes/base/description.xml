@@ -29,7 +29,7 @@
 					<supports agent="Camino/1" />
 					<supports agent="MSIE 6." />
 					<supports agent="MSIE 7." />
-					<supports agent="Opera/9" />
+					<supports agent="opera/9" />
 				</or>
 			</require>
 		</mode>
