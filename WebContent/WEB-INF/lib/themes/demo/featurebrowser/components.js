@@ -276,8 +276,11 @@ updateTabsContentHeight : function() {
 	try {
 		var tabsDiv = document.getElementById("featurebrowser-tabs");
 		var tabsComponent = itmill.themes.Demo.prototype.elementByIndex(tabsDiv.childNodes,0);
+		if (tabsComponent == null) return;
 		var tabs = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,0);
+		if (tabs == null) return;
 		var content = itmill.themes.Demo.prototype.elementByIndex(tabsComponent.childNodes,1);
+		if (content == null) return;
 		content.style.height="" + (tabsDiv.offsetHeight - tabs.offsetHeight-13) + "px";
 		content.style.borderBottom="0";
 		content.style.overflow='auto';
@@ -297,22 +300,30 @@ updatePropertiesContentHeight : function() {
 	try {
 		var propsDiv = document.getElementById("featurebrowser-properties");
 		var panel = itmill.themes.Demo.prototype.elementByIndex(propsDiv.childNodes,1);
-		var content = itmill.themes.Demo.prototype.elementByIndex(itmill.themes.Demo.prototype.elementByIndex(panel.childNodes,0).childNodes,1);
-		content.style.height="" + (propsDiv.offsetHeight - 15 - 20) + "px";
-		content.style.borderBottom="0";
-		content.style.borderRight="0";
-		content.style.overflow='auto';
+		if (panel != null) {
+			var t = itmill.themes.Demo.prototype.elementByIndex(panel.childNodes,0);
+			if (t == null) return;
+			var content = itmill.themes.Demo.prototype.elementByIndex(t.childNodes,1);
+			if (content != null) {
+				content.style.height="" + (propsDiv.offsetHeight - 15 - 20) + "px";
+				content.style.borderBottom="0";
+				content.style.borderRight="0";
+				content.style.overflow='auto';
+			}
+		}
 	} catch (e) {}
 },
 
 /** Helper method. Get element from node array by index */
 elementByIndex : function(nodeArray, index) {
+	if (typeof nodeArray == 'undefined' || nodeArray == null) return null;
 	var i=0;
-	while (index>=0) {
-		while(nodeArray[i].nodeType != Node.ELEMENT_NODE) i++;
+	while (index>=0 && i < nodeArray.length) {
+		while(i < nodeArray.length && nodeArray[i].nodeType != Node.ELEMENT_NODE) i++;
 		if (index == 0) return nodeArray[i];
 		index--; i++;
 	}
+	return null;
 }
 
 
