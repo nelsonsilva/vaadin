@@ -29,7 +29,9 @@
 					<supports agent="Camino/1" />
 					<supports agent="MSIE 6." />
 					<supports agent="MSIE 7." />
-					<supports agent="opera/9" />
+					<!-- Opera / 9 -->
+					<supports agent="pera/9" />
+					<supports agent="Konqueror/3" />
 				</or>
 			</require>
 		</mode>
