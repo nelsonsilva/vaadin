@@ -63,7 +63,6 @@ registerTo : function(client) {
 	client.registerRenderer(this,"upload",null,this.renderUpload);
 	client.registerRenderer(this,"embedded",null,this.renderEmbedded);
 
-	client.registerRenderer(this,"window",null,this.renderWindow);
 	client.registerRenderer(this,"framewindow",null,this.renderFramewindow);
 	client.registerRenderer(this,"open",null,this.renderOpen);
 	
@@ -79,6 +78,8 @@ registerTo : function(client) {
     client.registerRenderer(this,"table","list",this.renderPagingTable);
 	client.registerRenderer(this,"tree",null,this.renderTree);
 	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
+
+	client.registerRenderer(this,"window",null,this.renderWindow);
     
     // Usually functions here are run so that "this" means client, but
     // some of functions are run from themes Scope and need client reference
@@ -1119,6 +1120,13 @@ renderComponent : function(renderer,uidl,target,layoutInfo) {
 
 renderWindow : function(renderer,uidl,target,layoutInfo) {
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	
+	if(!uidl.getAttribute("main") && !uidl.getAttribute("native")) {
+		var tkWin = new itmill.themes.Base.TkWindow({title: "New DIV window", parentNode: div});
+		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
+		return;
+	}
+	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	var theme = renderer.theme;
@@ -5186,9 +5194,11 @@ itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {
 	this.parentTheme.addCSSClass(this.toggle, "toggle-selected");				
 	this.adjustWidth(this.layout,this.search.clientWidth);			
 }
+
 /* Close dropdown box */
+
 itmill.themes.Base.FilterSelect.prototype.closeDropdown = function() {
-	// ie fix.
+	// ie fix
 	if (this.popupSelectsHidden) {
 		var len = this.popupSelectsHidden.length;
 		for (var i=0;i<len;i++) {
@@ -5502,3 +5512,413 @@ itmill.themes.Base.FilterSelect.prototype.updateStatistics = function() {
 itmill.themes.Base.FilterSelect.prototype.decodeCaption = function(encoded) {	
 	return unescape(encoded.replace(/[+]+/g, " "));
 }
+
+/* ** DIV Windowing ** */
+
+
+/**
+ * Overlay is an object to be used by for example windows (by composition).
+ * 
+ * Other components that might use it:
+ *  * tooltips
+ *  * dropdown menus
+ * 
+ * TODO extend this to make optional shadow around Overlay objects
+ * 
+ */
+itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
+	// TODO detect IE and Mac FF which only need blocker iFrame
+	this._blocker = document.createElement("iframe");
+	this._blocker.className = "overlay_blocker";
+	this._blocker.style.width = (w ? w : 640) + "px";
+	this._blocker.style.height = (h ? h : 400) + "px";
+	this._hasBlocker = true;
+	
+	this._div = document.createElement("div");
+	this._div.className = "overlay_body";
+	this._div.style.width = (w ? w : 640) + "px";
+	this._div.style.height = (h ? h : 400) + "px";
+	
+	this.setXY(x,y);
+	this.setZindexBase(zIndexBase ? zIndexBase : 12000);
+	
+}
+
+/**
+ * This method is used to set base z-index above which this element floats.
+ * Each window has 100 z-indexes. They start from 12000 and below is described
+ * what is planned on each:
+ *  
+ * n + 0 	Window shadow
+ * n + 1 	Iframe (blocker)
+ * n + 2 	Window border and content divs (content overflow: auto|hidden)
+ * n + 50- 	Reserved
+ * 
+ * @param z base z-index
+ */
+itmill.themes.Base.Overlay.prototype.setZindexBase = function(z) {
+	this._zIndexBase = z;
+	if(this._hasBlocker)
+		this._blocker.style.zIndex = z + 1;
+	this._div.style.zIndex = z + 2;
+}
+
+/**
+ * @return {Number} current z-index base
+ */
+itmill.themes.Base.Overlay.prototype.getZindexBase = function() {
+	return this._zIndexBase;
+}
+
+/**
+ * Set width of floating element (containter and blocker)
+ */
+itmill.themes.Base.Overlay.prototype.setWidth = function(w) {
+	if(this._hasBlocker)
+		this._blocker.style.width = w + "px";
+	this._div.style.width = w + "px";
+}
+
+
+/**
+ * Set height of floating element (containter and blocker)
+ */
+itmill.themes.Base.Overlay.prototype.setHeight = function(h) {
+	if(this._hasBlocker)
+		this._blocker.style.height = h + "px";
+	this._div.style.height = h + "px";
+}
+
+/**
+ * This function is used to change absolute position of Overlay. To 
+ * only set one, define other as null
+ * 
+ * @param {Number} x x coordinate
+ * @param {Number} y y coordinate
+ */
+itmill.themes.Base.Overlay.prototype.setXY = function(x,y) {
+	if(typeof x == "number") {
+		if(this._hasBlocker)
+			this._blocker.style.left = x + "px";	
+		this._div.style.left = x + "px";
+	}
+	if(typeof y == "number") {
+		if(this._hasBlocker)
+			this._blocker.style.top = y + "px";
+		this._div.style.top = y + "px";
+	}
+}
+
+/**
+ * Append this Overlay to a given element
+ * @param {HTMLElement} parent Element where to append this overlay
+ */
+itmill.themes.Base.Overlay.prototype.appendTo = function(par) {
+	if(!par) {
+		par = document.body;
+	}
+	par.appendChild(this._blocker);
+	par.appendChild(this._div);
+	this._par = par;
+}
+
+/**
+ * Get reference to element where content is to be rendered
+ * @return {HTMLElement} container element
+ */
+itmill.themes.Base.Overlay.prototype.getPaintTarget = function() {
+	return this._div;
+}
+
+itmill.themes.Base.Overlay.prototype.dispose = function() {
+	if(this._hasBlocker)
+		this._blocker.parentNode.removeChild(this._blocker);
+	this._div.parentNode.removeChild(this._div);
+}
+
+/**
+ * TkWindow implements window component with HTMLDiv elements.
+ * 
+ * Possible arguments and their default values:
+ * {
+ * width 	: 640,
+ * height 	: 400,
+ * posX		: 0,
+ * posY		: 0,
+ * title	: "New Window",
+ * parentNode : document.body,
+ * draggable: true,
+ * resizeable: true
+ * }
+ * 
+ * @argument {Object} args hash containing initial settings for window
+ */
+itmill.themes.Base.TkWindow = function(args) {
+	if(!args)
+		args = new Object();
+
+	// TODO remove client determining hack to support mutltiple apps in one page
+	var client = itmill.clients[0];
+	
+	this._width = args.width ? args.width : 640;
+	this._height = args.height ? args.height : 400;
+	this._x	= args.posX ? args.posX : 0;
+	this._y	= args.posY ? args.posY : 0;
+	
+	this._header = document.createElement("div");
+	this._header.className = "winHeader"
+	
+	this._draggable = ( typeof args.draggable == "boolean" ) ? args.draggable : true;
+	if(this._draggable) {
+		client.addEventListener(this._header,"mousedown", this._onHeaderMouseDown);
+		this._header.TkWindow = this;
+	}
+	
+	this._closeable = ( typeof args.closeable == "boolean" ) ? args.closeable : true;
+	if(this._closeable) {
+		this._closeButton = document.createElement("div");
+		this._closeButton.TkWindow = this;
+		this._closeButton.className = "closeButton";
+		// TODO event listener for close button
+		this._header.appendChild(this._closeButton);
+		client.addEventListener(this._closeButton,"click",this._onCloseListener);
+	}
+	this._header.appendChild(document.createTextNode(args.title ? args.title : "New Window"));
+	
+	this.childTarget = this._body = document.createElement("div");
+	this._footer = document.createElement("div");
+	
+	this._resizeable = typeof args.resizeable == "boolean" ? args.resizeable : true
+	if(this._resizeable) {
+		this._winResizer = document.createElement("div");
+		this._winResizer.className = "winResizer"
+		this._winResizer.TkWindow = this;
+		this._footer.appendChild(this._winResizer);
+		client.addEventListener(this._winResizer, "mousedown", this._onResizeStart);
+	}
+	
+	// create and populate container
+	this._cont	= document.createElement("div");
+	this._cont.TkWindow = this;
+	client.addEventListener(this._cont, "click", this._onClickHandler);
+	
+	this._cont.appendChild(this._header);
+	this._cont.appendChild(this._body);
+	this._cont.appendChild(this._footer);
+
+	
+	this._body.className = "winBody";
+	this._body.style.height = (this._height - this.HEADER_HEIGHT * 2 ) + "px";
+
+	this._footer.className = "winFooter";
+	
+	
+	// TODO determine proper z-index base and pass it to Overlay object
+	this._ol = new itmill.themes.Base.Overlay(
+		this._width,
+		this._height,
+		this._x,
+		this._y
+	);
+	
+	var tmp = this._ol.getPaintTarget();
+	tmp.appendChild(this._cont);
+	
+	this._ol.appendTo(args.parentNode ? args.parentNode : null);
+	
+	// new window should be positioned on top
+	this._setWindowIndex(client.windowOrder.length);
+	client.windowOrder.push(this);
+}
+
+/**
+ * This function makes window the frontmost
+ */
+itmill.themes.Base.TkWindow.prototype.bringToFront = function() {
+	var wo = itmill.clients[0].windowOrder;
+	var curIndex = wo.indexOf(this);
+	if(curIndex < (wo.length -1) ) {
+		// if not on top already
+		wo.splice(curIndex,1);
+		for(;curIndex < wo.length;curIndex++)
+			wo[curIndex]._setWindowIndex(curIndex);
+		wo.push(this);
+		this._setWindowIndex(curIndex);
+	}
+}
+
+/**
+ * This function is used by bringToFront function to order windows.
+ */
+itmill.themes.Base.TkWindow.prototype._setWindowIndex = function(i) {
+	this._ol.setZindexBase(12000 + i*100);
+}
+
+itmill.themes.Base.TkWindow.prototype.setWidth = function(w) {
+	if( w > 50) {
+		this._cont.style.widht = w + "px";
+		this._ol.setWidth(w);
+		this._width = w;
+	}
+}
+
+itmill.themes.Base.TkWindow.prototype.setHeight = function(h) {
+	if( h > 50) {
+		this._body.style.height = ( h - this.HEADER_HEIGHT * 2 ) + "px";
+		this._ol.setHeight(h);
+		this._height = h;
+	}
+}
+
+/**
+ * This clickhandler forces window to be to frontmost when clicked,
+ * No support for X11 fanatics yet, sorry...
+ */
+itmill.themes.Base.TkWindow.prototype._onClickHandler = function(e) {
+	var evt = itmill.Client.prototype.getEvent(e);
+	// due lack in IE's event handling, get TkWindow via helper that loops DOM
+	var tkWindow = itmill.Client.prototype.getTkWindow(evt.target);
+	if(tkWindow) {
+		tkWindow.bringToFront();
+		evt.stop();
+	}
+		
+}
+
+/**
+ * This is actionListener for starting dragging
+ */
+itmill.themes.Base.TkWindow.prototype._onHeaderMouseDown =  function(e) {
+	var evt = itmill.Client.prototype.getEvent(e);
+	evt.stop();
+	var tkWindow = evt.target.TkWindow;
+	tkWindow.bringToFront();
+	
+	tkWindow.origMouseX = evt.mouseX;
+	tkWindow.origMouseY = evt.mouseY;
+	tkWindow.origX = tkWindow._ol._div.offsetLeft;
+	tkWindow.origY = tkWindow._ol._div.offsetTop;
+	
+	// TODO remove this wrong way of getting client object
+	var client = itmill.clients[0];
+	client.dragItem = tkWindow;
+	client.addEventListener(document, "mousemove", tkWindow._onDrag);
+	client.addEventListener(document, "mouseup", tkWindow._onDragMouseUp);
+	// don't use drag
+	client.addEventListener(document, "drag", tkWindow._stopListener);
+	document.onselectstart = function(e) {return false;}
+	
+}
+
+itmill.themes.Base.TkWindow.prototype._onDragMouseUp = function(e) {
+	// TODO remove this wrong way of getting client object
+	var client = itmill.clients[0];
+	var evt = client.getEvent(e);
+	client.removeEventListener(document,"mousemove",itmill.themes.Base.TkWindow.prototype._onDrag);
+	client.removeEventListener(document,"mouseup",itmill.themes.Base.TkWindow.prototype._onDragMouseUp);
+	client.removeEventListener(document,"drag",itmill.themes.Base.TkWindow.prototype._stopListener);
+	document.onselectstart = null ;
+	return false;
+}
+
+itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
+	// "this" is document.body
+	var client = itmill.clients[0];
+	var evt = client.getEvent(e);
+	evt.stop();
+	var tkWindow = client.dragItem;
+	tkWindow._ol.setXY(
+		(evt.mouseX - tkWindow.origMouseX + tkWindow.origX),
+		(evt.mouseY - tkWindow.origMouseY + tkWindow.origY)
+	);
+}
+
+/**
+ * This is actionListener for starting window resizing
+ */
+itmill.themes.Base.TkWindow.prototype._onResizeStart =  function(e) {
+	var evt = itmill.Client.prototype.getEvent(e);
+	evt.stop();
+	var tkWindow = evt.target.TkWindow;
+	tkWindow.origMouseX = evt.mouseX;
+	tkWindow.origMouseY = evt.mouseY;
+	tkWindow.origW = tkWindow._width;
+	tkWindow.origH = tkWindow._height;
+	
+	// TODO remove this wrong way of getting client object
+	var client = itmill.clients[0];
+	client.dragItem = tkWindow;
+	client.addEventListener(document, "mousemove", tkWindow._onResizeDrag);
+	client.addEventListener(document, "mouseup", tkWindow._onStopResizing);
+	// don't use drag
+	client.addEventListener(document, "drag", tkWindow._stopListener);
+	document.onselectstart = function(e) {return false;}
+	
+}
+
+itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
+	// TODO remove this wrong way of getting client object
+	// TODO
+	var client = itmill.clients[0];
+	var evt = client.getEvent(e);
+	client.removeEventListener(document,"mousemove",itmill.themes.Base.TkWindow.prototype._onResizeDrag);
+	client.removeEventListener(document,"mouseup",itmill.themes.Base.TkWindow.prototype._onStopResizing);
+	client.removeEventListener(document,"drag",itmill.themes.Base.TkWindow.prototype._stopListener);
+	evt.stop();
+	document.onselectstart = null;
+	return false;
+}
+
+itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
+	// "this" is document.body
+	// TODO
+	var client = itmill.clients[0];
+	var evt = client.getEvent(e);
+	evt.stop();
+	var tkWindow = client.dragItem;
+	var w = evt.mouseX - tkWindow.origMouseX + tkWindow.origW;
+	if(w < 50)
+		w = 50;
+	var h = evt.mouseY - tkWindow.origMouseY + tkWindow.origH;
+	if(h < 50)
+		h = 50;
+	tkWindow.setWidth(w);
+	tkWindow.setHeight(h);
+}
+
+
+itmill.themes.Base.TkWindow.prototype._stopListener = function(e) {
+	var evt = itmill.clients[0].getEvent(e);
+	evt.stop();
+	return false;
+}
+
+itmill.themes.Base.TkWindow.prototype._onCloseListener = function(e) {
+	var evt = itmill.Client.prototype.getEvent(e);
+	evt.stop();
+	var tkWindow = evt.target.TkWindow;
+	// TODO tell to clien that window was closed
+	tkWindow.cleanUp();
+}
+
+itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
+	//TODO remove circular references from window
+	
+	// TODO remove illegal client refrence
+	var client = itmill.clients[0];
+
+	// move this window to top and order the rest
+	this.bringToFront();
+	// remove reference from windowOrder
+	client.windowOrder.pop();
+	
+	this._cont.parentNode.removeChild(this._cont);
+	this._ol.dispose();
+}
+
+/**
+ * Defines headers and footers height.
+ * 
+ * NOTE! CSS file must also comfort to this value
+ */
+itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 20;

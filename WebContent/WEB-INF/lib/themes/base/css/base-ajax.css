@@ -848,3 +848,49 @@ IMG.overlay {
 	text-align: center;
 }
 
+/* Overlay components styles */
+.itmtk .overlay_blocker {
+	position: absolute;
+	border: 0;
+	opacity: 0;
+}
+.itmtk .overlay_body {
+	position: absolute;
+	border: 0;
+	/* TODO debug color and border */
+	background-color: #f00;
+	border: 1px solid black;
+}
+
+.itmtk .winHeader {
+	/* TODO debug color */
+	background-color: #0f0;	
+	height:20px;
+}
+.itmtk .winFooter {
+	/* TODO debug color */
+	background-color: #00f;
+	height:20px;
+}
+.itmtk .winBody {
+	/* TODO debug color */
+	background-color: #0ff;	
+	overflow: auto;
+}
+.itmtk .closeButton {
+	margin-top:4px;
+	margin-right:4px;
+	width:10px;
+	height:10px;
+	float:right;
+	background-color: red;
+	border:1px solid black;
+}
+.itmtk .winResizer {
+	margin-top:8px;
+	width:10px;
+	height:10px;
+	float:right;
+	background-color: grey;
+	border:1px solid black;
+}

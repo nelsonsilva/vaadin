@@ -58,9 +58,11 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 	// Create empty renderers list
 	this.renderers = new Object(); 
 
-	// Create windows list
+	// Create windows list (for native style windows)
 	this.documents = new Object(); 
 	this.windows = new Object(); 
+	
+	this.windowOrder = new Array();
 	
 	// Remove all eventListeners on window.unload
 	with (this) {
@@ -486,7 +488,7 @@ itmill.Client.prototype.getFirstChildElement = function (parent) {
 }
 
 
-/** Initializes new window.
+/** Initializes new native browser window.
  *  Creates a document element and initializes it to
  *  to contain a window component.
  *
@@ -837,7 +839,11 @@ itmill.Client.prototype.processUpdates = function (updates) {
 			// Use window element by default for windows
 			if (currentNode == null && changeContent != null) {
 			
-				if (changeContent.nodeName == "window" || changeContent.nodeName == "framewindow") {
+				if (
+					this.mainDocument == null
+					|| changeContent.nodeName == "framewindow"
+					|| changeContent.getAttribute("main")
+				) {
 					var winName = changeContent.getAttribute("name");				
 					
 					if (this.mainDocument == null) {
@@ -876,39 +882,39 @@ itmill.Client.prototype.processUpdates = function (updates) {
 				}
 			}
 			
-			if (currentNode != null) {
+			if (currentNode == null) {
+				// new style div window, set currentNode to mainDocument root
+				currentNode = this.mainWindowElement;
+			}
 			
-				if (invisible) {
-					// Special hiding procesedure for windows
-					if (windowName != null) {
-						this.unregisterWindow(windowName);					
-					} else {
-						// Hide invisble components
-						currentNode.style.display = "none";
-					}
-					
+			if (invisible) {
+				// Special hiding procesedure for windows
+				if (windowName != null) {
+					this.unregisterWindow(windowName);					
 				} else {
-					// Make sure we are visible
-					if (currentNode.style) currentNode.style.display = "";
+					// Hide invisble components
+					currentNode.style.display = "none";
 				}
-					
-				// Process all uidl nodes inside a change
-				var uidl = change.firstChild;
-				while (uidl) {
-					if (uidl.nodeType == Node.ELEMENT_NODE) {
-						if (!currentNode) {
-							currentNode = this.createPaintableElement(uidl);
-						}
-						if (currentNode.ownerDocument.renderUIDL) {
-							currentNode.ownerDocument.renderUIDL(uidl,currentNode);
-						} else { 
-							this.renderUIDL(uidl,currentNode);
-						}
-					}
-					uidl = uidl.nextSibling;
-				}
+				
 			} else {
-				this.error("Change " + i +" node not found. Id='"+ paintableId+ "'. Paintable='"+ paintableName+"'");		
+				// Make sure we are visible
+				if (currentNode.style) currentNode.style.display = "";
+			}
+				
+			// Process all uidl nodes inside a change
+			var uidl = change.firstChild;
+			while (uidl) {
+				if (uidl.nodeType == Node.ELEMENT_NODE) {
+					if (!currentNode) {
+						currentNode = this.createPaintableElement(uidl);
+					}
+					if (currentNode.ownerDocument.renderUIDL) {
+						currentNode.ownerDocument.renderUIDL(uidl,currentNode);
+					} else { 
+						this.renderUIDL(uidl,currentNode);
+					}
+				}
+				uidl = uidl.nextSibling;
 			}
 			
 			if (this.debugEnabled) {
@@ -1205,7 +1211,6 @@ itmill.Client.prototype.createPaintableElement = function (uidl, target) {
 itmill.Client.prototype.setElementClassName = function(element,className) {
 	if (element == null) { return; }
 		element.style.className = className;
-	
 }
 
 /**
@@ -1434,6 +1439,9 @@ itmill.Client.prototype.processAllLayoutFunctions = function() {
 
 
 /** Returns a cross-browser object with useful event properties.
+ * 
+ * TODO This function is in totally wrong place, should be in html-helper-lib.js
+ * 
  * e: 					the ('raw') event  
  * type:				event type
  * target:				the target element
@@ -1506,6 +1514,27 @@ itmill.Client.prototype.getEvent = function(e) {
 	
 	return props;
 }
+
+/**
+ * Returns a ...Base.TkWindow object that contains given HTMLElement object  or null
+ * if not found
+ *
+ *  TODO This function is in totally wrong place, should be in html-helper-lib.js
+ */
+ itmill.Client.prototype.getTkWindow = function(el) {
+ 	while(typeof el.TkWindow == "undefined" && el.parentNode != el.ownerDocument) {
+ 		el = el.parentNode;
+ 	}
+ 	if(el.TkWindow)
+ 		return el.TkWindow;
+	else 
+		return null;
+ }
+
+
+/**
+ *  TODO This function is in totally wrong place, should be in html-helper-lib.js
+ */
 itmill.Client.prototype.getElementPosition = function(element) {
 	var props = new Object();
 // TODO scroll offsets testing in IE
@@ -1535,6 +1564,7 @@ itmill.Client.prototype.getElementPosition = function(element) {
  *
  *  @obj Object to be printed
  *  @level recursion level
+ * @deprecated TO BE REMOVED DUE FIREBUG IS OUR DEFAULT DEBUGGING METHOD NOWDAYS
  */
 itmill.Client.prototype.debugObjectWindow = function(obj,level) {
 
@@ -1553,11 +1583,13 @@ itmill.Client.prototype.debugObjectWindow = function(obj,level) {
 	win.document.close();
 }
 
-/** Print a object instace as html string.
- *  Prints (recursively) the objects properties into a html table.
+/** 
+ * Print a object instace as html string.
+ * Prints (recursively) the objects properties into a html table.
  *  
- *  @obj Object to be printed
- *  @level recursion level
+ * @param obj Object to be printed
+ * @param level recursion level
+ * @deprecated TO BE REMOVED DUE FIREBUG IS OUR DEFAULT DEBUGGING METHOD NOWDAYS
  */
 itmill.Client.prototype.printObject = function(obj,level) {
 	if (level == null || level < 1) {
