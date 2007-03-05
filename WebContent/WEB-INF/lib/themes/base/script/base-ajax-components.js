@@ -1122,7 +1122,14 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	
 	if(!uidl.getAttribute("main") && !uidl.getAttribute("native")) {
-		var tkWin = new itmill.themes.Base.TkWindow({title: "New DIV window", parentNode: div});
+		var w = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","width")));
+		var h = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","height")));
+		var cap = uidl.getAttribute("caption");
+		var tkWin = new itmill.themes.Base.TkWindow({
+			title: cap,
+			width: w,
+			height: h,
+			parentNode: div});
 		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
 		return;
 	}
