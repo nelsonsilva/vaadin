@@ -5690,11 +5690,7 @@ itmill.themes.Base.TkWindow = function(args) {
 		
 		// constraint to browser window ?
 		this._constrainToBrowser = (typeof args.constrainToBrowser == "boolean") ? args.constrainToBrowser : false ;
-		if(this._constrainToBrowser) {
-			// TODO detect these
-			this._browserW = document.documentElement.clientWidth - 2 * this.BORDER_WIDTH;
-			this._browserH = document.documentElement.clientHeight - 2 * this.BORDER_WIDTH;
-		}
+
 	}
 	
 	this._closeable = ( typeof args.closeable == "boolean" ) ? args.closeable : true;
@@ -5853,10 +5849,10 @@ itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
 	var x =	(evt.mouseX - tkWindow.origMouseX + tkWindow.origX);
 	var y = (evt.mouseY - tkWindow.origMouseY + tkWindow.origY);
 	if(tkWindow._constrainToBrowser) {
-		if(x > tkWindow._browserW - tkWindow._width)
-			x = tkWindow._browserW - tkWindow._width;
-		if(y > tkWindow._browserH - tkWindow._height)
-			y = tkWindow._browserH - tkWindow._height;
+		if(x > document.documentElement.clientWidth - tkWindow._width - 2*tkWindow.BORDER_WIDTH)
+			x = document.documentElement.clientWidth - tkWindow._width - 2*tkWindow.BORDER_WIDTH;
+		if(y > document.documentElement.clientHeight - tkWindow._height - 2*tkWindow.BORDER_WIDTH)
+			y = document.documentElement.clientHeight - tkWindow._height - 2*tkWindow.BORDER_WIDTH;
 		if(x < 0)
 			x = 0;
 		if(y < 0)
@@ -5916,10 +5912,10 @@ itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	if(h < 100)
 		h = 100;
 	if(tkWindow._constrainToBrowser) {
-		if(tkWindow._x + w > tkWindow._browserW)
-			w = tkWindow._browserW - tkWindow._x;
-		if(tkWindow._y + h > tkWindow._browserH)
-			h = tkWindow._browserH - tkWindow._y;
+		if(tkWindow._x + w > document.documentElement.clientWidth - 2*tkWindow.BORDER_WIDTH)
+			w = document.documentElement.clientWidth - tkWindow._x - 2*tkWindow.BORDER_WIDTH;
+		if(tkWindow._y + h > document.documentElement.clientHeight - 2*tkWindow.BORDER_WIDTH)
+			h = document.documentElement.clientHeight - tkWindow._y - 2*tkWindow.BORDER_WIDTH;
 	}
 	tkWindow.setWidth(w);
 	tkWindow.setHeight(h);
