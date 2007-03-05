@@ -5863,6 +5863,8 @@ itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
 			y = 0;
 	}
 	tkWindow._ol.setXY(x,y);
+	tkWindow._x = x;
+	tkWindow._y = y;
 }
 
 /**
@@ -5903,7 +5905,6 @@ itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
 
 itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	// "this" is document.body
-	// TODO
 	var client = itmill.clients[0];
 	var evt = client.getEvent(e);
 	evt.stop();
@@ -5914,6 +5915,12 @@ itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	var h = evt.mouseY - tkWindow.origMouseY + tkWindow.origH;
 	if(h < 100)
 		h = 100;
+	if(tkWindow._constrainToBrowser) {
+		if(tkWindow._x + w > tkWindow._browserW)
+			w = tkWindow._browserW - tkWindow._x;
+		if(tkWindow._y + h > tkWindow._browserH)
+			h = tkWindow._browserH - tkWindow._y;
+	}
 	tkWindow.setWidth(w);
 	tkWindow.setHeight(h);
 }
