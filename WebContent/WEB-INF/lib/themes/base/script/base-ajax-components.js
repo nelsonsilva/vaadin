@@ -1125,10 +1125,18 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 		var w = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","width")));
 		var h = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","height")));
 		var cap = uidl.getAttribute("caption");
+		
+		// stack new windows from upper left corner
+		var x = (renderer.client.windowOrder.length + 1) * 20;
+		var y = (renderer.client.windowOrder.length + 1) * 20;
+		
 		var tkWin = new itmill.themes.Base.TkWindow({
 			title: cap,
 			width: w,
 			height: h,
+			posX: x,
+			posY: y,
+			constrainToBrowser: true,
 			parentNode: div});
 		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
 		return;
@@ -5679,6 +5687,14 @@ itmill.themes.Base.TkWindow = function(args) {
 	if(this._draggable) {
 		client.addEventListener(this._header,"mousedown", this._onHeaderMouseDown);
 		this._header.TkWindow = this;
+		
+		// constraint to browser window ?
+		this._constrainToBrowser = (typeof args.constrainToBrowser == "boolean") ? args.constrainToBrowser : false ;
+		if(this._constrainToBrowser) {
+			// TODO detect these
+			this._browserW = document.documentElement.clientWidth - 2 * this.BORDER_WIDTH;
+			this._browserH = document.documentElement.clientHeight - 2 * this.BORDER_WIDTH;
+		}
 	}
 	
 	this._closeable = ( typeof args.closeable == "boolean" ) ? args.closeable : true;
@@ -5834,10 +5850,19 @@ itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
 	var evt = client.getEvent(e);
 	evt.stop();
 	var tkWindow = client.dragItem;
-	tkWindow._ol.setXY(
-		(evt.mouseX - tkWindow.origMouseX + tkWindow.origX),
-		(evt.mouseY - tkWindow.origMouseY + tkWindow.origY)
-	);
+	var x =	(evt.mouseX - tkWindow.origMouseX + tkWindow.origX);
+	var y = (evt.mouseY - tkWindow.origMouseY + tkWindow.origY);
+	if(tkWindow._constrainToBrowser) {
+		if(x > tkWindow._browserW - tkWindow._width)
+			x = tkWindow._browserW - tkWindow._width;
+		if(y > tkWindow._browserH - tkWindow._height)
+			y = tkWindow._browserH - tkWindow._height;
+		if(x < 0)
+			x = 0;
+		if(y < 0)
+			y = 0;
+	}
+	tkWindow._ol.setXY(x,y);
 }
 
 /**
