@@ -5851,13 +5851,15 @@ itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
 	if(tkWindow._constrainToBrowser) {
 		if(x > document.documentElement.clientWidth - tkWindow._width - 2*tkWindow.BORDER_WIDTH)
 			x = document.documentElement.clientWidth - tkWindow._width - 2*tkWindow.BORDER_WIDTH;
-		if(y > document.documentElement.clientHeight - tkWindow._height - 2*tkWindow.BORDER_WIDTH)
-			y = document.documentElement.clientHeight - tkWindow._height - 2*tkWindow.BORDER_WIDTH;
+		// conditional height is due Safari bug
+		if(y > (window.innerHeight ? window.innerHeight : document.documentElement.clientHeight) - tkWindow._height - 2*tkWindow.BORDER_WIDTH)
+			y = (window.innerHeight ? window.innerHeight :document.documentElement.clientHeight) - tkWindow._height - 2*tkWindow.BORDER_WIDTH;
 		if(x < 0)
 			x = 0;
 		if(y < 0)
 			y = 0;
 	}
+	console.log(window.innerHeight);
 	tkWindow._ol.setXY(x,y);
 	tkWindow._x = x;
 	tkWindow._y = y;
