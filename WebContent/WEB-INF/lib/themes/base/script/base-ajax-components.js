@@ -5715,8 +5715,8 @@ itmill.themes.Base.TkWindow = function(args) {
 	
 	// TODO determine proper z-index base and pass it to Overlay object
 	this._ol = new itmill.themes.Base.Overlay(
-		this._width,
-		this._height,
+		this._width + 2 * this.BORDER_WIDTH,
+		this._height + 2 * this.BORDER_WIDTH,
 		this._x,
 		this._y
 	);
@@ -5755,17 +5755,17 @@ itmill.themes.Base.TkWindow.prototype._setWindowIndex = function(i) {
 }
 
 itmill.themes.Base.TkWindow.prototype.setWidth = function(w) {
-	if( w > 50) {
+	if( w > 100) {
+		this._ol.setWidth(w + 2 * this.BORDER_WIDTH);
 		this._cont.style.widht = w + "px";
-		this._ol.setWidth(w);
 		this._width = w;
 	}
 }
 
 itmill.themes.Base.TkWindow.prototype.setHeight = function(h) {
-	if( h > 50) {
+	if( h > 100) {
+		this._ol.setHeight(h + 2 * this.BORDER_WIDTH);
 		this._body.style.height = ( h - this.HEADER_HEIGHT * 2 ) + "px";
-		this._ol.setHeight(h);
 		this._height = h;
 	}
 }
@@ -5877,11 +5877,11 @@ itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	evt.stop();
 	var tkWindow = client.dragItem;
 	var w = evt.mouseX - tkWindow.origMouseX + tkWindow.origW;
-	if(w < 50)
-		w = 50;
+	if(w < 100)
+		w = 100;
 	var h = evt.mouseY - tkWindow.origMouseY + tkWindow.origH;
-	if(h < 50)
-		h = 50;
+	if(h < 100)
+		h = 100;
 	tkWindow.setWidth(w);
 	tkWindow.setHeight(h);
 }
@@ -5922,3 +5922,11 @@ itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
  * NOTE! CSS file must also comfort to this value
  */
 itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 20;
+
+/**
+ * Defines windows border width.
+ * 
+ * NOTE! CSS file must also comfort to this value
+ */
+itmill.themes.Base.TkWindow.prototype.BORDER_WIDTH = 1;
+

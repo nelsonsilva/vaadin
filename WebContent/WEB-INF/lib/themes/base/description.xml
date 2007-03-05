@@ -64,6 +64,13 @@
 					<supports agent="Firefox" />
 				</require> 
 			</fileset>
+			<!-- IE fixes -->
+			<fileset>
+				<require>
+					<supports agent="MSIE" />
+				</require> 
+				<file name="script/ie-extra.js" />
+			</fileset>
 		</fileset>
 
 		<!-- HTML mode support files -->

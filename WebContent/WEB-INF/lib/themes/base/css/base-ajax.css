@@ -859,23 +859,28 @@ IMG.overlay {
 	border: 0;
 	/* TODO debug color and border */
 	background-color: #f00;
-	border: 1px solid black;
 }
 
 .itmtk .winHeader {
 	/* TODO debug color */
 	background-color: #0f0;	
 	height:20px;
+	border: solid black;
+	border-width: 1px 1px 0 1px;
 }
 .itmtk .winFooter {
 	/* TODO debug color */
 	background-color: #00f;
 	height:20px;
+	border: solid black;
+	border-width: 0 1px 1px 1px;
 }
 .itmtk .winBody {
 	/* TODO debug color */
 	background-color: #0ff;	
 	overflow: auto;
+	border: solid black;
+	border-width: 0 1px 0 1px;
 }
 .itmtk .closeButton {
 	margin-top:4px;
