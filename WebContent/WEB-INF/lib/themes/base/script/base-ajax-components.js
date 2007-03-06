@@ -1461,9 +1461,7 @@ renderPanel : function(renderer,uidl,target,layoutInfo) {
             var w = parseInt(theme.getVariableElement(uidl,"integer","width").getAttribute("value"));
             var h = parseInt(theme.getVariableElement(uidl,"integer","height").getAttribute("value"));
             if (h && h > 0) {
-                console.info(outer.scrollHeight);
-                console.info(caption.offsetHeight);
-                content.style.height = (outer.scrollHeight - caption.offsetHeight) + "px";
+                content.style.height = (outer.offsetHeight - caption.offsetHeight - 14) + "px";
             }
             if (w && w > 0 && !window.XMLHttpRequest) {
                 // fix width for IE 6
