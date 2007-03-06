@@ -24,14 +24,23 @@
 			<require>
 				<supports javascript="ECMA-262" />
 				<or>
-					<supports agent="AppleWebKit" />
-					<supports agent="Firefox" />
-					<supports agent="Camino/1" />
+					<!-- 
+					 Camino, Epiphany, Firefox, Flock, Galeon, Gnuzilla, 
+					 HP Secure Web Browser, Iceweasel, Kazehakase, K-Meleon, 
+					 Konqueror, Minimo, Mozilla, Netscape, Omniweb,
+					 One Laptop per Child, Oxygen, Playstation 3, Safari,
+					 Seamonkey, Songbird, SwiftFox, Sylera
+					-->
+					<supports agent="Mozilla/5" />
+					<!-- 
+					 Avant Browser, GreenBrowser, KKman, MSIE 6, Opera 9 (beta),
+					 Opera 9 on Win XP, S60
+					-->
 					<supports agent="MSIE 6." />
+					<!-- MSIE 7 -->
 					<supports agent="MSIE 7." />
-					<!-- Opera / 9 -->
-					<supports agent="pera/9" />
-					<supports agent="Konqueror/3" />
+					<!-- Opera 9.x -->
+					<supports agent="Opera/9" />
 				</or>
 			</require>
 		</mode>
