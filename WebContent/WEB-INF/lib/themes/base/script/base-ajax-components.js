@@ -15,8 +15,6 @@ if(document.all) {
 }
 
 
-
-
 /** Base theme class extends ITMillToolkitClient.Theme */
 itmill.themes.Base = itmill.Class.extend( {
 
@@ -3158,7 +3156,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			}
             // render content
             // render content
-            if(comp.nodeName == 'label') {
+            if(comp.nodeName == 'label' && comp.firstChild) {
                 // skip heavy renderUIDL function if only text
                 tdDiv.appendChild(d.createTextNode(comp.firstChild.data));
             } else {
@@ -3364,7 +3362,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             cellContent.style.width = (target.colWidths[colorder[currentCol]] - 4) + "px";
             cell.appendChild(cellContent);
             // render cell content
-            if(comp.nodeName == 'label') {
+            if(comp.nodeName == 'label' && comp.firstChild) {
                 // skip heavy renderUIDL function if only text
                 cellContent.appendChild(d.createTextNode(comp.firstChild.data));
             } else {
