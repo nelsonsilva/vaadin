@@ -217,12 +217,17 @@ if (!("console" in window) || !("firebug" in console)) {
         consoleFrame.setAttribute("src", baseURL+"/firebug.html");
         consoleFrame.setAttribute("frameBorder", "0");
         consoleFrame.style.visibility = (frameVisible ? "visible" : "hidden");    
-        consoleFrame.style.zIndex = "2147483647";
+        consoleFrame.style.zIndex = "90000";
         consoleFrame.style.position = "fixed";
         consoleFrame.style.width = "100%";
         consoleFrame.style.left = "0";
         consoleFrame.style.bottom = "0";
         consoleFrame.style.height = "200px";
+        if(isIE && isIE && navigator.userAgent.indexOf("6.") > 0 ) {
+	        consoleFrame.style.position = "absolute";
+        	consoleFrame.style.top = (document.documentElement.clientHeight - 200) + "px";
+        	consoleFrame.style.bottom = null;
+        }
         document.body.appendChild(consoleFrame);
     }
     
