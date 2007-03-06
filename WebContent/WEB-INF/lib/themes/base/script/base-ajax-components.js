@@ -3210,7 +3210,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         cout.style.height = ( parseInt(model.meta.sizeableH) - extraH ) + "px";
     } else {
         // fix containers height to initial height of table + scrollbar
-        cout.style.height = table.offsetHeight+16+"px";
+        // due, some timing issues, tables height is not always stabilized,
+        // so calculate using pagelength & rowheight instead of offsetHeight
+        cout.style.height = (model.meta.pagelength*model.rowheight+16)+"px";
     }
 
     model.aSpacer.style.height = prePad + "px";
