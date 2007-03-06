@@ -3227,7 +3227,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     // fix width of table component to its initial width if not explicetely set via Sizeable interface
     if(!model.meta.sizeableW) {
-        model.state.width = div.style.width = (cout.scrollWidth + 20 ) + "px";
+        model.state.width = div.style.width = (cout.scrollWidth + 19 ) + "px";
     } else {
         if(model.meta.sizeableW.indexOf("%") < 0) {
             model.state.width = model.meta.sizeableW + "px";
