@@ -843,7 +843,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 				if (
 					this.mainDocument == null
 					|| changeContent.nodeName == "framewindow"
-					|| changeContent.getAttribute("main")
+					|| ( changeContent.getAttribute("style") && changeContent.getAttribute("style") == "native" )
 				) {
 					var winName = changeContent.getAttribute("name");				
 					

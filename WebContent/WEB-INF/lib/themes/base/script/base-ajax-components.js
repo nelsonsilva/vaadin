@@ -1121,7 +1121,7 @@ renderComponent : function(renderer,uidl,target,layoutInfo) {
 renderWindow : function(renderer,uidl,target,layoutInfo) {
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	
-	if(!uidl.getAttribute("main") && !uidl.getAttribute("native")) {
+	if(!uidl.getAttribute("main") && ! (uidl.getAttribute("style") && uidl.getAttribute("style") == "native")) {
 		var w = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","width")));
 		var h = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","height")));
 		var cap = uidl.getAttribute("caption");
@@ -2110,9 +2110,10 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-dateFieldShowCalendar : function (cal) {
+dateFieldShowCalendar : function (e) {
+	var evt = itmill.Client.prototype.getEvent(e);
 	// "this" is triggering element that has inputs id in inputId
-	var inputField = document.getElementById(this.inputId);
+	var inputField = evt.target.ownerDocument.getElementById(evt.target.inputId);
 	
 	// This uses Calendar object directly, DO NOT USE setup() helper methods - it will leak
 	var cal = window.calendar;
