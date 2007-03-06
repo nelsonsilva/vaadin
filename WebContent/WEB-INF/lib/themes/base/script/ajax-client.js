@@ -1,10 +1,8 @@
-
 /** Register namespace using OpenAjax Hub if it is available */
 if (typeof OpenAjax != 'undefined') {
  	OpenAjax.registerLibrary("ITMillToolkit40", "http://toolkit.itmill.com/", "4.0");
 	OpenAjax.registerGlobals("ITMillToolkit40", ["itmill"]);
 }
-
 
 /** Declare our own namespace. 
  * All globals should be defined in this namespace.
@@ -1690,8 +1688,8 @@ itmill.Class.extend = function(def) {
  * Add indexOf funtion to Array objects in case of lousy browser (IE or Safari)
  */
 if(!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function(value) {
- 		for(var i = 0; i < this.length; i++) {
+	Array.prototype.indexOf = function(value) {
+		for(var i = 0; i < this.length; i++) {
  			if(this[i] == value) {
  				return i;
  			}
