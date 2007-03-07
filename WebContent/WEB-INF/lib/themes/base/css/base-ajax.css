@@ -863,21 +863,30 @@ IMG.overlay {
 
 .itmtk .winHeader {
 	/* TODO debug color */
-	background-color: #0f0;	
+	background-color: ThreeDFace;	
 	height:20px;
 	border: solid black;
 	border-width: 1px 1px 0 1px;
 }
+
+.itmtk .winHeader .caption {
+	padding-top: 3px;
+	padding-left: 3px;
+	cursor: move;
+	white-space: pre;
+	overflow: hidden;
+}
+
 .itmtk .winFooter {
 	/* TODO debug color */
-	background-color: #00f;
+	background-color: ThreeDFace;
 	height:20px;
 	border: solid black;
 	border-width: 0 1px 1px 1px;
 }
 .itmtk .winBody {
 	/* TODO debug color */
-	background-color: #0ff;	
+	background-color: #fff;	
 	overflow: auto;
 	border: solid black;
 	border-width: 0 1px 0 1px;
@@ -888,14 +897,13 @@ IMG.overlay {
 	width:10px;
 	height:10px;
 	float:right;
-	background-color: red;
-	border:1px solid black;
+	background: url('../img/window/close_bg.png') no-repeat;
 }
 .itmtk .winResizer {
-	margin-top:8px;
-	width:10px;
-	height:10px;
+	margin-top:5px;
+	width:15px;
+	height:15px;
 	float:right;
-	background-color: grey;
-	border:1px solid black;
+	background: url('../img/window/resizer_bg.png') no-repeat;
+	cursor: SE-resize;
 }

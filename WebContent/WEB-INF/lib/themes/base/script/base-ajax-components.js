@@ -5716,7 +5716,10 @@ itmill.themes.Base.TkWindow = function(args) {
 		this._header.appendChild(this._closeButton);
 		client.addEventListener(this._closeButton,"click",this._onCloseListener);
 	}
-	this._header.appendChild(document.createTextNode(args.title ? args.title : "New Window"));
+	var capElement = document.createElement("div");
+	capElement.appendChild(document.createTextNode(args.title ? args.title : "New Window"));
+	capElement.className ="caption";
+	this._header.appendChild(capElement);
 	
 	this.childTarget = this._body = document.createElement("div");
 	this._footer = document.createElement("div");
@@ -5824,7 +5827,7 @@ itmill.themes.Base.TkWindow.prototype._onClickHandler = function(e) {
 itmill.themes.Base.TkWindow.prototype._onHeaderMouseDown =  function(e) {
 	var evt = itmill.Client.prototype.getEvent(e);
 	evt.stop();
-	var tkWindow = evt.target.TkWindow;
+	var tkWindow = itmill.Client.prototype.getTkWindow(evt.target);
 	tkWindow.bringToFront();
 	
 	tkWindow.origMouseX = evt.mouseX;
