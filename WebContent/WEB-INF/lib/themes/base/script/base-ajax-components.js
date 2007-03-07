@@ -5923,8 +5923,14 @@ itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	if(tkWindow._constrainToBrowser) {
 		if(tkWindow._x + w > document.documentElement.clientWidth - 2*tkWindow.BORDER_WIDTH)
 			w = document.documentElement.clientWidth - tkWindow._x - 2*tkWindow.BORDER_WIDTH;
-		if(tkWindow._y + h > document.documentElement.clientHeight - 2*tkWindow.BORDER_WIDTH)
-			h = document.documentElement.clientHeight - tkWindow._y - 2*tkWindow.BORDER_WIDTH;
+		if(window.opera) {
+			if( tkWindow._y + h > document.documentElement.scrollHeight - 2*tkWindow.BORDER_WIDTH) {
+				h = document.documentElement.scrollHeight - tkWindow._y - 2*tkWindow.BORDER_WIDTH;
+			}
+		} else {
+			if(tkWindow._y + h > document.documentElement.clientHeight - 2*tkWindow.BORDER_WIDTH)
+				h = document.documentElement.clientHeight - tkWindow._y - 2*tkWindow.BORDER_WIDTH;
+		}
 	}
 	tkWindow.setWidth(w);
 	tkWindow.setHeight(h);
