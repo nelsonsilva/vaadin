@@ -5542,12 +5542,21 @@ itmill.themes.Base.FilterSelect.prototype.decodeCaption = function(encoded) {
  */
 itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	// TODO detect IE and Mac FF which only need blocker iFrame
-	this._blocker = document.createElement("iframe");
-	this._blocker.className = "overlay_blocker";
-	this._blocker.style.width = (w ? w : 640) + "px";
-	this._blocker.style.height = (h ? h : 400) + "px";
-	this._hasBlocker = true;
-	
+	var agent = navigator.userAgent.toLowerCase();
+	if(
+		agent.indexOf("msie") > 0 ||
+		( agent.indexOf("firefox") > 0 && agent.indexOf("mac") )
+	) {
+		console.log("Adding Iframe blocker");
+		this._blocker = document.createElement("iframe");
+		this._blocker.className = "overlay_blocker";
+		this._blocker.style.width = (w ? w : 640) + "px";
+		this._blocker.style.height = (h ? h : 400) + "px";
+		this._hasBlocker = true;
+	} else {
+		this._hasBlocker = false;
+	}
+		
 	this._div = document.createElement("div");
 	this._div.className = "overlay_body";
 	this._div.style.width = (w ? w : 640) + "px";
@@ -5555,7 +5564,6 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	
 	this.setXY(x,y);
 	this.setZindexBase(zIndexBase ? zIndexBase : 12000);
-	
 }
 
 /**
@@ -5631,7 +5639,8 @@ itmill.themes.Base.Overlay.prototype.appendTo = function(par) {
 	if(!par) {
 		par = document.body;
 	}
-	par.appendChild(this._blocker);
+	if(this._hasBlocker)
+		par.appendChild(this._blocker);
 	par.appendChild(this._div);
 	this._par = par;
 }
@@ -5858,7 +5867,6 @@ itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
 		if(y < 0)
 			y = 0;
 	}
-	console.log(window.innerHeight);
 	tkWindow._ol.setXY(x,y);
 	tkWindow._x = x;
 	tkWindow._y = y;
