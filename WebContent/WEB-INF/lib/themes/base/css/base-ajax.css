@@ -861,7 +861,7 @@ IMG.overlay {
 	background-color: #f00;
 }
 
-.itmtk .winHeader {
+.itmtk .window .winHeader {
 	/* TODO debug color */
 	background-color: ThreeDFace;	
 	height:20px;
@@ -869,7 +869,7 @@ IMG.overlay {
 	border-width: 1px 1px 0 1px;
 }
 
-.itmtk .winHeader .caption {
+.itmtk .window .winHeader .caption {
 	padding-top: 3px;
 	padding-left: 3px;
 	cursor: move;
@@ -877,21 +877,21 @@ IMG.overlay {
 	overflow: hidden;
 }
 
-.itmtk .winFooter {
+.itmtk .window .winFooter {
 	/* TODO debug color */
 	background-color: ThreeDFace;
 	height:20px;
 	border: solid black;
 	border-width: 0 1px 1px 1px;
 }
-.itmtk .winBody {
+.itmtk .window .winBody {
 	/* TODO debug color */
 	background-color: #fff;	
 	overflow: auto;
 	border: solid black;
 	border-width: 0 1px 0 1px;
 }
-.itmtk .closeButton {
+.itmtk .window .closeButton {
 	margin-top:4px;
 	margin-right:4px;
 	width:10px;
@@ -899,7 +899,7 @@ IMG.overlay {
 	float:right;
 	background: url('../img/window/close_bg.png') no-repeat;
 }
-.itmtk .winResizer {
+.itmtk .window .winResizer {
 	margin-top:5px;
 	width:15px;
 	height:15px;

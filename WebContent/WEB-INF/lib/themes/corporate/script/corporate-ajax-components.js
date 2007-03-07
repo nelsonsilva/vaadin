@@ -323,4 +323,19 @@ addExpandNodeListener : function(theme,client,button,event,subnodes,expandVariab
 		);
 }
 
-}) // End of class
+}); // End of class
+
+/**
+ * Defines headers and footers height.
+ * 
+ * NOTE! CSS file must also comfort to this value
+ */
+itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 20;
+
+/**
+ * Defines windows border width.
+ * 
+ * NOTE! CSS file must also comfort to this value
+ */
+itmill.themes.Base.TkWindow.prototype.BORDER_WIDTH = 2;
+

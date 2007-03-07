@@ -803,3 +803,121 @@
 	border-top: none;
 	font-size: 0.9em;
 }
+
+/**
+ * Window 
+ * -----
+ */
+
+/* Default style */
+.itmtk .window .winHeader {
+	background: #d8e8fc url(../img/common/caption_bg.png) repeat-x;
+	border-top: 2px solid #d8dbe3;
+	border-left: 2px solid #d3d4dc;
+	border-right: 2px solid #aaacbc;
+}
+
+.itmtk .window .winHeader .caption {
+	padding-top: 3px;
+	padding-left: 7px;
+	cursor: move;
+	white-space: pre;
+	overflow: hidden;
+	color: #005290;
+	font-weight: normal;
+}
+
+.itmtk .window .winFooter {
+	/* TODO debug color */
+	background-color: ThreeDFace;
+	height:20px;
+	border: solid #d3d4dc;
+	border-top:0;
+	border-bottom: 2px solid #aaacbc;
+	border-left: 2px solid #d3d4dc;
+	border-right: 2px solid #aaacbc;
+}
+
+.itmtk .window .winBody {
+	/* TODO debug color */
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	overflow: auto;
+	border-right:				solid 2px #aaacbc;
+	border-left:				solid 2px #d3d4dc;
+	border-top:0;
+	border-bottom:0;
+}
+.itmtk .window .closeButton {
+	margin-top:2px;
+	margin-right:4px;
+	width:15px;
+	height:15px;
+	float:right;
+	background: url('../img/window/close_bg.png') no-repeat;
+}
+.itmtk .window .winResizer {
+	margin-top:5px;
+	width:15px;
+	height:15px;
+	float:right;
+	background: url('../img/window/resizer_bg.png') no-repeat;
+	cursor: SE-resize;
+}
+
+
+
+.itmtk .panel .panelborder {
+	border: 0;
+}
+.itmtk .panel .panelborder .content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px 5px 5px;
+}
+
+/* Strong style */
+.itmtk .panel-strong .panelborder .panelcaption {
+	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
+	height: 15px;
+	color: white;
+	padding: 5px 7px;
+	spacing: 0;
+	font-weight: bold;
+	border: 1px solid #a3b5ce;
+}
+.itmtk .panel-strong .panelborder {
+	border: 0;
+}
+.itmtk .panel-strong .panelborder .content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 2px #aaacbc;
+	border-bottom:				solid 2px #9193a0;
+	border-left:				solid 2px #d3d4dc;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px 5px 5px;
+}
+
+/* Light style */
+.itmtk .panel-light .panelborder .panelcaption {
+	background: transparent url(../img/common/caption_light_bg.png) repeat-x bottom left;
+	height: 16px;
+	color: #005290;
+	padding: 3px 1px 2px 1px;
+	spacing: 0;
+	font-weight: bold;
+	border: none;
+}
+.itmtk .panel-light .panelborder {
+	border: 0;
+}
+.itmtk .panel-light .panelborder .content {
+	border-top:					solid 0px #d8dbe3;
+	border-right:				solid 1px #d5d7de;
+	border-bottom:				solid 1px #c9cad0;
+	border-left:				solid 1px #e9e9ee;
+	background: #fff url(../img/common/panel_bg.png) repeat-x;
+	padding: 8px 5px 5px 5px;
+}
