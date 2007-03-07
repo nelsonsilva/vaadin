@@ -1269,7 +1269,7 @@ renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
     for (var i=0; i<liveDivs.length; i++) {
     	var div = liveDivs[i]
       	if (div.getAttribute("location") == null) continue;
-    	divs[i] = div;
+    	divs[divs.length] = div;
     }
     // Render component for each location
 	for (var i=0; i<divs.length; i++) {
