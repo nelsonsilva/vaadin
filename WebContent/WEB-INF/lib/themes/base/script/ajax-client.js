@@ -274,6 +274,72 @@ itmill.Client.prototype.loadDocument = function (url,skipCache) {
 	return response;
 }
 
+/** Loads a CustomLayout using the XMLHttpRequest object, performs url rewrite,
+ *  and returns it as text.
+ *  Currently rewrites:
+ *    src=|codebase=|code=|background=|usemap=|lowsrc=|href= and url()
+ *  @param url The name of the CustomLayout.		
+ *  @skipCache If true, does not use cached documents (or cache this result).
+ *	
+ *  @author IT Mill Ltd.
+ * 
+ */
+itmill.Client.prototype.loadCustomLayout = function (style,skipCache) {
+	if (!skipCache) {
+		// check if it's cached
+		if (!this.loadcache) this.loadcache = new Object();
+		var cached = this.loadcache["_"+style];
+		if (cached != null) {
+			this.debug(style + " loaded from cache.");
+			return cached;
+		}
+	}
+	
+	// not in cache, get from url
+	var renderer = this.findRenderer("customlayout",style);
+	var theme = renderer.theme;
+	var layoutBase = theme.root + "layout/";
+	var url = layoutBase + style + ".html";
+	var x = this.getXMLHttpRequest();
+	x.open("GET",url, false);
+	x.send(null);
+	if (x.status != 200) {
+		delete x;
+		this.debug("Could not find CustomLayout " + style);
+		return null;
+	}
+	text = x.responseText;
+	delete x;
+	if (!text) {
+		this.debug("Empty CustomLayout " + style + " loaded from " + url);
+		return null;
+	}
+	
+	var attrs = ["","codebase"];
+	// Replace src=
+	for (var i=0;i<attrs.length;i++) {
+		var attr = attrs[i];
+	 	text = text.replace(/(src=|codebase=|code=|background=|usemap=|lowsrc=|href=)(['"])(?!\/)(?!http:)(?!https:)(?:.\/.\/)?(\S+\2)/gi,"$1$2"+layoutBase+"$3");
+	  	text = text.replace(/(src=|codebase=|code=|background=|usemap=|lowsrc=|href=)(?!['"])(?!\/)(?!http:)(?!https:)(?:.\/.\/)?(\S+)/gi,"$1"+layoutBase+"$2");
+  	}
+  	// Replace url()
+  	text = text.replace(/(url\(\s*)(['"])(?!\/)(?!http:)(?!https:)(?:.\/.\/)?(\S+\2\s*\))/gi,"$1$2"+layoutBase+"$3");
+  	text = text.replace(/(url\(\s*)(?!['"])(?!\/)(?!http:)(?!https:)(?:.\/.\/)?(\S+\s*\))/gi,"$1"+layoutBase+"$2");
+ 	// Replace token ././ with base url 
+	text = text.replace(/\.\/\.\//g,layoutBase);
+	
+	if (!skipCache) {
+		this.loadcache["_"+style] = text;
+	}
+	
+	if (text) {
+		this.debug(style + " loaded from " + url);
+	} else {
+		this.debug("Could not load " + style + " from " + url);
+	}
+	return text;
+}
+
 
 /** Registers new renderer function to ajax client.
  *	

@@ -1229,23 +1229,21 @@ renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
 	// Shortcuts
 	var theme = renderer.theme;
 	var client = renderer.client;
-	
 	// Get style
     var style = uidl.getAttribute("style");    
     if (style == null) return null;
-    
-    // Load the layout
-    var url = theme.root + style;   
-    var text = renderer.client.loadDocument(url,false); 
+    // Load layout
+    var text = renderer.client.loadCustomLayout(style,false);
     if (text == null) {
-    	client.debug("CustomLayout " + style + " NOT FOUND @ "+ url);
+    	client.debug("CustomLayout " + style + " NOT FOUND");
     	return null; 
     }
-
+ 
 	// Create containing element
 	var main = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);		
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
     
+    // Save locations from uidl
     var locations = new Object();
     var unused = new Object();
     var cN = uidl.childNodes;
@@ -1255,47 +1253,54 @@ renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
           if (c.nodeType == Node.ELEMENT_NODE 
           		&& c.nodeName == "location" 
           		&& c.getAttribute("name")) {
-          		
           		locations[c.getAttribute("name")] = c;
           		unused[c.getAttribute("name")] = c;
           }
     }   
-    
-    
+ 
+ 	// Containing div, render layout
     var n = theme.createElementTo(main, "div");
     n.setAttribute("id",uidl.getAttribute("id"));
     n.innerHTML=text;
-    var divs = n.getElementsByTagName("div");
-    for (var i=0; i<divs.length; i++) {
-      var div = divs.item(i);
-      var name = div.getAttribute("location");      
-      if (name != null) {
-         var c = locations[name];
-         if (c && c.getAttribute("name") == name) {   
-          	delete unused[name];       
-            for (var k=0; k<c.childNodes.length; k++) {
-              var cc = c.childNodes.item(k); 
-              if (cc.nodeType == Node.ELEMENT_NODE) {
-                var parent = div.parentNode;               
-                // TODO
-                if (parent != null) {
-                	client.removeAllEventListeners(div);
-                	theme.removeAllChildNodes(div);
-                	var newNode = renderer.client.renderUIDL(cc,div);
-                }
-              }
-            }  
+
+    // Make non-live copy of location divs
+    var liveDivs = n.getElementsByTagName("div");
+    var divs = [];
+    for (var i=0; i<liveDivs.length; i++) {
+    	var div = liveDivs[i]
+      	if (div.getAttribute("location") == null) continue;
+    	divs[i] = div;
+    }
+    // Render component for each location
+	for (var i=0; i<divs.length; i++) {
+		var div = divs[i];
+		var name = div.getAttribute("location");      
+		// clear content
+		client.removeAllEventListeners(div);
+		div.innerHTML = "";
+		var c = locations[name];
+		if (c) {   
+			delete unused[name];
+			var lcn = c.childNodes;
+			for (var k=0; k<lcn.length; k++) {
+				// find component in uidl and render
+				var cc = lcn[k]; 
+				if (cc.nodeType == Node.ELEMENT_NODE) {					
+					var newNode = renderer.client.renderUIDL(cc,div);				
+	                break;
+				}
+			}
         } else {
+			// no such location in uidl
         	client.warn("Location " + name + " NOT USED in CustomLayout " + style);
-        }
-      }
+		}
+	}
+
+	// Report missing locations
+    for (var k in unused) {
+    	client.error("Location " + k + " NOT FOUND in CustomLayout " + style);
     }
-    if (unused.length>0) {
-    	for (var k in usedLocations) {
-    		client.error("Location " + k + " NOT FOUND in CustomLayout " + style);
-    	}
-    }
-    
+
 },
 
 renderOrderedLayout : function(renderer,uidl,target,layoutInfo) {
