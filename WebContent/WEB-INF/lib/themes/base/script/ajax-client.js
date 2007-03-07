@@ -795,7 +795,9 @@ itmill.Client.prototype.findPaintableById = function (paintableId) {
 		}			
 	}
 	if (this.debugEnabled) {
-		this.debug("Paintable '"+paintableId+"' NOT found in ANY of current windows.");
+		// this may be normal, if user makes quick clicks and 
+		// updates to other elements are still on their way
+		this.warn("Paintable '"+paintableId+"' NOT found in ANY of current windows.");
 	}	
 	return null;
 }
@@ -888,39 +890,46 @@ itmill.Client.prototype.processUpdates = function (updates) {
 				}
 			}
 			
-			if (currentNode == null) {
+			if (currentNode == null && change.nodeName == "window") {
 				// new style div window, set currentNode to mainDocument root
 				currentNode = this.mainWindowElement;
 			}
 			
-			if (invisible) {
-				// Special hiding procesedure for windows
-				if (windowName != null) {
-					this.unregisterWindow(windowName);					
+			if(currentNode) {
+				if (invisible) {
+					// Special hiding procesedure for windows
+					if (windowName != null) {
+						this.unregisterWindow(windowName);					
+					} else {
+						// Hide invisble components
+						currentNode.style.display = "none";
+					}
+					
 				} else {
-					// Hide invisble components
-					currentNode.style.display = "none";
+					// Make sure we are visible
+					if (currentNode.style) currentNode.style.display = "";
 				}
-				
+			
+				// Process all uidl nodes inside a change
+				var uidl = change.firstChild;
+				while (uidl) {
+					if (uidl.nodeType == Node.ELEMENT_NODE) {
+						if (!currentNode) {
+							currentNode = this.createPaintableElement(uidl);
+						}
+						if (currentNode.ownerDocument.renderUIDL) {
+							currentNode.ownerDocument.renderUIDL(uidl,currentNode);
+						} else { 
+							this.renderUIDL(uidl,currentNode);
+						}
+					}
+					uidl = uidl.nextSibling;
+				}
 			} else {
-				// Make sure we are visible
-				if (currentNode.style) currentNode.style.display = "";
-			}
-				
-			// Process all uidl nodes inside a change
-			var uidl = change.firstChild;
-			while (uidl) {
-				if (uidl.nodeType == Node.ELEMENT_NODE) {
-					if (!currentNode) {
-						currentNode = this.createPaintableElement(uidl);
-					}
-					if (currentNode.ownerDocument.renderUIDL) {
-						currentNode.ownerDocument.renderUIDL(uidl,currentNode);
-					} else { 
-						this.renderUIDL(uidl,currentNode);
-					}
-				}
-				uidl = uidl.nextSibling;
+				if (this.debugEnabled)
+					// warn only (this may be normal behaviour if user is closes window
+					// and update for it is still on its way etc...)
+					console.info("No paint target found, ignoring change")
 			}
 			
 			if (this.debugEnabled) {
