@@ -3691,7 +3691,7 @@ scrollTableRecalc : function(pid,target) {
         cell.lastChild.style.width = (w - 17)+"px";
 
         // enter looping rows only if width is changed
-        if(c[i].offsetWidth != w ) {
+        if(c[i] && c[i].offsetWidth != w ) {
             var rows = c.length/h.length;
             for (var j=0;j<rows;j++) {
                 var idx = j*h.length+i;
