@@ -1137,6 +1137,7 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 			constrainToBrowser: true,
 			parentNode: div});
 		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
+		div.TkWindow = tkWin;
 		return;
 	}
 	

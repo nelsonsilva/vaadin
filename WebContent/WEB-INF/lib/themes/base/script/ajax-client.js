@@ -895,20 +895,27 @@ itmill.Client.prototype.processUpdates = function (updates) {
 				currentNode = this.mainWindowElement;
 			}
 			
-			if(currentNode) {
-				if (invisible) {
-					// Special hiding procesedure for windows
-					if (windowName != null && !(change.getAttribute("style") && change.getAttribute("style") == "native")) {
-						this.unregisterWindow(windowName);					
+			if (invisible) {
+				// Special hiding procesedure for windows
+				if (windowName != null) {
+					if(currentNode && currentNode.className.indexOf("native") < 0 ) {
+						// if div window
+						currentNode.TkWindow.cleanUp();
+						currentNode.parentNode.removeChild(currentNode);
 					} else {
-						// Hide invisble components
-						currentNode.style.display = "none";
+						// native window
+						this.unregisterWindow(windowName);					
 					}
 				} else {
-					// Make sure we are visible
-					if (currentNode.style) currentNode.style.display = "";
+					// Hide invisble components
+					currentNode.style.display = "none";
 				}
+			} else {
+				// Make sure we are visible
+				if (currentNode) currentNode.style.display = "";
+			}
 			
+			if(currentNode) {
 				// Process all uidl nodes inside a change
 				var uidl = change.firstChild;
 				while (uidl) {
