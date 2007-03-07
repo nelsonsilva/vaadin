@@ -811,7 +811,8 @@
 
 /* Default style */
 .itmtk .window .winHeader {
-	background: #d8e8fc url(../img/common/caption_bg.png) repeat-x;
+	height:20px;
+	background: #d8e8fc url(../img/common/caption_strong_bg.png) repeat-x;
 	border-top: 2px solid #d8dbe3;
 	border-left: 2px solid #d3d4dc;
 	border-right: 2px solid #aaacbc;
@@ -823,8 +824,8 @@
 	cursor: move;
 	white-space: pre;
 	overflow: hidden;
-	color: #005290;
-	font-weight: normal;
+	color: white;
+	font-weight: bold;
 }
 
 .itmtk .window .winFooter {
@@ -856,15 +857,13 @@
 	background: url('../img/window/close_bg.png') no-repeat;
 }
 .itmtk .window .winResizer {
-	margin-top:5px;
-	width:15px;
-	height:15px;
+	margin-top:6px;
+	width:14px;
+	height:14px;
 	float:right;
 	background: url('../img/window/resizer_bg.png') no-repeat;
 	cursor: SE-resize;
 }
-
-
 
 .itmtk .panel .panelborder {
 	border: 0;
