@@ -5800,7 +5800,7 @@ itmill.themes.Base.TkWindow = function(args) {
 
 	
 	this._body.className = "winBody";
-	this._body.style.height = (this._height - this.HEADER_HEIGHT * 2 ) + "px";
+	this._body.style.height = (this._height - this.HEADER_HEIGHT - this.FOOTER_HEIGHT) + "px";
 
 	this._footer.className = "winFooter";
 	
@@ -5857,7 +5857,7 @@ itmill.themes.Base.TkWindow.prototype.setWidth = function(w) {
 itmill.themes.Base.TkWindow.prototype.setHeight = function(h) {
 	if( h > 100) {
 		this._ol.setHeight(h + 2 * this.BORDER_WIDTH);
-		this._body.style.height = ( h - this.HEADER_HEIGHT * 2 ) + "px";
+		this._body.style.height = ( h - this.HEADER_HEIGHT - this.FOOTER_HEIGHT ) + "px";
 		this._height = h;
 	}
 }
@@ -6037,6 +6037,13 @@ itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
  * NOTE! CSS file must also comfort to this value
  */
 itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 20;
+
+/**
+ * Defines footers height.
+ * 
+ * NOTE! CSS file must also comfort to this value
+ */
+itmill.themes.Base.TkWindow.prototype.FOOTER_HEIGHT = 15;
 
 /**
  * Defines windows border width.

@@ -330,7 +330,7 @@ addExpandNodeListener : function(theme,client,button,event,subnodes,expandVariab
  * 
  * NOTE! CSS file must also comfort to this value
  */
-itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 20;
+itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 25;
 
 /**
  * Defines windows border width.

@@ -807,7 +807,7 @@
 
 /* Default style */
 .itmtk .window .winHeader {
-	height:20px;
+	height:25px;
 	background: #d8e8fc url(../img/common/caption_strong_bg.png) repeat-x;
 	border-top: 2px solid #d8dbe3;
 	border-left: 2px solid #d3d4dc;
@@ -815,7 +815,7 @@
 }
 
 .itmtk .window .winHeader .caption {
-	padding-top: 3px;
+	padding-top: 5px;
 	padding-left: 7px;
 	cursor: move;
 	white-space: pre;
@@ -826,8 +826,8 @@
 
 .itmtk .window .winFooter {
 	/* TODO debug color */
-	background-color: ThreeDFace;
-	height:20px;
+	background-color: #d3d4dc;
+	height:15px;
 	border: solid #d3d4dc;
 	border-top:0;
 	border-bottom: 2px solid #aaacbc;
@@ -845,7 +845,7 @@
 	border-bottom:0;
 }
 .itmtk .window .closeButton {
-	margin-top:2px;
+	margin-top:4px;
 	margin-right:4px;
 	width:15px;
 	height:15px;
@@ -853,7 +853,7 @@
 	background: url('../img/window/close_bg.png') no-repeat;
 }
 .itmtk .window .winResizer {
-	margin-top:6px;
+	margin-top:1px;
 	width:14px;
 	height:14px;
 	float:right;
