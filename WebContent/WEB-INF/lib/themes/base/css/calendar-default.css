@@ -1,6 +1,6 @@
 /* The main calendar widget.  DIV containing a table. */
 
-div.calendar { position: relative; }
+div.calendar { position: relative; z-index:30000; }
 
 .calendar, .calendar table {
   border: 1px solid #aaaaaa;
@@ -175,7 +175,7 @@ div.calendar { position: relative; }
   background: #ffffff;
   color: #000;
   font-size: 90%;
-  z-index: 100;
+  z-index: z-index:30001;;
 }
 
 .calendar .combo .label,
