@@ -877,10 +877,14 @@ IMG.overlay {
 	overflow: hidden;
 }
 
+* html .itmtk .window .winHeader .caption {
+	position:absolute;
+}
+
 .itmtk .window .winFooter {
 	/* TODO debug color */
 	background-color: ThreeDFace;
-	height:20px;
+	height:15px;
 	border: solid black;
 	border-width: 0 1px 1px 1px;
 }
@@ -900,15 +904,21 @@ IMG.overlay {
 	background: url('../img/window/close_bg.png') no-repeat;
 }
 .itmtk .window .winResizer {
-	margin-top:5px;
 	width:15px;
 	height:15px;
 	float:right;
-	background: url('../img/window/resizer_bg.png') no-repeat;
+	background: url('../img/window/resizer_bg.gif') no-repeat;
 	cursor: SE-resize;
 }
 .itmtk .window .shadow {
 	position:absolute;	
 	background: #aaa;
+}
+/* shadow helpers are not used in base theme, make them act so that IE 6 don't get fool */
+.itmtk .window .shadow div {
+	width:1px;
+	height:1px;
+	display:inline;
+	float;left;	
 }
 

@@ -4,7 +4,6 @@
  * Corporate theme stylesheet (Ajax-version)         *
  *****************************************************/
 
-
 /**
  * Base theme overrides
  * --------------------
@@ -857,7 +856,7 @@
 	width:14px;
 	height:14px;
 	float:right;
-	background: url('../img/window/resizer_bg.png') no-repeat;
+	background: url('../img/window/resizer_bg.gif') no-repeat;
 	cursor: SE-resize;
 }
 
@@ -924,4 +923,36 @@
 }
 .itmtk .window .shadow .SE {
 	background: url('../img/shadow/SE.png') bottom right no-repeat;
+}
+* html .itmtk .window .shadow .NW {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/NW.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .N {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/N.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .NE {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/NE.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .E {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/E.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .W {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/W.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .S {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/S.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .SW {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/SW.png', sizingMethod='scale');
+}
+* html .itmtk .window .shadow .SE {
+	background: transparent;
+	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/SE.png', sizingMethod='scale');
 }
