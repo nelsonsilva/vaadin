@@ -339,3 +339,8 @@ itmill.themes.Base.TkWindow.prototype.HEADER_HEIGHT = 20;
  */
 itmill.themes.Base.TkWindow.prototype.BORDER_WIDTH = 2;
 
+itmill.themes.Base.Overlay.prototype.SHADOW_WIDTH = 25;
+itmill.themes.Base.Overlay.prototype.SHADOW_OFFSET = 5;
+itmill.themes.Base.Overlay.prototype.SHADOW_CORNER_R = 45;
+
+

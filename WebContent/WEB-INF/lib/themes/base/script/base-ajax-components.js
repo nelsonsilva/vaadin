@@ -5547,7 +5547,8 @@ itmill.themes.Base.FilterSelect.prototype.decodeCaption = function(encoded) {
  * 
  */
 itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
-	// TODO detect IE and Mac FF which only need blocker iFrame
+	w = (w ? w : 640);
+	h = (h ? h : 400);
 	var agent = navigator.userAgent.toLowerCase();
 	if(
 		agent.indexOf("msie") > 0 ||
@@ -5556,8 +5557,8 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 		console.log("Adding Iframe blocker");
 		this._blocker = document.createElement("iframe");
 		this._blocker.className = "overlay_blocker";
-		this._blocker.style.width = (w ? w : 640) + "px";
-		this._blocker.style.height = (h ? h : 400) + "px";
+		this._blocker.style.width = w + "px";
+		this._blocker.style.height = h + "px";
 		this._hasBlocker = true;
 	} else {
 		this._hasBlocker = false;
@@ -5565,12 +5566,54 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 		
 	this._div = document.createElement("div");
 	this._div.className = "overlay_body";
-	this._div.style.width = (w ? w : 640) + "px";
-	this._div.style.height = (h ? h : 400) + "px";
+	this._div.style.width = w + "px";
+	this._div.style.height = h + "px";
+	
+	this._shadow = document.createElement("div");
+	this._shadow.className = "shadow";
+	this._shadow.style.width = (w + 2*this.SHADOW_WIDTH) + "px";
+	this._shadow.style.height = (h + 2*this.SHADOW_WIDTH) + "px";
+	var tmp = document.createElement("div");
+	tmp.className = "NW";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "N";
+	tmp.style.width = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "NE";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "W";
+	tmp.style.height = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "C";
+	tmp.style.width = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	tmp.style.height = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "E";
+	tmp.style.height = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "SW";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "S";
+	tmp.style.width = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.appendChild(tmp);
+	tmp = document.createElement("div");
+	tmp.className = "SE";
+	this._shadow.appendChild(tmp);
 	
 	this.setXY(x,y);
 	this.setZindexBase(zIndexBase ? zIndexBase : 12000);
 }
+
+itmill.themes.Base.Overlay.prototype.SHADOW_WIDTH = 2;
+itmill.themes.Base.Overlay.prototype.SHADOW_OFFSET = 6;
+itmill.themes.Base.Overlay.prototype.SHADOW_CORNER_R = 45;
 
 /**
  * This method is used to set base z-index above which this element floats.
@@ -5586,6 +5629,7 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
  */
 itmill.themes.Base.Overlay.prototype.setZindexBase = function(z) {
 	this._zIndexBase = z;
+	this._shadow.style.zIndex = z;
 	if(this._hasBlocker)
 		this._blocker.style.zIndex = z + 1;
 	this._div.style.zIndex = z + 2;
@@ -5602,6 +5646,10 @@ itmill.themes.Base.Overlay.prototype.getZindexBase = function() {
  * Set width of floating element (containter and blocker)
  */
 itmill.themes.Base.Overlay.prototype.setWidth = function(w) {
+	this._shadow.childNodes[1].style.width = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.childNodes[4].style.width = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.childNodes[7].style.width = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.style.width = (w + 2*this.SHADOW_WIDTH) + "px";
 	if(this._hasBlocker)
 		this._blocker.style.width = w + "px";
 	this._div.style.width = w + "px";
@@ -5612,6 +5660,10 @@ itmill.themes.Base.Overlay.prototype.setWidth = function(w) {
  * Set height of floating element (containter and blocker)
  */
 itmill.themes.Base.Overlay.prototype.setHeight = function(h) {
+	this._shadow.childNodes[3].style.height = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.childNodes[4].style.height = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.childNodes[5].style.height = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R)) + "px";
+	this._shadow.style.height = (h + 2*this.SHADOW_WIDTH) + "px";
 	if(this._hasBlocker)
 		this._blocker.style.height = h + "px";
 	this._div.style.height = h + "px";
@@ -5626,11 +5678,13 @@ itmill.themes.Base.Overlay.prototype.setHeight = function(h) {
  */
 itmill.themes.Base.Overlay.prototype.setXY = function(x,y) {
 	if(typeof x == "number") {
+		this._shadow.style.left = (x - this.SHADOW_WIDTH + this.SHADOW_OFFSET) + "px";
 		if(this._hasBlocker)
 			this._blocker.style.left = x + "px";	
 		this._div.style.left = x + "px";
 	}
 	if(typeof y == "number") {
+		this._shadow.style.top = (y - this.SHADOW_WIDTH + this.SHADOW_OFFSET) + "px";
 		if(this._hasBlocker)
 			this._blocker.style.top = y + "px";
 		this._div.style.top = y + "px";
@@ -5645,6 +5699,7 @@ itmill.themes.Base.Overlay.prototype.appendTo = function(par) {
 	if(!par) {
 		par = document.body;
 	}
+	par.appendChild(this._shadow);
 	if(this._hasBlocker)
 		par.appendChild(this._blocker);
 	par.appendChild(this._div);

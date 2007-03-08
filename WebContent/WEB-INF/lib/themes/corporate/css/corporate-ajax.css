@@ -5,10 +5,6 @@
  *****************************************************/
 
 
-
-
-
- 
 /**
  * Base theme overrides
  * --------------------
@@ -865,58 +861,67 @@
 	cursor: SE-resize;
 }
 
-.itmtk .panel .panelborder {
-	border: 0;
-}
-.itmtk .panel .panelborder .content {
-	border-top:					solid 0px #d8dbe3;
-	border-right:				solid 2px #aaacbc;
-	border-bottom:				solid 2px #9193a0;
-	border-left:				solid 2px #d3d4dc;
-	background: #fff url(../img/common/panel_bg.png) repeat-x;
-	padding: 8px 5px 5px 5px;
+.itmtk .window .shadow {
+	background: transparent;
 }
 
-/* Strong style */
-.itmtk .panel-strong .panelborder .panelcaption {
-	background: #3d6ca8 url(../img/common/caption_strong_bg.png) repeat-x;
-	height: 15px;
-	color: white;
-	padding: 5px 7px;
-	spacing: 0;
-	font-weight: bold;
-	border: 1px solid #a3b5ce;
+.itmtk .window .shadow div {
+	display:inline;
+	float: left;
 }
-.itmtk .panel-strong .panelborder {
-	border: 0;
+.itmtk .window .shadow .NE,
+.itmtk .window .shadow .N,
+.itmtk .window .shadow .NW,
+.itmtk .window .shadow .SE,
+.itmtk .window .shadow .S,
+.itmtk .window .shadow .SW {
+	height: 45px;	
 }
-.itmtk .panel-strong .panelborder .content {
-	border-top:					solid 0px #d8dbe3;
-	border-right:				solid 2px #aaacbc;
-	border-bottom:				solid 2px #9193a0;
-	border-left:				solid 2px #d3d4dc;
-	background: #fff url(../img/common/panel_bg.png) repeat-x;
-	padding: 8px 5px 5px 5px;
+.itmtk .window .shadow .NE,
+.itmtk .window .shadow .N,
+.itmtk .window .shadow .NW,
+.itmtk .window .shadow .SE,
+.itmtk .window .shadow .S,
+.itmtk .window .shadow .SW {
+	height: 45px;	
+}
+.itmtk .window .shadow .W,
+.itmtk .window .shadow .E {
+	width: 45px;
 }
 
-/* Light style */
-.itmtk .panel-light .panelborder .panelcaption {
-	background: transparent url(../img/common/caption_light_bg.png) repeat-x bottom left;
-	height: 16px;
-	color: #005290;
-	padding: 3px 1px 2px 1px;
-	spacing: 0;
-	font-weight: bold;
-	border: none;
+.itmtk .window .shadow .NE,
+.itmtk .window .shadow .E,
+.itmtk .window .shadow .SE {
+	width: 45px;
 }
-.itmtk .panel-light .panelborder {
-	border: 0;
+.itmtk .window .shadow .NW,
+.itmtk .window .shadow .W,
+.itmtk .window .shadow .SW {
+	width: 45px;
 }
-.itmtk .panel-light .panelborder .content {
-	border-top:					solid 0px #d8dbe3;
-	border-right:				solid 1px #d5d7de;
-	border-bottom:				solid 1px #c9cad0;
-	border-left:				solid 1px #e9e9ee;
-	background: #fff url(../img/common/panel_bg.png) repeat-x;
-	padding: 8px 5px 5px 5px;
+
+.itmtk .window .shadow .NW {
+	background: url('../img/shadow/NW.png') top left no-repeat;
+}
+.itmtk .window .shadow .N {
+	background: url('../img/shadow/N.png') top repeat-x;
+}
+.itmtk .window .shadow .NE {
+	background: url('../img/shadow/NE.png') top right no-repeat;
+}
+.itmtk .window .shadow .E {
+	background: url('../img/shadow/E.png') top right repeat-y;
+}
+.itmtk .window .shadow .W {
+	background: url('../img/shadow/W.png') top left repeat-y;
+}
+.itmtk .window .shadow .S {
+	background: url('../img/shadow/S.png') bottom left repeat-x;
+}
+.itmtk .window .shadow .SW {
+	background: url('../img/shadow/SW.png') bottom left no-repeat;
+}
+.itmtk .window .shadow .SE {
+	background: url('../img/shadow/SE.png') bottom right no-repeat;
 }

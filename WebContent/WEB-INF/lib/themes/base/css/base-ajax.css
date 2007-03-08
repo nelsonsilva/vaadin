@@ -907,3 +907,8 @@ IMG.overlay {
 	background: url('../img/window/resizer_bg.png') no-repeat;
 	cursor: SE-resize;
 }
+.itmtk .window .shadow {
+	position:absolute;	
+	background: #aaa;
+}
+
