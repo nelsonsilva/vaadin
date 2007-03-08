@@ -5715,6 +5715,7 @@ itmill.themes.Base.Overlay.prototype.getPaintTarget = function() {
 }
 
 itmill.themes.Base.Overlay.prototype.dispose = function() {
+	this._shadow.parentNode.removeChild(this._shadow);
 	if(this._hasBlocker)
 		this._blocker.parentNode.removeChild(this._blocker);
 	this._div.parentNode.removeChild(this._div);
