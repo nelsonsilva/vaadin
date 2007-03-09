@@ -1209,6 +1209,9 @@ renderOpen : function(renderer,uidl,target,layoutInfo) {
  	if (name) {
  		window.open(src,name);
  	} else {
+ 		// first overcome IE prob by hiding scrollbars from containing div
+ 		if(document.all && !window.opera)
+ 			target.style.overflow = "hidden";
  		var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
  		div.innerHTML = "<IFRAME name=\""+name+"\" id=\""+name+"\" width=100% height=100% style=\"border:none;margin:0px;padding:0px;background:none;\" src=\""+src+"\"></IFRAME>";
 	}
