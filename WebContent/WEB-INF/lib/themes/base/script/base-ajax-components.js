@@ -5555,7 +5555,7 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	var agent = navigator.userAgent.toLowerCase();
 	if(
 		agent.indexOf("msie") > 0 ||
-		( agent.indexOf("firefox") > 0 && agent.indexOf("mac") )
+		( agent.indexOf("firefox") > 0 && agent.indexOf("mac") > 0 )
 	) {
 		console.log("Adding Iframe blocker");
 		this._blocker = document.createElement("iframe");
