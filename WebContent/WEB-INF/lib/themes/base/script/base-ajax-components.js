@@ -3289,7 +3289,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
     
     // send request to fetch cache rows
-    if (model.meta.totalrows > model.state.lastRendered) {
+    if (model.meta.totalrows > 0 && model.meta.totalrows > model.state.lastRendered) {
         reqfirstrowVar.value = model.state.lastRendered + 1;
         reqrowsVar.value = model.meta.cacheSize;
         theme.updateVar(client,reqfirstrowVar, false);
