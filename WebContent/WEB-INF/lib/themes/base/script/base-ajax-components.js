@@ -1123,7 +1123,6 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 		if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 		
 		var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
-		console.dirxml(uidl);
 		var w = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","width")));
 		var h = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","height")));
 		var cap = uidl.getAttribute("caption");
