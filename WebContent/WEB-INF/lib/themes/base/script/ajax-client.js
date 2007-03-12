@@ -1618,6 +1618,22 @@ itmill.Client.prototype.getEvent = function(e) {
 		return null;
  }
 
+/**
+ * Helper method for Themes that returns htmlElments closest parent that is Paintable 
+ * (DIV && has -"varMap" property) or null if not found
+ *
+ * TODO This function is in totally wrong place, should be in html-helper-lib.js 
+ * or something
+ */
+ itmill.Client.prototype.getPaintable = function(el) {
+ 	while(typeof el.varMap == "undefined" && el.parentNode != el.ownerDocument) {
+ 		el = el.parentNode;
+ 	}
+ 	if(el.varMap)
+ 		return el;
+	else 
+		return null;
+}
 
 /**
  *  TODO This function is in totally wrong place, should be in html-helper-lib.js

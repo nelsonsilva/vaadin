@@ -39,6 +39,7 @@ registerTo : function(client) {
 	// This hides all integer, string, etc. variables
 	client.registerRenderer(this,"integer",null,function() {});
 	client.registerRenderer(this,"string",null,function() {});
+	client.registerRenderer(this,"boolean",null,function() {});
 	// and special tags
 	client.registerRenderer(this,"description",null,function() {});
 	client.registerRenderer(this,"error",null,function() {});
@@ -1117,9 +1118,12 @@ renderComponent : function(renderer,uidl,target,layoutInfo) {
 },
 
 renderWindow : function(renderer,uidl,target,layoutInfo) {
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
-	
+
 	if(!uidl.getAttribute("main") && ! (uidl.getAttribute("style") && uidl.getAttribute("style") == "native")) {
+		if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
+		
+		var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+		console.dirxml(uidl);
 		var w = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","width")));
 		var h = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","height")));
 		var cap = uidl.getAttribute("caption");
@@ -1136,11 +1140,17 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 			posY: y,
 			constrainToBrowser: true,
 			parentNode: div});
-		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
+
 		div.TkWindow = tkWin;
+		renderer.theme.createVarFromUidl(div,renderer.theme.getVariableElement(uidl,"boolean","close"));
+		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
 		return;
 	}
 	
+	// rest is for "native"  windows or main window
+	
+	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	var theme = renderer.theme;
@@ -6015,8 +6025,12 @@ itmill.themes.Base.TkWindow.prototype._onCloseListener = function(e) {
 	var evt = itmill.Client.prototype.getEvent(e);
 	evt.stop();
 	var tkWindow = evt.target.TkWindow;
-	// TODO tell to clien that window was closed
-	tkWindow.cleanUp();
+
+	var client = itmill.clients[0];
+	var windowPaintable = client.getPaintable(evt.target);
+	var closeVar = windowPaintable.varMap["close"];
+	closeVar.value = true;
+	client.changeVariable(closeVar.id, closeVar.value, true);
 }
 
 itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
