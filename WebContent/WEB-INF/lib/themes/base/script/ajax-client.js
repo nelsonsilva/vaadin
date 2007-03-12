@@ -956,12 +956,8 @@ itmill.Client.prototype.processUpdates = function (updates) {
 				}
 			}
 			
-			if (currentNode == null && changeContent && changeContent.nodeName == "window") {
-				// new style div window, set currentNode to mainDocument root
-				currentNode = this.mainWindowElement;
-			}
 			
-			if (invisible) {
+			if (invisible && currentNode) {
 				// Special hiding procesedure for windows
 				if (windowName != null) {
 					if(currentNode && currentNode.className.indexOf("native") < 0 ) {
@@ -981,6 +977,11 @@ itmill.Client.prototype.processUpdates = function (updates) {
 				if (currentNode) currentNode.style.display = "";
 			}
 			
+			if (currentNode == null && changeContent && changeContent.nodeName == "window") {
+				// new style div window, set currentNode to mainDocument root
+				currentNode = this.mainWindowElement;
+			}
+
 			if(currentNode) {
 				// Process all uidl nodes inside a change
 				var uidl = change.firstChild;
