@@ -6043,7 +6043,6 @@ itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
 	// remove reference from windowOrder
 	client.windowOrder.pop();
 	
-	this._cont.parentNode.removeChild(this._cont);
 	this._ol.dispose();
 }
 
