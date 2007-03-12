@@ -2836,7 +2836,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var cols       = model.meta.cols = parseInt(uidl.getAttribute("cols"));
 	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
     
-	var pagelength = model.meta.pagelength = parseInt(uidl.getAttribute("pagelength"));
+	var pagelength = model.meta.pagelength = uidl.getAttribute("pagelength") ? parseInt(uidl.getAttribute("pagelength")) : model.meta.totalrows;
     model.meta.readonly = uidl.getAttribute("readonly") || false;
     model.meta.sizeableW = uidl.getAttribute("width") || false;
     model.meta.sizeableH = uidl.getAttribute("height") || false; 
