@@ -867,6 +867,7 @@ IMG.overlay {
 	height:20px;
 	border: solid black;
 	border-width: 1px 1px 0 1px;
+	overflow: auto;
 }
 
 .itmtk .window .winHeader .caption {
@@ -887,6 +888,7 @@ IMG.overlay {
 	height:15px;
 	border: solid black;
 	border-width: 0 1px 1px 1px;
+	overflow: auto;
 }
 .itmtk .window .winBody {
 	/* TODO debug color */

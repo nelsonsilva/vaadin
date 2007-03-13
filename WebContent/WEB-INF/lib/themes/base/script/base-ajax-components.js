@@ -5565,8 +5565,7 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	// IE 6 and mac FF needs iFrame blocker to prevent some form elements
 	// seeing trought Overlay
 	if(
-		(agent.indexOf("msie") > 0 && agent.indexOf("6.") > 0) ||
-		( agent.indexOf("firefox") > 0 && agent.indexOf("mac") > 0 )
+		(agent.indexOf("msie") > 0 && agent.indexOf("6.") > 0) 
 	) {
 		console.log("Adding Iframe blocker");
 		this._blocker = document.createElement("iframe");
