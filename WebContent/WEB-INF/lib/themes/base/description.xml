@@ -80,6 +80,16 @@
 				</require> 
 				<file name="script/ie-extra.js" />
 			</fileset>
+			<!-- Mac FF fixes -->
+			<fileset>
+				<require>
+					<and>
+					<supports agent="Mac" />
+					<supports agent="Firefox" />
+					</and>
+				</require> 
+				<file name="css/macff-extra.css" />
+			</fileset>
 		</fileset>
 
 		<!-- HTML mode support files -->

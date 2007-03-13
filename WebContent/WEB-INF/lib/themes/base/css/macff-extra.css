@@ -1,0 +1,10 @@
+/** This file is for fixing Safari oddities */
+.itmtk .window .winHeader {
+	overflow: auto;
+}
+.itmtk .window .winFooter {
+	overflow: auto;
+}
+.itmtk .window .shadow {
+	overflow: auto;
+}
