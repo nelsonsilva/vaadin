@@ -20,8 +20,17 @@
 
 		<!-- UIDL Mode support files -->
 		<fileset mode="ajax">
-			<file name="featurebrowser/components.js" />
-			<file name="featurebrowser/featurebrowser.css" />
+		 	<fileset>
+				<require><not><supports agent="SymbianOS"/></not></require>
+				<file name="featurebrowser/featurebrowser.css" />
+				<file name="featurebrowser/components.js" />
+			</fileset>
+			<!-- Use customized layout for SymbianOS phones -->
+			<fileset>
+	  		<require><supports agent="SymbianOS"/></require>
+				<file name="featurebrowser/symbian/featurebrowser.css" />
+				<file name="featurebrowser/symbian/components.js" />
+			</fileset>
 		</fileset>
 		<fileset mode="html">
 			<file name="featurebrowser/html-mode.xsl" />
