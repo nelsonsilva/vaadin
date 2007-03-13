@@ -874,7 +874,7 @@
 .itmtk .window .shadow .SE,
 .itmtk .window .shadow .S,
 .itmtk .window .shadow .SW {
-	height: 45px;	
+	height: 15px;	
 }
 .itmtk .window .shadow .NE,
 .itmtk .window .shadow .N,
@@ -882,22 +882,22 @@
 .itmtk .window .shadow .SE,
 .itmtk .window .shadow .S,
 .itmtk .window .shadow .SW {
-	height: 45px;	
+	height: 15px;	
 }
 .itmtk .window .shadow .W,
 .itmtk .window .shadow .E {
-	width: 45px;
+	width: 15px;
 }
 
 .itmtk .window .shadow .NE,
 .itmtk .window .shadow .E,
 .itmtk .window .shadow .SE {
-	width: 45px;
+	width: 15px;
 }
 .itmtk .window .shadow .NW,
 .itmtk .window .shadow .W,
 .itmtk .window .shadow .SW {
-	width: 45px;
+	width: 15px;
 }
 
 .itmtk .window .shadow .NW {
