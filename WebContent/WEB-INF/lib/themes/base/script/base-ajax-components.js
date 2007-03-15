@@ -3704,7 +3704,10 @@ scrollTableRecalc : function(pid,target) {
         // loop headers and columns natural widths, browser may squeeze them to fit whole table
         var defPad = 10;
         for (var i = 0;i<h.length;i++) {
-            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].lastChild.clientWidth > c[i].clientWidth) ? (h[i].clientWidth) : c[i].clientWidth) + defPad;
+        	if(c && c[i])
+	            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].lastChild.clientWidth > c[i].clientWidth) ? (h[i].clientWidth) : c[i].clientWidth) + defPad;
+            else
+            	colWidths[h[i].getAttribute("cid")] = parseInt(h[i].lastChild.clientWidth);
         }
     }
     for (var i = 0;i< h.length ;i++) {
