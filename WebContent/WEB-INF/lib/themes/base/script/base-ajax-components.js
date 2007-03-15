@@ -3228,7 +3228,11 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     model.rowheight = table.rows.length ? Math.ceil(table.offsetHeight/table.rows.length) : 22;
     // scroll padding calculations 
-    var prePad = (model.state.fv - 1) * model.rowheight;
+    
+    if(model.state.fv > 0)
+    	var prePad = (model.state.fv - 1) * model.rowheight;
+	else
+		var prePad = 0;
     // remaining invisible lines * line_height
     var postPad = (model.meta.totalrows-model.state.fv-model.request.rows+1)*model.rowheight;
 
