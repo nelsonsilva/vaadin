@@ -5828,6 +5828,10 @@ itmill.themes.Base.TkWindow = function(args) {
 	
 	this._body.className = "winBody";
 	this._body.style.height = (this._height - this.HEADER_HEIGHT - this.FOOTER_HEIGHT) + "px";
+	if(document.all && !window.XMLHttpRequest && !window.opera) {
+		// for IE6 we also need to set/force bodys width
+		this._body.style.width = this._width + "px";
+	}
 
 	this._footer.className = "winFooter";
 	
