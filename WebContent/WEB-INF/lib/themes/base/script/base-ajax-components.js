@@ -5878,6 +5878,10 @@ itmill.themes.Base.TkWindow.prototype.setWidth = function(w) {
 		this._ol.setWidth(w + 2 * this.BORDER_WIDTH);
 		this._cont.style.widht = w + "px";
 		this._width = w;
+		if(document.all && !window.XMLHttpRequest && !window.opera) {
+			// for IE6 we also need to set/force bodys width
+			this._body.style.width = w + "px";
+		}
 	}
 }
 
