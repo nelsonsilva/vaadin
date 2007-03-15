@@ -3611,6 +3611,26 @@ scrollTableAddScrollListener : function (theme,target) {
 				cout.scrollHandler();
 			},250)	
  	});
+ 	if(window.opera) {
+ 		// opera has bug: it don't fire onscroll event on mousewheel scroll
+ 		// hook it explicitely	
+ 		cout.onmousewheel = function (e) {
+        if (cout.scrollTimeout) {
+ 			clearTimeout(cout.scrollTimeout);
+		}
+		hout.scrollLeft = cout.scrollLeft;	
+		target.scrolledLeft = cout.scrollLeft;
+		var status = target.model.status;
+		var d = theme.scrollTableGetFV(target);
+		if (d + target.model.meta.pagelength > target.model.state.lastRendered || d < target.model.state.firstRendered) {
+ 			status.innerHTML = d + "-" + (d+target.model.meta.pagelength-1) + " / " + target.model.meta.totalrows;
+ 			status.style.display = "block";
+ 		}
+		cout.scrollTimeout = setTimeout(function () {
+				cout.scrollHandler();
+			},250)	
+	 	};
+ 	}
 },
 
 /* Calculates first totally visible row */
