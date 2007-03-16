@@ -3093,8 +3093,19 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var cout = model.cout = theme.createElementTo(inner,"div");
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
-    // TODO move this to CSS
-	cout.style.overflow = "scroll";
+	
+	// Now we have a very weird bugfix, FF mac has big issues setting scrollbars
+	// to right layer. Now that we have set up new scrollbars and possibly under
+	// frontmost window, we need to "shake" the frontmost window a bit
+	var agent = navigator.userAgent.toLowerCase();
+	// try to workaround nasty scrollbar problems with mac firefox
+	if(this.windowOrder && this.windowOrder[0] && agent.indexOf("mac") > 0 && agent.indexOf("firefox") > 0 ) {
+		var ol = this.windowOrder[client.windowOrder.length -1]._ol;
+		ol._div.style.overflow = "auto";
+		var fool = ol._div.offsetHeight;
+		ol._div.style.overflow = "visible";
+		fool = ol._div.offsetHeight;
+	}
     
     // create spacer elements and save reference to model (needed for webkit bug)
     model.aSpacer = theme.createElementTo(cout,"div");
@@ -5687,6 +5698,15 @@ itmill.themes.Base.Overlay.prototype.setZindexBase = function(z) {
 	if(this._hasBlocker)
 		this._blocker.style.zIndex = z + 1;
 	this._div.style.zIndex = z + 2;
+	// try to workaround nasty scrollbar problems with mac firefox
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf("mac") > 0 && agent.indexOf("firefox") > 0 ) {
+		this._div.style.overflow = "auto";
+		var fool = this._div.offsetHeight;
+		this._div.style.overflow = "visible";
+		fool = this._div.offsetHeight;
+	}
+	
 }
 
 /**
@@ -5758,6 +5778,15 @@ itmill.themes.Base.Overlay.prototype.appendTo = function(par) {
 		par.appendChild(this._blocker);
 	par.appendChild(this._div);
 	this._par = par;
+	var agent = navigator.userAgent.toLowerCase();
+	// try to workaround nasty scrollbar problems with mac firefox
+	if(agent.indexOf("mac") > 0 && agent.indexOf("firefox") > 0 ) {
+		this._div.style.overflow = "auto";
+		var fool = this._div.offsetHeight;
+		this._div.style.overflow = "visible";
+		fool = this._div.offsetHeight;
+	}
+	
 }
 
 /**

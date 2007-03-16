@@ -374,6 +374,9 @@ IMG.overlay {
 	padding-right:0px;
 	margin-right:12px;
 }
+.itmtk .table .cout {
+	overflow:scroll;
+}
 
 .itmtk .table .cout table.cin {
 	margin:0;
