@@ -2920,7 +2920,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     // this is a hack to scroll always to top on Safari 2.0.*
     if(navigator.userAgent.indexOf("AppleWebKit/4") > 0 ) {
     	console.warn("Safari don't support scrollTop, scroll up");
-    	if(fvVar.value != 1) {
+    	if(fvVar && fvVar.value != 1) {
     		// need to scroll top on every redraw
         	var fvVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","firstvisible"));
 			fvVar.value = 1;
