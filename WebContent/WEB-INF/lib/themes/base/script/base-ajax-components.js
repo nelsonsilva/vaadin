@@ -3742,7 +3742,7 @@ scrollTableRecalc : function(pid,target) {
         	if(c && c[i])
 	            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].lastChild.clientWidth > c[i].clientWidth) ? (h[i].clientWidth) : c[i].clientWidth) + defPad;
             else
-            	colWidths[h[i].getAttribute("cid")] = parseInt(h[i].lastChild.clientWidth);
+            	colWidths[h[i].getAttribute("cid")] = parseInt(h[i].clientWidth) + defPad;
         }
     }
     for (var i = 0;i< h.length ;i++) {
