@@ -1759,6 +1759,9 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 			li.actionList = actionList;
 			li.key = node.getAttribute("key");
 			client.addEventListener(li,"contextmenu",theme.treeNodeShowContextMenu);
+			if(window.opera)
+				client.addEventListener(li,"click",theme.treeNodeShowContextMenu);
+			
 		}
 	}
 		
@@ -1835,6 +1838,7 @@ addExpandNodeListener : function(theme,client,button,event,subnodes,expandVariab
 
 treeNodeShowContextMenu: function(e) {
 	var evt = itmill.Client.prototype.getEvent(e);
+	console.dir(evt);
 	if(evt.rightclick || evt.type == "contextmenu") {
 		evt.stop();
 		// Build ContextMenu compatible structure form list
@@ -3311,6 +3315,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			}
 			tr.actionList = actionList;
 			client.addEventListener(tr,"contextmenu",theme.tableRowShowContextMenu);
+			if(window.opera)
+				client.addEventListener(tr,"click",theme.tableRowShowContextMenu);
         }
         // selection
         if (model.meta.selectmode != "none"  && ! model.meta.readonly ) {
@@ -3527,6 +3533,8 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
 			}
 			row.actionList = actionList;
 			renderer.client.addEventListener(row,"contextmenu",theme.tableRowShowContextMenu);
+			if(window.opera)
+				client.addEventListener(tr,"click",theme.tableRowShowContextMenu);
         }
         // selection
         if (model.meta.selectmode != "none" && ! model.meta.readonly) {
@@ -3999,34 +4007,36 @@ addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sort
 tableRowShowContextMenu : function(e) {
 	console.warn("Context menu building unimplemented!!");
 	var evt = itmill.clients[0].getEvent(e);
-	// stop bubling
-	evt.stop();
-	// get TR element ( event may be bubbling from contained elements)
-	var row = false;
-	var tmp = evt.target;
-	while(!row && tmp) {
-		if(tmp.actionList)
-			row = tmp;
-		else
-			tmp = tmp.parentNode;
-	}
-	if(!row) {
-		console.error("Couldn't find row element for which to show context menu");
+	if(evt.rightclick || evt.type == "contextmenu") {
+		// stop bubling
+		evt.stop();
+		// get TR element ( event may be bubbling from contained elements)
+		var row = false;
+		var tmp = evt.target;
+		while(!row && tmp) {
+			if(tmp.actionList)
+				row = tmp;
+			else
+				tmp = tmp.parentNode;
+		}
+		if(!row) {
+			console.error("Couldn't find row element for which to show context menu");
+			return false;
+		}
+		var pntbl = row.parentNode.parentNode.parentNode.parentNode.parentNode;
+		var actions = new Array();
+		// actionId string is sent to server on contextMenu click
+		// They comma separated like this: "[listitem],[actionKey]"
+		for(var i = 0; i < row.actionList.length; i++) {
+			actions.push({
+				caption: pntbl.model.meta.actions[row.actionList[i]],
+				actionId: (row.key + "," + row.actionList[i])
+			});
+		}
+		var cm = itmill.clients[0].getContextMenu();
+		cm.showContextMenu(actions,evt,pntbl.varMap.action);
 		return false;
 	}
-	var pntbl = row.parentNode.parentNode.parentNode.parentNode.parentNode;
-	var actions = new Array();
-	// actionId string is sent to server on contextMenu click
-	// They comma separated like this: "[listitem],[actionKey]"
-	for(var i = 0; i < row.actionList.length; i++) {
-		actions.push({
-			caption: pntbl.model.meta.actions[row.actionList[i]],
-			actionId: (row.key + "," + row.actionList[i])
-		});
-	}
-	var cm = itmill.clients[0].getContextMenu();
-	cm.showContextMenu(actions,evt,pntbl.varMap.action);
-	return false;
 },
 
 renderSelect : function(renderer,uidl,target,layoutInfo) {
