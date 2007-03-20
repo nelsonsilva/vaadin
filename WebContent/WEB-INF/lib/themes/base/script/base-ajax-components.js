@@ -1,4 +1,4 @@
-if(document.all) {
+if(document.all && !window.opera) {
 	Node = new Object();
 	Node.ELEMENT_NODE = 1;
 	Node.ATTRIBUTE_NODE = 2;
@@ -1752,7 +1752,7 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 			hasChildren = true;
 		}
 		if (!disabled && !readonly && childNode.nodeName == "al" ) {
-			// extract what actions this particular node has
+			// extract actions that this particular node has
 			var actionList = new Array();
 			for(var j = 0; j < childNode.childNodes.length; j++) {
 				actionList.push(childNode.childNodes[j].firstChild.data);
@@ -3063,8 +3063,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var actionVar = null;
 	var alNode = theme.getFirstElement(uidl,"actions")
 	if (alNode) {
-		actionVar = theme.createVariableElementTo(div,theme.getVariableElement(alNode,"string","action"));
-        model.actionVar = actionVar;
+		actionVar = theme.createVarFromUidl(div,theme.getVariableElement(alNode,"string","action"));
 		actions = new Object();
 		var ak = alNode.getElementsByTagName("action");
 		for (var i=0;i<ak.length;i++) {
@@ -3190,7 +3189,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
 	
-	// Now we have a very weird bugfix, FF mac has big issues setting scrollbars
+	// Now we have a very weird bugfix: mac FF has big issues setting scrollbars
 	// to right layer. Now that we have set up new scrollbars and possibly under
 	// frontmost window, we need to "shake" the frontmost window a bit
 	var agent = navigator.userAgent.toLowerCase();
@@ -3204,6 +3203,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
     
     // create spacer elements and save reference to model (needed for webkit bug)
+    // Otherwice we simply use margins
     model.aSpacer = theme.createElementTo(cout,"div");
     model.aSpacer.className = "spacer";
 
@@ -3305,7 +3305,13 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             tr.appendChild(td);
 		}
         if (al && tr.firstChild) {
-            theme.renderActionPopup(renderer,al,tr,actions,actionVar,key,"rightclick");
+			// extract actions that this particular node has
+			var actionList = new Array();
+			for(var j = 0; j < al.childNodes.length; j++) {
+				actionList.push(al.childNodes[j].firstChild.data);
+			}
+			tr.actionList = actionList;
+			client.addEventListener(tr,"contextmenu",theme.tableRowShowContextMenu);
         }
         // selection
         if (model.meta.selectmode != "none"  && ! model.meta.readonly ) {
@@ -3515,7 +3521,13 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             row.appendChild(cell);
         }
         if (al&&row.firstChild) {
-            theme.renderActionPopup(renderer,al,row,tm.meta.actions,tm.actionVar,key,"rightclick");
+        	// extract actions that this particular node has
+			var actionList = new Array();
+			for(var j = 0; j < al.childNodes.length; j++) {
+				actionList.push(al.childNodes[j].firstChild.data);
+			}
+			row.actionList = actionList;
+			renderer.client.addEventListener(row,"contextmenu",theme.tableRowShowContextMenu);
         }
         // selection
         if (model.meta.selectmode != "none" && ! model.meta.readonly) {
@@ -3980,6 +3992,42 @@ addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sort
 		}
 	});
 	//client.addEventListener(element,"mouseup", mouseUpListener);
+},
+
+/**
+ * This is event listener that builds context menu for row
+ */
+tableRowShowContextMenu : function(e) {
+	console.warn("Context menu building unimplemented!!");
+	var evt = itmill.clients[0].getEvent(e);
+	// stop bubling
+	evt.stop();
+	// get TR element ( event may be bubbling from contained elements)
+	var row = false;
+	var tmp = evt.target;
+	while(!row && tmp) {
+		if(tmp.actionList)
+			row = tmp;
+		else
+			tmp = tmp.parentNode;
+	}
+	if(!row) {
+		console.error("Couldn't find row element for which to show context menu");
+		return false;
+	}
+	var pntbl = row.parentNode.parentNode.parentNode.parentNode.parentNode;
+	var actions = new Array();
+	// actionId string is sent to server on contextMenu click
+	// They comma separated like this: "[listitem],[actionKey]"
+	for(var i = 0; i < row.actionList.length; i++) {
+		actions.push({
+			caption: pntbl.model.meta.actions[row.actionList[i]],
+			actionId: (row.key + "," + row.actionList[i])
+		});
+	}
+	var cm = itmill.clients[0].getContextMenu();
+	cm.showContextMenu(actions,evt,pntbl.varMap.action);
+	return false;
 },
 
 renderSelect : function(renderer,uidl,target,layoutInfo) {
@@ -6350,6 +6398,9 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 		this._htmlElement.appendChild(li);
 	}
 	this._ol.setModal(true);
+	// we may want to define non-standard opacity for context menus
+	// modality curtain
+	this._ol._modalityCurtain.className += " cmModalityCurtain";
 	this._ol.addModalityClickEvent({f:this._hide,obj:this});
 	this._container.style.display = "block";
 	this._ol.setWidth(this._htmlElement.offsetWidth);

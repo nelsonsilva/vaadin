@@ -1,6 +1,10 @@
-/** This file is for fixing Safari oddities */
+/** This file is for fixing IE oddities */
 .itmtk .modalityCurtain {
-	filter:alpha(opacity=10);
+	filter:alpha(opacity=20);
+}
+
+.itmtk .modalityCurtain.cmModalityCurtain {
+	filter:alpha(opacity=0);
 }
 
 .itmtk .contextMenu {

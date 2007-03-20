@@ -860,99 +860,105 @@
 	cursor: SE-resize;
 }
 
-.itmtk .window .shadow {
+.itmtk .window .shadow,
+.itmtk .contextMenu .shadow {
 	background: transparent;
 }
 
-.itmtk .window .shadow div {
+/* Make context shadows bit less offset -> like bit closer to other layer */
+.itmtk .contextMenu .shadow {
+	margin-top:-3px;
+	margin-left:-3px;
+}
+
+
+.itmtk .window .shadow div,
+.itmtk .contextMenu .shadow div {
 	display:inline;
 	float: left;
 }
-.itmtk .window .shadow .NE,
-.itmtk .window .shadow .N,
-.itmtk .window .shadow .NW,
-.itmtk .window .shadow .SE,
-.itmtk .window .shadow .S,
-.itmtk .window .shadow .SW {
-	height: 15px;	
-}
-.itmtk .window .shadow .NE,
-.itmtk .window .shadow .N,
-.itmtk .window .shadow .NW,
-.itmtk .window .shadow .SE,
-.itmtk .window .shadow .S,
-.itmtk .window .shadow .SW {
-	height: 15px;	
-}
-.itmtk .window .shadow .W,
-.itmtk .window .shadow .E {
-	width: 15px;
-}
 
-.itmtk .window .shadow .NE,
-.itmtk .window .shadow .E,
-.itmtk .window .shadow .SE {
-	width: 15px;
-}
 .itmtk .window .shadow .NW,
-.itmtk .window .shadow .W,
-.itmtk .window .shadow .SW {
+.itmtk .contextMenu .shadow .NW {
+	height: 15px;	
 	width: 15px;
-}
-
-.itmtk .window .shadow .NW {
 	background: url('../img/shadow/NW.png') top left no-repeat;
 }
-.itmtk .window .shadow .N {
+.itmtk .window .shadow .N,
+.itmtk .contextMenu .shadow .N {
+	height: 15px;	
 	background: url('../img/shadow/N.png') top repeat-x;
 }
-.itmtk .window .shadow .NE {
+.itmtk .window .shadow .NE,
+.itmtk .contextMenu .shadow .NE {
+	height: 15px;	
+	width: 15px;
 	background: url('../img/shadow/NE.png') top right no-repeat;
 }
-.itmtk .window .shadow .E {
+.itmtk .window .shadow .E,
+.itmtk .contextMenu .shadow .E {
+	width: 15px;
 	background: url('../img/shadow/E.png') top right repeat-y;
 }
-.itmtk .window .shadow .W {
+.itmtk .window .shadow .W,
+.itmtk .contextMenu .shadow .W {
+	width: 15px;
 	background: url('../img/shadow/W.png') top left repeat-y;
 }
-.itmtk .window .shadow .S {
+.itmtk .window .shadow .S,
+.itmtk .contextMenu .shadow .S {
+	height: 15px;	
 	background: url('../img/shadow/S.png') bottom left repeat-x;
 }
-.itmtk .window .shadow .SW {
+.itmtk .window .shadow .SW,
+.itmtk .contextMenu .shadow .SW {
+	width: 15px;
+	height: 15px;	
 	background: url('../img/shadow/SW.png') bottom left no-repeat;
 }
-.itmtk .window .shadow .SE {
+.itmtk .window .shadow .SE,
+.itmtk .contextMenu .shadow .SE {
+	width: 15px;
+	height: 15px;	
 	background: url('../img/shadow/SE.png') bottom right no-repeat;
 }
-* html .itmtk .window .shadow .NW {
+* html .itmtk .window .shadow .NW,
+* html .itmtk .contextMenu .shadow .NW  {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/NW.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .N {
+* html .itmtk .window .shadow .N,
+* html .itmtk .contextMenu .shadow .N {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/N.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .NE {
+* html .itmtk .window .shadow .NE,
+* html .itmtk .contextMenu .shadow .NE {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/NE.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .E {
+* html .itmtk .window .shadow .E,
+* html .itmtk .contextMenu .shadow .E {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/E.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .W {
+* html .itmtk .window .shadow .W,
+* html .itmtk .contextMenu .shadow .W {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/W.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .S {
+* html .itmtk .window .shadow .S,
+* html .itmtk .contextMenu .shadow .S {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/S.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .SW {
+* html .itmtk .window .shadow .SW,
+* html .itmtk .contextMenu .shadow .SW {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/SW.png', sizingMethod='scale');
 }
-* html .itmtk .window .shadow .SE {
+* html .itmtk .window .shadow .SE,
+* html .itmtk .contextMenu .shadow .SE {
 	background: transparent;
 	filter/**/:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='RES/corporate/img/shadow/SE.png', sizingMethod='scale');
 }
