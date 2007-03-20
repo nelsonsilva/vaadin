@@ -113,7 +113,6 @@ createTextNodeTo : function (target,text) {
 	// Sanity check
 	if (text == null || target == null) return null;
 
-	// Create DIV as container
 	var tn = target.ownerDocument.createTextNode(text);
 
 	// Append to parent
