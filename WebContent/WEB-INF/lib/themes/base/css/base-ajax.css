@@ -860,8 +860,6 @@ IMG.overlay {
 .itmtk .overlay_body {
 	position: absolute;
 	border: 0;
-	/* TODO debug color and border */
-	background-color: #f00;
 }
 
 .itmtk .window .winHeader {
@@ -922,10 +920,48 @@ IMG.overlay {
 	width:1px;
 	height:1px;
 	display:inline;
-	float;left;	
+	float:left;	
 }
-
 .itmtk .window .winBody .open {
 	height:100%;	
 }
 
+.itmtk .contextMenu {
+	position:absolute;
+}
+.itmtk .contextMenu .shadow {
+	position:absolute;	
+}
+.itmtk .contextMenu .shadow div{
+	display:none;
+}
+.itmtk .contextMenu .overlay_body ul {
+	z-index:30003 !important;
+}
+.itmtk .contextMenu ul {
+	background-color:ThreeDFace;
+	list-style:none;
+	margin:0;
+	padding:0;
+	border: 1px solid ThreeDShadow;
+	border-bottom:0;
+	float:left;
+}
+.itmtk .contextMenu li {
+	cursor:pointer;
+	border-bottom: 1px solid ThreeDShadow;
+	padding-left:1.25em;
+	padding-top:0.15em;
+	padding-bottom:0.15em;
+	padding-right:1.8em;
+	white-space:pre;
+	float:left;
+	clear:left;
+}
+
+.itmtk .modalityCurtain {
+	position:absolute;
+	/* TODO remove debug color, should be trasparent by default */
+	background: #000;
+	opacity:0.1;
+}

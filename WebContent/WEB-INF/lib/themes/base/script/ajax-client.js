@@ -29,6 +29,8 @@ itmill.clients = new Array();
 itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement) {
     itmill.clients.push(this);
     this.clientId = itmill.clients.length;
+    
+    this._browserDetect();
 
 	// Store parameters
 	this.mainWindowElement = windowElementNode;
@@ -109,16 +111,10 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
        var src = img.src;
         if (!src || src.indexOf("pixel.gif")>0) return;
         if (src.indexOf(".png")<1) return
-        var ua = navigator.userAgent.toLowerCase();
-        if (ua.indexOf("windows")<0) return;
-        var msie = ua.indexOf("msie");
-        if (msie < 0) return;
-        var v = parseInt(ua.substring(msie+5,msie+6));
-        if (!v || v < 5 || v > 6) return;
+        if (!itmill.wb.isIE6) return;
         
         var w = img.width||16; // def width 16, hidden icons fail otherwise
         var h = img.height||16;
-
         
         img.onload = null;
         img.src = clientRoot + "pixel.gif";
@@ -140,6 +136,17 @@ itmill.Client.prototype.start = function() {
 	} 
 	// Send initial request
 	this.processVariableChanges(true);
+}
+
+/**
+ * This function runs various browser detections.
+ * 
+ * After this we can check for variables like itmill.wb.isIE or itmill.wb.isMac
+ */
+itmill.Client.prototype._browserDetect = function() {
+	if(!itmill.wb) {
+		itmill.wb = new itmill.WebBrowser();
+	}
 }
 
 itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
@@ -1017,6 +1024,8 @@ itmill.Client.prototype.processUpdates = function (updates) {
         	console.error("Could not process changes: "+e.message);
             console.error(e);
  		} else {
+        	console.error("Could not process changes: "+e.message);
+            console.error(e);
 			alert("Failed to process all changes. \n Please enable debug logging to get detailed error description");
 		}
 	}
@@ -1590,8 +1599,15 @@ itmill.Client.prototype.getEvent = function(e) {
 	}
 	props.rightclick = rightclick;
 	
-	props.mouseX = e.pageX||e.clientX;
-	props.mouseY = e.pageY||e.clientY;
+	if (e.pageX || e.pageY) 	{
+		props.mouseX = e.pageX;
+		props.mouseY = e.pageY;
+	} else if (e.clientX || e.clientY) 	{
+		props.mouseX = e.clientX + document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+		props.mouseY = e.clientY + document.body.scrollTop
+			+ document.documentElement.scrollTop;
+	}
 	
 	props.stop = function() {
 		e.cancelBubble = true;
@@ -1607,7 +1623,8 @@ itmill.Client.prototype.getEvent = function(e) {
  * Returns a ...Base.TkWindow object that contains given HTMLElement object  or null
  * if not found
  *
- *  TODO This function is in totally wrong place, should be in html-helper-lib.js
+ * TODO This function is in totally wrong place, should be in html-helper-lib.js 
+ * or something
  */
  itmill.Client.prototype.getTkWindow = function(el) {
  	while(typeof el.TkWindow == "undefined" && el.parentNode != el.ownerDocument) {
@@ -1617,7 +1634,7 @@ itmill.Client.prototype.getEvent = function(e) {
  		return el.TkWindow;
 	else 
 		return null;
- }
+}
 
 /**
  * Helper method for Themes that returns htmlElments closest parent that is Paintable 
@@ -1722,6 +1739,21 @@ itmill.Client.prototype.printObject = function(obj,level) {
 	return str;
 }
 
+/**
+ * One client has only one context menu object. This is called by hanglers which
+ * want to populate and show it.
+ * 
+ * @return {itmill.ui.ContextMenu} Returns clients context menu object
+ */
+itmill.Client.prototype.getContextMenu = function() {
+	if(!this.contextMenu) {
+		this.contextMenu = new itmill.ui.ContextMenu();
+		this.contextMenu.appendTo(this.mainWindowElement);
+	}
+	return this.contextMenu;
+}
+
+
 /** Creates a text node to the same document as target.
  *  If target is null or not given the document reference is 
  *  used instead.
@@ -1752,6 +1784,51 @@ itmill.Client.prototype.createElement = function(nodeName, target) {
 		return document.createElement(nodeName);
 	}
 }
+
+/**
+ * This is a class that provides browser detection and some
+ * crossbrowser functions needed in various components.
+ * 
+ * TODO this is in  wrong file
+ */
+itmill.WebBrowser = function() {
+	if(document.all && !window.opera) {
+		this.isIE = true;
+		if(window.XMLHttpRequest)
+			this.isIE7 = true;
+		else
+			this.isIE6 = true;
+	}
+	if(window.opera)
+		this.isOpera = true;
+	var agent = navigator.userAgent;
+	if(agent.indexOf("Webkit") > 0 ) {
+		this.isWebkit = true;
+	} 
+
+	if(agent.indexOf("Mac") > 0 ) {
+		this.isMac = true;
+	}
+	if(agent.indexOf("Linux") > 0 ) {
+		this.isLinux = true;
+	}
+}
+
+itmill.WebBrowser.prototype.getWindowWidth = function() {
+	return document.documentElement.clientWidth;
+}
+
+itmill.WebBrowser.prototype.getWindowHeight = function() {
+	if(self.innerHeight) {
+		return self.innerHeight;
+	}
+	else if(window.opera) {
+		return document.documentElement.scrollHeight;
+	} else {
+		return document.documentElement.clientHeight;
+	}
+}
+
 
 /** Class that implements inheritance mechanism for themes */
 

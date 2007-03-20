@@ -79,6 +79,7 @@
 					<supports agent="MSIE" />
 				</require> 
 				<file name="script/ie-extra.js" />
+				<file name="css/ie-extra.css" />
 			</fileset>
 			<!-- Mac FF fixes -->
 			<fileset>

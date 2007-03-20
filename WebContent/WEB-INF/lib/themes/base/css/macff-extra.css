@@ -1,4 +1,8 @@
-/** This file is for fixing Safari oddities */
+/** This file is for fixing Mac FF oddities
+ * The most notable of them is the popping scrollbars issue.
+ * Mac FF has some kind of detectin of its "bug", so we can quite often 
+ * make simple workaround for it by setting floating element overflow to "auto"
+ */
 .itmtk .window .winHeader {
 	overflow: auto;
 }
@@ -6,5 +10,8 @@
 	overflow: auto;
 }
 .itmtk .window .shadow {
+	overflow: auto;
+}
+.itmtk .modalityCurtain {
 	overflow: auto;
 }
