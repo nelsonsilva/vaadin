@@ -3659,7 +3659,7 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 			var offset = -(target.origX-evt.mouseX);
 			var w = (target.origW+offset);
             // minimum height = scrollresizer + space for sort indicator + margin
-			if (w < 17) w = 17;
+			if (w < 19) w = 19;
 			try {
 				td.width = w;
                 td.lastChild.style.width = (w-17)+"px";
@@ -4003,7 +4003,8 @@ addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sort
  * context clicked
  */
 tableRowShowContextMenu : function(e) {
-	var evt = itmill.clients[0].getEvent(e);
+	var client = itmill.clients[0];
+	var evt = client.getEvent(e);
 	if(evt.rightclick || evt.type == "contextmenu") {
 		// stop bubling
 		evt.stop();
@@ -4020,7 +4021,7 @@ tableRowShowContextMenu : function(e) {
 			console.error("Couldn't find row element for which to show context menu");
 			return false;
 		}
-		var pntbl = row.parentNode.parentNode.parentNode.parentNode.parentNode;
+		var pntbl = client.getPaintable(row);
 		var actions = new Array();
 		// actionValue string is sent to server on contextMenu click
 		// They comma separated like this: "[listitem],[actionKey]"
@@ -4031,7 +4032,7 @@ tableRowShowContextMenu : function(e) {
 			});
 		}
 		var cm = itmill.clients[0].getContextMenu();
-		cm.showContextMenu(actions,evt,pntbl.varMap.collapsedColumns);
+		cm.showContextMenu(actions,evt,pntbl.varMap.action);
 		return false;
 	}
 },
@@ -6432,7 +6433,7 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	delete this._customClickHandler;
 	
 	// set maximum width for context menu
-	this._ol.setWidth(400);
+	this._ol.setWidth(250);
 	
 	// append new nodes
 	for(var i = 0; i < aOptions.length; i++) {
@@ -6456,8 +6457,10 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	this._container.style.display = "block";
 	this._ol.setWidth(this._htmlElement.offsetWidth);
 	// width now fixed, fix individual list items to blocks again
-	for(var i = 0; i < this._htmlElement.childNodes.length; i++)
+	for(var i = 0; i < this._htmlElement.childNodes.length; i++) {
 		this._htmlElement.childNodes[i].style.display = "block";
+		this._htmlElement.style.display = "block";
+	}
 	this._ol.setHeight(this._htmlElement.offsetHeight);
 	var x = evt.mouseX;
 	var y = evt.mouseY;
