@@ -945,20 +945,26 @@ IMG.overlay {
 	margin:0;
 	padding:0;
 	border: 1px solid ThreeDShadow;
-	border-bottom:0;
 	float:left;
 }
 .itmtk .contextMenu li {
 	cursor:pointer;
-	border-bottom: 1px solid ThreeDShadow;
-	padding-left:1.25em;
-	padding-top:0.15em;
-	padding-bottom:0.15em;
+	padding-left:1.5em;
+	padding-top:0.2em;
+	padding-bottom:0.2em;
 	padding-right:1.8em;
 	white-space:pre;
 	float:left;
 	clear:left;
 }
+
+.itmtk .contextMenu .off {
+	background: url(../img/table/off.gif) no-repeat 0 0.2em;
+}
+.itmtk .contextMenu .on {
+	background: url(../img/table/on.gif) no-repeat 0 0.2em;
+}
+
 .itmtk .modalityCurtain.cmModalityCurtain {
 	position:absolute;
 	/* TODO remove debug color, should be trasparent by default */

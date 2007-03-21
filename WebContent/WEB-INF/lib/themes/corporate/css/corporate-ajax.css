@@ -404,14 +404,17 @@
 	padding: 3px 18px;
 	color: #2c3437;
 }
+
 .itmtk .table .popup .off,
 .itmtk .table-paging .popup .off,
-.itmtk .list .popup .off {
+.itmtk .list .popup .off,
+.itmtk .contextMenu .off {
 	background: transparent url(../img/common/unchecked.png) no-repeat 1px 0.2em;
 }
 .itmtk .table .popup .on,
 .itmtk .table-paging .popup .on,
-.itmtk .list .popup .on {
+.itmtk .list .popup .on,
+.itmtk .contextMenu .on {
 	background: transparent url(../img/common/checked.png) no-repeat 1px 0.2em;
 }
 .itmtk .table .popup .item.over,

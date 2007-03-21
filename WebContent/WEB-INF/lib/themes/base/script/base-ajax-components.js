@@ -444,10 +444,26 @@ createVarFromUidl : function(paintable, variableUidl) {
     variable.type = variableUidl.nodeName;
     // TODO arrays could be handled as real js arrays and lot of old functions below could be removed
     if (variable.type == "array") {
-        variable.value = this.arrayToList(variableUidl);
+        variable.value = new Array();
+        var items = variableUidl.getElementsByTagName("ai");
+        if (items != null) {
+            for (var i=0; i < items.length; i++) {
+                var v = this.getFirstTextNode(items[i]); 
+                if (v != null && v.data != null) {
+                    variable.value.push(v.data);
+                }
+            } 
+        }
+        variable.id = "array:" + variable.id;
     } else if (variable.type == "string") {
         var node = this.getFirstTextNode(variableUidl);
         variable.value = (node?node.data:"");
+    } else if (variable.type == "boolean") {
+        if (variableUidl.getAttribute("value") == "true") {
+            variable.value = true;
+        } else { 
+            variable.value = false;
+        }
     } else {
         variable.value = variableUidl.getAttribute("value");
     }
@@ -1856,12 +1872,12 @@ treeNodeShowContextMenu: function(e) {
 		// event triggers from span element in li element
 		var tree = client.getPaintable(node);
 		var actions = new Array();
-		// actionId string is sent to server on contextMenu click
+		// actionValue string is sent to server on contextMenu click
 		// They comma separated like this: "[listitem],[actionKey]"
 		for(var i = 0; i < node.actionList.length; i++) {
 			actions.push({
 				caption: tree.actions[node.actionList[i]],
-				actionId: (node.key + "," + node.actionList[i])
+				actionValue: (node.key + "," + node.actionList[i])
 			});
 		}
 		cm.showContextMenu(actions,evt,tree.varMap.action);
@@ -3034,7 +3050,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var reqfirstrowVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","reqfirstrow"));
 
 
-	var ccVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","collapsedcolumns"));
+	var ccVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"array","collapsedcolumns"));
 	var coVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","columnorder"));
 	var selVar = model.selVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
 	var sortVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"string","sortcolumn"));
@@ -3081,26 +3097,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var vcols = model.vcols = inner.childNodes[1];
 	if (visiblecols) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div></DIV>";
-		var icon = vcols.firstChild; 
-		vcols.id = pid+"vcols";
-		var popup_blocker = theme.createElementTo(vcols,"iframe","popup-blocker-iframe hide");
-		var popup = theme.createElementTo(vcols,"div","border popup hide");
-		theme.addTogglePopupListener(theme,client,icon,"click",popup,null,null,null,popup_blocker);
-		theme.addStopListener(theme,client,icon,"mouseover");
-		theme.addStopListener(theme,client,icon,"mouseout");
-		var row = theme.createElementTo(popup,"div","item clickable pad border");
-		theme.addHidePopupListener(theme,client,row,"click");
-		var cols = visiblecols.getElementsByTagName("column");
-		for (var i=0;i<cols.length;i++) {
-			var row = theme.createElementTo(popup,"div","item clickable pad border");
-			var collapsed = "true"==cols[i].getAttribute("collapsed");
-			row.className += (collapsed ? " off" : " on")
-			theme.createTextNodeTo(row,cols[i].getAttribute("caption"));
-			theme.addAddClassListener(theme,client,row,"mouseover","over");
-			theme.addRemoveClassListener(theme,client,row,"mouseout","over");
-			theme.addToggleVarListener(theme,client,row,"click",ccVar,cols[i].getAttribute("cid"),true);
-		}
-		delete cols;		
+		renderer.client.addEventListener(vcols,"click",theme.tableShowColumnSelectMenu);
 	}
 
 
@@ -3265,7 +3262,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             td = d.createElement("td"); tdDiv = d.createElement("div");
             td.className = "tablecell"; tdDiv.className = "cellContent";
             td.appendChild(tdDiv);
-            tr.appenChild(td);
+            tr.appendChild(td);
 		}
 		var al = null;
 		var colNum = -1;
@@ -4002,10 +3999,10 @@ addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sort
 },
 
 /**
- * This is event listener that builds context menu for row
+ * This is an event listener that builds context menu for row when
+ * context clicked
  */
 tableRowShowContextMenu : function(e) {
-	console.warn("Context menu building unimplemented!!");
 	var evt = itmill.clients[0].getEvent(e);
 	if(evt.rightclick || evt.type == "contextmenu") {
 		// stop bubling
@@ -4025,19 +4022,52 @@ tableRowShowContextMenu : function(e) {
 		}
 		var pntbl = row.parentNode.parentNode.parentNode.parentNode.parentNode;
 		var actions = new Array();
-		// actionId string is sent to server on contextMenu click
+		// actionValue string is sent to server on contextMenu click
 		// They comma separated like this: "[listitem],[actionKey]"
 		for(var i = 0; i < row.actionList.length; i++) {
 			actions.push({
 				caption: pntbl.model.meta.actions[row.actionList[i]],
-				actionId: (row.key + "," + row.actionList[i])
+				actionValue: (row.key + "," + row.actionList[i])
 			});
 		}
 		var cm = itmill.clients[0].getContextMenu();
-		cm.showContextMenu(actions,evt,pntbl.varMap.action);
+		cm.showContextMenu(actions,evt,pntbl.varMap.collapsedColumns);
 		return false;
 	}
 },
+
+/**
+ * This is handler that creates "context menu" for choosing
+ * visible columns for table
+ */
+ tableShowColumnSelectMenu : function(e) {
+ 	var client = itmill.clients[0];
+ 	var evt = client.getEvent(e);
+ 	// stop bubbling
+ 	evt.stop();
+ 	var cm = client.getContextMenu();
+ 	var pntbl = client.getPaintable(evt.target);
+ 	var vcol = pntbl.model.visiblecols; // columnorder uidl snippet
+ 	var aOpt = new Array();
+ 	// loop all arrays and create appropriate values to be sent to
+	// server on menu click
+ 	for(var i = 0; i < vcol.childNodes.length; i++) {
+ 		var col = vcol.childNodes[i];
+ 		var collapsed = "true" == col.getAttribute("collapsed");
+ 		// copy array that has collapsed columns
+ 		var tmp = pntbl.varMap.collapsedcolumns.value.slice();
+ 		if(collapsed)
+ 			tmp.splice(tmp.indexOf(col.getAttribute("cid")), 1);
+ 		else
+ 			tmp.push(col.getAttribute("cid"));
+		aOpt.push({
+			caption: col.getAttribute("caption"),
+			actionValue: tmp.join(","),
+			checked: !collapsed
+		});
+ 	}
+ 	cm.showContextMenu(aOpt,evt, pntbl.varMap.collapsedcolumns);
+ },
 
 renderSelect : function(renderer,uidl,target,layoutInfo) {
 
@@ -6381,8 +6411,12 @@ itmill.ui.ContextMenu.prototype.appendTo = function(el) {
  * 
  * @param aOptions {array} containts objects describing context menus options.
  * Option objects look like this:
- * {caption, actionId}
- * @param evt event is used to determine proper position for contextMenu
+ * {caption, actionValue}
+ * 
+ * They may also optionally include property "checked" (true/false).
+ * 
+ * @param 	evt	crossbrowser event which triggered the contextMenu building,
+ *  			is used to determine proper position for contextMenu
  * @param actionVar is the variable which will be updated on action click
  */
 itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, actionVar) {
@@ -6394,6 +6428,8 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	while(this._htmlElement.firstChild) {
 		this._htmlElement.removeChild(this._htmlElement.firstChild);
 	}
+	// delete possible customClickHandler
+	delete this._customClickHandler;
 	
 	// set maximum width for context menu
 	this._ol.setWidth(400);
@@ -6402,8 +6438,14 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	for(var i = 0; i < aOptions.length; i++) {
 		var opt = aOptions[i];
 		var li = document.createElement("li");
-		li.actionId = opt.actionId;
+		li.actionValue= opt.actionValue;
 		li.appendChild(document.createTextNode(opt.caption));
+		if(typeof opt.checked != "undefined") {
+			if(opt.checked) 
+				li.className = "on";
+			else
+				li.className = "off";
+		}
 		this._htmlElement.appendChild(li);
 	}
 	this._ol.setModal(true);
@@ -6432,14 +6474,23 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	this._container.style.left = x + "px";
 }
 
+/**
+ * This is default clickHandler for context menu. It can be overridden
+ * by setting own to clickHandler
+ */
 itmill.ui.ContextMenu.prototype._clickHandler = function(e) {
-	// TODO refactor bad client fetch
+	// TDO refactor bad client fetch
 	var client = itmill.clients[0];
 	var evt = client.getEvent(e);
-	var li = evt.target;
-	var actionVar = li.parentNode.contextMenu.actionVar;
-	client.changeVariable(actionVar.id, li.actionId, true);
-	li.parentNode.contextMenu._hide();
+	var cm = evt.target.parentNode.contextMenu;
+	if(!cm.clickHandler) {
+		var li = evt.target;
+		var actionVar = cm.actionVar;
+		client.changeVariable(actionVar.id, li.actionValue, true);
+		li.parentNode.contextMenu._hide();
+	} else {
+		cm.clickHandler(evt);	
+	}
 }
 
 /*
