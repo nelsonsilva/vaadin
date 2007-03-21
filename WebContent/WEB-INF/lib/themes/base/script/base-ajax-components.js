@@ -1158,6 +1158,8 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 		div.TkWindow = tkWin;
 		renderer.theme.createVarFromUidl(div,renderer.theme.getVariableElement(uidl,"boolean","close"));
 		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
+		if(uidl.getAttribute("style") == "modal")
+			tkWin.setModal(true);
 		return;
 	}
 	
@@ -6340,6 +6342,25 @@ itmill.themes.Base.TkWindow.prototype._onCloseListener = function(e) {
 	client.changeVariable(closeVar.id, closeVar.value, true);
 }
 
+/**
+ * Using this window it is possible to set window modal
+ */
+itmill.themes.Base.TkWindow.prototype.setModal = function(modal) {
+	if(modal) {
+		// ensure this is the frontmost window
+		this.bringToFront();
+		// tell Overlay to enable modalityCurtain
+		this._ol.setModal(true);
+		// TODO center window
+		var x = Math.floor((itmill.wb.getWindowWidth() - this._width) / 2 ) ;
+		var y = Math.floor((itmill.wb.getWindowHeight() - this._height) / 2 ) ;
+		this._ol.setXY(x,y);
+	} else {
+		// TODO remo modality
+		this._ol.setModal(false);
+	}
+}
+
 itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
 	//TODO remove circular references from window
 	
@@ -6350,7 +6371,7 @@ itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
 	this.bringToFront();
 	// remove reference from windowOrder
 	client.windowOrder.pop();
-	
+	this.setModal(false);
 	this._ol.dispose();
 }
 
