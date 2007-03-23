@@ -6459,8 +6459,10 @@ itmill.themes.Base.TkWindow.prototype.setModal = function(modal) {
 		// Following commented line would be the obvious solution: 
 		
 	} else {
-		// remove modality curtain and restore tabbing order
-		this._ol.setModal(false, true);
+		if(this._ol.isModal()) {
+			// remove modality curtain and restore tabbing order
+			this._ol.setModal(false, true);
+		}
 	}
 }
 
