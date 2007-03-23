@@ -966,7 +966,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 			
 			if (invisible && currentNode) {
 				// Special hiding procesedure for windows
-				if (windowName != null) {
+				if (windowName != null || changeContent.nodeName == "window") {
 					if(currentNode && currentNode.className.indexOf("native") < 0 ) {
 						// if div window
 						currentNode.TkWindow.cleanUp();
