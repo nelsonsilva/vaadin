@@ -6009,7 +6009,6 @@ itmill.themes.Base.Overlay.prototype.tabbableTags = new Array("A","BUTTON","TEXT
 						elem: el,
 						ti: el.tabIndex
 					});
-			 		console.log("Saving tabindex: " + el.tabIndex);
 			 		// put out of tabbing order
 					el.tabIndex="-1";
 				}
@@ -6025,8 +6024,6 @@ itmill.themes.Base.Overlay.prototype.tabbableTags = new Array("A","BUTTON","TEXT
  itmill.themes.Base.Overlay.prototype._restoreTabbing = function() {
  	while(this._disTabbableElements.length > 0) {
  		var tmp = this._disTabbableElements.pop();
- 		console.log("Restoring z index");
- 		console.dir(tmp);
  		tmp.elem.tabIndex = tmp.ti;
  	}
 }
