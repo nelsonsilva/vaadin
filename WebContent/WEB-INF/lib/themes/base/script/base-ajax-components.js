@@ -18,7 +18,7 @@ if(document.all && !window.opera) {
 /** Base theme class extends ITMillToolkitClient.Theme */
 itmill.themes.Base = itmill.Class.extend( {
 
-
+	
 /** Constructor
  *  @param themeRoot The base URL for theme resources.
  *  @constructor
@@ -5821,6 +5821,8 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	this._div.style.height = h + "px";
 	
 	this._shadow = document.createElement("div");
+	this._shadow.tabIndex = "-1"; // due we need to set mac FF overflow scroll
+	
 	this._shadow.className = "shadow";
 	this._shadow.style.width = (w + 2*this.SHADOW_WIDTH) + "px";
 	this._shadow.style.height = (h + 2*this.SHADOW_WIDTH) + "px";
@@ -5904,11 +5906,25 @@ itmill.themes.Base.Overlay.prototype.getZindexBase = function() {
 	return this._zIndexBase;
 }
 
-// TODO documentation
-// TODO refactor this to use only one modality curtain per client
-itmill.themes.Base.Overlay.prototype.setModal = function(modality) {
+
+/**
+ * With this function Overlay can be made modal, so that components
+ * outside modal layer cannot be accessed. This is achieved by drawing a
+ * div element just below overlay.
+ * 
+ * This function can additionally disabble tabbing focus into elements outside
+ * modal layer. Tabbing will be restored when modality is removed. This may be
+ *  a performance hit on big pages, so this functionality is enabled 
+ * optionally.
+ * 
+ * @param modality true if enabling modality, false on removing
+ * @param tabbing boolean flag to indicate if to take "tabbing" into account
+ * 
+ */
+itmill.themes.Base.Overlay.prototype.setModal = function(modality, tabbing) {
 	if(modality) {
 		this._modalityCurtain = document.createElement("div");
+		this._modalityCurtain.tabIndex = "-1";
 		this._modalityCurtain.className = "modalityCurtain";
 		// TODO take document height into consideration, now possible
 		// to bypass modality curtain by scrolling down
@@ -5922,6 +5938,11 @@ itmill.themes.Base.Overlay.prototype.setModal = function(modality) {
 		// Modality curtain needs to be appended to clients main div
 		// FIXME better way to fetch client reference
 		itmill.clients[0].mainWindowElement.appendChild(this._modalityCurtain);
+		
+		if(tabbing) {
+			this._disableTabbingOutOfOverlay();
+		}
+		
 	} else {
 		// remove modality curtain
 		if(this._modalityCurtain && this._modalityCurtain.parentNode) {
@@ -5929,6 +5950,10 @@ itmill.themes.Base.Overlay.prototype.setModal = function(modality) {
 			this._modalityCurtain.parentNode.removeChild(this._modalityCurtain);
 		}
 		delete this._modalityCurtain;
+		if(tabbing) {
+			this._restoreTabbing();
+		}
+		
 	}
 }
 
@@ -5942,6 +5967,68 @@ itmill.themes.Base.Overlay.prototype.addModalityClickEvent = function(prop) {
 			prop.f.call(prop.obj);
 		}
 	}
+}
+
+/**
+ * Detects if givent element is in Overlay
+ * @param el HTMLElement to be inspected
+ */
+itmill.themes.Base.Overlay.prototype._containsElement = function(el) {
+	if(el) {
+		var tmp = el;
+		while(tmp.parentNode.nodeType == 1) {
+			if(tmp.parentNode && tmp.parentNode == this._div)
+				return true;
+			tmp = tmp.parentNode;				
+		}
+	}
+	return false;
+}
+
+itmill.themes.Base.Overlay.prototype.tabbableTags = new Array("A","BUTTON","TEXTAREA","INPUT","IFRAME", "SELECT", "DIV");
+
+/*
+ * This function sets z-index to -1 for all possible elements that might
+ * have it
+ */
+ itmill.themes.Base.Overlay.prototype._disableTabbingOutOfOverlay = function() {
+ 	if(!this._disTabbableElements) {
+ 		this._disTabbableElements = new Array();
+ 	}
+	var i = 0;
+	for (var j = 0; j < this.tabbableTags.length; j++) {
+		var tagElements = document.getElementsByTagName(this.tabbableTags[j]);
+		for (var k = 0 ; k < tagElements.length; k++) {
+			var el = tagElements[k];
+			if(!this._containsElement(el)) {
+				// save old tabIndex if element not in modal window and tabbable
+				// Divs need an extra check, because they are only tabbable if 
+				// tabIndex is set
+				if(this.tabbableTags[j] != "DIV" || el.tabIndex > 0) {
+					this._disTabbableElements.push({
+						elem: el,
+						ti: el.tabIndex
+					});
+			 		console.log("Saving tabindex: " + el.tabIndex);
+			 		// put out of tabbing order
+					el.tabIndex="-1";
+				}
+			}
+			i++;
+		}
+	}
+}
+
+/*
+ * This function restores disabled z-indexes to their original value
+ */
+ itmill.themes.Base.Overlay.prototype._restoreTabbing = function() {
+ 	while(this._disTabbableElements.length > 0) {
+ 		var tmp = this._disTabbableElements.pop();
+ 		console.log("Restoring z index");
+ 		console.dir(tmp);
+ 		tmp.elem.tabIndex = tmp.ti;
+ 	}
 }
 
 /**
@@ -6062,7 +6149,7 @@ itmill.themes.Base.TkWindow = function(args) {
 		args = new Object();
 
 	// TODO remove client determining hack to support mutltiple apps in one page
-	var client = itmill.clients[0];
+	this.client = itmill.clients[0];
 	
 	this._width = parseInt(args.width) > 100  ? args.width : 640;
 	this._height = parseInt(args.height) > 100 ? args.height : 400;
@@ -6070,11 +6157,12 @@ itmill.themes.Base.TkWindow = function(args) {
 	this._y	= args.posY ? args.posY : 0;
 	
 	this._header = document.createElement("div");
+	this._header.tabIndex = "-1"; // due we need to set mac FF overflow scroll
 	this._header.className = "winHeader"
 	
 	this._draggable = ( typeof args.draggable == "boolean" ) ? args.draggable : true;
 	if(this._draggable) {
-		client.addEventListener(this._header,"mousedown", this._onHeaderMouseDown);
+		this.client.addEventListener(this._header,"mousedown", this._onHeaderMouseDown);
 		this._header.TkWindow = this;
 		
 		// constraint to browser window ?
@@ -6089,7 +6177,7 @@ itmill.themes.Base.TkWindow = function(args) {
 		this._closeButton.className = "closeButton";
 		// TODO event listener for close button
 		this._header.appendChild(this._closeButton);
-		client.addEventListener(this._closeButton,"click",this._onCloseListener);
+		this.client.addEventListener(this._closeButton,"click",this._onCloseListener);
 	}
 	var capElement = document.createElement("div");
 	capElement.appendChild(document.createTextNode(args.title ? args.title : "New Window"));
@@ -6098,6 +6186,7 @@ itmill.themes.Base.TkWindow = function(args) {
 	
 	this.childTarget = this._body = document.createElement("div");
 	this._footer = document.createElement("div");
+	this._footer.tabIndex = "-1"; // due we need to set mac FF overflow scroll
 	
 	this._resizeable = typeof args.resizeable == "boolean" ? args.resizeable : true
 	if(this._resizeable) {
@@ -6105,13 +6194,13 @@ itmill.themes.Base.TkWindow = function(args) {
 		this._winResizer.className = "winResizer"
 		this._winResizer.TkWindow = this;
 		this._footer.appendChild(this._winResizer);
-		client.addEventListener(this._winResizer, "mousedown", this._onResizeStart);
+		this.client.addEventListener(this._winResizer, "mousedown", this._onResizeStart);
 	}
 	
 	// create and populate container
 	this._cont	= document.createElement("div");
 	this._cont.TkWindow = this;
-	client.addEventListener(this._cont, "click", this._onClickHandler);
+	this.client.addEventListener(this._cont, "click", this._onClickHandler);
 	
 	this._cont.appendChild(this._header);
 	this._cont.appendChild(this._body);
@@ -6142,15 +6231,15 @@ itmill.themes.Base.TkWindow = function(args) {
 	this._ol.appendTo(args.parentNode ? args.parentNode : null);
 	
 	// new window should be positioned on top
-	this._setWindowIndex(client.windowOrder.length);
-	client.windowOrder.push(this);
+	this._setWindowIndex(this.client.windowOrder.length);
+	this.client.windowOrder.push(this);
 }
 
 /**
  * This function makes window the frontmost
  */
 itmill.themes.Base.TkWindow.prototype.bringToFront = function() {
-	var wo = itmill.clients[0].windowOrder;
+	var wo = this.client.windowOrder;
 	var curIndex = wo.indexOf(this);
 	if(curIndex < (wo.length -1) ) {
 		// if not on top already
@@ -6287,9 +6376,13 @@ itmill.themes.Base.TkWindow.prototype._onResizeStart =  function(e) {
 	
 }
 
+/**
+ * Event listener when mouse up after resizing.
+ * 
+ * We will remove all event listeners used during resizing here.
+ */
 itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
 	// TODO remove this wrong way of getting client object
-	// TODO
 	var client = itmill.clients[0];
 	var evt = client.getEvent(e);
 	client.removeEventListener(document,"mousemove",itmill.themes.Base.TkWindow.prototype._onResizeDrag);
@@ -6300,6 +6393,9 @@ itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
 	return false;
 }
 
+/*
+ * This is fired during resizing when mouse moves. Changing the size.
+ */
 itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	// "this" is document.body
 	var client = itmill.clients[0];
@@ -6330,6 +6426,14 @@ itmill.themes.Base.TkWindow.prototype._stopListener = function(e) {
 	return false;
 }
 
+/**
+ * This listener is fired when window is to be closed. This will not actually
+ * close it, but only notify server that user clicked "close button" or some
+ * customized event requested window close.
+ * 
+ * Server will then in most common situation send back an instruction to 
+ * really close the window, but functionality can be overridden on Java side.
+ */
 itmill.themes.Base.TkWindow.prototype._onCloseListener = function(e) {
 	var evt = itmill.Client.prototype.getEvent(e);
 	evt.stop();
@@ -6349,28 +6453,29 @@ itmill.themes.Base.TkWindow.prototype.setModal = function(modal) {
 	if(modal) {
 		// ensure this is the frontmost window
 		this.bringToFront();
-		// tell Overlay to enable modalityCurtain
-		this._ol.setModal(true);
-		// TODO center window
+		// tell Overlay to enable modalityCurtain and modify tabbing
+		this._ol.setModal(true,true);
+		// center window
 		var x = Math.floor((itmill.wb.getWindowWidth() - this._width) / 2 ) ;
 		var y = Math.floor((itmill.wb.getWindowHeight() - this._height) / 2 ) ;
 		this._ol.setXY(x,y);
+		
+		// TODO capture focus events outside this window
+		// Following commented line would be the obvious solution: 
+		
 	} else {
-		// TODO remo modality
-		this._ol.setModal(false);
+		// remove modality curtain and restore tabbing order
+		this._ol.setModal(false, true);
 	}
 }
 
 itmill.themes.Base.TkWindow.prototype.cleanUp = function() {
+	this.client.debug("Removing window");
 	//TODO remove circular references from window
-	
-	// TODO remove illegal client refrence
-	var client = itmill.clients[0];
-
 	// move this window to top and order the rest
 	this.bringToFront();
 	// remove reference from windowOrder
-	client.windowOrder.pop();
+	this.client.windowOrder.pop();
 	this.setModal(false);
 	this._ol.dispose();
 }
