@@ -5926,10 +5926,9 @@ itmill.themes.Base.Overlay.prototype.setModal = function(modality, tabbing) {
 		this._modalityCurtain = document.createElement("div");
 		this._modalityCurtain.tabIndex = "-1";
 		this._modalityCurtain.className = "modalityCurtain";
-		// TODO take document height into consideration, now possible
 		// to bypass modality curtain by scrolling down
-		this._modalityCurtain.style.width = itmill.wb.getWindowWidth() + "px";
-		this._modalityCurtain.style.height = itmill.wb.getWindowHeight() + "px";
+		this._modalityCurtain.style.height = "100%";
+		this._modalityCurtain.style.width = "100%";
 		this._modalityCurtain.style.top = "0px";
 		this._modalityCurtain.style.left = "0px";
 		this._modalityCurtain.style.zIndex = this._zIndexBase + 1;
@@ -6004,7 +6003,7 @@ itmill.themes.Base.Overlay.prototype.tabbableTags = new Array("A","BUTTON","TEXT
 				// save old tabIndex if element not in modal window and tabbable
 				// Divs need an extra check, because they are only tabbable if 
 				// tabIndex is set
-				if(this.tabbableTags[j] != "DIV" || el.tabIndex > 0) {
+				if(this.tabbableTags[j] != "DIV" || ( el.tabIndex > 0 || el.style.overflow == "auto" || el.style.overflow == "scroll" )) {
 					this._disTabbableElements.push({
 						elem: el,
 						ti: el.tabIndex
@@ -6043,7 +6042,6 @@ itmill.themes.Base.Overlay.prototype.setWidth = function(w) {
 		this._blocker.style.width = w + "px";
 	this._div.style.width = w + "px";
 }
-
 
 /**
  * Set height of floating element (containter and blocker)
