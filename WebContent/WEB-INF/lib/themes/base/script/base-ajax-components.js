@@ -3190,6 +3190,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var cout = model.cout = theme.createElementTo(inner,"div");
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
+	// TODO move this to CSS
+	cout.style.overflow = "scroll";
 	
 	// Now we have a very weird bugfix: mac FF has big issues setting scrollbars
 	// to right layer. Now that we have set up new scrollbars and possibly under
