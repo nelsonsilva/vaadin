@@ -1760,7 +1760,6 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 	
 	// Actions
 	// and does node have subnodes/leafs?
-	// TODO don't render in-place, use generic popup-container (on-the-fly rendering)
 	
 	var hasChildren = false;
 	for (var i=0; i<node.childNodes.length; i++) {
@@ -3190,7 +3189,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var cout = model.cout = theme.createElementTo(inner,"div");
 	cout.id = pid+"cout";
 	theme.addCSSClass(cout,"cout");
-	// TODO move this to CSS
+	
+	// We have set this attribute also in CSS, but due reindeer bug (?)
+	// set scrolling in JS also
 	cout.style.overflow = "scroll";
 	
 	// Now we have a very weird bugfix: mac FF has big issues setting scrollbars
