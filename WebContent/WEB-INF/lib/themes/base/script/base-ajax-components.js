@@ -6207,13 +6207,12 @@ itmill.themes.Base.TkWindow = function(args) {
 	
 	this._body.className = "winBody";
 	this._body.style.height = (this._height - this.HEADER_HEIGHT - this.FOOTER_HEIGHT) + "px";
-	if(document.all && !window.XMLHttpRequest && !window.opera) {
-		// for IE6 we also need to set/force bodys width
-		this._body.style.width = this._width + "px";
-	}
+	this._body.style.position = "absolute";
+	this._body.style.width = this._width + "px";
 
 	this._footer.className = "winFooter";
-	
+	this._footer.style.position = "absolute";
+	this._footer.style.bottom = "0px";
 	
 	// TODO determine proper z-index base and pass it to Overlay object
 	this._ol = new itmill.themes.Base.Overlay(
@@ -6261,10 +6260,7 @@ itmill.themes.Base.TkWindow.prototype.setWidth = function(w) {
 		this._ol.setWidth(w + 2 * this.BORDER_WIDTH);
 		this._cont.style.widht = w + "px";
 		this._width = w;
-		if(document.all && !window.XMLHttpRequest && !window.opera) {
-			// for IE6 we also need to set/force bodys width
-			this._body.style.width = w + "px";
-		}
+		this._body.style.width = w + "px";
 	}
 }
 
