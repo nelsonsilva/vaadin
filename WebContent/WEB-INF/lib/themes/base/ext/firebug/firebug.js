@@ -213,8 +213,7 @@ if (!("console" in window) || !("firebug" in console)) {
 
         var baseURL = getFirebugURL();
 
-		// Nokia Series60 doesn't work well with hidden iframes
-        consoleFrame = document.createElement((navigator.appName=="Netscape"&&navigator.appVersion=="7.0") ? "div" : "iframe");
+        consoleFrame = document.createElement("iframe");
         consoleFrame.setAttribute("src", baseURL+"/firebug.html");
         consoleFrame.setAttribute("frameBorder", "0");
         consoleFrame.style.visibility = (frameVisible ? "visible" : "hidden");    
