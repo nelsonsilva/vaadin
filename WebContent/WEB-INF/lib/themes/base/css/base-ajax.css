@@ -918,10 +918,7 @@ IMG.overlay {
 }
 /* shadow helpers are not used in base theme, make them act so that IE 6 don't get fool */
 .itmtk .window .shadow div {
-	width:1px;
-	height:1px;
-	display:inline;
-	float:left;	
+	display:none;
 }
 .itmtk .window .winBody .open {
 	height:100%;	
