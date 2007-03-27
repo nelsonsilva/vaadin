@@ -2424,7 +2424,7 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
     '<form action="'+client.ajaxAdapterServletUrl +
     '" method="post" enctype="multipart/form-data" target="'+frameName+'">'+
     '<input type="file" name="'+varNode.getAttribute("id")+'" />'+
-    '<input type="submit" value="Send" />' +
+    '<input type="submit" value="Send" onclick="javascript:this.form.parentNode.previousSibling.firstChild.submitted = true; this.form.submit(); return false;"/>' +
     '</form>'
     ;
     
