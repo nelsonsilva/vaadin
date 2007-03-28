@@ -1753,8 +1753,29 @@ itmill.Client.prototype.getContextMenu = function() {
 	return this.contextMenu;
 }
 
+/**
+ * Method to register shorcut key handler
+ * 
+ * @param shortcut Shortcut object to be added
+ */
+itmill.Client.prototype.addShortcutHandler = function(shortcut) {
+	// TODO
+	// this should find the right container element where shortcuts should be hooked
+	// now prototyping by hooking all events to document
+	var body = document.body;
+	if(!body.shortcutMap) {
+		body.shortcutMap = new Array();
+	}
+	body.shortcutMap.push(shortcut);
+	// TODO remove this, containers that catch key clicks should do this on render phase
+	if(!body.shortcutEventAdded) {
+		console.log("adding shortcut event handler");
+		this.addEventListener(body,"keydown",itmill.ui._shortcutHandler);
+		body.shortcutEventAdded = true;
+	}
+}
 
-/** Creates a text node to the same document as target.
+/** Createsa text node to the same document as target.
  *  If target is null or not given the document reference is 
  *  used instead.
  *  

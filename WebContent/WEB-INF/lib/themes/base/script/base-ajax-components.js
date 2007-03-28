@@ -4459,56 +4459,101 @@ renderPre : function(renderer,uidl,target) {
 
 
 renderButton : function(renderer,uidl,target,layoutInfo) {
-			// Branch for checkbox
-
-			if (uidl.getAttribute("type") == "switch") {
-				return renderer.theme.renderCheckBox(renderer,uidl,target,layoutInfo);
+	// Branch for checkbox
+	
+	if (uidl.getAttribute("type") == "switch") {
+		return renderer.theme.renderCheckBox(renderer,uidl,target,layoutInfo);
+	}
+	
+	// Shortcuts
+	var theme = renderer.theme;
+	var client = renderer.client;
+	
+	var disabled = "true"==uidl.getAttribute("disabled");
+	var readonly = "true"==uidl.getAttribute("readonly");
+	var immediate = "true"==uidl.getAttribute("immediate");
+	var tabindex = uidl.getAttribute("tabindex");
+	
+	var linkStyle = "link"==uidl.getAttribute("style");
+	
+	var pntbl = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
+	
+	div = renderer.theme.createElementTo(pntbl,"div",(linkStyle?"link clickable":"outset clickable"));
+	var outer = renderer.theme.createElementTo(div,"div",(linkStyle?"":"outer"));
+	var inner = renderer.theme.createElementTo(outer,"div",(linkStyle?"pad":"border pad bg"));
+	
+	var caption = theme.renderDefaultComponentHeader(renderer,uidl,inner);
+	var hiddenInput = theme.addTabtoHandlers(client,theme,caption,div,tabindex,("default"==uidl.getAttribute("style")));
+	
+	if (!disabled&&!readonly) {
+	    // make sure other components release their focus and possibly update their variables
+	    renderer.client.addEventListener(pntbl,"mousedown", function() {
+	        hiddenInput.focus();    
+	    });
+	    // Handlers
+		theme.createVarFromUidl(pntbl, theme.getVariableElement(uidl,"boolean", "state"));
+		
+        this.addEventListener(div,"click",theme._buttonClickListener);
+		
+		theme.addAddClassListener(theme,client,div,"mousedown","down",div);
+		theme.addRemoveClassListener(theme,client,div,"mouseup","down",div);
+		theme.addRemoveClassListener(theme,client,div,"mouseout","down",div);
+		
+		theme.addAddClassListener(theme,client,div,"mouseover","over",div);
+		theme.addRemoveClassListener(theme,client,div,"mouseout","over",div);
+		
+		theme.addPreventSelectionListener(theme,client,div);
+		if(theme.getFirstElement(uidl,"actions")) {
+			var actions = theme.getFirstElement(uidl, "actions");
+			theme.createVarFromUidl(pntbl, theme.getVariableElement(actions,"string", "action"));
+			var aNodes = actions.getElementsByTagName("action");
+			for(var i = 0; i < aNodes.length; i++) {
+				var node = aNodes[i];
+				var modCount = node.getAttribute("modifiers");
+				if(modCount > 0) {
+					for(var j = 0; j < modCount; j++) {
+						var modifier = parseInt(node.getAttribute("modifier" + j));
+						switch(modifier) {
+							case 17: // ctrl
+								var ctrl = true;
+								break;
+							case 18: // alt
+								var alt = true;
+								break;
+							case 16:
+								var shift = true;
+								break;
+							default:
+								break;
+						}
+					}
+				}
+				var sc = new itmill.ui.Shortcut(
+					pntbl,
+					theme._buttonShortcutKeyListener,
+					parseInt(node.getAttribute("keycode")),
+					ctrl,
+					alt,
+					shift);
+				client.addShortcutHandler(sc);
 			}
+		}
+	}
+},
+_buttonClickListener : function(e) {
+	var client = itmill.clients[0];
+	var evt = client.getEvent(e);
+	var pntbl = client.getPaintable(evt.target);
+	client.changeVariable(pntbl.varMap.state.id, "true", true);
+},
 
-			// Shortcuts
-			var theme = renderer.theme;
-			var client = renderer.client;
-			
-			var disabled = "true"==uidl.getAttribute("disabled");
-			var readonly = "true"==uidl.getAttribute("readonly");
-			var immediate = "true"==uidl.getAttribute("immediate");
-			var tabindex = uidl.getAttribute("tabindex");
-			
-			var linkStyle = "link"==uidl.getAttribute("style");
-			
-			var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
-			if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
-			
-			div = renderer.theme.createElementTo(div,"div",(linkStyle?"link clickable":"outset clickable"));
-			var outer = renderer.theme.createElementTo(div,"div",(linkStyle?"":"outer"));
-			var inner = renderer.theme.createElementTo(outer,"div",(linkStyle?"pad":"border pad bg"));
-			
-			var caption = theme.renderDefaultComponentHeader(renderer,uidl,inner);
-			var hiddenInput = theme.addTabtoHandlers(client,theme,caption,div,tabindex,("default"==uidl.getAttribute("style")));
-			
-			if (!disabled&&!readonly) {
-                // make sure other components release their focus and possibly update their variables
-                renderer.client.addEventListener(div,"mousedown", function() {
-                    hiddenInput.focus();    
-                });
-                // Handlers
-				var v = theme.getVariableElement(uidl,"boolean", "state");
-				if (v != null) {
-					var varId = v.getAttribute("id");
-                    
-					theme.addSetVarListener(theme,client,div,"click",varId,"true",immediate);
-					
-					theme.addAddClassListener(theme,client,div,"mousedown","down",div);
-					theme.addRemoveClassListener(theme,client,div,"mouseup","down",div);
-					theme.addRemoveClassListener(theme,client,div,"mouseout","down",div);
-					
-					theme.addAddClassListener(theme,client,div,"mouseover","over",div);
-					theme.addRemoveClassListener(theme,client,div,"mouseout","over",div);
-					
-					theme.addPreventSelectionListener(theme,client,div);
-				}		
-			}
-				
+_buttonShortcutKeyListener : function(keycode, modifiers) {
+	// this should be called on button paintable and send data to server
+	// TODO convert to use action variable, now uses state (button click)
+	console.warn("buttonShortcutKeyListener fired, but unimplemented");
+	var client = itmill.clients[0];
+	client.changeVariable(this.varMap.action.id, "1,1", true);
 },
 
 renderCheckBox : function(renderer,uidl,target,layoutInfo) {
@@ -6635,4 +6680,39 @@ itmill.ui.ContextMenu.prototype._hide = function() {
  */
 itmill.ui.ContextMenu.prototype.cleanUp = function() {
 	// TODO
+}
+
+/**
+ * TODO
+ */
+itmill.ui.Shortcut = function(target, func, keyCode, c, a, s) {
+	this.target = target;
+	this.func = func;
+	this.keyCode = keyCode;
+	this.ctrl = c || false;
+	this.alt = a || false;
+	this.shift = s || false;
+}
+
+itmill.ui._shortcutHandler =  function(e) {
+	var evt = itmill.Client.prototype.getEvent(e);
+	// TODO cont shoud be fetched
+	var cont = document.body;
+	if(cont.shortcutMap.length > 0) {
+		// loop shortcuts and detect "hit"
+		for(var i = 0 ; i < cont.shortcutMap.length;i++) {
+			sc = cont.shortcutMap[i];
+			if(
+			sc.keyCode == evt.e.keyCode &&
+			sc.alt == evt.alt &&
+			sc.ctrl == evt.ctrl &&
+			sc.shift == evt.shift
+			) {
+				console.info("matched key combination")
+				evt.stop();
+				sc.func.call(sc.target);
+				return false; // prevent default action
+			}
+		}
+	}
 }
