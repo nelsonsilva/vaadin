@@ -1145,15 +1145,23 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 
 	if(!uidl.getAttribute("main") && ! (uidl.getAttribute("style") && uidl.getAttribute("style") == "native")) {
 		if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
-		
+		if(target.TkWindow) {
+            target.TkWindow.cleanUp();
+        }
 		var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 		var w = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","width")));
 		var h = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","height")));
+		var x = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","positionx")));
+		var y = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","positiony")));
 		var cap = uidl.getAttribute("caption");
 		
 		// stack new windows from upper left corner
-		var x = (renderer.client.windowOrder.length + 1) * 20;
-		var y = (renderer.client.windowOrder.length + 1) * 20;
+        if (!x || x < 0) {
+		    x = (renderer.client.windowOrder.length + 1) * 20;
+        }
+        if (!y || y < 0) {
+		    var y = (renderer.client.windowOrder.length + 1) * 20;
+        }
 		
 		var tkWin = new itmill.themes.Base.TkWindow({
 			title: cap,
@@ -1167,8 +1175,11 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 		div.TkWindow = tkWin;
 		renderer.theme.createVarFromUidl(div,renderer.theme.getVariableElement(uidl,"boolean","close"));
 		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
-		if(uidl.getAttribute("style") == "modal")
+		if(uidl.getAttribute("style") == "modal") {
 			tkWin.setModal(true);
+        } else {
+            tkWin.setModal(false);
+        }
 		return;
 	}
 	
@@ -5844,10 +5855,8 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	h = (h ? h : 400);
 	var agent = navigator.userAgent.toLowerCase();
 	// IE 6 and mac FF needs iFrame blocker to prevent some form elements
-	// seeing trought Overlay
-	if(
-		(agent.indexOf("msie") > 0 && agent.indexOf("6.") > 0) 
-	) {
+	// seeing trought Overlay, all IE versions with acroreader
+	if ( agent.indexOf("msie") > 0 ) {
 		console.log("Adding Iframe blocker");
 		this._blocker = document.createElement("iframe");
 		this._blocker.className = "overlay_blocker";
