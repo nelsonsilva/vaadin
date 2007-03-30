@@ -3113,15 +3113,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var html = "<div><TABLE id=\""+pid+"hin\" class=\"hin\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><TBODY><TR>";	
 	if (rowheaders) {
 		html += "<td ";
-		if (colWidths["heh"]) {
-			html += "width="+colWidths["heh"]+"\" ";
-		}
 		html += "cid=\"heh\" id=\""+pid+"heh\" class=\"heh\">";
         html += "<img id=\""+pid+"hah\" src=\""+theme.root+"img/table/handle.gif\" class=\"colresizer\" >";
         html += "<div class=\"headerContent\" style=\"";
-    	if (colWidths["heh"]) {
-			html += "width:"+(colWidths["heh"] - 17)+"px;";
-		}
 		html += "\"></div></td>";
 	}
 
@@ -3141,10 +3135,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		model.colorder[i] = cid;
 		html += "<TD ";
         var cellClasses = '';
-		if (colWidths[cid]) {
-            // set width explicitely
-			html += 'width="'+colWidths[cid]+'"';
-		} 
 		if (sortkey == cid) {
             html += "sorted=\"true\" ";
             if(sortasc) {
@@ -3170,11 +3160,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 			}
 		}
 		html += '" ';
-		if (colWidths[cid]) {
-        // header contents widht needs to be explicitely set to WIDTH - COL_RESIZER_WIDTH
-        // to enable grabbing resizer when header cells content overflows
-			html += 'style="width:'+(colWidths[cid] - 17)+'px;"';
-		} 
 		html += ">";
         html += (iconUrl?"<img src=\""+iconUrl+"\" class=\"icon\">":"")+cap+"</div></TD>";
 	}
@@ -3246,10 +3231,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             td = d.createElement("td"); tdDiv = d.createElement("div");
             td.className = "tablecell";
             tdDiv.className = "cellContent";
-			if (colWidths["heh"]) {
-                td.width = colWidths["heh"];
-                tdDiv.style.width = (colWidths["heh"]-4)+"px";
-			} 
 			if (iconUrl) {
                 icon = d.createElement("img");
                 icon.className = "icon";
@@ -3292,12 +3273,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                     default:
                 }
             }
-			if (colWidths[model.colorder[colNum]]) {
-                // set container divs width explicitely due IE overflow bug
-                // width - border - margin
-                td.width = colWidths[model.colorder[colNum]];
-                tdDiv.style.width = (colWidths[model.colorder[colNum]] - 4) + "px";
-			}
             // render content
             // render content
             if(comp.nodeName == 'label' && comp.firstChild) {
@@ -3863,14 +3838,13 @@ scrollTableRecalc : function(pid,target) {
         }
     }
     for (var i = 0;i< h.length ;i++) {
-        var cell = h[i];
+    	var cell = h[i];
         var cid = cell.getAttribute("cid");
-        var w = colWidths[cid];
-        cell.width = w;
-        // set div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
+        var w = colWidths[cid] || cell.offsetWidth;
+		cell.style.width = w + "px";
+        // et div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
         // now text doesn't overlap resizer & sort indicator
         cell.lastChild.style.width = (w - 17)+"px";
-
         // enter looping rows only if width is changed
         if(c[i] && c[i].offsetWidth != w ) {
             var rows = c.length/h.length;
