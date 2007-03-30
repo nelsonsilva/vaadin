@@ -897,6 +897,7 @@ itmill.Client.prototype.processUpdates = function (updates) {
 		// Iterate through the received changes
 		var changes = updates.getElementsByTagName("change");
 		var cLen = changes.length;
+		this._focusedElementRendered = false;
 		for (var i=0; i<cLen; i++) {
 			// Render start time
             if (this.debugEnabled) {
@@ -904,6 +905,8 @@ itmill.Client.prototype.processUpdates = function (updates) {
             }
 			var change = changes.item(i);
 			var paintableId = change.getAttribute("pid");
+			if(paintableId == this.focusedElement)
+				this._focusedElementRendered = true;
 			var windowName = change.getAttribute("windowname");
 			var invisible = (change.getAttribute("visible") == "false");
 			var changeContent = this.getFirstChildElement(change);
@@ -1017,6 +1020,20 @@ itmill.Client.prototype.processUpdates = function (updates) {
                 console.timeEnd("Change");
                 console.groupEnd();
 			}
+		}
+		
+		// all updates are now in, check for meta tagas
+		var meta = updates.getElementsByTagName("meta");
+		if(meta[0]) {
+			var metaEl = meta[0];
+			var focusEl = metaEl.getElementsByTagName("focus");
+			if(focusEl && focusEl[0]) {
+				this.setFocus(focusEl[0].getAttribute("pid"));
+			}
+		} else if (this._focusedElementRendered) {
+			// update didn't contain focus information, set the one that is
+			// most recently set if it was re-rendered
+			this.setFocus(this._focusedPID);
 		}
 	} catch (e) {
 		// Print out the exception
@@ -1288,7 +1305,6 @@ itmill.Client.prototype.createPaintableElement = function (uidl, target) {
 	} else {
 		div.style.display = "";
 	}
-	
 	// Return reference to newly created div
 	return div;	
 }
@@ -1617,6 +1633,27 @@ itmill.Client.prototype.getEvent = function(e) {
 	}
 	
 	return props;
+}
+
+/**
+ * This method should be called when element receives focus. Client stores reference to
+ * currently focused element PID, so it can restore focus if element gets re-rendered
+ */
+itmill.Client.prototype.setFocusedElement = function(el) {
+	if(el && el.id) {
+		this._focusedPID = el.id;
+	}
+}
+
+itmill.Client.prototype.setFocus = function(pid) {
+	var el = this.findPaintableById(pid);
+	if(el) {
+		// run custom focus handler if one exists, else focus paintable div
+		if(el._onfocus)
+			el._onfocus();
+		else
+			el.focus();
+	}
 }
 
 /**

@@ -616,6 +616,8 @@ createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 	// And create DIV as container
 	var div = null;
 	var pid = uidl.getAttribute("id");
+	if(pid && pid == renderer.client._focusedPID)
+		renderer.client._focusedElementRendered = true;
 	var li = layoutInfo||target.layoutInfo;
 	if (pid != null && target.getAttribute("id") == pid){
 		div = target;
@@ -1113,7 +1115,14 @@ addTabtoHandlers : function(client,theme,target,hoverTarget,tabindex,defaultButt
 	client.addEventListener(b,"blur", function() {
 		theme.removeCSSClass(hoverTarget,"over");
 	});
+	b.onfocus = theme._updateFocusedToClient;
     return b;
+},
+
+_updateFocusedToClient : function() {
+	var client = itmill.clients[0];
+	var pntbl = client.getPaintable(this);
+	client.setFocusedElement(pntbl);
 },
 
 /*
@@ -1926,6 +1935,10 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 	if (tabindex) input.tabIndex = tabindex;
 	if (disabled||readonly) {
 		input.disabled = "true";
+	} else {
+		div.focusableField = input;
+		div._onfocus = theme._onFieldFocus;
+		input.onfocus = theme._updateFocusedToClient;
 	}
 	
 	// Assign cols and rows
@@ -1954,6 +1967,10 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 		
 	// Listener 
 	theme.addSetVarListener(theme,client,input,"change",inputId,input,immediate);
+},
+_onFieldFocus : function() {
+	var client = itmill.clients[0];
+	this.focusableField.focus();
 },
 
 renderDateField : function(renderer,uidl,target,layoutInfo) {
@@ -4461,6 +4478,8 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 	var hiddenInput = theme.addTabtoHandlers(client,theme,caption,div,tabindex,("default"==uidl.getAttribute("style")));
 	
 	if (!disabled&&!readonly) {
+		pntbl.focusableField = hiddenInput;
+		pntbl._onfocus = theme._onFieldFocus;
 	    // make sure other components release their focus and possibly update their variables
 	    renderer.client.addEventListener(pntbl,"mousedown", function() {
 	        hiddenInput.focus();    
@@ -4478,6 +4497,8 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 		theme.addRemoveClassListener(theme,client,div,"mouseout","over",div);
 		
 		theme.addPreventSelectionListener(theme,client,div);
+		
+		// TODO clean
 		if(theme.getFirstElement(uidl,"actions")) {
 			var actions = theme.getFirstElement(uidl, "actions");
 			theme.createVarFromUidl(pntbl, theme.getVariableElement(actions,"string", "action"));
