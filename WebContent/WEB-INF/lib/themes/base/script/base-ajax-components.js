@@ -2497,7 +2497,12 @@ renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 		var img = renderer.theme.createElementTo(div,"img","embedded");
 		
 		// SRC
-		var val = uidl.getAttribute("src");
+		var val = uidl.getAttribute("src");			
+		
+		// Support for theme resources as images
+		if (typeof val != 'undefined' && val != null && val.indexOf("theme://") == 0)
+    		val = theme.root + val.substring(8);
+    	
 		if (val != null) img.src = val;
 		
 		// Width
@@ -2523,6 +2528,11 @@ renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 		  'codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"> ';
 
 		val = uidl.getAttribute("src");
+
+		// Support for theme resources 
+		if (typeof val != 'undefined' && val != null && val.indexOf("theme://") == 0)
+    		val = theme.root + val.substring(8);
+		
 		if (val) 
 			html += '<param name="movie" value="'+val+'" /> ';
 
@@ -2551,6 +2561,11 @@ renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 		
 		var html = "<object ";
 		var val = uidl.getAttribute("src");
+	
+		// Support for theme resources 
+		if (typeof val != 'undefined' && val != null && val.indexOf("theme://") == 0)
+    		val = theme.root + val.substring(8);
+	
 		if (val) html += " data=\""+val+"\" ";
 		
 		val = uidl.getAttribute("width");
