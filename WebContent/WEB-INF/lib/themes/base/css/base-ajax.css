@@ -679,7 +679,6 @@ IMG.overlay {
 }
 
 .itmtk .filterselect .fsinput {
-	width: 150px;
 	padding: 2px;
 	padding-left: 3px;
 	margin-top: 1px !important;
@@ -736,19 +735,18 @@ IMG.overlay {
 
 .itmtk .filterselect .layout {	
 	height: 100%;
+	width: 100%;
 	margin: 0px;
 	padding: 0px;
 }
 
 .itmtk .filterselect .fspopup {
-	min-width: 300px;
 	position: absolute;	
 	display: none;
 	z-index: 20000;
 }
 
 .itmtk .filterselect .fspopup-show {
-	min-width: 300px;
 	position: absolute;	
 	display: visible; /* TODO 'visible' not valid here - block? */
 	z-index: 20000;
@@ -765,7 +763,6 @@ IMG.overlay {
 	border: 1px solid;
 	border-color: #aaa #000 #000 #aaa;	
 	height: 10px;
-      min-width: 300px;
 	width: 100%;
 	background: #a6b8d6;
 	background-image: url('../img/filterselect/up.gif');
@@ -779,7 +776,6 @@ IMG.overlay {
 	border: 1px solid;
 	border-color: #aaa #000 #000 #aaa;	
 	height: 10px;
-      min-width: 300px;
 	width: 100%;
 	background: #a6b8d6;
 	background-image: url('../img/filterselect/down.gif');
@@ -810,7 +806,6 @@ IMG.overlay {
 	margin: 0px;
 	padding: 0px;
 	height: 160px;
-	min-width: 300px;
 	width: 100%;
 	border-left: 1px solid #aaaaaa;
 	border-right: 1px solid #aaaaaa;

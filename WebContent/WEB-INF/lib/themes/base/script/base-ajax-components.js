@@ -5559,9 +5559,10 @@ itmill.themes.Base.FilterSelect.prototype.focusSearchField = function() {
 	//TODO: Select the text
 }
 
-
 itmill.themes.Base.FilterSelect.prototype.show = function(element) {
-	if (element) {				
+	if (element) {
+		// TODO width of arrow-icon (18px) could be checked
+        element.style.width = ( element.parentNode.offsetWidth -18 )+ "px";
 		element.className = 'fspopup-show';		
 	}
 }
