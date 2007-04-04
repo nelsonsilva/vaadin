@@ -10,7 +10,6 @@
 
 	<extends theme="corporate" />  
 
-	<!--  Example theme only supports UIDL mode -->
 	<modes>
 		<mode name="ajax"/>
 		<mode name="html"/>
