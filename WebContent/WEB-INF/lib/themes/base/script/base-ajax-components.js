@@ -4507,8 +4507,8 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 		pntbl.focusableField = hiddenInput;
 		pntbl._onfocus = theme._onFieldFocus;
 	    // make sure other components release their focus and possibly update their variables
-	    renderer.client.addEventListener(pntbl,"mousedown", function() {
-	        hiddenInput.focus();    
+	    renderer.client.addEventListener(div,"mousedown", function() {
+	        hiddenInput.focus();
 	    });
 	    // Handlers
 		theme.createVarFromUidl(pntbl, theme.getVariableElement(uidl,"boolean", "state"));
