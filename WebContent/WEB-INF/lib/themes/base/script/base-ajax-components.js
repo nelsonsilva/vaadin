@@ -4508,10 +4508,6 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 	if (!disabled&&!readonly) {
 		pntbl.focusableField = hiddenInput;
 		pntbl._onfocus = theme._onFieldFocus;
-	    // make sure other components release their focus and possibly update their variables
-	    renderer.client.addEventListener(div,"mousedown", function() {
-	        hiddenInput.focus();
-	    });
 	    // Handlers
 		theme.createVarFromUidl(pntbl, theme.getVariableElement(uidl,"boolean", "state"));
 		
@@ -4567,12 +4563,14 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 _buttonClickListener : function(e) {
 	var evt = itmill.lib.getEvent(e);
 	var pntbl = itmill.lib.getPaintable(evt.target);
+	pntbl.focusableField.focus();
 	pntbl.client.changeVariable(pntbl.varMap.state.id, "true", true);
 },
 
 _buttonShortcutKeyListener : function(keycode, modifiers) {
 	// this should be called on button paintable and send data to server
 	// TODO convert to use action variable, now uses state (button click)
+	this.focusableField.focus();
 	this.client.changeVariable(this.varMap.action.id, "1,1", true);
 },
 

@@ -1894,7 +1894,7 @@ itmill.WebBrowser.prototype.getWindowHeight = function() {
  * Various static general purpose functions that don't 
  * belong to client or theme are stored in itmill.lib.
  */
- itmill.lib = new Object(); // create namespace
+itmill.lib = new Object(); // create namespace
  
  /** Returns a cross-browser object with useful event properties.
  * 
