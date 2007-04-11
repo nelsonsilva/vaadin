@@ -27,8 +27,8 @@ itmill.clients = new Array();
  *  @author IT Mill Ltd.
  */
 itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement) {
-    itmill.clients.push(this);
     this.clientId = itmill.clients.length;
+    itmill.clients.push(this);
     
     this._browserDetect();
 
@@ -1298,6 +1298,9 @@ itmill.Client.prototype.createPaintableElement = function (uidl, target) {
     // Create a varMap has for elements variables
     div.varMap = new Object();
 	
+	// add reference to client for use in event listeners
+	div.client = this;
+	
 	// Set visibility
 	var invisible = uidl.getAttribute("invisible");
 	if (target != null && invisible == "true") {
@@ -1553,7 +1556,7 @@ itmill.Client.prototype.processAllLayoutFunctions = function() {
 
 /** Returns a cross-browser object with useful event properties.
  * 
- * TODO This function is in totally wrong place, should be in html-helper-lib.js
+ * @deprecated use same function in itmill.lib
  * 
  * e: 					the ('raw') event  
  * type:				event type
@@ -1887,7 +1890,155 @@ itmill.WebBrowser.prototype.getWindowHeight = function() {
 	}
 }
 
+/* 
+ * Various static general purpose functions that don't 
+ * belong to client or theme are stored in itmill.lib.
+ */
+ itmill.lib = new Object(); // create namespace
+ 
+ /** Returns a cross-browser object with useful event properties.
+ * 
+ * @deprecated use same function in itmill.lib
+ * 
+ * e: 					the ('raw') event  
+ * type:				event type
+ * target:				the target element
+ * targetX:				X-position of the target element
+ * targetY:				Y-position of the target element
+ * key:					pressed key character
+ * alt:					true if ALT -key was held
+ * shift:				true if SHIFT -key was held
+ * ctrl:				true if CTRL -key was held
+ * rightclick:			true if the right mousebutton was clicked, or ctrl held while clicking
+ * mouseX:				X-position of the mouse
+ * mouseY:				Y-position of the mouse
+ *
+ *  @param e			The event, null for window.event (IE)
+ *
+ *	@return Properties object.  
+ */
+itmill.lib.getEvent = function(e) {
+	var props = new Object()
 
+	if (!e) var e = window.event;
+	props.e = e;
+	props.type = e.type;
+	
+	var targ;	
+	if (e.target) { 
+		targ = e.target;
+	} else if (e.srcElement) { 
+		targ = e.srcElement;
+	}
+	if (targ.nodeType == 3) {
+		targ = targ.parentNode;
+	}
+	props.target = targ;
+	var p = itmill.lib.getElementPosition(targ);
+	props.targetX = p.x;
+	props.targetY = p.y;
+	
+	var code;
+	if (e.keyCode) {
+	 code = e.keyCode;
+	} else if (e.which) {
+		code = e.which;
+	}
+	if (code) {
+		props.key = String.fromCharCode(code);
+	}
+	
+	props.alt = e.altKey;
+	props.ctrl = e.ctrlKey;
+	props.shift = e.shiftKey;
+	
+	var rightclick;
+	if (e.which) {
+		rightclick = (e.which == 3 || (props.ctrl));
+	} else if (e.button) {
+		rightclick = (e.button == 2|| (props.ctrl));
+	}
+	props.rightclick = rightclick;
+	
+	if (e.pageX || e.pageY) 	{
+		props.mouseX = e.pageX;
+		props.mouseY = e.pageY;
+	} else if (e.clientX || e.clientY) 	{
+		props.mouseX = e.clientX + document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+		props.mouseY = e.clientY + document.body.scrollTop
+			+ document.documentElement.scrollTop;
+	}
+	
+	props.stop = function() {
+		e.cancelBubble = true;
+		if (e.stopPropagation) e.stopPropagation();
+		if (e.preventDefault) e.preventDefault();
+		return false;
+	}
+	
+	return props;
+}
+
+itmill.lib.getElementPosition = function(element) {
+	var props = new Object();
+// TODO scroll offsets testing in IE
+	var obj = element;
+	var x = obj.offsetLeft + (obj.scrollLeft||0);
+	var y = obj.offsetTop + (obj.scrollTop||0);
+	if (obj.parentNode||obj.offsetParent) {
+		while (obj.offsetParent||obj.parentNode) {
+            obj = obj.offsetParent||obj.parentNode;
+			if (obj.nodeName == "TBODY") continue;
+			x += (obj.offsetLeft||0) - (obj.scrollLeft||0);
+			y += (obj.offsetTop||0) - (obj.scrollTop||0);
+		}
+	} else if (obj.x) {
+		x += obj.x;
+		y += obj.y;
+	}
+	props.x = x;
+	props.y = y;
+	props.h = element.offsetHeight;
+	props.w = element.offsetWidth;
+	
+	return props;
+}
+
+
+ /**
+  * Utility function for event handlers that returns a client object
+  * that owns element.
+  * 
+  * Iterates through html elements until finds a paintable element and returns
+  * client reference from it.
+  * 
+  * @param htmlElement element to be inspected, usually got from evt.target
+  * @return Client object for this element
+  * 
+  */
+ itmill.lib.getClient = function(htmlElement) {
+ 	var pntbl = itmill.lib.getPaintable(htmlElement);
+ 	return pntbl.client;
+ }
+ 
+ /**
+ * Helper method  that returns htmlElments closest parent that is Paintable 
+ * (DIV && has -"varMap" property) or null if not found
+ *
+ * @param el html element
+ * @return Paintable div element
+ */
+ itmill.lib.getPaintable = function(el) {
+ 	while(typeof el.varMap == "undefined" && el.parentNode != el.ownerDocument) {
+ 		el = el.parentNode;
+ 	}
+ 	if(el.varMap)
+ 		return el;
+	else 
+		return null;
+} 
+ 
 /** Class that implements inheritance mechanism for themes */
 
 itmill.Class = function() {};
