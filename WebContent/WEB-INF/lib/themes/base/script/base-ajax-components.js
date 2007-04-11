@@ -1536,10 +1536,12 @@ renderProgressIndicator : function(renderer,uidl,target,layoutInfo) {
     var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
     var id = div.id;
     var interval = uidl.getAttribute("pollinginterval");
+    
+    var appId = this.clientId;
 
     var f = function() {
         // poll server for changes
-        client.processVariableChanges(false,false);
+        itmill.clients[appId].processVariableChanges(false,false);
         if(null == document.getElementById(id)) {
             //if progressindicator is removed, clear this interval
             clearInterval(renderer.theme.intervals[id]);
@@ -4563,18 +4565,15 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 _buttonClickListener : function(e) {
-	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
-	var pntbl = client.getPaintable(evt.target);
-	client.changeVariable(pntbl.varMap.state.id, "true", true);
+	var evt = itmill.lib.getEvent(e);
+	var pntbl = itmill.lib.getPaintable(evt.target);
+	pntbl.client.changeVariable(pntbl.varMap.state.id, "true", true);
 },
 
 _buttonShortcutKeyListener : function(keycode, modifiers) {
 	// this should be called on button paintable and send data to server
 	// TODO convert to use action variable, now uses state (button click)
-	console.warn("buttonShortcutKeyListener fired, but unimplemented");
-	var client = itmill.clients[0];
-	client.changeVariable(this.varMap.action.id, "1,1", true);
+	this.client.changeVariable(this.varMap.action.id, "1,1", true);
 },
 
 renderCheckBox : function(renderer,uidl,target,layoutInfo) {
