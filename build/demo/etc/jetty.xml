@@ -205,4 +205,24 @@
     <!-- ensure/prevent Server: header being sent to browsers        -->
     <Set name="sendServerVersion">true</Set>
 
+	<!-- =========================================================== -->
+    <!-- IT MIll Toolkit Web Application                             -->
+    <!-- =========================================================== -->
+	<New id="itmill-toolkit_webapp" class="org.mortbay.jetty.webapp.WebAppContext">
+        <Set name="contextPath">/</Set>
+        <Set name="war">
+          <SystemProperty name="jetty.home" default="."/>/itmill-toolkit.war
+        </Set>
+        <Set name="extractWAR">true</Set>
+        <Set name="defaultsDescriptor">
+            <SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml
+        </Set>
+    </New> 
+
+ 	<Ref id="Contexts">
+    	<Call name="addHandler">
+	      <Arg><Ref id="itmill-toolkit_webapp"/></Arg>
+	    </Call>
+	 </Ref>
+
 </Configure>
