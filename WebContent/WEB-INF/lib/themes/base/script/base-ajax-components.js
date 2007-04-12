@@ -14,7 +14,6 @@ if(document.all && !window.opera) {
 	Node.NOTATION_NODE = 12;
 }
 
-
 /** Base theme class extends ITMillToolkitClient.Theme */
 itmill.themes.Base = itmill.Class.extend( {
 
@@ -5869,6 +5868,7 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	var agent = navigator.userAgent.toLowerCase();
 	// IE 6 and mac FF needs iFrame blocker to prevent some form elements
 	// seeing trought Overlay, all IE versions with acroreader
+	// TODO change to use itmill.wb.isIE
 	if ( agent.indexOf("msie") > 0 ) {
 		console.log("Adding Iframe blocker");
 		this._blocker = document.createElement("iframe");
@@ -6235,7 +6235,6 @@ itmill.themes.Base.TkWindow = function(args) {
 		this._closeButton = document.createElement("div");
 		this._closeButton.TkWindow = this;
 		this._closeButton.className = "closeButton";
-		// TODO event listener for close button
 		this._header.appendChild(this._closeButton);
 		this.client.addEventListener(this._closeButton,"click",this._onCloseListener);
 	}
@@ -6339,9 +6338,9 @@ itmill.themes.Base.TkWindow.prototype.setHeight = function(h) {
  * No support for X11 fanatics yet, sorry...
  */
 itmill.themes.Base.TkWindow.prototype._onClickHandler = function(e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	// due lack in IE's event handling, get TkWindow via helper that loops DOM
-	var tkWindow = itmill.Client.prototype.getTkWindow(evt.target);
+	var tkWindow = itmill.lib.getTkWindow(evt.target);
 	if(tkWindow) {
 		tkWindow.bringToFront();
 		evt.stop();
@@ -6353,9 +6352,9 @@ itmill.themes.Base.TkWindow.prototype._onClickHandler = function(e) {
  * This is actionListener for starting dragging
  */
 itmill.themes.Base.TkWindow.prototype._onHeaderMouseDown =  function(e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	evt.stop();
-	var tkWindow = itmill.Client.prototype.getTkWindow(evt.target);
+	var tkWindow = itmill.lib.getTkWindow(evt.target);
 	tkWindow.bringToFront();
 	
 	tkWindow.origMouseX = evt.mouseX;
@@ -6363,8 +6362,7 @@ itmill.themes.Base.TkWindow.prototype._onHeaderMouseDown =  function(e) {
 	tkWindow.origX = tkWindow._ol._div.offsetLeft;
 	tkWindow.origY = tkWindow._ol._div.offsetTop;
 	
-	// TODO remove this wrong way of getting client object
-	var client = itmill.clients[0];
+	var client = itmill.lib.getClient(evt.target);
 	client.dragItem = tkWindow;
 	client.addEventListener(document, "mousemove", tkWindow._onDrag);
 	client.addEventListener(document, "mouseup", tkWindow._onDragMouseUp);
@@ -6375,9 +6373,8 @@ itmill.themes.Base.TkWindow.prototype._onHeaderMouseDown =  function(e) {
 }
 
 itmill.themes.Base.TkWindow.prototype._onDragMouseUp = function(e) {
-	// TODO remove this wrong way of getting client object
-	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
 	client.removeEventListener(document,"mousemove",itmill.themes.Base.TkWindow.prototype._onDrag);
 	client.removeEventListener(document,"mouseup",itmill.themes.Base.TkWindow.prototype._onDragMouseUp);
 	client.removeEventListener(document,"drag",itmill.themes.Base.TkWindow.prototype._stopListener);
@@ -6387,8 +6384,8 @@ itmill.themes.Base.TkWindow.prototype._onDragMouseUp = function(e) {
 
 itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
 	// "this" is document.body
-	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
 	evt.stop();
 	var tkWindow = client.dragItem;
 	var x =	(evt.mouseX - tkWindow.origMouseX + tkWindow.origX);
@@ -6413,16 +6410,17 @@ itmill.themes.Base.TkWindow.prototype._onDrag = function(e) {
  * This is actionListener for starting window resizing
  */
 itmill.themes.Base.TkWindow.prototype._onResizeStart =  function(e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
+
 	evt.stop();
+
 	var tkWindow = evt.target.TkWindow;
 	tkWindow.origMouseX = evt.mouseX;
 	tkWindow.origMouseY = evt.mouseY;
 	tkWindow.origW = tkWindow._width;
 	tkWindow.origH = tkWindow._height;
 	
-	// TODO remove this wrong way of getting client object
-	var client = itmill.clients[0];
 	client.dragItem = tkWindow;
 	client.addEventListener(document, "mousemove", tkWindow._onResizeDrag);
 	client.addEventListener(document, "mouseup", tkWindow._onStopResizing);
@@ -6438,9 +6436,8 @@ itmill.themes.Base.TkWindow.prototype._onResizeStart =  function(e) {
  * We will remove all event listeners used during resizing here.
  */
 itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
-	// TODO remove this wrong way of getting client object
-	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
 	client.removeEventListener(document,"mousemove",itmill.themes.Base.TkWindow.prototype._onResizeDrag);
 	client.removeEventListener(document,"mouseup",itmill.themes.Base.TkWindow.prototype._onStopResizing);
 	client.removeEventListener(document,"drag",itmill.themes.Base.TkWindow.prototype._stopListener);
@@ -6454,8 +6451,8 @@ itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
  */
 itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	// "this" is document.body
-	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
 	evt.stop();
 	var tkWindow = client.dragItem;
 	var w = evt.mouseX - tkWindow.origMouseX + tkWindow.origW;
@@ -6477,7 +6474,7 @@ itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 
 
 itmill.themes.Base.TkWindow.prototype._stopListener = function(e) {
-	var evt = itmill.clients[0].getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	evt.stop();
 	return false;
 }
@@ -6491,11 +6488,11 @@ itmill.themes.Base.TkWindow.prototype._stopListener = function(e) {
  * really close the window, but functionality can be overridden on Java side.
  */
 itmill.themes.Base.TkWindow.prototype._onCloseListener = function(e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
 	evt.stop();
 	var tkWindow = evt.target.TkWindow;
 
-	var client = itmill.clients[0];
 	var windowPaintable = client.getPaintable(evt.target);
 	var closeVar = windowPaintable.varMap["close"];
 	closeVar.value = true;

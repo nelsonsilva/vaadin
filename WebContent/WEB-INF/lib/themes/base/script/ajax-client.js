@@ -1660,23 +1660,6 @@ itmill.Client.prototype.setFocus = function(pid) {
 }
 
 /**
- * Returns a ...Base.TkWindow object that contains given HTMLElement object  or null
- * if not found
- *
- * TODO This function is in totally wrong place, should be in html-helper-lib.js 
- * or something
- */
- itmill.Client.prototype.getTkWindow = function(el) {
- 	while(typeof el.TkWindow == "undefined" && el.parentNode != el.ownerDocument) {
- 		el = el.parentNode;
- 	}
- 	if(el.TkWindow)
- 		return el.TkWindow;
-	else 
-		return null;
-}
-
-/**
  * Helper method for Themes that returns htmlElments closest parent that is Paintable 
  * (DIV && has -"varMap" property) or null if not found
  *
@@ -2038,6 +2021,21 @@ itmill.lib.getElementPosition = function(element) {
 	else 
 		return null;
 } 
+ 
+ /**
+ * Returns a ...Base.TkWindow object that contains given HTMLElement object  or null
+ * if not found
+ */
+ itmill.lib.getTkWindow = function(el) {
+ 	while(typeof el.TkWindow == "undefined" && el.parentNode != el.ownerDocument) {
+ 		el = el.parentNode;
+ 	}
+ 	if(el.TkWindow)
+ 		return el.TkWindow;
+	else 
+		return null;
+}
+ 
  
 /** Class that implements inheritance mechanism for themes */
 
