@@ -2426,6 +2426,12 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
     ;
     
     var form = formContainer.firstChild;
+    if("true" == uidl.getAttribute("disabled")) {
+    	form.firstChild.disabled = true;
+    	form.lastChild.onclick = "javascript: return false;";
+    	form.lastChild.disabled = true;
+    }
+    
     form.onsubmit = function() {
         iframe.submitted = true;
     };
