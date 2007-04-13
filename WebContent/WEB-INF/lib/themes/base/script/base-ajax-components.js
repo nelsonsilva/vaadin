@@ -6214,6 +6214,7 @@ itmill.themes.Base.TkWindow = function(args) {
 	this._footer.className = "winFooter";
 	this._footer.style.position = "absolute";
 	this._footer.style.bottom = "0px";
+	this._footer.style.width = this._width + "px";
 	
 	// TODO determine proper z-index base and pass it to Overlay object
 	this._ol = new itmill.themes.Base.Overlay(
@@ -6262,6 +6263,8 @@ itmill.themes.Base.TkWindow.prototype.setWidth = function(w) {
 		this._cont.style.widht = w + "px";
 		this._width = w;
 		this._body.style.width = w + "px";
+		this._footer.style.width = w + "px";
+		
 	}
 }
 
