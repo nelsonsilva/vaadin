@@ -3665,7 +3665,9 @@ scrollTableAddScrollListener : function (theme,target) {
 		target.scrolledLeft = cout.scrollLeft;
 		var status = target.model.status;
 		var d = theme.scrollTableGetFV(target);
-		if (d + target.model.meta.pagelength > target.model.state.lastRendered || d < target.model.state.firstRendered) {
+		if ( d != target.model.state.fv && 
+			(d + target.model.meta.pagelength > target.model.state.lastRendered || d < target.model.state.firstRendered)
+			) {
  			status.innerHTML = d + "-" + (d+target.model.meta.pagelength-1) + " / " + target.model.meta.totalrows;
  			status.style.display = "block";
  		}
@@ -3699,8 +3701,8 @@ scrollTableAddScrollListener : function (theme,target) {
 scrollTableGetFV : function(target) {
     var m = target.model;
     var new_fr = Math.ceil(m.cout.scrollTop/m.rowheight) + 1;
- 	if (new_fr < 1) return 1; // scrolled past begin
  	if (new_fr > (m.meta.totalrows - m.meta.pagelength + 1)) new_fr=(m.meta.totalrows-m.meta.pagelength + 1); // scrolled past last page
+ 	if (new_fr < 1) return 1; // scrolled to befor first row
  	return new_fr;
  },
  
