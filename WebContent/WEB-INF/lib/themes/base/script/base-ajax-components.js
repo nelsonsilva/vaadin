@@ -57,6 +57,7 @@ registerTo : function(client) {
 	client.registerRenderer(this,"datefield","calendar",this.renderDateFieldCalendar);
 	client.registerRenderer(this,"select",null,this.renderSelect);
 	client.registerRenderer(this,"select","optiongroup",this.renderSelectOptionGroup);
+	client.registerRenderer(this,"select","horizontalOptiongroup",this.renderSelectOptionGroup);
 	client.registerRenderer(this,"select","twincol",this.renderSelectTwincol);
 	client.registerRenderer(this,"upload",null,this.renderUpload);
 	client.registerRenderer(this,"embedded",null,this.renderEmbedded);

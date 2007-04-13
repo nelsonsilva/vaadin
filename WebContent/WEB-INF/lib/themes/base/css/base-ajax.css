@@ -245,6 +245,10 @@ IMG.overlay {
 	margin-left: 1.2em;
 	margin-top: 0.3em;
 }
+.itmtk .select-horizontalOptiongroup div.nobr {
+ 	display: inline;
+ 	margin-right:1.5em;
+ }
 .itmtk .select-twincol {
 	width: 350px;
 }
