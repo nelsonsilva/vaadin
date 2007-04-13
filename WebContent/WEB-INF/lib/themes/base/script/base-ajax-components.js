@@ -1947,8 +1947,10 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 	theme.addSetVarListener(theme,client,input,"change",inputId,input,immediate);
 },
 _onFieldFocus : function() {
-	var client = itmill.clients[0];
-	this.focusableField.focus();
+	// IE 6 sometimes throws error when trying to move focus onwars
+	try {
+		this.focusableField.focus();
+	} catch(e) {}
 },
 
 renderDateField : function(renderer,uidl,target,layoutInfo) {
