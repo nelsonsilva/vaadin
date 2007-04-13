@@ -1856,6 +1856,9 @@ itmill.WebBrowser = function() {
 	if(agent.indexOf("Linux") > 0 ) {
 		this.isLinux = true;
 	}
+	// TODO: Refine this, assumes FF if not opera, IE or webkit
+	if(!this.isIE && !this.isOpera && !this.isWebkit)
+		this.isFF = true;
 }
 
 itmill.WebBrowser.prototype.getWindowWidth = function() {

@@ -829,41 +829,7 @@ showPopup : function(client,popup, x, y, delay, defWidth, dontHideSelects) {
 		this.hidePopup();
 	} 
 	this.popup = popup;
-/*	THIS CODE IS NOT NEEDED IF WE CAN POSITION THE POPUP BEFOREHAND
 
-	popup.style.left = 0+"px";
-	popup.style.top = 0+"px";
-	this.removeCSSClass(popup,"hide");
-
-    var p = client.getElementPosition(popup);
-    this.addCSSClass(popup,"hide");
-    // TODOO!!! width not working properly
-	if (p.w > document.body.clientWidth/2) {
-		popup.style.width = Math.round(document.body.clientWidth/2)+"px";
-		p.w = Math.round(document.body.clientWidth/2);
-	}
-
-    var posX = x||p.x;
-    var posY = y||p.y;
-    if (posX+p.w>document.body.clientWidth) {
-    	posX = document.body.clientWidth-p.w;
-    	if (posX<0) posX=0;
-    }
-    if (posY+p.h>document.body.clientHeight) {
-    	posY = document.body.clientHeight-p.h;
-    	if (posY < 0) posY =0;
-    }
-    
-    if (p.h > document.body.clientHeight -20) {
-		popup.style.height = document.body.clientHeight -20 + "px";
-		popup.style.overflow = "auto";
-		posX -= 20;
-	}
-    
-    popup.dontHideSelects = dontHideSelects;
-	popup.style.left = posX+"px";
-	popup.style.top = posY+"px";
-*/
 	if (delay > 0) {
 		with ({theme:this}) {
 			theme.popupTimeout = setTimeout(function(){
@@ -2650,62 +2616,11 @@ renderLink : function(renderer,uidl,target,layoutInfo) {
 		}
 		theme.addLinkOpenWindowListener(theme,client,div,"click",src,targetName,feat);
 	}
-	/*
-	with(props) {
-		client.addEventListener(div,"mouseover", function(e) {
-				theme.addCSSClass(div,"over");
-			}
-		);
-		client.addEventListener(div,"mouseout", function(e) {
-				theme.removeCSSClass(div,"over");
-			}
-		);
-		client.addEventListener(div,"click", function(e) {
-				theme.hidePopup();
-				if (!target) {
-					window.location = src;
-				} else {
-					var feat;
-					switch (border) {
-						case "minimal":
-							feat = "menubar=yes,location=no,status=no";
-							break;
-						case "none":
-							feat = "menubar=no,location=no,status=no";
-							break;
-						default: 
-							feat = "menubar=yes,location=yes,scrollbars=yes,status=yes";
-							break;
-					}
-					if (width||height) {
-						feat += ",resizable=no"
-					} else {
-						feat += ",resizable=yes"
-					}
-					var win = window.open(src, target,
-								feat
-									+(width?",width="+width:"")
-									+(height?",height="+height:"")
-							);
-					win.focus();
-				}			
-			}
-		);
-	}
-	*/
-	//var inner = theme.createElementTo(div,"div", "border pad");
-	
+
 	// Render default header
 	theme.renderDefaultComponentHeader(renderer,uidl,link);
 	
-	// Description under link
-	/* Unnecessary, tooltip description already.
-	var descriptionText = theme.getElementContent(uidl,"description");
-	if (descriptionText) {
-		var desc = theme.createElementTo(link,"div", "description");
-		theme.createTextNodeTo(desc,descriptionText);
-	}
-	*/
+
 },
 
 addLinkOpenWindowListener : function(theme,client,element,event,url,target,features) {
@@ -4341,38 +4256,35 @@ renderSelectTwincol : function(renderer,uidl,target,layoutInfo) {
 },
 
 renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
-	// TODO: 
-	// 	- newitem currently always immediate, change
-	//	- optiongrouphorizontal style	
-					
+				
 	var theme = renderer.theme;
 	var client = renderer.client;
 	
 	// Create containing element
-	var div = theme.createPaintableElement(renderer,uidl,target);	
+	var pntbl = theme.createPaintableElement(renderer,uidl,target);	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
-	// Create selection variable
-	var selectMode = uidl.getAttribute("selectmode");
+	var selectMode = pntbl.selectMode = uidl.getAttribute("selectmode");
 	var selectable = selectMode == "multi" || selectMode == "single";
-	var immediate = ("true" == uidl.getAttribute("immediate"));
+	pntbl.immediate = ("true" == uidl.getAttribute("immediate"));
 	var disabled = ("true" == uidl.getAttribute("disabled"));
 	var readonly = ("true" == uidl.getAttribute("readonly"));
 	var newitem = ("true" == uidl.getAttribute("allownewitem"));
-	var selectionVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
 	
 	// Render default header
-	theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	theme.renderDefaultComponentHeader(renderer,uidl,pntbl,layoutInfo);
 
-	// Create select input	
-	var select = theme.createElementTo(div,"div");
+	var selVar = theme.createVarFromUidl(pntbl, theme.getVariableElement(uidl,"array","selected"));
+
+	var select = theme.createElementTo(pntbl,"div");
 	var options = theme.getFirstElement(uidl,"options");
 	if (options != null) {
 		options = options.getElementsByTagName("so");
 	}	
 	
-	// Selected options
-	if (options != null && options.length >0) {
+	var inputName = "input"+uidl.getAttribute("id");
+	
+	if (options != null && options.length > 0) {
 		for (var i=0; i<options.length;i++) {
 			var optionUidl = options[i];
 			var iconUrl = optionUidl.getAttribute("icon");
@@ -4380,9 +4292,7 @@ renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
 			var key = optionUidl.getAttribute("key");
 			
 			// Create input
-			var inputName = "input"+uidl.getAttribute("id");
 			var inputId = inputName+i;
-			var input = null;
 			var caption =  optionUidl.getAttribute("caption");
 			var html;
 			if (selectMode == "multi") {
@@ -4393,7 +4303,8 @@ renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
 			if (disabled||readonly) html += " disabled=\"true\" "
 			if (optionUidl.getAttribute("selected") == "true") {
 				html += " checked=\"true\" "
-			} 
+			}
+			html += ' value="' + key + '"';
 			html += " ><label class=\"clickable\" for=\""+inputId+"\">";
 			if (caption) html += caption;
 			if (iconUrl) {
@@ -4401,29 +4312,80 @@ renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
 	    			iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
 	    					+ iconUrl.substring(8);
 	    		}
-	    		html += "<IMG src=\""+iconUrl+"\" class=\"icon\">";
+	    		html += "<img src=\""+iconUrl+"\" class=\"icon\">";
 			}				
 			html += "</label>";
 			
 			div.innerHTML = html;
 			if (!(disabled||readonly)) {
-				var input = div.firstChild;
-				if (selectMode == "multi") {
-					theme.addToggleVarListener(theme,client,input,"click",selectionVariable,key,immediate);
-				} else {
-					theme.addSetVarListener(theme,client,input,"click",selectionVariable,key,immediate);
-				} 
+				div.firstChild.onchange = theme._optionGroupValueChange;
+				client.addEventListener(div.lastChild,"change",theme._optionGroupValueChange);
+				if(itmill.wb.isFF || itmill.wb.isOpera) {
+					client.addEventListener(div.lastChild,"click",theme._optionGroupValueChange);
+					// Workaround for unresolved bug when used in div window and using
+					// click straight to option: Strech label element over input
+					var l = div.lastChild;
+					l.style.marginLeft = "-20px";
+					l.style.paddingLeft = "20px";
+				}
 			}
 		}
 	}
 	if (newitem) {
-		var ni = theme.createElementTo(div,"div","newitem");
+		var ni = theme.createElementTo(pntbl,"div","newitem");
 		var input = theme.createInputElementTo(ni,"text");
 		var button = theme.createElementTo(ni,"button");
 		theme.createTextNodeTo(button,"+");
 		var newitemVariable = theme.createVariableElementTo(ni,theme.getVariableElement(uidl,"string","newitem"));
 		theme.addSetVarListener(theme,client,input,"change",newitemVariable,input,true);
 	}
+},
+/**
+ * Event listener for radio or checkbox value change.
+ * 
+ * Updates variable to client.
+ */
+_optionGroupValueChange : function(e) {
+	var evt = itmill.lib.getEvent(e);
+	if(evt.type == "change") {
+		// we can count this is input field
+		var pntbl = itmill.lib.getPaintable(this);
+		var input = this;
+	} else {
+		var pntbl = itmill.lib.getPaintable(evt.target);
+		// clicked on input (where value sits) or label (next sibling)
+		var input = typeof evt.target.value == "undefined" ? evt.target.previousSibling : evt.target;
+	}
+	
+
+	var selVar = pntbl.varMap.selected;
+	if(pntbl.selectMode == "multi") {
+		// TODO uncheck
+		if( (evt.type == "click" && input.checked == false) ||
+			(evt.type == "change" && input.checked == true)) {
+			// add value to selected list
+			selVar.value.push(input.value);
+			input.checked = true;
+		} else {
+			// deselecting item
+			var index = selVar.value.indexOf(input.value);
+			if(index > -1) {
+				selVar.value.splice(index,1);
+			}
+			input.checked = false;
+		}
+		pntbl.client.changeVariable(selVar.id, selVar.value.join(','), pntbl.immediate)
+	} else {
+		// TODO remove this if no warning appear
+		if(evt.type == "change" && !input.checked) console.warn("This shouldn't happen!");
+		pntbl.varMap.selected.value = input.value;
+		pntbl.client.changeVariable(pntbl.varMap.selected.id, pntbl.varMap.selected.value, pntbl.immediate)
+		// force checked
+		input.checked = true;
+	}
+	// force focus in case of label click, make keyboard navigation easier
+	input.focus();
+	evt.stop();
 },
 
 renderLabel : function(renderer,uidl,target,layoutInfo) {
