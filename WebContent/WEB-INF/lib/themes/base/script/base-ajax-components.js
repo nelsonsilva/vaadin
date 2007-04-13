@@ -4319,15 +4319,6 @@ renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
 			div.innerHTML = html;
 			if (!(disabled||readonly)) {
 				div.firstChild.onchange = theme._optionGroupValueChange;
-				client.addEventListener(div.lastChild,"change",theme._optionGroupValueChange);
-				if(itmill.wb.isFF || itmill.wb.isOpera) {
-					client.addEventListener(div.lastChild,"click",theme._optionGroupValueChange);
-					// Workaround for unresolved bug when used in div window and using
-					// click straight to option: Strech label element over input
-					var l = div.lastChild;
-					l.style.marginLeft = "-20px";
-					l.style.paddingLeft = "20px";
-				}
 			}
 		}
 	}
@@ -4347,45 +4338,30 @@ renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
  */
 _optionGroupValueChange : function(e) {
 	var evt = itmill.lib.getEvent(e);
-	if(evt.type == "change") {
-		// we can count this is input field
-		var pntbl = itmill.lib.getPaintable(this);
-		var input = this;
-	} else {
-		var pntbl = itmill.lib.getPaintable(evt.target);
-		// clicked on input (where value sits) or label (next sibling)
-		var input = typeof evt.target.value == "undefined" ? evt.target.previousSibling : evt.target;
-	}
+	var pntbl = itmill.lib.getPaintable(this);
+	var input = this;
 	
 
 	var selVar = pntbl.varMap.selected;
 	if(pntbl.selectMode == "multi") {
-		// TODO uncheck
-		if( (evt.type == "click" && input.checked == false) ||
-			(evt.type == "change" && input.checked == true)) {
+		if( input.checked == true ) {
 			// add value to selected list
 			selVar.value.push(input.value);
-			input.checked = true;
 		} else {
 			// deselecting item
 			var index = selVar.value.indexOf(input.value);
 			if(index > -1) {
 				selVar.value.splice(index,1);
 			}
-			input.checked = false;
 		}
 		pntbl.client.changeVariable(selVar.id, selVar.value.join(','), pntbl.immediate)
 	} else {
-		// TODO remove this if no warning appear
-		if(evt.type == "change" && !input.checked) console.warn("This shouldn't happen!");
 		pntbl.varMap.selected.value = input.value;
 		pntbl.client.changeVariable(pntbl.varMap.selected.id, pntbl.varMap.selected.value, pntbl.immediate)
 		// force checked
-		input.checked = true;
 	}
 	// force focus in case of label click, make keyboard navigation easier
 	input.focus();
-	evt.stop();
 },
 
 renderLabel : function(renderer,uidl,target,layoutInfo) {
@@ -6305,7 +6281,7 @@ itmill.themes.Base.TkWindow.prototype._onClickHandler = function(e) {
 	var tkWindow = itmill.lib.getTkWindow(evt.target);
 	if(tkWindow) {
 		tkWindow.bringToFront();
-		evt.stop();
+//		evt.stop();
 	}
 		
 }
