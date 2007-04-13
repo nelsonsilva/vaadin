@@ -37,6 +37,10 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 	if (this.mainWindowElement == null) {
 		alert("Invalid window element. Ajax client not properly initialized.");
 	}
+	// make main element look like Paintable so that some event listeners can't get
+	// reference to client
+	this.mainWindowElement.varMap = new Object();
+	this.mainWindowElement.client = this;
 	this.itmtkMainWindow = window;
 	
 	this.ajaxAdapterServletUrl = servletUrl;
@@ -2005,7 +2009,7 @@ itmill.lib.getElementPosition = function(element) {
   */
  itmill.lib.getClient = function(htmlElement) {
  	var pntbl = itmill.lib.getPaintable(htmlElement);
- 	return pntbl.client;
+ 	return pntbl ? pntbl.client : null;
  }
  
  /**
