@@ -1545,7 +1545,7 @@ itmill.Client.prototype.processAllLayoutFunctions = function() {
 			var idx = lfo[pid];
 			var func = lf[idx];
 			try {
-				func();
+				func(pid);
 				cnt++;
 			} catch (e) {
 				this.error("Layout function "+pid+" failed; "+ e + " Removing.");
