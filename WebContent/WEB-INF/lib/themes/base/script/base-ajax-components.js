@@ -2403,8 +2403,10 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
-	// Render default header
-	renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	// We don't render header for upload, but use caption for submitting buttons text
+	var caption = uidl.getAttribute("caption");
+	if(caption == null || caption == "")
+		caption = "Send";
 
 	// Unique name for iframes
 	var frameName = "upload_"+varNode.getAttribute("id")+"_iframe";
@@ -2422,7 +2424,7 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
     '<form action="'+client.ajaxAdapterServletUrl +
     '" method="post" enctype="multipart/form-data" target="'+frameName+'">'+
     '<input type="file" name="'+varNode.getAttribute("id")+'" />'+
-    '<input type="submit" value="Send" onclick="javascript:this.form.parentNode.previousSibling.firstChild.submitted = true; this.form.submit(); return false;"/>' +
+    '<input type="submit" value="'+caption+'" onclick="javascript:this.form.parentNode.previousSibling.firstChild.submitted = true; this.form.submit(); return false;"/>' +
     '</form>'
     ;
     
