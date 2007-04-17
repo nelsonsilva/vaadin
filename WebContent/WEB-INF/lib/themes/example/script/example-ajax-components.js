@@ -24,5 +24,5 @@ registerTo : function(client) {
 	arguments.callee.$.registerTo.call(this,client);
 	
 }
-,
+
 }); // End of class
