@@ -1062,16 +1062,14 @@ addHidePopupListener : function(theme,client,element,event,dontstop) {
 */
 addTabtoHandlers : function(client,theme,target,hoverTarget,tabindex,defaultButton) {
 	
-	var d = this.createElementTo(target,"div");
-	d.style.border = "none";
-	d.style.background = "none";
-	d.style.padding = "0px";
-	d.style.margin = "0px";
-	d.style.width = "0px";
-	d.style.height = "0px";
-	d.style.overflow = "hidden";
+	var div = document.createElement("div");
+	div.style.padding = "0px";
+	div.style.margin = "0px";
+	div.style.width = "0px";
+	div.style.height = "0px";
+	div.style.overflow = "hidden";
 
-	var b = this.createInputElementTo(d,(defaultButton?"submit":"button"));
+	var b = this.createInputElementTo(div,(defaultButton?"submit":"button"));
 
 	if (tabindex) b.tabIndex = tabindex;
 
@@ -1082,6 +1080,7 @@ addTabtoHandlers : function(client,theme,target,hoverTarget,tabindex,defaultButt
 		theme.removeCSSClass(hoverTarget,"over");
 	});
 	b.onfocus = theme._updateFocusedToClient;
+	target.appendChild(div);
     return b;
 },
 
