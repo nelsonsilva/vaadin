@@ -897,6 +897,14 @@ itmill.Client.prototype.processUpdates = function (updates) {
     if(this.profilingEnabled)
         console.profile("Changes profiling");
 
+	var tmp = updates.getElementsByTagName("meta");
+    if(tmp[0])
+    	var metaEl = tmp[0];
+	if(metaEl && metaEl.getAttribute("appInit") === "true") {
+		// Session timeout or other app start, empty main element
+		this.removeAllEventListeners(this.mainWindowElement);
+		this.mainWindowElement.innerHTML = "";
+	}    
 	try {
 		// Iterate through the received changes
 		var changes = updates.getElementsByTagName("change");
@@ -1026,10 +1034,8 @@ itmill.Client.prototype.processUpdates = function (updates) {
 			}
 		}
 		
-		// all updates are now in, check for meta tagas
-		var meta = updates.getElementsByTagName("meta");
-		if(meta[0]) {
-			var metaEl = meta[0];
+		// all updates are now in, check if meta tags have pending focus instruction
+		if(metaEl) {
 			var focusEl = metaEl.getElementsByTagName("focus");
 			if(focusEl && focusEl[0]) {
 				this.setFocus(focusEl[0].getAttribute("pid"));
