@@ -1947,6 +1947,7 @@ itmill.lib.getEvent = function(e) {
 	props.alt = e.altKey;
 	props.ctrl = e.ctrlKey;
 	props.shift = e.shiftKey;
+	props.meta = e.metaKey;
 	
 	var rightclick;
 	if (e.which) {
