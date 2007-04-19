@@ -4172,9 +4172,13 @@ renderSelectTwincol : function(renderer,uidl,target,layoutInfo) {
 	var options = theme.getFirstElement(uidl,"options");
 	if (options != null) {
 		options = options.getElementsByTagName("so");
-		unselected.size = (options.length>7?7:options.length);
-        selected.size = (options.length>7?7:options.length);
+		selected.size = unselected.size = (options.length>7?7:options.length);
 	}
+	
+	// Limit size to be at least 3 selects so that component don't look
+	// weird with empty selections
+	if(selected.size < 3 )
+		selected.size = unselected.size = 3;
     
 	// Select options
 	if (options != null && options.length >0) {
