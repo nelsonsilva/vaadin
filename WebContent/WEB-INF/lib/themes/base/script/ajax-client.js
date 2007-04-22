@@ -296,31 +296,40 @@ itmill.Client.prototype.loadDocument = function (url,skipCache) {
  * 
  */
 itmill.Client.prototype.loadCustomLayout = function (style,skipCache) {
+
+	// Load from caches
 	if (!skipCache) {
-		// check if it's cached
+	
+		// check if it's loaded already
 		if (!this.loadcache) this.loadcache = new Object();
 		var cached = this.loadcache["_"+style];
-		if (cached != null) {
-			this.debug(style + " loaded from cache.");
+		if (cached != null) 
 			return cached;
-		}
 	}
 	
-	// not in cache, get from url
+	// Check pre-cache
+	if (!this.precache) this.precache = new Object();
+	var resId = "layout/"+ style + ".html";
+	var text = this.precache[resId];
+	
+	// not in cache, get synchronously from url
 	var renderer = this.findRenderer("customlayout",style);
 	var theme = renderer.theme;
 	var layoutBase = theme.root + "layout/";
-	var url = layoutBase + style + ".html";
-	var x = this.getXMLHttpRequest();
-	x.open("GET",url, false);
-	x.send(null);
-	if (x.status != 200) {
+	if (text == null) {
+		var url = layoutBase + style + ".html";
+		var x = this.getXMLHttpRequest();
+		x.open("GET",url, false);
+		x.send(null);
+		if (x.status != 200) {
+			delete x;
+			this.debug("Could not find CustomLayout " + style);
+			return null;
+		}
+		text = x.responseText;
 		delete x;
-		this.debug("Could not find CustomLayout " + style);
-		return null;
 	}
-	text = x.responseText;
-	delete x;
+
 	if (!text) {
 		this.debug("Empty CustomLayout " + style + " loaded from " + url);
 		return null;
@@ -905,6 +914,22 @@ itmill.Client.prototype.processUpdates = function (updates) {
 		this.removeAllEventListeners(this.mainWindowElement);
 		this.mainWindowElement.innerHTML = "";
 	}    
+
+	// Precached resources
+	var preCachedResources = updates.getElementsByTagName("precache");
+	if (!this.precache) this.precache = new Object();
+	for (var i=0; i<preCachedResources.length; i++) {
+		var r = preCachedResources[i];
+		var res = r.getAttribute("resource");
+		var data;
+		for (var j=0; j<r.childNodes.length; j++) {
+			var c = r.childNodes[j];
+			if (c.nodeType == Node.CDATA_SECTION_NODE)
+				data = c.nodeValue;
+		}
+		this.precache[res] = data;
+	}
+
 	try {
 		// Iterate through the received changes
 		var changes = updates.getElementsByTagName("change");
