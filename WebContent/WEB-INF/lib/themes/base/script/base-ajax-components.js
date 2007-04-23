@@ -5280,7 +5280,10 @@ itmill.themes.Base.FilterSelect = function(renderer,uidl,target,layoutInfo) {
 	    'values' contains all values in array.
 	*/
 	var value = options.getAttribute("initial");	
-	this.ops = eval("(" + value + ")");		
+	this.ops = eval("(" + value + ")");
+	if (this.ops.keys && this.ops.keys.length > 0) {
+		this.size = this.ops.keys.length;
+	}
 
 	this.selectionVariable = this.parentTheme.createVariableElementTo(div,this.parentTheme.getVariableElement(uidl,"array","selected"));	
 
@@ -5335,16 +5338,17 @@ itmill.themes.Base.FilterSelect = function(renderer,uidl,target,layoutInfo) {
 	td.setAttribute('colspan','2');
 	
 	this.popup = this.parentTheme.createElementTo(td,"div","fspopup");
-	var layout = this.parentTheme.createElementTo(this.popup,"div","layout");
+	var layout = this.parentTheme.createElementTo(this.popup,"div");
 	this.parentTheme.addAddClassListener(this.parentTheme,this.client,layout,"mouseover","over");
 	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,layout,"mouseout","over");
 	this.upbutton = this.parentTheme.createElementTo(layout,"div","fsup");	
+	this.parentTheme.createElementTo(layout,"div");
 	
 	var selectdiv = this.parentTheme.createElementTo(this.popup,"div","selectbox");
 	if (focusid) this.popup.focusid = focusid;
 	if (tabindex) this.popup.tabIndex = tabindex;				
 	
-	this.layout = this.parentTheme.createElementTo(this.popup,"div","layout");
+	this.layout = this.parentTheme.createElementTo(this.popup,"div");
 	this.downbutton = this.parentTheme.createElementTo(this.layout,"div","fsdown");
 	this.parentTheme.addAddClassListener(this.parentTheme,this.client,this.layout,"mouseover","over");
 	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,this.layout,"mouseout","over");	
@@ -5521,8 +5525,10 @@ itmill.themes.Base.FilterSelect.prototype.focusSearchField = function() {
 itmill.themes.Base.FilterSelect.prototype.show = function(element) {
 	if (element) {
 		// TODO width of arrow-icon (18px) could be checked
-        element.style.width = ( element.parentNode.offsetWidth -18 )+ "px";
 		element.className = 'fspopup-show';		
+		if (element.offsetWidth < element.parentNode.offsetWidth) {
+			element.style.width = ( element.parentNode.offsetWidth)+ "px"
+		}
 	}
 }
 
@@ -5590,7 +5596,7 @@ itmill.themes.Base.FilterSelect.prototype.flash = function(el) {
 
 itmill.themes.Base.FilterSelect.prototype.adjustWidth = function(el, width) {
 	if (el.clientWidth <= width) {
-		el.style.width = width;
+		//el.style.width = width;
 	} 
 }
 
@@ -5676,6 +5682,7 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 		
 		for (var i=this.startIndex; i<keys.length && i<this.startIndex+this.size;i++) {
 			var optionNode = this.parentTheme.createElementTo(this.select,"div");
+			optionNode.style.whiteSpace = "nowrap";
 			optionNode.id = index;
 			optionNode.value = keys[i];	
 			this.parentTheme.addCSSClass(optionNode,"selectbox-row");
@@ -5717,8 +5724,9 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 				fs.focusSearchField();
 			});	
 			index++;
+
 		}
-		
+
 	} else {
 		this.closeDropdown();		
 		this.select.disabled = true;

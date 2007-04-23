@@ -752,54 +752,62 @@ IMG.overlay {
 
 .itmtk .filterselect .fspopup-show {
 	position: absolute;	
-	display: visible; /* TODO 'visible' not valid here - block? */
 	z-index: 20000;
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
 }
 
 .itmtk .filterselect .layout {
-	border: 1px solid #a0a0a0;
 	background-color: white;
 	margin: 0px;
 	padding: 0px;
+	clear: both;
 }
 
-.itmtk .filterselect .fsup {	
-	border: 1px solid;
+.itmtk .filterselect .fsup {
+	border-top: 1px solid;
+	border-bottom: 1px solid;
 	border-color: #aaa #000 #000 #aaa;	
-	height: 10px;
-	width: 100%;
 	background: #a6b8d6;
 	background-image: url('../img/filterselect/up.gif');
 	background-position: center;
 	background-repeat: no-repeat;
 	cursor: hand;
 	cursor: pointer !important;
+	padding: 5px;
+	text-align: right; /* IE event fix */
 }
 
 .itmtk .filterselect .fsdown {	
-	border: 1px solid;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
 	border-color: #aaa #000 #000 #aaa;	
-	height: 10px;
-	width: 100%;
 	background: #a6b8d6;
 	background-image: url('../img/filterselect/down.gif');
 	background-position: center;
 	background-repeat: no-repeat;
 	cursor: hand;
 	cursor: pointer !important;
+	padding: 5px;
+	text-align: right; /* IE event fix */
 }
 
 .itmtk .filterselect .over .fsdown  {	
 	background-color: orange;
 	border-color: #000 #aaa #aaa #000;
 }
-
+.itmtk .filterselect .over {
+		border: none;
+		margin: 0px;
+		padding: 0px;
+}
 .itmtk .filterselect .over .fsup  {
 	background-color: orange;
 	border-color: #000 #aaa #aaa #000;
 }
 
-.itmtk .filterselect .layout .disabled, .filterselect .layout .over .disabled {
+.itmtk .filterselect .layout .disabled, 
+.itmtk .filterselect .layout .over .disabled {
 	background-color: #8e8e8e;
 	border-color: #000 #aaa #aaa #000;
 	opacity: 1.0;
@@ -809,17 +817,13 @@ IMG.overlay {
 .itmtk .filterselect .selectbox {
 	margin: 0px;
 	padding: 0px;
-	height: 160px;
 	width: 100%;
-	border-left: 1px solid #aaaaaa;
-	border-right: 1px solid #aaaaaa;
 	background-color: #ffffff;
-	padding: 0px;
 }
 
 .itmtk .filterselect .selectbox-row {
 	margin: 0px;
-	padding: 0px;
+	padding: 0px 3px 0px 3px;
 	border: none;
 	background-color: #ffffff;	
 	cursor: hand;
@@ -844,8 +848,7 @@ IMG.overlay {
 
 .itmtk .filterselect .statics {
 	font-size: 12px;
-	width: 100%;
-	border: 1px solid #aaaaaa;
+	border-bottom: 1px solid #aaaaaa;
 	background-color: #ffffff;
 	text-align: center;
 }
