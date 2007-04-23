@@ -1467,8 +1467,8 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 			var sc = element._elementsShortcuts[j];
 			node.shortcutMap.splice(node.shortcutMap.indexOf(sc),1);
 			this.debug("KeyboardShortcut removed");
+			delete element._elementsShortcuts[j];
 		}
-		delete element._elementsShortcuts;
 	}
 	// TODO eventMAp -> paintable & only get DIV:s
 	var childs = element.getElementsByTagName("*");
@@ -1493,8 +1493,8 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 					var sc = element._elementsShortcuts[j];
 					node.shortcutMap.splice(node.shortcutMap.indexOf(sc),1);
 					this.debug("KeyboardShortcut removed");
+					delete element._elementsShortcuts[j];
 				}
-				delete element._elementsShortcuts;
 			}
 		}
 	}
