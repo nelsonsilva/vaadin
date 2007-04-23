@@ -3480,7 +3480,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
 			row.actionList = actionList;
 			renderer.client.addEventListener(row,"contextmenu",theme.tableRowShowContextMenu);
 			if(window.opera)
-				client.addEventListener(tr,"click",theme.tableRowShowContextMenu);
+				renderer.client.addEventListener(row,"click",theme.tableRowShowContextMenu);
         }
         // selection
         if (model.meta.selectmode != "none" && ! model.meta.readonly) {
