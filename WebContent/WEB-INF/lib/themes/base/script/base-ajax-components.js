@@ -5672,9 +5672,8 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 			this.parentTheme.addCSSClass(optionNode,"selectbox-row");
 			// unescape and replace all '+' characters with space. 
 			var caption = this.decodeCaption(values[i]);			
-			optionNode.caption = caption;
-			this.parentTheme.createTextNodeTo(optionNode,caption);									
-			
+			optionNode.caption = caption;									
+			optionNode.innerHTML = caption||"&nbsp";
 			if (this.selectMode == "multi") {
 				// TODO multiselections
 			} else {
