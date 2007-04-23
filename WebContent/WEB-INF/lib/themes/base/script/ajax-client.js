@@ -1397,6 +1397,7 @@ itmill.Client.prototype.addEventListener = function(element,type,func,id) {
 	
 	return func;
 }
+
 /**
  *   Remove event listener function from a element. The parameters should match addEventListener()
  *  
@@ -1431,13 +1432,13 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 	if (element.removeEventListener) {
 			element.removeEventListener(type, func, false);
 			
-		} else if (element.detachEvent) {
-			element.detachEvent("on" + type, func);
-			
-		} else {
-			element['on'+type] =  null;
-		}
+	} else if (element.detachEvent) {
+		element.detachEvent("on" + type, func);
 		
+	} else {
+		element['on'+type] =  null;
+	}
+	
 }
 
 /**
@@ -1458,8 +1459,16 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 				removed++;
 			}
 		}
-		
 		element.eventMap = null;
+	}
+	if(element._elementsShortcuts) {
+		var node = itmill.lib.getShortcutHandlerNode(element);
+		for(var j = 0; j < element._elementsShortcuts.length; j++) {
+			var sc = element._elementsShortcuts[j];
+			node.shortcutMap.splice(node.shortcutMap.indexOf(sc),1);
+			this.debug("KeyboardShortcut removed");
+		}
+		delete element._elementsShortcuts;
 	}
 	// TODO eventMAp -> paintable & only get DIV:s
 	var childs = element.getElementsByTagName("*");
@@ -1478,11 +1487,48 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 				
 				element.eventMap = null;
 			}
+			if(element._elementsShortcuts) {
+				var node = itmill.lib.getShortcutHandlerNode(element);
+				for(var j = 0; j < element._elementsShortcuts.length; j++) {
+					var sc = element._elementsShortcuts[j];
+					node.shortcutMap.splice(node.shortcutMap.indexOf(sc),1);
+					this.debug("KeyboardShortcut removed");
+				}
+				delete element._elementsShortcuts;
+			}
 		}
 	}
 	
 	return removed;
 }
+
+/**
+ * Method to register shorcut key handler
+ * 
+ * @param shortcut Shortcut object to be added
+ */
+itmill.Client.prototype.addShortcutHandler = function(shortcut) {
+	// TODO
+	// this should find the right container element where shortcuts should be hooked
+	// now prototyping by hooking all events to document
+	var node = itmill.lib.getShortcutHandlerNode(shortcut.target);
+	if(!node.shortcutMap) {
+		node.shortcutMap = new Array();
+	}
+	node.shortcutMap.push(shortcut);
+	// TODO remove this, containers that catch key clicks should do this on render phase
+	if(!node.shortcutEventAdded) {
+		console.log("adding shortcut event handler");
+		this.addEventListener(node,"keydown",itmill.ui._shortcutHandler);
+		node.shortcutEventAdded = true;
+	}
+	// also store shortcut reference to owner element so that it gets
+	// removed when element is removed 
+	if(!shortcut.target._elementsShortcuts)
+		shortcut.target._elementsShortcuts = new Array();
+	shortcut.target._elementsShortcuts.push(shortcut);
+}
+
 
 itmill.Client.prototype.registerLayoutFunction = function (paintableElement,func) {
 	if (!paintableElement || !func) {
@@ -1712,7 +1758,8 @@ itmill.Client.prototype.setFocus = function(pid) {
 }
 
 /**
- *  TODO This function is in totally wrong place, should be in html-helper-lib.js
+ * @deprecated use itmill.lib.getElementPosition instead
+ *  TODO Remove this
  */
 itmill.Client.prototype.getElementPosition = function(element) {
 	var props = new Object();
@@ -1809,28 +1856,6 @@ itmill.Client.prototype.getContextMenu = function() {
 		this.contextMenu.appendTo(this.mainWindowElement);
 	}
 	return this.contextMenu;
-}
-
-/**
- * Method to register shorcut key handler
- * 
- * @param shortcut Shortcut object to be added
- */
-itmill.Client.prototype.addShortcutHandler = function(shortcut) {
-	// TODO
-	// this should find the right container element where shortcuts should be hooked
-	// now prototyping by hooking all events to document
-	var body = document.body;
-	if(!body.shortcutMap) {
-		body.shortcutMap = new Array();
-	}
-	body.shortcutMap.push(shortcut);
-	// TODO remove this, containers that catch key clicks should do this on render phase
-	if(!body.shortcutEventAdded) {
-		console.log("adding shortcut event handler");
-		this.addEventListener(body,"keydown",itmill.ui._shortcutHandler);
-		body.shortcutEventAdded = true;
-	}
 }
 
 /** Createsa text node to the same document as target.
@@ -2073,6 +2098,13 @@ itmill.lib.getElementPosition = function(element) {
  		return el.TkWindow;
 	else 
 		return null;
+}
+
+itmill.lib.getShortcutHandlerNode = function(el) {
+	var node;
+	
+	if(!node)
+		return document.body;
 }
  
  
