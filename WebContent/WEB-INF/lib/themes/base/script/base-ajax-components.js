@@ -2929,6 +2929,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var selectmode = model.meta.selectmode = uidl.getAttribute("selectmode");
 	var cols       = model.meta.cols = parseInt(uidl.getAttribute("cols"));
 	var totalrows  = model.meta.totalrows = parseInt(uidl.getAttribute("totalrows"));
+	model.meta.disabled = ("true" == uidl.getAttribute("disabled"));
     
 	var pagelength = model.meta.pagelength = uidl.getAttribute("pagelength") ? parseInt(uidl.getAttribute("pagelength")) : model.meta.totalrows;
     model.meta.readonly = uidl.getAttribute("readonly") || false;
@@ -3065,7 +3066,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"display:none;\"></div>";
     inner.innerHTML += '<div class="colsel-container"></div><div class="hcontainer"></div>';
 	var vcols = model.vcols = inner.childNodes[1];
-	if (visiblecols) {
+	if (visiblecols && ! model.meta.disabled) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div></DIV>";
 		renderer.client.addEventListener(vcols,"click",theme.tableShowColumnSelectMenu);
 	}
@@ -3253,7 +3254,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             td.appendChild(tdDiv);
             tr.appendChild(td);
 		}
-        if (al && tr.firstChild) {
+        if (al && tr.firstChild && ! model.meta.disabled) {
 			// extract actions that this particular node has
 			var actionList = new Array();
 			for(var j = 0; j < al.childNodes.length; j++) {
@@ -3265,7 +3266,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 				client.addEventListener(tr,"click",theme.tableRowShowContextMenu);
         }
         // selection
-        if (model.meta.selectmode != "none"  && ! model.meta.readonly ) {
+        if (model.meta.selectmode != "none"  && ! model.meta.readonly && ! model.meta.disabled) {
             model.selected.push(tr);
             theme.addCSSClass(tr,"clickable");
             theme.addToggleClassListener(theme,client,tr,"mouseover","selectable");
@@ -3349,46 +3350,54 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	status.style.marginLeft = Math.round(div.offsetWidth/2 - 75 ) +"px";
     vcols.style.marginLeft = (div.offsetWidth - 22) + "px";
 
-    theme.scrollTableAddScrollHandler(client,theme,div);
-    theme.scrollTableAddScrollListener(theme,div);
-    
- 	// Column order drag & drop
- 	var hin = target.ownerDocument.getElementById(pid+"hin");
-    var h = hin.getElementsByTagName("td");
-    var dragOrderGroup = new Object();
-    for (var i = 0;i<h.length;i++) { 
-    	var id = h[i].getAttribute("id");  
-    	if (id==pid+"heh") {
-	        var handle = target.ownerDocument.getElementById(pid+"hah");
+	if(! model.meta.disabled) {
+		// add listener only for enabled table
+	    theme.scrollTableAddScrollHandler(client,theme,div);
+	    theme.scrollTableAddScrollListener(theme,div);
+	 	// Column order drag & drop
+	 	var hin = target.ownerDocument.getElementById(pid+"hin");
+	    var h = hin.getElementsByTagName("td");
+	    var dragOrderGroup = new Object();
+	    for (var i = 0;i<h.length;i++) { 
+	    	var id = h[i].getAttribute("id");  
+	    	if (id==pid+"heh") {
+		        var handle = target.ownerDocument.getElementById(pid+"hah");
+		        if (handle) {
+		        	theme.tableAddWidthListeners(client,theme,handle,"heh",div,pid);
+		        }
+	    	}
+	 		if (!id||id.indexOf(pid+"he")<0) {
+	            continue;
+	        }   
+	        var cid = h[i].getAttribute("cid");
+	        var handle = target.ownerDocument.getElementById(pid+"ha"+cid);
 	        if (handle) {
-	        	theme.tableAddWidthListeners(client,theme,handle,"heh",div,pid);
+	        	theme.tableAddWidthListeners(client,theme,handle,cid,div,pid);
 	        }
-    	}
- 		if (!id||id.indexOf(pid+"he")<0) {
-            continue;
-        }   
-        var cid = h[i].getAttribute("cid");
-        var handle = target.ownerDocument.getElementById(pid+"ha"+cid);
-        if (handle) {
-        	theme.tableAddWidthListeners(client,theme,handle,cid,div,pid);
-        }
-        if (coVar||sortVar) {
-        	theme.addCSSClass(h[i],"clickable");
-        	theme.addToDragOrderGroup(client,theme,h[i],dragOrderGroup,coVar,sortVar,sortascVar,sortasc);
-        }
-    }
+	        if (coVar||sortVar) {
+	        	theme.addCSSClass(h[i],"clickable");
+	        	theme.addToDragOrderGroup(client,theme,h[i],dragOrderGroup,coVar,sortVar,sortascVar,sortasc);
+	        }
+	    }
+	    
+	    var hin = target.ownerDocument.getElementById(pid+"hin");
+	    var cin = target.ownerDocument.getElementById(pid+"cin");
+	    theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
+	    
+	    // send request to fetch cache rows
+	    if (model.meta.totalrows > 0 && model.meta.totalrows > model.state.lastRendered) {
+	        reqfirstrowVar.value = model.state.lastRendered + 1;
+	        reqrowsVar.value = model.meta.cacheSize;
+	        theme.updateVar(client,reqfirstrowVar, false);
+	        theme.updateVar(client,reqrowsVar, true);
+	    }
+
+	} else {
+		// if disabled remove, scrollbars
+	    theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
+		cout.style.overflow = "hidden";
+	}
     
-    var hin = target.ownerDocument.getElementById(pid+"hin");
-    var cin = target.ownerDocument.getElementById(pid+"cin");
-    theme.scrollTableRegisterLF(client,theme,div,inner,cout,hout,cin,hin);
-    
-    // send request to fetch cache rows
-    if (model.meta.totalrows > 0 && model.meta.totalrows > model.state.lastRendered) {
-        reqfirstrowVar.value = model.state.lastRendered + 1;
-        reqrowsVar.value = model.meta.cacheSize;
-        theme.updateVar(client,reqfirstrowVar, false);
-        theme.updateVar(client,reqrowsVar, true);
-    }
 },
 
 /**
