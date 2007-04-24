@@ -1648,7 +1648,10 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 		actions = new Object();
 		var ak = alNode.getElementsByTagName("action");
 		for (var i=0;i<ak.length;i++) {
-			actions[ak[i].getAttribute("key")] = ak[i].getAttribute("caption");
+			actions[ak[i].getAttribute("key")] = {
+				caption: ak[i].getAttribute("caption"),
+				icon: ak[i].getAttribute("icon")
+			};
 		}
 	}
 	div.actions = actions;
@@ -1842,7 +1845,6 @@ addExpandNodeListener : function(theme,client,button,event,subnodes,expandVariab
 
 treeNodeShowContextMenu: function(e) {
 	var evt = itmill.Client.prototype.getEvent(e);
-	console.dir(evt);
 	if(evt.rightclick || evt.type == "contextmenu") {
 		evt.stop();
 		// Build ContextMenu compatible structure form list
@@ -1864,7 +1866,8 @@ treeNodeShowContextMenu: function(e) {
 		// They comma separated like this: "[listitem],[actionKey]"
 		for(var i = 0; i < node.actionList.length; i++) {
 			actions.push({
-				caption: tree.actions[node.actionList[i]],
+				caption: tree.actions[node.actionList[i]].caption,
+				icon: tree.actions[node.actionList[i]].icon,
 				actionValue: (node.key + "," + node.actionList[i])
 			});
 		}
@@ -6612,6 +6615,12 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 		var opt = aOptions[i];
 		var li = document.createElement("li");
 		li.actionValue= opt.actionValue;
+		if(opt.icon) {
+			var iconNode = document.createElement("img");
+			iconNode.src = opt.icon;
+			iconNode.className = 'icon';
+			li.appendChild(iconNode);
+		}
 		li.appendChild(document.createTextNode(opt.caption));
 		if(typeof opt.checked != "undefined") {
 			if(opt.checked) 
@@ -6655,14 +6664,19 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
  */
 itmill.ui.ContextMenu.prototype._clickHandler = function(e) {
 	// TDO refactor bad client fetch
-	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
-	var cm = evt.target.parentNode.contextMenu;
+	var evt = itmill.lib.getEvent(e);
+	var client = itmill.lib.getClient(evt.target);
+	// get cm from target which is icon or li element
+	var cm;
+	if(evt.target.parentNode.contextMenu)
+		cm = evt.target.parentNode.contextMenu;
+	else
+		cm = evt.target.parentNode.parentNode.contextMenu;
 	if(!cm.clickHandler) {
 		var li = evt.target;
 		var actionVar = cm.actionVar;
 		client.changeVariable(actionVar.id, li.actionValue, true);
-		li.parentNode.contextMenu._hide();
+		cm._hide();
 	} else {
 		cm.clickHandler(evt);	
 	}

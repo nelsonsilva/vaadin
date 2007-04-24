@@ -80,7 +80,8 @@ INPUT, SELECT, SELECT OPTION, TEXTAREA {
 .itmtk .caption {
     color: ButtonText;
 }
-.itmtk .caption .icon {
+.itmtk .caption .icon,
+.itmtk .contextMenu .icon {
 	vertical-align: middle;
 	padding-right: 5px;
 }
