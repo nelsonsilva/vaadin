@@ -6431,8 +6431,12 @@ itmill.themes.Base.TkWindow.prototype._onStopResizing = function(e) {
 itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	// "this" is document.body
 	var evt = itmill.lib.getEvent(e);
-	var client = itmill.lib.getClient(evt.target);
 	evt.stop();
+	var client = itmill.lib.getClient(evt.target);
+	// client reference might not be got if app's base area is small, then fetch first
+	// toolkit app
+	if(!client)
+		client = itmill.clients[0];
 	var tkWindow = client.dragItem;
 	var w = evt.mouseX - tkWindow.origMouseX + tkWindow.origW;
 	if(w < 100)
