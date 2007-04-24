@@ -6181,14 +6181,14 @@ itmill.themes.Base.TkWindow = function(args) {
 	// TODO remove client determining hack to support mutltiple apps in one page
 	this.client = itmill.clients[0];
 	
-	if(args.width) 
+	if(args.width && args.width > 0)
 		this._width = parseInt(args.width) > 100  ? args.width : 100;
 	else
 		this._width = 640;
-	if(args.height)
+	if(args.height && args.height > 0)
 		this._height = parseInt(args.height) > 100 ? args.height : 100;
 	else
-		this.height = 400;
+		this._height = 400;
 	this._x	= args.posX ? args.posX : 0;
 	this._y	= args.posY ? args.posY : 0;
 	
