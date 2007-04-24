@@ -6435,6 +6435,8 @@ itmill.themes.Base.TkWindow.prototype._onResizeDrag = function(e) {
 	var client = itmill.lib.getClient(evt.target);
 	// client reference might not be got if app's base area is small, then fetch first
 	// toolkit app
+	// TODO refactor this so that client.dragItem is moved to itmill.dragItem (only one thing
+	// can be dragged at once anyway)
 	if(!client)
 		client = itmill.clients[0];
 	var tkWindow = client.dragItem;
