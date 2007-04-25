@@ -172,6 +172,7 @@
   <!-- + Set Virtual Hosts. A Null host or empty array means all hosts -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+  <!-- Deploy IT Mill Toolkit example WAR to root -->
   <Call name="addWebApplication">
     <Arg>/</Arg>
     <Arg>./itmill-toolkit.war</Arg>
@@ -239,30 +240,6 @@
     </Array>
   </Set>
   -->
-
-<Call name="addContext">
-    <Arg></Arg>
-    <Arg><New class="org.mortbay.http.HttpContext">
-      <Call name="setContextPath">
-        <Arg>/doc</Arg>
-      </Call>    
-      <Call name="setResourceBase">
-        <Arg>../doc</Arg>
-      </Call>
-      <Call name="addHandler">
-        <Arg>
-          <New class="org.mortbay.http.handler.ResourceHandler"></New>
-        </Arg>
-      </Call>
-    </New></Arg>
-    <Set name="virtualHosts">
-      <Array type="java.lang.String">
-        <Item></Item>
-        <Item>127.0.0.1</Item>
-        <Item>localhost</Item>
-      </Array>
-    </Set>
-</Call>
 
 </Configure>
 
