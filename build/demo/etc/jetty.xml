@@ -154,7 +154,6 @@
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <Set name="rootWebApp">root</Set>
   
-<!--
   <Call name="addWebApplications">
     <Arg></Arg>
     <Arg><SystemProperty name="jetty.home" default="."/>/webapps/</Arg>
@@ -162,7 +161,6 @@
     <Arg type="boolean">true</Arg>
     <Arg type="boolean">false</Arg>
   </Call>
--->
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Add and configure a specific web application                    -->
