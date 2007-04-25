@@ -264,30 +264,6 @@
     </Set>
 </Call>
 
-<Call name="addContext">
-    <Arg></Arg>
-    <Arg><New class="org.mortbay.http.HttpContext">
-      <Call name="setContextPath">
-        <Arg>/lib</Arg>
-      </Call>
-      <Call name="setResourceBase">
-        <Arg>../lib</Arg>
-      </Call>
-      <Call name="addHandler">
-        <Arg>
-          <New class="org.mortbay.http.handler.ResourceHandler"></New>
-        </Arg>
-      </Call>
-    </New></Arg>
-    <Set name="virtualHosts">
-      <Array type="java.lang.String">
-        <Item></Item>
-        <Item>127.0.0.1</Item>
-        <Item>localhost</Item>
-      </Array>
-    </Set>
-</Call>
-
 </Configure>
 
 
