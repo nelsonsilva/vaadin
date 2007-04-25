@@ -2929,13 +2929,13 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     var redraw = false;
     var allowUpdate = true;
 	if (target.colWidths) {
-		if(target.model.tableBody.rows.length > 0) {
+		if(target.model.tableBody.childNodes.length > 0) {
     	    // we are repainting existing table with rows in it
     	    redraw = true;
 			colWidths = target.colWidths;
 		} else {
 			// table is empty -> delete colWidths to recalc
-			delete target.colWidths;
+			target.colWidths = null;
 			colWidths = model.colWidths = new Object();
 		}
 	} else {
