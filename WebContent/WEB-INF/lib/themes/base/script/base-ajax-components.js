@@ -1132,6 +1132,7 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 		var x = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","positionx")));
 		var y = parseInt(renderer.theme.getVariableElementValue(renderer.theme.getVariableElement(uidl,"integer","positiony")));
 		var cap = uidl.getAttribute("caption");
+		var modality = uidl.getAttribute("style") == "modal";
 		
 		// stack new windows from upper left corner
         if (!x || x < 0) {
@@ -1148,16 +1149,17 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 			posX: x,
 			posY: y,
 			constrainToBrowser: true,
-			parentNode: div});
+			parentNode: div,
+			modal: modality});
 
 		div.TkWindow = tkWin;
 		renderer.theme.createVarFromUidl(div,renderer.theme.getVariableElement(uidl,"boolean","close"));
-		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
-		if(uidl.getAttribute("style") == "modal") {
-			tkWin.setModal(true);
-        } else {
+		
+		// this is needed to remove window modality
+		if(!modality) {
             tkWin.setModal(false);
         }
+		renderer.theme.renderChildNodes(renderer,uidl,tkWin.childTarget);
 		return;
 	}
 	
@@ -6212,9 +6214,16 @@ itmill.themes.Base.TkWindow = function(args) {
 		this._height = parseInt(args.height) > 100 ? args.height : 100;
 	else
 		this._height = 400;
-	this._x	= args.posX ? args.posX : 0;
-	this._y	= args.posY ? args.posY : 0;
 	
+	if(args.modal ) {
+		// if modal, center window
+		this._x = Math.floor((itmill.wb.getWindowWidth() - this._width) / 2 ) ;
+		this._y = Math.floor((itmill.wb.getWindowHeight() - this._height) / 2 ) ;
+	} else {
+		this._x	= args.posX ? args.posX : 0;
+		this._y	= args.posY ? args.posY : 0;
+	}
+
 	this._header = document.createElement("div");
 	this._header.tabIndex = "-1"; // due we need to set mac FF overflow scroll
 	this._header.className = "winHeader"
@@ -6291,6 +6300,8 @@ itmill.themes.Base.TkWindow = function(args) {
 	// new window should be positioned on top
 	this._setWindowIndex(this.client.windowOrder.length);
 	this.client.windowOrder.push(this);
+	if(args.modal)
+		this._ol.setModal(true,true);
 }
 
 /**
@@ -6649,6 +6660,7 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	// modality curtain
 	this._ol._modalityCurtain.className += " cmModalityCurtain";
 	this._ol.addModalityClickEvent({f:this._hide,obj:this});
+	this._container.style.visibility = "hidden";
 	this._container.style.display = "block";
 	this._ol.setWidth(this._htmlElement.offsetWidth);
 	// width now fixed, fix individual list items to blocks again
@@ -6670,6 +6682,7 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	}
 	this._container.style.top = y + "px";
 	this._container.style.left = x + "px";
+	this._container.style.visibility = "visible";
 }
 
 /**
