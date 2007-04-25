@@ -108,6 +108,19 @@ createElementTo : function (target, tagName, cssClass) {
 	return e;
 },
 
+/**
+ * All uri's grabbed from uidl, should be filtered through this function, which
+ * makes them browsers compatible. In uidl we may have uri's that start with
+ * 'theme://' that are converted for browsers.
+ */
+parseResourceUri : function (iconUrl) {
+	if (iconUrl && iconUrl.indexOf("theme://") == 0) {
+    	iconUrl = (this.iconRoot != null ? this.iconRoot : this.root) 
+    				+ iconUrl.substring(8);
+    }
+	return iconUrl
+},
+
 createTextNodeTo : function (target,text) {
 
 	// Sanity check
@@ -1651,7 +1664,7 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 		for (var i=0;i<ak.length;i++) {
 			actions[ak[i].getAttribute("key")] = {
 				caption: ak[i].getAttribute("caption"),
-				icon: ak[i].getAttribute("icon")
+				icon: theme.parseResourceUri(ak[i].getAttribute("icon"))
 			};
 		}
 	}
