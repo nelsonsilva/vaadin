@@ -3544,7 +3544,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         // if first received row == lastRendered + 1 we have moderate update to end of table
         // -> add received rows to the end of the table and resize bSpacer
         for(var i = 0; i < trs.length; i++) {
-            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
+            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1), tm.meta.selectmode);
             tableBody.appendChild(row);
             tm.bSpacer.style.height = (parseInt(tm.bSpacer.style.height) - tm.rowheight) + "px";
             tm.state.lastRendered++;
@@ -3559,7 +3559,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         // moderate update to beginning of the table
         for(var i = trs.length -1 ; i >= 0; i--) {
             // render a new row
-            row = createRow(trs[i], ((tm.state.firstRendered - 1)%2 == 1 ));
+            row = createRow(trs[i], ((tm.state.firstRendered - 1)%2 == 1 ), tm.meta.selectmode);
             tableBody.insertBefore(row, tableBody.firstChild);
             // adjust top margin
             tm.aSpacer.style.height = (parseInt(tm.aSpacer.style.height) - tm.rowheight) + "px";
@@ -3590,7 +3590,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         tm.state.firstRendered = model.request.firstrow;
         tm.state.lastRendered = model.request.firstrow - 1;
         for(var i = 0; i < trs.length; i++) {
-            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
+            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1), tm.meta.selectmode);
             tableBody.appendChild(row);
             tm.bSpacer.style.height = (parseInt(tm.bSpacer.style.height) - tm.rowheight) + "px";
             tm.state.lastRendered++;
@@ -3611,7 +3611,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         tm.state.firstRendered = model.request.firstrow;
         tm.state.lastRendered = model.request.firstrow - 1;
         for(var i = 0; i < trs.length; i++) {
-            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1));
+            var row = createRow(trs[i], ((model.request.firstrow + i)%2 == 1), tm.meta.selectmode);
             tableBody.appendChild(row);
             tm.state.lastRendered++;
         }
