@@ -178,7 +178,8 @@
 	overflow: hidden;
 }
 .itmtk .tabsheet .tabs .clickable,
-.itmtk .tabsheet .tabs .tab-on {
+.itmtk .tabsheet .tabs .tab-on,
+.itmtk .tabsheet .tabs .tab {
 	color: #094582;
 	height: 22px;
 	padding: 0 8px;
@@ -186,10 +187,14 @@
 	background: #d4e7fe	url(../img/tabsheet/tab_bg.png) repeat-x;
 	
 }
+.itmtk .tabsheet .tabs td.disabled {
+	color: graytext;
+}
 .itmtk .tabsheet .tabs .tab-on {
 	background: #d4e7fe	url(../img/tabsheet/tab_open_bg.png) repeat-x;
 	border-bottom: none;
 }
+
 .itmtk .tabsheet .tabs .over {
 	background-image: url(../img/tabsheet/tab_hover_bg.png);
 }

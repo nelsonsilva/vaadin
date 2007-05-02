@@ -77,7 +77,7 @@ renderTabSheet : function(renderer,uidl,target,layoutInfo) {
 					} else if (tabNode.getAttribute("disabled") == "true" 
 								|| uidl.getAttribute("disabled") == "true"
 								|| uidl.getAttribute("readonly") == "true") {
-						theme.setCSSClass(tab,"tab disabled inline");
+						theme.setCSSClass(tab,"tab disabled");
 					} else {
 						theme.setCSSClass(tab,"tab clickable");
 						theme.addAddClassListener(theme,this,tab,"mouseover","over",tab);
