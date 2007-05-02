@@ -1906,10 +1906,9 @@ itmill.WebBrowser = function() {
 	if(window.opera)
 		this.isOpera = true;
 	var agent = navigator.userAgent;
-	if(agent.indexOf("Webkit") > 0 ) {
+	if(agent.indexOf("WebKit") > 0 ) {
 		this.isWebkit = true;
 	} 
-
 	if(agent.indexOf("Mac") > 0 ) {
 		this.isMac = true;
 	}

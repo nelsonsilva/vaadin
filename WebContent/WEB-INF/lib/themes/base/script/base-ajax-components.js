@@ -5214,19 +5214,19 @@ eventPosition : function(e) {
  * Prevent text selection in buttons and etc.
  */
 addPreventSelectionListener : function(theme,client,div,event) {
-	this.client.addEventListener(div, "mousedown", function(e) { 
-			var evt = client.getEvent(e);
+	if(itmill.wb.isFF) {
+		div.style.MozUserSelect = "none";
+	} else if(itmill.wb.isWebkit) {
+		div.style.WebkitUserSelect = "none";
+	} else {
+		// For IE
+		this.client.addEventListener(div, "selectstart", function(e) { 
+			var evt = itmill.lib.getEvent(e);
 			evt.stop();
 			return false;
 		}
-	);
-	// For IE
-	this.client.addEventListener(div, "selectstart", function(e) { 
-			var evt = client.getEvent(e);
-			evt.stop();
-			return false;
-		}
-	);
+		);
+	}
 }
 
 
