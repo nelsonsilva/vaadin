@@ -11,3 +11,8 @@
 	/* workaround for IE z-index bug */
 	z-index:30002;
 }
+
+.itmtk .tooltip {
+	/* workaround for IE z-index bug */
+	z-index:31002;
+}

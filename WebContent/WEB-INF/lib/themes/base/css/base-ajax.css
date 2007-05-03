@@ -978,3 +978,22 @@ IMG.overlay {
 	background: #000;
 	opacity:0.2;
 }
+
+.itmtk .tooltip {
+	position:absolute;
+}
+.itmtk .tooltip .shadow {
+	position:absolute;	
+	overflow: auto;
+}
+.itmtk .tooltip .shadow div{
+	display:none;
+}
+.itmtk .tooltip .overlay_body div {
+	z-index:31003 !important;
+	background: #ffffe1;
+	padding: 3px;
+	border: 1px solid gray;
+}
+.itmtk .tooltip span {
+}

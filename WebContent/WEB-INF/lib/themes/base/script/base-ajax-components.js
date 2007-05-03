@@ -737,7 +737,6 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		errorIcon = icon;
 	} else if (description) {
 	
-		this.addCSSClass(caption,"clickable");
 		if(!captionText) this.addCSSClass(caption,"hide");
 		
 		var icon = this.createElementTo(caption,"img","icon description");
@@ -748,15 +747,48 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 			this.removeCSSClass(caption,"hide");
 		} 
 	}
-	
 	var popupTarget = (captionText || iconUrl || error)?caption:target;
 	if (error||description) {
-		if(description) popupTarget._descriptionHTML = client.getXMLtext(description);
-		if(error) popupTarget._errorHTML = client.getXMLtext(error);
-		this.addDescriptionAndErrorPopupListener(theme, client, popupTarget, errorIcon);
+		if(error) {
+			popupTarget._descriptionHTML = '<span class="error">' + client.getXMLtext(error) + "</span>";
+		} else {
+			popupTarget._descriptionHTML = client.getXMLtext(description);
+		}
+		this.client.addEventListener(popupTarget, "mouseover",this._onDescriptionMouseOver);
+		this.client.addEventListener(popupTarget, "mouseout",this._onDescriptionMouseOut);
 	}
-
 	return caption;
+},
+
+_onDescriptionMouseOver : function(e) {
+	console.info("Setting popup with timeout");
+	var evt = itmill.lib.getEvent(e);
+	
+	var trg = evt.target;
+	while(!trg._descriptionHTML && trg.parentNode)
+		trg = trg.parentNode;
+	
+	if(trg._descriptionHTML) {
+		trg._popuptimeout = window.setTimeout(function() {
+			var client = itmill.lib.getClient(trg);
+			var tt = client.getTooltip();
+			tt.showTooltip(trg._descriptionHTML, evt);
+		}, 800);
+	}
+},
+
+_onDescriptionMouseOut : function(e) {
+	console.info("Removing popup and timeout");
+	var evt = itmill.lib.getEvent(e);
+	var trg = evt.target;
+	while(!trg._descriptionHTML && trg.parentNode)
+		trg = trg.parentNode;
+	if(trg._descriptionHTML) {
+		window.clearTimeout(trg._popuptimeout);
+		var client = itmill.lib.getClient(trg);
+		var tt = client.getTooltip();
+		tt._hide();
+	}
 },
 
 renderActionPopup : function(renderer, uidl, to, actions, actionVar, id, popupEvent) {
@@ -6672,8 +6704,8 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	var x = evt.mouseX;
 	var y = evt.mouseY;
 	// if not enough room on right side, pop on left
-	if(x + this._htmlElement.offsetWidth > itmill.wb.getWindowWidth()) {
-		x = itmill.wb.getWindowWidth() - this._htmlElement.offsetWidth;
+	if(x + this._htmlElement.offsetWidth + this._ol.SHADOW_WIDTH > itmill.wb.getWindowWidth()) {
+		x = itmill.wb.getWindowWidth() - this._htmlElement.offsetWidth - this._ol.SHADOW_WIDTH;
 	}
 	
 	// if not enough room below, pop on top
@@ -6690,7 +6722,6 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
  * by setting own to clickHandler
  */
 itmill.ui.ContextMenu.prototype._clickHandler = function(e) {
-	// TDO refactor bad client fetch
 	var evt = itmill.lib.getEvent(e);
 	var client = itmill.lib.getClient(evt.target);
 	// get cm from target which is icon or li element
@@ -6761,4 +6792,94 @@ itmill.ui._shortcutHandler =  function(e) {
 			}
 		}
 	}
+}
+
+ /**
+ * Context menu that gets rendered under mouseClick.
+ * 
+ * NOTE: Do not call this constructor directly. Instead use getContextMenu() in
+ * client, so we can ensure there is only one context menu. We want this to
+ * ensure performance on views that have hundreds of objects that may be
+ * "right clicked".
+ */
+itmill.ui.Tooltip = function() {
+ 	this._container = document.createElement("div");
+ 	this._container.className = "tooltip";
+ 	this._container.style.display = "none";
+ 	this._htmlElement = document.createElement("div");
+ 	this._htmlElement.tooltip = this; // save reference for event handlers
+ 	this._ol = new itmill.themes.Base.Overlay();
+ 	this._ol.setZindexBase(31000); // Toolkit default for context menus
+	this._ol.appendTo(this._container);
+	var pTarget = this._ol.getPaintTarget();
+	pTarget.appendChild(this._htmlElement);
+	console.info("Tooltip container created");
+}
+
+itmill.ui.Tooltip.prototype.appendTo = function(el) {
+	el.appendChild(this._container);
+}
+
+/**
+ * Pixels reserved for tooltips padding, border and shadow
+ */
+itmill.ui.Tooltip.prototype.EXTRA_WIDTH = 10;
+
+/**
+ * This method is called by eventHandlers to show context menu.
+ * 
+ * @param content {htmlSnippet} containts content to be shown in tooltip normally plain text
+ * @param 	evt	crossbrowser event which triggered the contextMenu building,
+ *  			is used to determine proper position for contextMenu
+ */
+itmill.ui.Tooltip.prototype.showTooltip = function(content, evt) {
+	// truncate old content
+	while(this._htmlElement.firstChild) {
+		this._htmlElement.removeChild(this._htmlElement.firstChild);
+	}
+	
+	// set maximum width for context menu
+	this._ol.setWidth(250);
+	
+	// append new tooltip
+	
+	this._htmlElement.innerHTML = "<span>"+content+"</span>";
+	
+	this._container.style.visibility = "hidden";
+	this._container.style.display = "block";
+	this._ol.setWidth(this._htmlElement.firstChild.offsetWidth + this.EXTRA_WIDTH*2);
+	
+	this._ol.setHeight(this._htmlElement.offsetHeight);
+	var x = evt.mouseX;
+	var y = evt.mouseY + 15;
+	// if not enough room on right side, pop on left
+	if(x + this._htmlElement.offsetWidth + this.EXTRA_WIDTH > itmill.wb.getWindowWidth()) {
+		x = itmill.wb.getWindowWidth() - this._htmlElement.offsetWidth - this.EXTRA_WIDTH;
+	}
+	
+	// if not enough room below, pop on top
+	if(y + this._htmlElement.offsetHeight + this.EXTRA_WIDTH*2 > itmill.wb.getWindowHeight()) {
+		y = itmill.wb.getWindowHeight() - this._htmlElement.offsetHeight * 2 - this.EXTRA_WIDTH - 15;
+	}
+	this._container.style.top = y + "px";
+	this._container.style.left = x + "px";
+	this._container.style.visibility = "visible";
+}
+
+/*
+ * This functiond hides tooltip menu from User, but does not destroy it
+ * so it can be re-used with showTooltip function.
+ * 
+ * @private Called by Tooltips own event handlers.
+ */
+itmill.ui.Tooltip.prototype._hide = function() {
+	this._container.style.display = "none";
+}
+
+/**
+ * Cleans circular references to avoid IE leaks and detaches menu from
+ * html DOM
+ */
+itmill.ui.Tooltip.prototype.cleanUp = function() {
+	// TODO
 }

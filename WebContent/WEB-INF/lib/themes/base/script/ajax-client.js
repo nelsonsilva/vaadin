@@ -1858,6 +1858,21 @@ itmill.Client.prototype.getContextMenu = function() {
 	return this.contextMenu;
 }
 
+/**
+ * One client has only one Tooltip object. This is called by handlers which
+ * want to populate and show it.
+ * 
+ * @return {itmill.ui.Tooltip} Returns clients Tooltip object
+ */
+itmill.Client.prototype.getTooltip = function() {
+	if(!this.tooltip) {
+		this.tooltip = new itmill.ui.Tooltip();
+		this.tooltip.appendTo(this.mainWindowElement);
+	}
+	return this.tooltip;
+}
+
+
 /** Createsa text node to the same document as target.
  *  If target is null or not given the document reference is 
  *  used instead.
