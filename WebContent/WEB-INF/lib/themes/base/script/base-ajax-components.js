@@ -6124,11 +6124,12 @@ itmill.themes.Base.Overlay.prototype.tabbableTags = new Array("A","BUTTON","TEXT
  */
 itmill.themes.Base.Overlay.prototype.setWidth = function(w) {
 	var w2 = (w + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R));
-	if(w2 > 0) {
-		this._shadow.childNodes[1].style.width = w2 + "px";
-		this._shadow.childNodes[4].style.width = w2 + "px";
-		this._shadow.childNodes[7].style.width = w2 + "px";
-	}
+	if(w2 < 0)
+		w2 = 0;
+	this._shadow.childNodes[1].style.width = w2 + "px";
+	this._shadow.childNodes[4].style.width = w2 + "px";
+	this._shadow.childNodes[7].style.width = w2 + "px";
+	
 	this._shadow.style.width = (w + 2*this.SHADOW_WIDTH) + "px";
 	if(this._hasBlocker)
 		this._blocker.style.width = w + "px";
@@ -6140,11 +6141,11 @@ itmill.themes.Base.Overlay.prototype.setWidth = function(w) {
  */
 itmill.themes.Base.Overlay.prototype.setHeight = function(h) {
 	var h2 = (h + 2*(this.SHADOW_WIDTH - this.SHADOW_CORNER_R));
-	if(h2 > 0) {
-		this._shadow.childNodes[3].style.height = h2 + "px";
-		this._shadow.childNodes[4].style.height = h2 + "px";
-		this._shadow.childNodes[5].style.height = h2 + "px";
-	}
+	if(h2 < 0)
+		h2 = 0;
+	this._shadow.childNodes[3].style.height = h2 + "px";
+	this._shadow.childNodes[4].style.height = h2 + "px";
+	this._shadow.childNodes[5].style.height = h2 + "px";
 	this._shadow.style.height = (h + 2*this.SHADOW_WIDTH) + "px";
 	if(this._hasBlocker)
 		this._blocker.style.height = h + "px";
