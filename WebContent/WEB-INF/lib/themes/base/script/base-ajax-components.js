@@ -761,7 +761,6 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 },
 
 _onDescriptionMouseOver : function(e) {
-	console.info("Setting popup with timeout");
 	var evt = itmill.lib.getEvent(e);
 	
 	var trg = evt.target;
@@ -778,7 +777,6 @@ _onDescriptionMouseOver : function(e) {
 },
 
 _onDescriptionMouseOut : function(e) {
-	console.info("Removing popup and timeout");
 	var evt = itmill.lib.getEvent(e);
 	var trg = evt.target;
 	while(!trg._descriptionHTML && trg.parentNode)
