@@ -6809,6 +6809,8 @@ itmill.ui.Tooltip = function() {
  	this._htmlElement.tooltip = this; // save reference for event handlers
  	this._ol = new itmill.themes.Base.Overlay();
  	this._ol.setZindexBase(31000); // Toolkit default for context menus
+ 	this._ol.SHADOW_OFFSET = 0;
+ 	this._ol.SHADOW_WIDTH = 0;
 	this._ol.appendTo(this._container);
 	var pTarget = this._ol.getPaintTarget();
 	pTarget.appendChild(this._htmlElement);
