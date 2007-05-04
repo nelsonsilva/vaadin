@@ -768,11 +768,13 @@ _onDescriptionMouseOver : function(e) {
 		trg = trg.parentNode;
 	
 	if(trg._descriptionHTML) {
-		trg._popuptimeout = window.setTimeout(function() {
-			var client = itmill.lib.getClient(trg);
-			var tt = client.getTooltip();
-			tt.showTooltip(trg._descriptionHTML, evt);
-		}, 800);
+		var client = itmill.lib.getClient(trg);
+		if(client) {
+			trg._popuptimeout = window.setTimeout(function() {
+				var tt = client.getTooltip();
+				tt.showTooltip(trg._descriptionHTML, evt);
+			}, 800);
+		}
 	}
 },
 

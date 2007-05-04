@@ -2091,10 +2091,10 @@ itmill.lib.getElementPosition = function(element) {
  * @return Paintable div element
  */
  itmill.lib.getPaintable = function(el) {
- 	while(typeof el.varMap == "undefined" && el.parentNode != el.ownerDocument) {
- 		el = el.parentNode;
- 	}
- 	if(el.varMap)
+ 	while(el && typeof el.varMap == "undefined" && el.parentNode != el.ownerDocument) {
+		el = el.parentNode;
+	}
+ 	if(el && el.varMap)
  		return el;
 	else 
 		return null;
