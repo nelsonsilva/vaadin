@@ -4470,7 +4470,7 @@ renderData : function(renderer,uidl,target) {
 		var child = uidl.childNodes.item(i);
 		if (child.nodeType == Node.ELEMENT_NODE) {
 			html += renderer.theme.nodeToString(child,true);
-		} if (child.nodeType == Node.TEXT_NODE && child.data != null) {
+		} if ((child.nodeType == Node.TEXT_NODE || child.nodeType == Node.CDATA_SECTION_NODE) && child.data != null) {
 			html += child.data;
 		}
 	}
