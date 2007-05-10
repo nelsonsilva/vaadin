@@ -791,158 +791,6 @@ _onDescriptionMouseOut : function(e) {
 	}
 },
 
-renderActionPopup : function(renderer, uidl, to, actions, actionVar, id, popupEvent) {
-	// Shortcuts
-	var theme = renderer.theme;
-	var client = renderer.client;
-	var evtName = popupEvent||"rightclick";
-
-	var ak = uidl.getElementsByTagName("ak");
-	var len = ak.length;
-	if (len < 1) return;
-
-	var popup = theme.createElementTo((to.nodeName=="TR"?to.firstChild:to),"div", "actions outset hide");
-	theme.addHidePopupListener(theme,client,popup,"click");
-	theme.addStopListener(theme,client,popup,"click");
-	
-	var inner = theme.createElementTo(popup,"div", "border");	
-	var item = theme.createElementTo(inner,"div", "item pad clickable");
-	
-	for (var k=0;k<len;k++) {
-		var key = theme.getFirstTextNode(ak[k]).data;
-		var item = theme.createElementTo(inner,"div", "item pad clickable");
-		theme.createTextNodeTo(item,actions[key]);
-		theme.addAddClassListener(theme,client,item,"mouseover","over");
-		theme.addRemoveClassListener(theme,client,item,"mouseout","over");
-		theme.addSetVarListener(theme,client,item,"click",actionVar,id+","+key,true);
-		theme.addHidePopupListener(theme,client,item,"click");
-		theme.addStopListener(theme,client,item,"click");
-	}
-	theme.addStopListener(theme,client,to,"contextmenu");
-	//theme.addStopListener(theme,client,to,evtName);
-	theme.addTogglePopupListener(theme,client,to,evtName,popup);
-},
-
-/** Show popup at specified position.
- *  Hides previous popup.
- *  
- *  @param popup		The element to popup
- *  @param x			horizontal popup position
- *  @param y			vertical popup position
- *  @param delay		delay before popping up
- *  @param defWidth		(optional) default width for the popup
- *  @param dontHideSelects (optional) set true if there's no need to hide browsers select components (for IE).
- *  
- */
-showPopup : function(client,popup, x, y, delay, defWidth, dontHideSelects) {
-
-	if (this.popupTimeout) {
-		clearTimeout(this.popupTimeout);
-		delete this.popupTimeout;
-	}
-	if (!popup) {
-		var popup = this.popup;
-		this.popupShowing = true;
-		var scrollTop = (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-		var scrollLeft = (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-		var docWidth = document.body.clientWidth;
-		var docHeight = document.body.clientHeight;
-		this.removeCSSClass(popup,"hide");
-		
-		if(popup.dontHideSelects) {
-			var ua = navigator.userAgent.toLowerCase();
-	        if (ua.indexOf("msie")>=0) {
-				var sels = popup.ownerDocument.getElementsByTagName("select");
-				if (sels) {
-					var len = sels.length;
-					var hidden = new Array();
-					for (var i=0;i<len;i++) {
-						var sel = sels[i];
-						if (sel.style&&sel.style.display!="none") {
-							sel.style.visibility = "hidden";
-							hidden[hidden.length] = sel;
-						}
-					}		
-					this.popupSelectsHidden = hidden;
-				}
-			}
-		}
-		/* TODO fix popup width & position */
-		return;		
-	}
-	if (!delay) var delay = 0;
-	if (this.popup && this.popup != popup) {
-		this.hidePopup();
-	} 
-	this.popup = popup;
-
-	if (delay > 0) {
-		with ({theme:this}) {
-			theme.popupTimeout = setTimeout(function(){
-					theme.showPopup(client);
-				}, delay);
-		}
-	} else {
-		this.showPopup(client);
-	}
-},
-
-/** Hides previous popup.
- */
-hidePopup : function() {
-	if (this.popupSelectsHidden) {
-		var len = this.popupSelectsHidden.length;
-		for (var i=0;i<len;i++) {
-			var sel = this.popupSelectsHidden[i];
-			sel.style.visibility = "visible";
-		}
-		this.popupSelectsHidden = null;
-	}
-
-	if (this.popup) {
-		this.addCSSClass(this.popup,"hide");
-        if(this.popup.blocker)
-            this.addCSSClass(this.popup.blocker, "hide");
-		this.popupShowing = false;
-	}
-	if (this.popupTimeout) {
-		clearTimeout(this.popupTimeout);
-		delete this.popupTimeout;
-	}
-},
-
-/** Shows the popup if it's not currently shown,
- *  hides the popup otherwise.
- *  Hides previous popup.
- *  
- *  @param popup		The element to popup
- *  @param x			horizontal popup position
- *  @param y			vertical popup position
- *  @param delay		delay before popping up
- *  @param defWidth		(optional) default width for the popup
- *  @param blocker		Blocker element (usually an iframe) to hide underlying browser chrome
- *  
- */
-togglePopup : function(popup, x, y, delay, defWidth, blocker) {
-	// presuming "this" is theme
-	if (this.popup == popup && this.popupShowing) {
-		this.hidePopup();
-		if(blocker) this.addCSSClass(blocker,"hide");
-	} else {
-		this.showPopup(this.client,popup,x,y,delay,defWidth,blocker?true:false);
-		if(blocker) {
-            popup.blocker = blocker;
-			blocker.style.position = "absolute";
-			blocker.style.width = popup.offsetWidth + "px";
-			blocker.style.height = popup.offsetHeight + "px";
-			blocker.style.background = "transparent";
-			blocker.style.filter = "alpha(opacity=0)";
-			blocker.style.opacity = "0";
-			this.removeCSSClass(blocker,"hide");
-		}
-	}
-},
-
 
 /*
 #### Generic event handlers ######################################################
@@ -2706,14 +2554,17 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	// Create containing DIV
 	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
+	
+	// Mimic scroll table structure
+	div.model = new Object();
+	div.model.meta = new Object();
+	
+	// Clean possible scroll table material that's causing errors when switching 
+	// back to scroll table rendering in feature browser (in IE)
+	target.colWidths = null;
 
 	// Create default header
 	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
-	
-	// If no actual caption, remove description popup listener
-	if(caption && caption.className.indexOf("hide") > -1) {
-		client.removeEventListener(div,undefined,null,"descriptionPopup");
-	}
 	
 	if ("list"==uidl.getAttribute("style")) {
 		theme.removeCSSClass(div,"table-list");
@@ -2736,8 +2587,8 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 		selected = new Array();
 	}
 	var selectionVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
-	var visibleCols = theme.getFirstElement(uidl,"visiblecolumns");
-	var collapseVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","collapsedcolumns"));
+	var visibleCols = div.model.visiblecols = theme.getFirstElement(uidl,"visiblecolumns");
+	var collapseVariable = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"array","collapsedcolumns"));
 	var sortcolVar = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"string","sortcolumn"));
 	var sortkey = theme.getVariableElementValue(theme.getVariableElement(uidl,"string","sortcolumn"));
 	var sortasc = theme.getVariableElement(uidl,"boolean","sortascending");
@@ -2748,11 +2599,12 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	var actionVar = null;
 	var alNode = theme.getFirstElement(uidl,"actions")
 	if (alNode) {
-		actionVar = theme.createVariableElementTo(div,theme.getVariableElement(alNode,"string","action"));
-		actions = new Object();
+		actionVar = theme.createVarFromUidl(div,theme.getVariableElement(alNode,"string","action"));
+		actions = true;
+		div.model.meta.actions = new Array();
 		var ak = alNode.getElementsByTagName("action");
 		for (var i=0;i<ak.length;i++) {
-			actions[ak[i].getAttribute("key")] = ak[i].getAttribute("caption");
+			div.model.meta.actions[ak[i].getAttribute("key")] = ak[i].getAttribute("caption");
 		}
 	}
 	delete alNode;
@@ -2774,10 +2626,11 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 	if (cols != null) {
 		cols = cols.getElementsByTagName("ch");
 	}
-	if (cols != null && cols.length >0) {
+	if (/*cols != null && cols.length >0*/true) {
 		tr = theme.createElementTo(table,"tr","header");
 		if (rowheaders) {
-			theme.createElementTo(tr,"td","empty");
+			td = theme.createElementTo(tr,"td","empty");
+			// TODO enable sorting by rowheader
 		}
 		for (var i=0; i<cols.length;i++) {
 			var sortable = cols[i].getAttribute("sortable");
@@ -2807,17 +2660,18 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 			var iconDiv = theme.createElementTo(td,"div","img");
 			var icon = theme.createElementTo(iconDiv,"img","icon");
 			icon.src = theme.root+"img/table/colsel.gif";
-			var popup = theme.createElementTo(td,"div","outset popup hide");
-			var inner = theme.createElementTo(popup,"div","border");
+			//var popup = theme.createElementTo(td,"div","outset popup hide");
+			//var inner = theme.createElementTo(popup,"div","border");
 			// empty row to allow closing:
-			var row = theme.createElementTo(inner,"div","item clickable pad border");
+			//var row = theme.createElementTo(inner,"div","item clickable pad border");
 
-			theme.addHidePopupListener(theme,client,row,"click");
-			theme.addToggleClassListener(theme,client,row,"mouseover","over");
-			theme.addToggleClassListener(theme,client,row,"mouseout","over");		
-			theme.addTogglePopupListener(theme,client,iconDiv,"click",popup);
+			//theme.addHidePopupListener(theme,client,row,"click");
+			//theme.addToggleClassListener(theme,client,row,"mouseover","over");
+			//theme.addToggleClassListener(theme,client,row,"mouseout","over");		
+			//theme.addTogglePopupListener(theme,client,iconDiv,"click",popup);
+			renderer.client.addEventListener(iconDiv,"click",theme.tableShowColumnSelectMenu);
 			
-			var cols = visibleCols.getElementsByTagName("column");
+			/*var cols = visibleCols.getElementsByTagName("column");
 			for (var i=0;i<cols.length;i++) {
 				var row = theme.createElementTo(inner,"div","item clickable pad border");
 				var collapsed = "true"==cols[i].getAttribute("collapsed");
@@ -2828,7 +2682,7 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 				theme.addToggleClassListener(theme,client,row,"mouseout","over");
 				theme.addToggleVarListener(theme,client,row,"click",collapseVariable,cols[i].getAttribute("cid"),true);
 			}
-			delete cols;
+			delete cols;*/
 		}
 	}
 	delete cols;
@@ -2846,6 +2700,8 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 
 			if (selectable) theme.addCSSClass(tr, "clickable");
 			var key = rows[i].getAttribute("key");
+			tr.key = new Object();
+			tr.key = key;
 			
 			if (selectable&&"true"==rows[i].getAttribute("selected")) {
 				theme.addCSSClass(tr, "selected");
@@ -2875,12 +2731,22 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 					} else if (rows[i].childNodes[j].nodeType == Node.ELEMENT_NODE) {
 						td = theme.createElementTo(tr,"td");
 						renderer.client.renderUIDL(rows[i].childNodes[j],td);
-						if (al) {
-							theme.renderActionPopup(renderer,al,td,actions,actionVar,key);
-						}	
 					}
 				}
-			}	
+			}
+			
+			// extract actions that this particular node has
+			if(actions) {
+				var actionList = new Array();
+				for(var j = 0; j < al.childNodes.length; j++) {
+					actionList.push(al.childNodes[j].firstChild.data);
+				}
+				tr.actionList = actionList;
+				client.addEventListener(tr,"contextmenu",theme.tableRowShowContextMenu);
+				if(window.opera)
+					client.addEventListener(tr,"click",theme.tableRowShowContextMenu);	
+			}
+			
 			// SCROLLBAR
 			/*
 			if (i==0) {
@@ -3091,11 +2957,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	theme.addCSSClass(caption, "tablecaption");
 	
-	// If no actual caption, remove description popup listener
-	if(caption && caption.className.indexOf("hide") > -1) {
-		client.removeEventListener(div,undefined,null,"descriptionPopup");
-	}
-	
 	
 	// column collapsing
 	// main div
@@ -3300,7 +3161,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                     default:
                 }
             }
-            // render content
             // render content
             if(comp.nodeName == 'label' && ! comp.getAttribute("caption") && comp.firstChild && comp.firstChild.data) {
                 // skip heavy renderUIDL function if only text
