@@ -582,39 +582,76 @@ IMG.overlay {
 	padding: 0.12em 0.4em 0.12em 0.4em;
 }
 
-/* Tree */
-.itmtk .tree, itmtk .tree-menu {
-	border: 1px solid;
-	border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
-}
-.itmtk .tree .caption, .itmtk .tree-menu .caption {
-	border: 1px solid;
-	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-	padding: 0.0em 0.4em 0.1em 0.4em;
-}
-.itmtk .tree .content, .itmtk .tree .content .node, .itmtk .tree .content .nodes, .itmtk .tree .content .node IMG, 
-.itmtk .tree-menu .content, .itmtk .tree-menu .content .node, .itmtk .tree-menu .content .nodes, .itmtk .tree-menu .content .node IMG {
-	background-color: Window;
-}
 
-.itmtk .tree .node, .itmtk .tree-menu .node {
+/* Tree */
+.itmtk .tree {
+	border: 2px groove threedhighlight;
+}
+.itmtk .tree .treecaption {
+	padding: 0.2em 0.4em;
+	border-bottom: 2px groove threedhighlight;
+}
+.itmtk .tree .content {
+	background-color: Window;
+	overflow: auto;
+}
+.itmtk .tree ul.tree, ul.tree ul {
+	list-style-type: none;
+	background: url(../img/tree/dots.gif) repeat-y 7px 0;
+	margin: 0;
+	padding: 0;
 	border: none;
-	padding: 0px;
-	height: 16px;
+}
+.itmtk ul.tree ul {
+	margin-left: 0px;
+	clear: left;
+}
+.itmtk .tree ul.tree li {
+	margin: 0;
+	padding: 0 0 0 17px;
+	line-height: 16px;
+	background: url(../img/tree/node.gif) no-repeat 7px 0;
+	clear: left;
 	white-space: nowrap;
 }
-
-.itmtk .tree .nodes, .itmtk .tree-menu .nodes {
-	padding-left: 16px;
+.itmtk .tree ul.tree .caption {
+	background-color: transparent;
+	border: none;
+	padding: 1px 2px;
+	overflow: hidden;
 }
-.itmtk .tree .over,.itmtk .tree-menu .over  {
+.itmtk .tree ul.tree li .icon {
+	width: 16px;
+	height: 16px;
+	border: none;
+	vertical-align: middle;
+	margin: -1px 0;
+}
+.itmtk .tree ul.tree .last {
+	background: Window url(../img/tree/leaf.gif) no-repeat 7px 0;
+}
+.itmtk .tree ul.tree .collapse {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin-left: -16px;
+	float: left;
+	display: inline; /* IE6 float fix */
+	background: url(../img/tree/expanded.gif) no-repeat;
+	cursor: pointer;
+}
+.itmtk .tree ul.tree .expand {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin-left: -16px;
+	float: left;
+	display: inline; /* IE6 float fix */
+	background: url(../img/tree/collapsed.gif) no-repeat;
+	cursor: pointer;
+}
+.itmtk .tree .tree .over {
 	text-decoration: underline;
-	color: Highlight;
-}
-.itmtk .tree .content DIV.selected, .itmtk .tree .content .selected IMG, .itmtk .tree-menu .content DIV.selected, .itmtk .tree-menu .content .selected IMG {
-	background-color: Highlight;
-	color: HighlightText;
-	font-weight: normal;
 }
 
 /* ACTIONS */
