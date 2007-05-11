@@ -936,19 +936,6 @@ addShowPopupListener : function(theme,client,element,event,popup,delay,defWidth)
 	);
 },
 
-// TODO dontstop -> stop in all listeners
-addHidePopupListener : function(theme,client,element,event,dontstop) {
-	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
-			var evt = client.getEvent(e);
-            if (evt.alt) return;
-			if (event=="rightclick"&&!evt.rightclick) return;
-			theme.hidePopup();
-			if (!dontstop) {
-				evt.stop();
-			}
-		}
-	);
-},
 
 /**
 * Adds a hidden button with a tabindex; adds .over to hoverTarget when focused
@@ -1057,8 +1044,7 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 	if (typeof currentTheme != 'undefined' && div.itmtkTheme != currentTheme)
 		window.location.href = window.location.href;
 	
-    theme.addHidePopupListener(theme,renderer.client,div,"click",true);
-	// Render children to div
+    // Render children to div
 	theme.renderChildNodes(renderer, uidl, div);
 	
 	// Apply width and height
@@ -1557,11 +1543,6 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 	var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	theme.addCSSClass(caption,"treecaption");
 	
-	// If no actual caption, remove description popup listener from the container
-	if(caption && caption.className.indexOf("hide") > -1) {
-		this.removeEventListener(div,undefined,null,"descriptionPopup");
-	}
-
 	// Content DIV
 	var content = theme.createElementTo(div,"div","content");
 	
@@ -2648,8 +2629,6 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 			var cap = theme.createElementTo(td,"div","caption");
 			theme.createTextNodeTo(cap,ch != null? ch : "");
 			if (sortkey==key) {
-				//var icon = theme.createElementTo(cap,"IMG","icon");
-				//icon.src = theme.root+"img/table/"+(sortasc?"asc.gif":"desc.gif");
 				theme.addCSSClass(td,sortasc?"asc":"desc");
 			}
 		}
@@ -2660,29 +2639,7 @@ renderPagingTable : function(renderer,uidl,target,layoutInfo) {
 			var iconDiv = theme.createElementTo(td,"div","img");
 			var icon = theme.createElementTo(iconDiv,"img","icon");
 			icon.src = theme.root+"img/table/colsel.gif";
-			//var popup = theme.createElementTo(td,"div","outset popup hide");
-			//var inner = theme.createElementTo(popup,"div","border");
-			// empty row to allow closing:
-			//var row = theme.createElementTo(inner,"div","item clickable pad border");
-
-			//theme.addHidePopupListener(theme,client,row,"click");
-			//theme.addToggleClassListener(theme,client,row,"mouseover","over");
-			//theme.addToggleClassListener(theme,client,row,"mouseout","over");		
-			//theme.addTogglePopupListener(theme,client,iconDiv,"click",popup);
 			renderer.client.addEventListener(iconDiv,"click",theme.tableShowColumnSelectMenu);
-			
-			/*var cols = visibleCols.getElementsByTagName("column");
-			for (var i=0;i<cols.length;i++) {
-				var row = theme.createElementTo(inner,"div","item clickable pad border");
-				var collapsed = "true"==cols[i].getAttribute("collapsed");
-				theme.addCSSClass(row,collapsed?"off":"on");				
-				theme.createTextNodeTo(row,cols[i].getAttribute("caption"));
-
-				theme.addToggleClassListener(theme,client,row,"mouseover","over");
-				theme.addToggleClassListener(theme,client,row,"mouseout","over");
-				theme.addToggleVarListener(theme,client,row,"click",collapseVariable,cols[i].getAttribute("cid"),true);
-			}
-			delete cols;*/
 		}
 	}
 	delete cols;
@@ -5598,7 +5555,8 @@ itmill.themes.Base.Overlay.prototype.setModal = function(modality, tabbing) {
 		this._modalityCurtain.tabIndex = "-1";
 		this._modalityCurtain.className = "modalityCurtain";
 		// to bypass modality curtain by scrolling down
-		this._modalityCurtain.style.height = "100%";
+		if(document.body.clientHeight > itmill.wb.getWindowHeight()) this._modalityCurtain.style.height = document.body.clientHeight + "px";
+		else this._modalityCurtain.style.height = "100%";
 		this._modalityCurtain.style.width = "100%";
 		this._modalityCurtain.style.top = "0px";
 		this._modalityCurtain.style.left = "0px";
@@ -5617,6 +5575,7 @@ itmill.themes.Base.Overlay.prototype.setModal = function(modality, tabbing) {
 		// remove modality curtain
 		if(this._modalityCurtain && this._modalityCurtain.parentNode) {
 			this._modalityCurtain.onclick = null;
+			this._modalityCurtain.oncontextmenu = null;
 			this._modalityCurtain.parentNode.removeChild(this._modalityCurtain);
 		}
 		delete this._modalityCurtain;
@@ -5634,6 +5593,9 @@ itmill.themes.Base.Overlay.prototype.isModal = function() {
 itmill.themes.Base.Overlay.prototype.addModalityClickEvent = function(prop) {
 	if(this.isModal()) {
 		this._modalityCurtain.onclick = function() {
+			prop.f.call(prop.obj);
+		}
+		this._modalityCurtain.oncontextmenu = function() {
 			prop.f.call(prop.obj);
 		}
 	}
@@ -6289,8 +6251,11 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	}
 	
 	// if not enough room below, pop on top
-	if(y + this._htmlElement.offsetHeight > itmill.wb.getWindowHeight()) {
-		y = itmill.wb.getWindowHeight() - this._htmlElement.offsetHeight;
+	var height = itmill.wb.getWindowHeight() 
+	             + document.body.scrollTop 
+	             + document.documentElement.scrollTop;
+	if(y + this._htmlElement.offsetHeight > height) {
+		y = height - this._htmlElement.offsetHeight;
 	}
 	this._container.style.top = y + "px";
 	this._container.style.left = x + "px";
@@ -6310,6 +6275,7 @@ itmill.ui.ContextMenu.prototype._clickHandler = function(e) {
 		cm = evt.target.parentNode.contextMenu;
 	else
 		cm = evt.target.parentNode.parentNode.contextMenu;
+	if(!cm) return;
 	if(!cm.clickHandler) {
 		var li = evt.target;
 		var actionVar = cm.actionVar;
