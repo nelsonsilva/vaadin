@@ -670,57 +670,19 @@
 }
 
 .itmtk .tree ul.tree, ul.tree ul {
-	list-style-type: none;
 	background: url(../img/tree/2x2-dotline.png) repeat-y 7px 0;
-	margin: 0;
-	padding: 0;
-}
-.itmtk ul.tree ul {
-	margin-left: 0px;
-	clear: left;
 }
 .itmtk .tree ul.tree li {
-	margin: 0;
-	padding: 0 0 0 17px;
-	line-height: 16px;
 	background: url(../img/tree/node.png) no-repeat 7px 0;
-	clear: left;
-	white-space: nowrap;
-}
-.itmtk .tree ul.tree .caption {
-	background-color: transparent;
-	border: none;
-	padding: 1px 2px;
-}
-.itmtk .tree ul.tree li .icon {
-	width: 16px;
-	height: 16px;
-	border: none;
-	vertical-align: middle;
-	margin: -1px 0;
 }
 .itmtk .tree ul.tree .last {
 	background: #fff url(../img/tree/lastnode.png) no-repeat 7px 0;
 }
 .itmtk .tree ul.tree .collapse {
-	display: block;
-	width: 16px;
-	height: 16px;
-	margin-left: -16px;
-	float: left;
-	display: inline; /* IE6 float fix */
 	background: url(../img/tree/collapse.png) no-repeat;
-	cursor: pointer;
 }
 .itmtk .tree ul.tree .expand {
-	display: block;
-	width: 16px;
-	height: 16px;
-	margin-left: -16px;
-	float: left;
-	display: inline; /* IE6 float fix */
 	background: url(../img/tree/expand.png) no-repeat;
-	cursor: pointer;
 }
 .itmtk .tree ul.tree .selected {
 	background-color: #f9ffc6;
