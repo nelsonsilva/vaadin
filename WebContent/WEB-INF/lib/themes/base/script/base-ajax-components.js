@@ -14,14 +14,18 @@ if(document.all && !window.opera) {
 	Node.NOTATION_NODE = 12;
 }
 
-/** Base theme class extends ITMillToolkitClient.Theme */
+/** 
+ * Base theme class extends ITMillToolkitClient.Theme 
+ */
 itmill.themes.Base = itmill.Class.extend( {
 
 	
-/** Constructor
- *  @param themeRoot The base URL for theme resources.
- *  @constructor
-*/
+/** 
+ * Constructor
+ * 
+ * @param themeRoot The base URL for theme resources.
+ * @constructor
+ */
 construct : function(themeRoot) {
 	this.themeName = "base";
 
@@ -29,7 +33,8 @@ construct : function(themeRoot) {
 	this.root = themeRoot;
 },
 
-/** Register all renderers to a ajax client.
+/** 
+ * Register all renderers to a ajax client.
  *
  * @param client The ajax client instance.
  */
@@ -76,19 +81,18 @@ registerTo : function(client) {
     client.registerRenderer(this,"table","paging",this.renderPagingTable);
     client.registerRenderer(this,"table","list",this.renderPagingTable);
 	client.registerRenderer(this,"tree",null,this.renderTree);
-	client.registerRenderer(this,"tree","coolmenu",this.renderTreeMenu);
 
 	client.registerRenderer(this,"window",null,this.renderWindow);
     
     // Usually functions here are run so that "this" means client, but
-    // some of functions are run from themes Scope and need client reference
+    // some of functions are run from themes scope and need client reference
     this.client = client;
 },
 
 
-/* 
-#### DOM functions ########################################################
-*/
+/*
+ * #### DOM functions ########################################################
+ */
 
 createElementTo : function (target, tagName, cssClass) {
 
@@ -121,7 +125,7 @@ parseResourceUri : function (iconUrl) {
 	return iconUrl
 },
 
-createTextNodeTo : function (target,text) {
+createTextNodeTo : function (target, text) {
 
 	// Sanity check
 	if (text == null || target == null) return null;
@@ -156,19 +160,17 @@ getFirstTextNode : function(parent) {
 			return child;
 		}
 	}
-	
 },
 
 /**
- *   Removes all children of an element an element.
+ * Removes all children of an element an element.
  *  
- *   @param element      Remove children of this element. 
- *  
- *   @return the element with children removed
+ * @param element Remove children of this element. 
+ * @return the element with children removed
  */
 removeAllChildNodes : function(element) {
 	this.client.removeAllEventListeners(element);
-	while (element.childNodes&&element.childNodes.length > 0) {
+	while(element.childNodes&&element.childNodes.length > 0) {
 		element.removeChild(element.childNodes[0]);
 	}
 	return element;
@@ -247,11 +249,11 @@ nodeToString : function(node, deep) {
 	  return ""+node.nodeName + "-node";
 },
 
-createInputElementTo : function(target,type,className,focusid) {
+createInputElementTo : function(target, type, className, focusid) {
 	
 	var input = null;
 	var appendInEnd = false;
-	if (document.all && !window.opera) {
+	if (itmill.wb.isIE) {
 		// IE only
 		input = this.createElementTo(target,"<input type='"+type+"'>");
 	} else {
@@ -318,11 +320,10 @@ toggleCSSClass : function(element, className) {
 	for (var i=0;i<classArray.length;i++) {
 		if (classArray[i]==className) {
 			this.removeCSSClass(element, className);
-			return;
+			return element;
 		}
 	}	
 	this.addCSSClass(element, className);
-	
 	return element;	
 },
 
@@ -332,15 +333,13 @@ setCSSClass : function(element, className) {
 	return element;	
 },
 
-setCSSDefaultClass : function(renderer,element,uidl) {
+setCSSDefaultClass : function(renderer, element, uidl) {
 	if (element == null) return element;
-	var cn = this.styleToCSSClass(renderer.tag,uidl.getAttribute("style"));
-	element.className = cn;
+	element.className = this.styleToCSSClass(renderer.tag, uidl.getAttribute("style"));
 	return element;	
 },
 
-styleToCSSClass : function(prefix,style) {
-
+styleToCSSClass : function(prefix, style) {
 	var s = "";
 	if (prefix != null) {
 		s = prefix;
@@ -354,38 +353,35 @@ styleToCSSClass : function(prefix,style) {
   	return s
 },
 
-/* 
-#### Generic JS helpers ##################################################
-*/
+/*
+ * #### Generic JS helpers ##################################################
+ */
 
 /**
- *   Check if integer list contains a number.
+ * Check if integer list contains a number.
  *  
- *   @param list         Comma separated list of integers
- *   @param number       Number to be tested
- *  
- *   @return true iff the number can be found in the list
+ * @param list         Comma separated list of integers
+ * @param number       Number to be tested
+ * @return true iff the number can be found in the list
  */
-listContainsInt : function(list,number) {
+listContainsInt : function(list, number) {
   if (!list) return false;
   var a = list.split(",");
 
   for (var i = 0;i<a.length;i++) {
     if (a[i] == number) return true;
   }
-  
   return false;
 },
 
-/** Add number to integer list, if it does not exit before.
+/** 
+ * Add number to integer list, if it does not exit before.
  *  
- *  
- *  @param list         Comma separated list of integers
- *  @param number       Number to be added
- *  
- *  @return new list
+ * @param list         Comma separated list of integers
+ * @param number       Number to be added
+ * @return new list
  */
-listAddInt : function(list,number) {
+listAddInt : function(list, number) {
 
   if (this.listContainsInt(list,number)) 
     return list;
@@ -394,14 +390,14 @@ listAddInt : function(list,number) {
   else return list + "," + number;
 },
 
-/** Remove number from integer list.
+/** 
+ * Remove number from integer list.
  *  
- *  @param list         Comma separated list of integers
- *  @param number       Number to be removed
- *  
- *  @return new list
+ * @param list         Comma separated list of integers
+ * @param number       Number to be removed
+ * @return new list
  */
-listRemoveInt : function(list,number) {
+listRemoveInt : function(list, number) {
 	if (!list) return "";
 	retval = "";
 	var a = list.split(',');
@@ -415,9 +411,9 @@ listRemoveInt : function(list,number) {
 	return retval;
 },
 
-/* 
-#### Variable helpers #############################################
-*/
+/*
+ *#### Variable helpers #############################################
+ */
 
 /**
  * Fetches reference to elements variable
@@ -430,21 +426,22 @@ getVar : function(paintable, varId) {
 }, 
 
 /**
- * Tells client that variable has changed
+ * Tells client that the variable has changed
  *
- * @param paintable Element which variable is to be changed
- * @param varId variables id or name
- * @param value value to be stored
+ * @param Object client Client object which handles the variable
+ * @param Object variable Variable object to update
+ * @param boolean immediate True if the client should send all variable changes immediately, false if it should buffer the update.
  * @param immediate flag if variable change should be sent to server immediatedly
  */
-updateVar : function(client,variable, immediate) {
+updateVar : function(client, variable, immediate) {
     client.changeVariable(variable.id, variable.value, immediate);
 },
 
 /**
  * Creates local variable to paintable from uidl
+ * 
  * @param paintable Paintable element where variable is stored
- * @param variableUidl uidl fraction where variable is parsed
+ * @param variableUidl UIDL fraction from which variable is parsed
  * @return varId
  */
 createVarFromUidl : function(paintable, variableUidl) {
@@ -491,7 +488,6 @@ createVarFromUidl : function(paintable, variableUidl) {
 // and function above
 
 getVariableElement : function(uidl,type,name) {
-
 	if (uidl == null) return;
 	
 	var nodes = this.getChildElements(uidl,type);
@@ -569,7 +565,6 @@ removeArrayVariable : function(client, variableNode, value, immediate) {
 },
 
 arrayToList : function(arrayVariableElement) {
-
   var list = "";
   if (arrayVariableElement == null || arrayVariableElement.childNodes == null) return list;
   
@@ -589,24 +584,25 @@ arrayToList : function(arrayVariableElement) {
 
 
 /* 
-#### Generic component functions #############################################
-*/
+ *#### Generic component functions #############################################
+ */
+ 
 renderChildNodes : function(renderer, uidl, to) {
 	for (var i=0; i<uidl.childNodes.length; i++) {
 		var child = uidl.childNodes.item(i);
 		if (child.nodeType == Node.ELEMENT_NODE) {
-			renderer.client.renderUIDL(child,to);
+			renderer.client.renderUIDL(child, to);
 		} else if (child.nodeType == Node.TEXT_NODE) {
 			to.appendChild(to.ownerDocument.createTextNode(child.data));
 		}
 	}
 },
 
-applyWidthAndHeight : function(uidl,target) {
+applyWidthAndHeight : function(uidl, target) {
 	if (target == null || uidl == null) return;
 
 	// Width
-	var widthEl = this.getVariableElement(uidl,"integer","width");
+	var widthEl = this.getVariableElement(uidl, "integer", "width");
 	if (widthEl) {
 		var w = widthEl.getAttribute("value");
 		if (w > 0) {
@@ -621,12 +617,14 @@ applyWidthAndHeight : function(uidl,target) {
 		if (h > 0) {
 			target.style.height = ""+h+"px";
 		}
-	}	
+	}
+	
+	return target;
 },
 
-createPaintableElement : function (renderer, uidl, target,layoutInfo) {
+createPaintableElement : function (renderer, uidl, target, layoutInfo) {
 
-	// And create DIV as container
+	// Create DIV as container
 	var div = null;
 	var pid = uidl.getAttribute("id");
 	if(pid && pid == renderer.client._focusedPID)
@@ -650,12 +648,12 @@ createPaintableElement : function (renderer, uidl, target,layoutInfo) {
 	}
 		
 	// Assign CSS class
-	this.setCSSDefaultClass(renderer,div,uidl);
+	this.setCSSDefaultClass(renderer, div, uidl);
 	if ("true"==uidl.getAttribute("disabled")) {
-		this.addCSSClass(div,"disabled");
+		this.addCSSClass(div, "disabled");
 	}
-	if (this.getFirstElement(uidl,"error")) {
-		this.addCSSClass(div,"error");
+	if (this.getFirstElement(uidl, "error")) {
+		this.addCSSClass(div, "error");
 	}
 	return div;	
 },
@@ -700,15 +698,11 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		});
 	}
 	
-	if (captionText||error||description||icon) {
-		//this.addCSSClass(caption,"caption clickable");
-	} else {
+	if (!(captionText||error||description||icon))
 		return caption;
-	}
-	
 	
 	var iconUrl = uidl.getAttribute("icon");
-		
+	
 	if (iconUrl) {
     	if (iconUrl.indexOf("theme://") == 0) {
     		iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
@@ -793,9 +787,9 @@ _onDescriptionMouseOut : function(e) {
 
 
 /*
-#### Generic event handlers ######################################################
-*/
-addAddClassListener : function(theme,client,element,event,className,target,current) {
+ * #### Generic event handlers ######################################################
+ */
+addAddClassListener : function(theme, client, element, event, className, target, current) {
 	client.addEventListener(element,event, function(e) {
 			if (current) {
 				if (current.length) {
@@ -819,30 +813,49 @@ addAddClassListener : function(theme,client,element,event,className,target,curre
 	);
 },
 
-addRemoveClassListener : function(theme,client,element,event,className,target) {
+addRemoveClassListener : function(theme, client, element, event, className, target) {
 	this.client.addEventListener(element,event, function(e) {
 			theme.removeCSSClass((target?target:element),className);
 		}
 	);
 },
 
-addToggleClassListener : function(theme,client,element,event,className,target) {
+addToggleClassListener : function(theme, client, element, event, className, target) {
 	this.client.addEventListener(element,event, function(e) {
 			theme.toggleCSSClass((target?target:element),className);
 		}
 	);
 },
 
-addStopListener : function(theme,client,element,event) {
+addStopListener : function(theme, client, element, event) {
 	this.client.addEventListener(element, event, function(e) { 
 			var evt = client.getEvent(e);
-			evt.stop();
-			return false;
+			return evt.stop();
 		}
 	);
 },
 
-addSetVarListener : function(theme,client,element,event,variable,key,immediate) {
+/**
+ * Prevent text selection in buttons and etc.
+ */
+addPreventSelectionListener : function(theme, client, element, event) {
+	// TODO add element.style.KhtmlUserSelect = "none";
+	if(itmill.wb.isFF) {
+		element.style.MozUserSelect = "none";
+	} else if(itmill.wb.isWebkit) {
+		element.style.WebkitUserSelect = "none";
+	} else {
+		// For IE
+		this.client.addEventListener(element, "selectstart", function(e) { 
+			var evt = itmill.lib.getEvent(e);
+			evt.stop();
+			return false;
+		}
+		);
+	}
+},
+
+addSetVarListener : function(theme, client, element, event, variable, key, immediate) {
 	this.client.addEventListener(element,event, function(e) {
 			var value = "";
 			if (typeof(key)=="string") {
@@ -869,79 +882,35 @@ addSetVarListener : function(theme,client,element,event,variable,key,immediate) 
 	);
 },
 
-addRemoveVarListener : function(theme,client,element,event,variable,key,immediate) {
+// TODO no usage (14.5.2007), should be removed?
+addRemoveVarListener : function(theme, client, element, event, variable, key, immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.removeArrayVariable(client,variable,key,immediate);
 		}
 	);
 },
 
-addAddVarListener : function(theme,client,element,event,variable,key,immediate) {
+// TODO no usage (14.5.2007), should be removed?
+addAddVarListener : function(theme, client, element, event, variable, key, immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.addArrayVariable(client,variable,key,immediate);
 		}
 	);
 },
 
-addToggleVarListener : function(theme,client,element,event,variable,key,immediate) {
+addToggleVarListener : function(theme, client, element, event, variable, key, immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.toggleArrayVariable(client,variable,key,immediate);
 		}
 	);
 },
 
-addExpandNodeListener : function(theme,client,img,event,subnodes,expandVariable,collapseVariable,key,immediate,target) {
-		client.addEventListener((target?target:img), event, function(e) { 
-				if (img.expanded == "true") {
-					theme.removeArrayVariable(client,expandVariable,key,false);
-					theme.addArrayVariable(client,collapseVariable,key,immediate);
-					img.src = theme.root + "img/tree/off.gif";
-					img.expanded = "false";
-				} else {
-					theme.removeArrayVariable(client,collapseVariable,key,false);
-					theme.addArrayVariable(client,expandVariable,key,immediate || 
-						!img.expanded || !subnodes.childNodes || subnodes.childNodes.length <= 0);
-					img.src = theme.root + "img/tree/on.gif";
-					img.expanded = "true";
-				}
-			}
-		);
-},
-
-addTogglePopupListener : function(theme,client,element,event,popup,delay,defWidth,popupAt,blocker) {
-	client.addEventListener(element,(event=="rightclick"?"mouseup":event), function(e) {
-			var evt = client.getEvent(e);
-			if (event=="rightclick"&&!evt.rightclick) return;
-			if (evt.target.nodeName == "INPUT" || evt.target.nodeName == "SELECT") return;
-            if (evt.alt) return;
-            if (popupAt) {
-            	var p = client.getElementPosition(popupAt);
- 				theme.togglePopup(popup,p.x,(p.y+p.h),(delay?delay:0),(defWidth?defWidth:100),blocker);
-            } else {
-				theme.togglePopup(popup,evt.mouseX,evt.mouseY,(delay?delay:0),(defWidth?defWidth:100),blocker);
-			}
-			evt.stop();
-		}
-	);
-},
-
-addShowPopupListener : function(theme,client,element,event,popup,delay,defWidth) {
-	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
-			var evt = client.getEvent(e);
-			if (event=="rightclick"&&!evt.rightclick) return;
-
-			theme.showPopup(client,popup,evt.mouseX,evt.mouseY,(delay?delay:0),(defWidth?defWidth:100));
-			evt.stop();
-		}
-	);
-},
 
 
 /**
 * Adds a hidden button with a tabindex; adds .over to hoverTarget when focused
 */
-addTabtoHandlers : function(client,theme,target,hoverTarget,tabindex,defaultButton) {
-	
+addTabtoHandlers : function(client, theme, target, hoverTarget, tabindex, defaultButton) {
 	var div = document.createElement("div");
 	div.style.padding = "0px";
 	div.style.margin = "0px";
@@ -970,11 +939,12 @@ _updateFocusedToClient : function() {
 	client.setFocusedElement(pntbl);
 },
 
-/*
-#### Component renderers ######################################################
-*/
-renderComponent : function(renderer,uidl,target,layoutInfo) {
 
+/*
+ * #### Component renderers ######################################################
+ */
+ 
+renderComponent : function(renderer, uidl, target, layoutInfo) {
 	// Create containing element
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
@@ -986,7 +956,7 @@ renderComponent : function(renderer,uidl,target,layoutInfo) {
 	renderer.theme.renderChildNodes(renderer, uidl, div);
 },
 
-renderWindow : function(renderer,uidl,target,layoutInfo) {
+renderWindow : function(renderer, uidl, target, layoutInfo) {
 
 	if(!uidl.getAttribute("main") && ! (uidl.getAttribute("style") && uidl.getAttribute("style") == "native")) {
 		if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
@@ -1030,7 +1000,7 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 		return;
 	}
 	
-	// rest is for "native"  windows or main window
+	// rest is for "native" windows or main window
 	
 	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 
@@ -1092,7 +1062,7 @@ renderWindow : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-renderOpen : function(renderer,uidl,target,layoutInfo) {
+renderOpen : function(renderer, uidl, target, layoutInfo) {
 	var theme = renderer.theme;
  	
  	var src = uidl.getAttribute("src");
@@ -1102,14 +1072,14 @@ renderOpen : function(renderer,uidl,target,layoutInfo) {
  		window.open(src,name);
  	} else {
  		// first overcome IE prob by hiding scrollbars from containing div
- 		if(document.all && !window.opera)
+ 		if(itmill.wb.isIE)
  			target.style.overflow = "hidden";
  		var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
  		div.innerHTML = "<IFRAME name=\""+name+"\" id=\""+name+"\" width=100% height=100% style=\"border:none;margin:0px;padding:0px;background:none;\" src=\""+src+"\"></IFRAME>";
 	}
 },
 
-renderFramewindow : function(renderer,uidl,target,layoutInfo) {	
+renderFramewindow : function(renderer, uidl, target, layoutInfo) {	
 	var theme = renderer.theme;
 	var client = renderer.client;
 	
@@ -1120,7 +1090,7 @@ renderFramewindow : function(renderer,uidl,target,layoutInfo) {
 	client.initializeNewWindow(win,uidl,theme);
 },
 
-renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
+renderCustomLayout : function(renderer, uidl, target, layoutInfo) {
 	// Shortcuts
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -1128,14 +1098,14 @@ renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
     var style = uidl.getAttribute("style");    
     if (style == null) return null;
     // Load layout
-    var text = renderer.client.loadCustomLayout(style,false);
+    var text = client.loadCustomLayout(style,false);
     if (text == null) {
     	client.debug("CustomLayout " + style + " NOT FOUND");
     	return null; 
     }
  
 	// Create containing element
-	var main = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);		
+	var main = theme.createPaintableElement(renderer,uidl,target,layoutInfo);		
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
     
     // Save locations from uidl
@@ -1198,12 +1168,13 @@ renderCustomLayout : function(renderer,uidl,target,layoutInfo) {
 
 },
 
-renderOrderedLayout : function(renderer,uidl,target,layoutInfo) {
+renderOrderedLayout : function(renderer, uidl, target, layoutInfo) {
 	// Shortcuts
 	var theme = renderer.theme;
+	var client = renderer.client;
 	
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);		
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);		
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
 	// Render all children to table
@@ -1222,36 +1193,37 @@ renderOrderedLayout : function(renderer,uidl,target,layoutInfo) {
 			// Ensure TABLE and TR
 			if (tr == null || vertical) {
 				if (table == null) {
-					table = renderer.theme.createElementTo(div,"table","orderedlayout");
+					table = theme.createElementTo(div,"table","orderedlayout");
                     //table.width="100%";                    
-					renderer.theme.addCSSClass(table,"layout");
-					table = renderer.theme.createElementTo(table,"tbody","layout");
+					theme.addCSSClass(table,"layout");
+					table = theme.createElementTo(table,"tbody","layout");
 				}
-				tr = renderer.theme.createElementTo(table,"tr","layout");
+				tr = theme.createElementTo(table,"tr","layout");
 			}
 			
 			// Create extra TD for form style captions
 			var layoutInfo = null;
 			if (form) {
 			 	layoutInfo = new Object()
-				td = renderer.theme.createElementTo(tr,"td","layout");
+				td = theme.createElementTo(tr,"td","layout");
 				layoutInfo.captionNode = td;
 			}
 			
 			// Force new TD for each child rendered
-			td = renderer.theme.createElementTo(tr,"td","layout");			
+			td = theme.createElementTo(tr,"td","layout");			
 			
 			// Render the component to TD
-			renderer.client.renderUIDL(childUIDL,td, null, layoutInfo);
+			client.renderUIDL(childUIDL,td, null, layoutInfo);
 			
 		}
 	}			
 },
 
-renderGridLayout : function(renderer,uidl,target,layoutInfo) {
+renderGridLayout : function(renderer, uidl, target, layoutInfo) {
 	// NOTE TODO indenting might be off
 	// Shortcuts
 	var theme = renderer.theme;
+	var client = renderer.client;
 		
 	var h = uidl.getAttribute("h");	
 	var w = uidl.getAttribute("w");
@@ -1262,7 +1234,7 @@ renderGridLayout : function(renderer,uidl,target,layoutInfo) {
 	//var px = Math.floor(width/parseInt(w));
 	
 	var table = theme.createElementTo(div,"table", "layout");
-	table = renderer.theme.createElementTo(table,"tbody","layout");
+	table = theme.createElementTo(table,"tbody","layout");
 	var tr = null;
 	var td = null;
 	for (var y=0; y<uidl.childNodes.length; y++) {
@@ -1280,7 +1252,7 @@ renderGridLayout : function(renderer,uidl,target,layoutInfo) {
 				// Add colspan and rowspan
 				if (cellUidl.nodeType == Node.ELEMENT_NODE && cellUidl.nodeName == "gc") {							
 					// Create new TD for each child rendered
-					td = renderer.theme.createElementTo(tr,"td","layout");
+					td = theme.createElementTo(tr,"td","layout");
 										
 					var w = cellUidl.getAttribute('w');
 					var h = cellUidl.getAttribute('h');							
@@ -1298,7 +1270,7 @@ renderGridLayout : function(renderer,uidl,target,layoutInfo) {
 						for (var c=0;c<len;c++) {
 							var el = cellUidl.childNodes[c];
 							if (el.nodeType == Node.ELEMENT_NODE) {
-								renderer.client.renderUIDL(el,td);
+								client.renderUIDL(el,td);
 							}
 						}
 						//cont.style.width = "";
@@ -1309,44 +1281,25 @@ renderGridLayout : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-renderPanel : function(renderer,uidl,target,layoutInfo) {
-			// Supports styles "light" and "none"
+renderPanel : function(renderer, uidl, target, layoutInfo) {
 
 			// Shortcuts
 			var theme = renderer.theme;
 			
 			var style = uidl.getAttribute("style");
 			
-			var borderStyle = "panelborder";
-			
 			// Create component element
 			var outer = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 			if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 			
-            if ("none"!=style) {
-			    theme.addCSSClass(div,"outset");
-            }
-			if ("light"==style) {
-				theme.addCSSClass(div,"light");
-				//borderStyle += "light";
-			}
-			
 			// Create extra DIV for visual layout
-			var div = theme.createElementTo(outer,"div");
-            if ("none"!=style) {
-			    theme.setCSSClass(div,borderStyle);
-            }
+			var div = theme.createElementTo(outer,"div","panelborder");
 
 			// Create default header
 			var caption = theme.renderDefaultComponentHeader(renderer,uidl,div);
 			theme.addCSSClass(caption,"panelcaption");
             if ("light"==style) {
 				theme.addCSSClass(caption,"panelcaptionlight");
-			}
-			
-			// If no actual caption, remove description popup listener
-			if(caption && caption.className.indexOf("hide") > -1) {
-				client.removeEventListener(div,undefined,null,"descriptionPopup");
 			}
 
 			// Create content DIV
@@ -1363,7 +1316,7 @@ renderPanel : function(renderer,uidl,target,layoutInfo) {
             	var ch = (caption?caption.offsetHeight:0);
                 content.style.height = (outer.offsetHeight - ch - 14) + "px";
             }
-            if (w && w > 0 && !window.XMLHttpRequest) {
+            if (w && w > 0 && itmill.wb.isIE6) {
                 // fix width for IE 6
                 // offsetwidht - scrollbar + border
                 content.style.width = (content.offsetWidth - 14) + "px";
@@ -1371,13 +1324,12 @@ renderPanel : function(renderer,uidl,target,layoutInfo) {
  			
 			// Render children to div
 			theme.renderChildNodes(renderer, uidl, content);
-
 },
 
 /** under development
- * this should be easyly modified not to use polling in case "comet" is implemented
+ * this should be easily modified not to use polling in case "comet" is implemented
  */ 
-renderProgressIndicator : function(renderer,uidl,target,layoutInfo) {
+renderProgressIndicator : function(renderer, uidl, target, layoutInfo) {
     // TODO try to mess intervals
     // Create container element
     var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
@@ -1430,81 +1382,83 @@ renderProgressIndicator : function(renderer,uidl,target,layoutInfo) {
     }
 },
 
-renderTabSheet : function(renderer,uidl,target,layoutInfo) {
+renderTabSheet : function(renderer, uidl, target, layoutInfo) {
+	var theme = renderer.theme;
+	var client = renderer.client;
+	
+	// Create container element
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
-			var theme = renderer.theme;
-			
-			// Create container element
-			var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
-			if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
-
-			// Create default header
-			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
-			
-			// If no actual caption, remove description popup listener
-			if(caption && caption.className.indexOf("hide") > -1) {
-				client.removeEventListener(div,undefined,null,"descriptionPopup");
+	// Create default header
+	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	
+	// If no actual caption, remove description popup listener
+	if(caption && caption.className.indexOf("hide") > -1) {
+		client.removeEventListener(div,undefined,null,"descriptionPopup");
+	}
+	
+	//  Render tabs
+	var tabs = theme.createElementTo(div,"div","tabs");
+	var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");
+	
+	var tabNodes = theme.getChildElements(uidl,"tabs");
+	if (tabNodes != null && tabNodes.length >0)  tabNodes = theme.getChildElements(tabNodes[0],"tab");
+	var selectedTabNode = null;
+	if (tabNodes != null && tabNodes.length >0) {
+		for (var i=0; i< tabNodes.length;i++) {
+			var tabNode = tabNodes[i];
+			var tab = theme.createElementTo(tabs,"div");
+			var key = tabNode.getAttribute("key");
+			var iconUrl =  tabNode.getAttribute("icon");
+			if (iconUrl && iconUrl.indexOf("theme://") == 0) {
+   				iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
+    				+ iconUrl.substring(8);
+			}		
+			if (tabNode.getAttribute("selected") == "true") {
+				theme.addCSSClass(tab,"tab-on inline");
+				selectedTabNode = tabNode;
+			} else if (tabNode.getAttribute("disabled") == "true" 
+						|| uidl.getAttribute("disabled") == "true"
+						|| uidl.getAttribute("readonly") == "true") {
+				theme.setCSSClass(tab,"tab disabled inline");
+			} else {
+				theme.setCSSClass(tab,"tab clickable inline");
+				theme.addAddClassListener(theme,client,tab,"mouseover","over",tab);
+				theme.addRemoveClassListener(theme,client,tab,"mouseout","over",tab);
+				theme.addSetVarListener(theme,client,tab,"click",varId,key,true);
+				theme.addPreventSelectionListener(theme,client,tab);
 			}
+			// Extra div in tab
+			tab = theme.createElementTo(tab,"div","caption border pad inline");
 			
-			//  Render tabs
-			var tabs = theme.createElementTo(div,"div","tabs");
-			var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");
-			
-			var tabNodes = theme.getChildElements(uidl,"tabs");
-			if (tabNodes != null && tabNodes.length >0)  tabNodes = theme.getChildElements(tabNodes[0],"tab");
-			var selectedTabNode = null;
-			if (tabNodes != null && tabNodes.length >0) {
-				for (var i=0; i< tabNodes.length;i++) {
-					var tabNode = tabNodes[i];
-					var tab = theme.createElementTo(tabs,"div");
-					var key = tabNode.getAttribute("key");
-					var iconUrl =  tabNode.getAttribute("icon");
-					if (iconUrl && iconUrl.indexOf("theme://") == 0) {
-		   				iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
-		    				+ iconUrl.substring(8);
-					}		
-					if (tabNode.getAttribute("selected") == "true") {
-						theme.addCSSClass(tab,"tab-on inline");
-						selectedTabNode = tabNode;
-					} else if (tabNode.getAttribute("disabled") == "true" 
-								|| uidl.getAttribute("disabled") == "true"
-								|| uidl.getAttribute("readonly") == "true") {
-						theme.setCSSClass(tab,"tab disabled inline");
-					} else {
-						theme.setCSSClass(tab,"tab clickable inline");
-						theme.addAddClassListener(theme,this,tab,"mouseover","over",tab);
-						theme.addRemoveClassListener(theme,this,tab,"mouseout","over",tab);
-						theme.addSetVarListener(theme,this,tab,"click",varId,key,true);
-					}
-					// Extra div in tab
-					tab = theme.createElementTo(tab,"div","caption border pad inline");
-					
-					// Icon
-					if (iconUrl) {
-						tab.innerHTML = "<IMG src=\""+iconUrl+"\" class=\"icon\" />" + tabNode.getAttribute("caption");
-					} else {
-						tab.innerHTML = tabNode.getAttribute("caption");
-					}
-				
-				}
+			// Icon
+			if (iconUrl) {
+				tab.innerHTML = "<IMG src=\""+iconUrl+"\" class=\"icon\" />" + tabNode.getAttribute("caption");
+			} else {
+				tab.innerHTML = tabNode.getAttribute("caption");
 			}
-			
-			// Render content (IE renderbug need three)
-			var content = theme.createElementTo(div,"div","outset");
-			content = theme.createElementTo(content,"div","border");
-			content = theme.createElementTo(content,"div","content");
-			if (selectedTabNode != null) {
-				theme.renderChildNodes(renderer,selectedTabNode, content);
-			}
+		
+		}
+	}
+	
+	// Render content (IE renderbug need three)
+	var content = theme.createElementTo(div,"div","outset");
+	content = theme.createElementTo(content,"div","border");
+	content = theme.createElementTo(content,"div","content");
+	if (selectedTabNode != null) {
+		theme.renderChildNodes(renderer,selectedTabNode, content);
+	}
 },
 
 
-renderTree : function(renderer,uidl,target,layoutInfo) {
+renderTree : function(renderer, uidl, target, layoutInfo) {
 			
 	var theme = renderer.theme;
+	var client = renderer.client;
 	
 	// Create container element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
 	// Get tree attributes
@@ -1540,7 +1494,7 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 	delete alNode;
 
 	// Create default header
-	var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	theme.addCSSClass(caption,"treecaption");
 	
 	// Content DIV
@@ -1567,7 +1521,7 @@ renderTree : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,lastItem) {
+renderTreeNode : function(renderer, node, target, selectable, selectMode, selected, selectionVariable, expandVariable, collapseVariable, actions, actionVar, immediate, disabled, readonly, lastItem) {
 
 	// Shortcuts
 	var theme = renderer.theme;
@@ -1643,7 +1597,7 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 			li.actionList = actionList;
 			li.key = node.getAttribute("key");
 			client.addEventListener(li,"contextmenu",theme.treeNodeShowContextMenu);
-			if(window.opera)
+			if(itmill.wb.isOpera)
 				client.addEventListener(li,"click",theme.treeNodeShowContextMenu);
 			
 		}
@@ -1660,7 +1614,6 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 			ECButton.expanded = "false";
 		}
 		
-
 		if(hasChildren) {
 		
 			var subtree = theme.createElementTo(li,"ul");
@@ -1699,7 +1652,7 @@ renderTreeNode : function(renderer,node,target,selectable,selectMode,selected,se
 
 },
 
-addExpandNodeListener : function(theme,client,button,event,subnodes,expandVariable,collapseVariable,key,immediate,target) {
+addExpandNodeListener : function(theme, client, button, event, subnodes, expandVariable, collapseVariable, key, immediate, target) {
 		client.addEventListener((target?target:button), event, function(e) { 
 				if (button.expanded == "true") {
 					theme.removeArrayVariable(client,expandVariable,key,false);
@@ -1717,8 +1670,6 @@ addExpandNodeListener : function(theme,client,button,event,subnodes,expandVariab
 			}
 		);
 },
-
-
 
 treeNodeShowContextMenu: function(e) {
 	var evt = itmill.Client.prototype.getEvent(e);
@@ -1754,11 +1705,10 @@ treeNodeShowContextMenu: function(e) {
 	}
 },
 
-
-renderTextField : function(renderer,uidl,target, layoutInfo) {
-
+renderTextField : function(renderer, uidl, target, layoutInfo) {
 	var client = renderer.client;
 	var theme = renderer.theme;
+	
 	var immediate = uidl.getAttribute("immediate") == "true";
 	var readonly = uidl.getAttribute("readonly") == "true";
 	var multiline = uidl.getAttribute("multiline") == "true";
@@ -1770,25 +1720,25 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 	var tabindex = uidl.getAttribute("tabindex");
 	
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
 	// Render default header
-	renderer.theme.renderDefaultComponentHeader(renderer,uidl,div, layoutInfo);
+	theme.renderDefaultComponentHeader(renderer,uidl,div, layoutInfo);
 	
 	// Create border
-	var border = renderer.theme.createElementTo(div,"div","border");
+	var border = theme.createElementTo(div,"div","border");
 	
 	// Create input
 	var input = null;
 	if (multiline) {
-		input = renderer.theme.createElementTo(border,"textarea");	
+		input = theme.createElementTo(border,"textarea");	
 		input.wrap = "off";	
 		if (focusid) {
 			input.focusid = focusid;
 		}
 	} else {
-		input = renderer.theme.createInputElementTo(border,(secret?"password":"text"),null,focusid);	
+		input = theme.createInputElementTo(border,(secret?"password":"text"),null,focusid);	
 	}
 	if (tabindex) input.tabIndex = tabindex;
 	if (disabled||readonly) {
@@ -1800,7 +1750,7 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 	}
 	
 	// Assign cols and rows
-	if (cols >0) {
+	if (cols > 0) {
 		if (multiline) {
 			input.cols = cols;
 		} else {
@@ -1808,7 +1758,7 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 			input.maxlength = cols;
 		}
 	}
-	if (rows >0) {
+	if (rows > 0) {
 		input.rows = rows;
 	}
 	
@@ -1826,6 +1776,7 @@ renderTextField : function(renderer,uidl,target, layoutInfo) {
 	// Listener 
 	theme.addSetVarListener(theme,client,input,"change",inputId,input,immediate);
 },
+
 _onFieldFocus : function() {
 	// IE 6 sometimes throws error when trying to move focus onwars
 	try {
@@ -1833,15 +1784,16 @@ _onFieldFocus : function() {
 	} catch(e) {}
 },
 
-renderDateField : function(renderer,uidl,target,layoutInfo) {
+renderDateField : function(renderer, uidl, target, layoutInfo) {
 	// TODO needs simplification
 	// - jscalendar supports time! but not resolution?
 	// - dynamic .js loading!
 
 	var theme = renderer.theme;
+	var client = renderer.client;
 
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
@@ -1858,7 +1810,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 	var locale = uidl.getAttribute("locale")	
 	if (locale && !disabled && !readonly) {
 		locale = locale.toLowerCase().split("_")[0];
-		var lang = renderer.client.loadDocument(theme.root+"ext/jscalendar/lang/calendar-"+locale+".js",false);
+		var lang = client.loadDocument(theme.root+"ext/jscalendar/lang/calendar-"+locale+".js",false);
 		if (lang) {			
 			try {
 				window.eval(lang);
@@ -1869,7 +1821,7 @@ renderDateField : function(renderer,uidl,target,layoutInfo) {
 	}		
 	
 	// Render default header
-	renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 		
 	var yearVar = theme.getVariableElement(uidl,"integer","year");
     var monthVar = theme.getVariableElement(uidl,"integer","month"); 
@@ -2150,7 +2102,6 @@ dateFieldShowCalendar : function (e) {
 	
 	cal.showAtElement(this);
 	cal.triggerElement = this;
-	
 },
 
 /** Called on Calendars  "close click" */
@@ -2224,16 +2175,16 @@ addDateFieldNullListener : function (client,elm,text,msec,sec,min,hour,day,month
    });
 },
 
-renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
-
+renderDateFieldCalendar : function(renderer, uidl, target, layoutInfo) {
+	var client = renderer.client;
 	var theme = renderer.theme;
 	
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	// Render default header
-	renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	
 	// Get attributes
 	var immediate = uidl.getAttribute("immediate") == "true";
@@ -2272,14 +2223,14 @@ renderDateFieldCalendar : function(renderer,uidl,target,layoutInfo) {
    });
 },
 
-renderUpload : function(renderer,uidl,target,layoutInfo) {
-
+renderUpload : function(renderer, uidl, target, layoutInfo) {
 	var theme = renderer.theme;
 	var client = renderer.client;
+	
 	var varNode = theme.getVariableElement(uidl,"uploadstream","stream");
 	
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	// We don't render header for upload, but use caption for submitting buttons text
@@ -2290,15 +2241,14 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 	// Unique name for iframes
 	var frameName = "upload_"+varNode.getAttribute("id")+"_iframe";
     
-    var hIframeContainer = renderer.theme.createElementTo(div,"div");
+    var hIframeContainer = theme.createElementTo(div,"div");
     hIframeContainer.innerHTML = '<iframe style="height:0px;width:0px;0;margin:0;padding:0;border:0;" name="'+frameName+'"></iframe>'
 
     iframe = hIframeContainer.firstChild;
     ifr = iframe.contentWindow;
 
-    // Ok. Now we are ready render the actual upload form and 
-    // inputs.
-    var formContainer = renderer.theme.createElementTo(div,"div");
+    // Ok. Now we are ready render the actual upload form and inputs.
+    var formContainer = theme.createElementTo(div,"div");
     formContainer.innerHTML = 
     '<form action="'+client.ajaxAdapterServletUrl +
     '" method="post" enctype="multipart/form-data" target="'+frameName+'">'+
@@ -2320,7 +2270,7 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 
     iframe.submitted = false;
 	// Attach event listeners for processing the chencges after upload.
-	if (document.all && !window.opera) {
+	if (itmill.wb.isIE) {
 		iframe.onreadystatechange = function() {
             if (iframe.submitted == true) {
                 iframe.onreadystatechange = null;
@@ -2337,21 +2287,21 @@ renderUpload : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-renderEmbedded : function(renderer,uidl,target,layoutInfo) {
-
+renderEmbedded : function(renderer, uidl, target, layoutInfo) {
+	var client = renderer.client;
     var theme = renderer.theme;
     
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
 	// Render default header
-	renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	
 	if (uidl.getAttribute("type") == "image") {
 	
 		// Image mode
-		var img = renderer.theme.createElementTo(div,"img","embedded");
+		var img = theme.createElementTo(div,"img","embedded");
 		
 		// SRC
 		var val = uidl.getAttribute("src");			
@@ -2457,8 +2407,8 @@ renderEmbedded : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-renderLink : function(renderer,uidl,target,layoutInfo) {
-	// Shortcut variables
+renderLink : function(renderer, uidl, target, layoutInfo) {
+	// Shortcuts
 	var theme = renderer.theme;
 	var client = renderer.client;
 
@@ -2513,7 +2463,7 @@ renderLink : function(renderer,uidl,target,layoutInfo) {
 
 },
 
-addLinkOpenWindowListener : function(theme,client,element,event,url,target,features) {
+addLinkOpenWindowListener : function(theme, client, element, event, url, target, features) {
 	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
 			var evt = client.getEvent(e);
 			if (event=="rightclick"&&!evt.rightclick) return;
@@ -2527,7 +2477,7 @@ addLinkOpenWindowListener : function(theme,client,element,event,url,target,featu
 	);
 },
 
-renderPagingTable : function(renderer,uidl,target,layoutInfo) {
+renderPagingTable : function(renderer, uidl, target, layoutInfo) {
 	// Shortcut variables
 	var theme = renderer.theme;
 	var client = renderer.client;
@@ -3534,20 +3484,20 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 	});
 },
 
-scrollTableRegisterLF : function(client,theme,paintableElement,inner,cout,hout,cin,hin) {
-	client.registerLayoutFunction(paintableElement,function() {
-        // TODO check this if really needed
-		// var w = (inner.offsetWidth-4) +"px";
-		//cout.style.width = w;
-		//cin.style.width = w;
-		//hout.style.width = w;
-		//hin.style.width = w;
-		//hout.style.width = hout.offsetParent.offsetWidth + "px";
-		//div.recalc();
-	});
+scrollTableRegisterLF : function(client, theme, paintableElement, inner, cout, hout, cin, hin) {
+	// TODO check this if really needed
+	/*client.registerLayoutFunction(paintableElement,function() {
+        var w = (inner.offsetWidth-4) +"px";
+		cout.style.width = w;
+		cin.style.width = w;
+		hout.style.width = w;
+		hin.style.width = w;
+		hout.style.width = hout.offsetParent.offsetWidth + "px";
+		div.recalc();
+	});*/
 },
 
-scrollTableAddScrollListener : function (theme,target) {
+scrollTableAddScrollListener : function (theme, target) {
 	var hout = target.model.hout;
     var cout = target.model.cout;
 	theme.client.addEventListener(cout,"scroll", function (e) {
@@ -3568,7 +3518,7 @@ scrollTableAddScrollListener : function (theme,target) {
 				cout.scrollHandler();
 			},250)	
  	});
- 	if(window.opera) {
+ 	if(itmill.wb.isOpera) {
  		// opera has bug: it don't fire onscroll event on mousewheel scroll
  		// hook it explicitely	
  		cout.onmousewheel = function (e) {
@@ -3599,7 +3549,7 @@ scrollTableGetFV : function(target) {
  	return new_fr;
  },
  
-scrollTableAddScrollHandler : function(client,theme,target) {
+scrollTableAddScrollHandler : function(client, theme, target) {
     var m = target.model;
  	m.cout.scrollHandler = function () {
 			var d = theme.scrollTableGetFV(target);
@@ -3664,7 +3614,7 @@ scrollTableAddScrollHandler : function(client,theme,target) {
  	};
 },
 
-scrollTableRecalc : function(pid,target) {
+scrollTableRecalc : function(pid, target) {
 	var div = target.ownerDocument.getElementById(pid);
 	var colWidths = div.colWidths;
 	if (!colWidths) {
@@ -3691,7 +3641,7 @@ scrollTableRecalc : function(pid,target) {
             	colWidths[h[i].getAttribute("cid")] = parseInt(h[i].clientWidth) + defPad;
         }
     }
-    for (var i = 0;i< h.length ;i++) {
+    for(var i = 0;i< h.length ;i++) {
     	var cell = h[i];
         var cid = cell.getAttribute("cid");
         var w = colWidths[cid] || cell.offsetWidth;
@@ -3716,7 +3666,7 @@ scrollTableRecalc : function(pid,target) {
 },
 
 // Header order drag & drop	
-addToDragOrderGroup : function (client,theme,element,group,variable,sortVar,sortascVar,sortasc) {
+addToDragOrderGroup : function (client, theme, element, group, variable, sortVar, sortascVar, sortasc) {
 	element.dragGroup = group;
 	if (!group.elements) {
 		group.elements = new Array();
@@ -3874,7 +3824,7 @@ tableRowShowContextMenu : function(e) {
  * This is handler that creates "context menu" for choosing
  * visible columns for table
  */
- tableShowColumnSelectMenu : function(e) {
+tableShowColumnSelectMenu : function(e) {
  	var client = itmill.clients[0];
  	var evt = client.getEvent(e);
  	// stop bubbling
@@ -3901,9 +3851,9 @@ tableRowShowContextMenu : function(e) {
 		});
  	}
  	cm.showContextMenu(aOpt,evt, pntbl.varMap.collapsedcolumns);
- },
+},
 
-renderSelect : function(renderer,uidl,target,layoutInfo) {
+renderSelect : function(renderer, uidl, target, layoutInfo) {
 
 	var theme = renderer.theme;
 	var client = renderer.client;	
@@ -3917,7 +3867,7 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
 	}
 			
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
 	// Create selection variable
@@ -3976,7 +3926,7 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
 			if (options[i].getAttribute("selected") == "true") {
 				optionNode.selected = true;
                 // IE bug workaraund to preserve selection in multiselect
-                if(document.all) {
+                if(itmill.wb.isIE) {
                     window.scrollBy(0,0);
                 }
 			}
@@ -3995,7 +3945,7 @@ renderSelect : function(renderer,uidl,target,layoutInfo) {
 	}
 },
 
-renderSelectTwincol : function(renderer,uidl,target,layoutInfo) {
+renderSelectTwincol : function(renderer, uidl, target, layoutInfo) {
     function deleteOptionFromSelectByOptionValue(select, value) {
         for(var i = 0; i < select.options.length; i++) {
             if(select.options[i].value == value) {
@@ -4016,7 +3966,7 @@ renderSelectTwincol : function(renderer,uidl,target,layoutInfo) {
 	var client = renderer.client;
 	
 	// Create containing element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);	
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
 	// Create selection variable
@@ -4154,8 +4104,7 @@ renderSelectTwincol : function(renderer,uidl,target,layoutInfo) {
     
 },
 
-renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
-				
+renderSelectOptionGroup : function(renderer, uidl, target, layoutInfo) {
 	var theme = renderer.theme;
 	var client = renderer.client;
 	
@@ -4230,16 +4179,15 @@ renderSelectOptionGroup : function(renderer,uidl,target,layoutInfo) {
 		theme.addSetVarListener(theme,client,input,"change",newitemVariable,input,true);
 	}
 },
+
 /**
  * Event listener for radio or checkbox value change.
- * 
  * Updates variable to client.
  */
 _optionGroupValueChange : function(e) {
 	var evt = itmill.lib.getEvent(e);
 	var pntbl = itmill.lib.getPaintable(this);
 	var input = this;
-	
 
 	var selVar = pntbl.varMap.selected;
 	if(pntbl.selectMode == "multi") {
@@ -4263,25 +4211,25 @@ _optionGroupValueChange : function(e) {
 	input.focus();
 },
 
-renderLabel : function(renderer,uidl,target,layoutInfo) {
-			
-			// Create container element
-			var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
-			if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
+renderLabel : function(renderer, uidl, target, layoutInfo) {
+	var theme = renderer.theme;
+	
+	// Create container element
+	var div = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 
-			// Create default header
-			var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
+	// Create default header
+	var caption = theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 
-			// Render children to div
-			if (uidl.childNodes.length>0) {
-				div = renderer.theme.createElementTo(div,"div");
-				renderer.theme.renderChildNodes(renderer, uidl, div);
-			}
-			if (div.innerHTML == "") div.innerHTML = "&nbsp;";
+	// Render children to div
+	if (uidl.childNodes.length>0) {
+		div = theme.createElementTo(div,"div");
+		theme.renderChildNodes(renderer, uidl, div);
+	}
+	if (div.innerHTML == "") div.innerHTML = "&nbsp;";
 },
 
-renderData : function(renderer,uidl,target) {
-
+renderData : function(renderer, uidl, target) {
 	var html = "";
 	for (var i=0; i<uidl.childNodes.length; i++) {
 		var child = uidl.childNodes.item(i);
@@ -4295,7 +4243,7 @@ renderData : function(renderer,uidl,target) {
 				
 },
 
-renderPre : function(renderer,uidl,target) {
+renderPre : function(renderer, uidl, target) {
 
 	// Create pre node
 	var pre = renderer.theme.createElementTo(target,"pre");
@@ -4313,9 +4261,8 @@ renderPre : function(renderer,uidl,target) {
 },
 
 
-renderButton : function(renderer,uidl,target,layoutInfo) {
+renderButton : function(renderer, uidl, target, layoutInfo) {
 	// Branch for checkbox
-	
 	if (uidl.getAttribute("type") == "switch") {
 		return renderer.theme.renderCheckBox(renderer,uidl,target,layoutInfo);
 	}
@@ -4334,9 +4281,9 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 	var pntbl = theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
 	
-	div = renderer.theme.createElementTo(pntbl,"div",(linkStyle?"link clickable":"outset clickable"));
-	var outer = renderer.theme.createElementTo(div,"div",(linkStyle?"":"outer"));
-	var inner = renderer.theme.createElementTo(outer,"div",(linkStyle?"pad":"border pad bg"));
+	div = theme.createElementTo(pntbl,"div",(linkStyle?"link clickable":"outset clickable"));
+	var outer = theme.createElementTo(div,"div",(linkStyle?"":"outer"));
+	var inner = theme.createElementTo(outer,"div",(linkStyle?"pad":"border pad bg"));
 	
 	var caption = theme.renderDefaultComponentHeader(renderer,uidl,inner);
 	var hiddenInput = theme.addTabtoHandlers(client,theme,caption,div,tabindex,("default"==uidl.getAttribute("style")));
@@ -4396,6 +4343,7 @@ renderButton : function(renderer,uidl,target,layoutInfo) {
 		}
 	}
 },
+
 _buttonClickListener : function(e) {
 	var evt = itmill.lib.getEvent(e);
 	var pntbl = itmill.lib.getPaintable(evt.target);
@@ -4410,7 +4358,7 @@ _buttonShortcutKeyListener : function(keycode, modifiers) {
 	this.client.changeVariable(this.varMap.action.id, "1,1", true);
 },
 
-renderCheckBox : function(renderer,uidl,target,layoutInfo) {
+renderCheckBox : function(renderer, uidl, target, layoutInfo) {
 		// Shortcuts
 		var theme = renderer.theme;
 		var client = renderer.client;
@@ -4445,362 +4393,7 @@ renderCheckBox : function(renderer,uidl,target,layoutInfo) {
 			// Attach listener
 			theme.addSetVarListener(theme,client,input,(immediate?"click":"change"),varId,input,immediate);
 		}
-},
-
-///////
-/* TODO merge or delete the rest
-
-/**
- *   Render tree as a menubar.
- *   NOTE:
- *   First level nodes are not selectable - menu opens with click. 
- *   If style == "coolmenu", immediate is forced.
- *  
- */
-
-renderTreeMenu : function(renderer,uidl,target,layoutInfo) {
-			
-	var theme = renderer.theme;
-	
-	// Create container element
-	var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
-	if (uidl.getAttribute("invisible")) return; // Don't render content if invisible
-
-	// Get tree attributes
-	var style = uidl.getAttribute("style");
-	var immediate = ("true" == uidl.getAttribute("immediate")||style=="coolmenu");
-	var disabled = ("true" == uidl.getAttribute("disabled"));
-	var readonly = ("true" == uidl.getAttribute("readonly"));
-	var selectMode = uidl.getAttribute("selectmode");
-	var selectable = selectMode == "multi" || selectMode == "single";
-	var selected;
-	if (selectable) {
-		selected = new Object();
-	}
-	var selectionVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","selected"));
-	var expandVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","expand"));
-	var collapseVariable = theme.createVariableElementTo(div,theme.getVariableElement(uidl,"array","collapse"));
-
-	var actions = null;
-	var actionVar = null;
-	var alNode = theme.getFirstElement(uidl,"actions")
-	if (alNode) {
-		actionVar = theme.createVariableElementTo(div,theme.getVariableElement(alNode,"string","action"));
-		actions = new Object();
-		var ak = alNode.getElementsByTagName("action");
-		for (var i=0;i<ak.length;i++) {
-			actions[ak[i].getAttribute("key")] = ak[i].getAttribute("caption");
-		}
-	}
-	delete alNode;
-
-	// Create default header
-	var caption = renderer.theme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
-
-	// Content DIV
-	var content = theme.createElementTo(div,"div","content menu"); 
-	
-	// Iterate all nodes
-	for (var i = 0; i< uidl.childNodes.length;i++) {
-		var node = uidl.childNodes[i];
-		if (node.nodeName == "node" || node.nodeName == "leaf") {
-			theme.renderTreeMenuNode(renderer,node,content,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,0);
-		} 	
-	}
-},
-
-renderTreeMenuNode : function(renderer,node,target,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,level) {
-
-	var theme = renderer.theme;
-	var client = renderer.client;
-
-	var n = theme.createElementTo(target,"div",(level==0?"inline clickable":"clickable"));
-	
-	
-	// Caption
-	var cap = theme.createElementTo(n,"div","inline caption pad");
-	theme.createTextNodeTo(cap,node.getAttribute("caption"));	
-
-	// Expand/collapse/spacer button
-	var img = theme.createElementTo(n,"img","icon");
-    img.align = "absbottom";
-	var key = node.getAttribute("key");	
-	var icon = node.getAttribute("icon");
-    if (icon) {
-        var iconurl = theme.root+icon.split("theme:")[1];
-        var iimg = theme.createElementTo(n,"img","icon");
-	    iimg.src = iconurl;
-    }
-
-
-	// Hover effects
-	if (!disabled&&!readonly) {
-		theme.addAddClassListener(theme,client,n,"mouseover","selected",n);
-		theme.addRemoveClassListener(theme,client,n,"mouseout","selected",n);
-	}
-	
-	// Server-side selection
-	if (selectable && node.getAttribute("selected") == "true") {
-		theme.addCSSClass(n,"selected");
-		selected[key] = n;
-	}
-
-	// Indicate selection	
-	if (theme.listContainsInt(selectionVariable.value,key)) {
-		theme.addCSSClass(n, "selected");
-	}
-
-	// Selection listeners
-	if (selectable && !disabled && (level != 0 || node.nodeName == "leaf")) {
-		if (!readonly) {		
-			if (selectMode == "single") {
-				theme.addAddClassListener(theme,client,n,"click","selected",n,selected);
-				theme.addSetVarListener(theme,client,n,"click",selectionVariable,key,immediate);
-			
-			} else if (selectMode == "multi") {	
-				theme.addToggleClassListener(theme,client,n,"click","selected");
-				theme.addToggleVarListener(theme,client,n,"click",selectionVariable,key,immediate);
-			
-			}
-		}
-	} 
-	
-	// Actions
-	if (!disabled && !readonly) {
-		for (var i = 0; i< node.childNodes.length;i++) {
-			var childNode = node.childNodes[i];
-			if (childNode.nodeName == "al" ) {
-				theme.renderActionPopup(renderer,childNode,n,actions,actionVar,key,1); // TODO check
-			} 
-		}	
-	}
-	
-	// Render all sub-nodes
-	if (node.nodeName == "node") {
-		var subnodes = theme.createElementTo(target,"div","hide popup");
-        var inner = theme.createElementTo(subnodes,"div","border");
-        theme.addTogglePopupListener(theme,client,n,(level==0?"click":"mouseover"),subnodes,0,null,n);
-        //theme.addToggleClassListener(theme,client,n,(level==0?"click":"mouseover"),"hide",subnodes)
-		if (node.childNodes != null && node.childNodes.length >0) {
-			img.src = theme.root + "img/tree/empty.gif";
-			img.expanded = "true";
-		} else {
-			img.src = theme.root + "img/tree/empty.gif";
-			img.expanded = "false";
-		}
-		for (var i = 0; i< node.childNodes.length;i++) {
-			var childNode = node.childNodes[i];
-			if (childNode.nodeName == "node" || childNode.nodeName == "leaf") {
-				theme.renderTreeMenuNode(renderer,childNode,inner,selectable,selectMode,selected,selectionVariable,expandVariable,collapseVariable,actions,actionVar,immediate,disabled,readonly,level+1);
-			} 
-		}	
-		
-		// Add event listener
-		if (!disabled&&level!=0) {
-			var target = (selectable&&!readonly?img:n);
-			theme.addToggleClassListener(theme,client,target,"mouseup","hidden",subnodes);
-			theme.addExpandNodeListener(theme,client,img,"mouseup",subnodes,expandVariable,collapseVariable,key,immediate,target);
-			theme.addStopListener(theme,client,target,"mouseup");
-			theme.addStopListener(theme,client,target,"click");
-		}
-		
-	} else {
-			img.src = theme.root + "img/tree/empty.gif";			
-	}
-},
-
-/**
-* 5.6.2006 - Jouni Koivuviita
-* New innerHTML components
-* RENAMED for testing both - marc
-*/
-
-renderNewPanel : function(renderer,uidl,target,layoutInfo) {
-    // Shortcuts
-    var theme = renderer.theme;
-	var style = uidl.getAttribute("style");
-	// Create component element
-	var div = theme.createPaintableElement(renderer,uidl,target); 
-    
-	/* New panel theme, 8.6.2006 - Jouni Koivuviita */
-	div.innerHTML = "<div class=\"top\"><div class=\"right\"></div><div class=\"left\"><div class=\"title\"></div></div></div><div class=\"middle\"></div><div class=\"bottom\"><div class=\"right\"></div><div class=\"left\"></div></div>";
-	var cap = div.firstChild.firstChild.nextSibling.firstChild;
-	var content = div.childNodes[1];
-	theme.applyWidthAndHeight(uidl,div.childNodes[1],"height");
-	theme.applyWidthAndHeight(uidl,div,"width");
-	
-	/*	
-    div.innerHTML = "<TABLE width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><TR height=\"35\"><TD width=\"12\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/top-left.png\"></TD><TD style=\"background: url('"+theme.root+"img/top.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/top.png', sizingMethod='scale');\"></TD><TD  width=\"12\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/top-right.png\"></TD></TR><TR><TD style=\"background: url('"+theme.root+"img/left.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/left.png', sizingMethod='scale');\"></TD><TD bgcolor=white></TD><TD style=\"background: url('"+theme.root+"img/right.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/right.png', sizingMethod='scale');\"></TD></TR><TR height=\"12\"><TD><IMG onload=\"png(this);\" src=\""+theme.root+"img/bottom-left.png\"></TD><TD style=\"background: url('"+theme.root+"img/bottom.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/bottom.png', sizingMethod='scale');\"></TD><TD><IMG onload=\"png(this);\" src=\""+theme.root+"img/bottom-right.png\"></TD></TR></TABLE>";
-    var cap = div.firstChild.firstChild.firstChild.childNodes[1];
-    var content = div.firstChild.firstChild.childNodes[1].childNodes[1];
-	*/
-    
-    theme.renderDefaultComponentHeader(renderer,uidl,cap);
-    theme.renderChildNodes(renderer, uidl, content);
-},
-
-renderNewPanelModal : function(renderer,uidl,target,layoutInfo,alignment) {
-    // Shortcuts
-    var theme = renderer.theme;
-    //var parentTheme = theme.parent;
-	// Create component element
-	var div = theme.createPaintableElement(renderer,uidl,target); 
-    var html = "<IFRAME frameborder=\"0\" style=\"border:none;z-index:9997;position:absolute;top:0px;left:0px;width:100%;height:100%;background-color:white;filter: alpha(opacity=80);opacity:0.8;\"></IFRAME>";
-    html += "<DIV align=\"center\" style=\"position:absolute;top:0px;width:100%;left:0px;z-index:9999;filter: alpha(opacity=100);opacity:1;\"><TABLE  cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><TR height=\"35\"><TD width=\"12\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/top-left.png\"></TD><TD style=\"background: url('"+theme.root+"img/top.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/top.png', sizingMethod='scale');\"></TD><TD  width=\"12\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/top-right.png\"></TD></TR><TR><TD style=\"background: url('"+theme.root+"img/left.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/left.png', sizingMethod='scale');\"></TD><TD bgcolor=white ></TD><TD style=\"background: url('"+theme.root+"img/right.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/right.png', sizingMethod='scale');\"></TD></TR><TR height=\"12\"><TD><IMG onload=\"png(this);\" src=\""+theme.root+"img/bottom-left.png\"></TD><TD style=\"background: url('"+theme.root+"img/bottom.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/bottom.png', sizingMethod='scale');\"></TD><TD><IMG onload=\"png(this);\" src=\""+theme.root+"img/bottom-right.png\"></TD></TR></TABLE><DIV>";
-    div.innerHTML = html;
-    var overlay = div.firstChild;
-    overlay.style.width = div.ownerDocument.body.offsetWidth + "px";
-    overlay.style.height = div.ownerDocument.body.offsetHeight + "px";
-    var table = div.childNodes[1].firstChild;
-    var cap = table.firstChild.firstChild.childNodes[1];
-    var content = table.firstChild.childNodes[1].childNodes[1];
-    
-    theme.renderDefaultComponentHeader(renderer,uidl,cap);
-    theme.renderChildNodes(renderer, uidl, content);
-   
-   	var ifrdiv = theme.createElementTo(div,"div");
-   
-   html = "<IFRAME frameborder=\"0\" style=\"border:none;z-index:9998;position:absolute;top:"+(div.childNodes[1].offsetTop+5)+"px;left:"+(table.offsetLeft+5)+"px;width:"+(table.offsetWidth-7)+"px;height:"+(table.offsetHeight-7)+"px;background-color:white;filter: alpha(opacity=100);opacity:1;\"></IFRAME>";
-   ifrdiv.innerHTML += html;
-},
-
-renderNewPanelLight : function(renderer,uidl,target,layoutInfo) {
-    // Shortcuts
-    var theme = renderer.theme;
-	var style = uidl.getAttribute("style");
-	// Create component element
-	var div = theme.createPaintableElement(renderer,uidl,target); 
-                        
-    div.innerHTML = "<TABLE width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><TR><TD width=\"12\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/top-left-lite.png\"></TD><TD style=\"background: url('"+theme.root+"img/top-lite.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/top-lite.png', sizingMethod='scale');\"></TD><TD width=\"12\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/top-right-lite.png\"></TD></TR><TR><TD style=\"background: url('"+theme.root+"img/left.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/left.png', sizingMethod='scale');\"></TD><TD bgcolor=white></TD><TD style=\"background: url('"+theme.root+"img/right.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/right.png', sizingMethod='scale');\"></TD></TR><TR><TD><IMG onload=\"png(this);\" src=\""+theme.root+"img/bottom-left.png\"></TD><TD style=\"background: url('"+theme.root+"img/bottom.png') !important;background: none;background-position:right;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/bottom.png', sizingMethod='scale');\"></TD><TD><IMG onload=\"png(this);\" src=\""+theme.root+"img/bottom-right.png\"></TD></TR></TABLE>";
-
-    var content = div.firstChild.firstChild.childNodes[1].childNodes[1];
-    
-    theme.renderDefaultComponentHeader(renderer,uidl,content);
-    theme.renderChildNodes(renderer, uidl, content);
-},
-
-renderNewPanelNone : function(renderer,uidl,target,layoutInfo) {
-    // Shortcuts
-    var theme = renderer.theme;
-	var style = uidl.getAttribute("style");
-	// Create component element
-	var div = theme.createPaintableElement(renderer,uidl,target); 
-            
-    var content = theme.createElementTo(div,"div");
-   
-    theme.renderDefaultComponentHeader(renderer,uidl,content);
-    theme.renderChildNodes(renderer, uidl, content);
-},
-
-renderNewTabSheet : function(renderer,uidl,target,layoutInfo) {
-    // Shortcuts
-    var theme = renderer.theme;
-
-	// Create component element
-	var div = theme.createPaintableElement(renderer,uidl,target); 
-    if (uidl.getAttribute("invisible")) return;  
-
-	var style = uidl.getAttribute("style");
-    var disabled  = ("true"==uidl.getAttribute("disabled"));
-	
-	var cdiv = theme.createElementTo(div,"div");
-	var caption = theme.renderDefaultComponentHeader(renderer,uidl,cdiv,layoutInfo);
-	div = theme.createElementTo(div,"div");
-         
-	// Tabs
-	var tabNodes = theme.getChildElements(uidl,"tabs");
-	if (tabNodes != null && tabNodes.length >0) tabNodes = theme.getChildElements(tabNodes[0],"tab");
-	var selectedTabNode = null;
-	if (tabNodes != null && tabNodes.length >0) {
-	    var html = "<TABLE width=\"100%\" class=\"tabsheet-table\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><TBODY>";
-		html += "<TR valign=\"bottom\"><TD></TD>";
-		
-		var posttabs = "<TR valign=\"top\"><TD><IMG  onload=\"png(this);\" src=\""+theme.root+"img/tabsheet/top-left-lite.png\"/></TD>";
-		var len = tabNodes.length;
-		for (var i=0; i<len;i++) {
-			var tab = tabNodes[i];
-			var caption = tab.getAttribute("caption");
-			var icon = tab.getAttribute("icon");
-			if (icon) icon = theme.root+icon.split("theme://")[1];
-			var selected = ("true"==tab.getAttribute("selected"));
-			var disabled = ("true"==tab.getAttribute("disabled"));
-			var offset = (selected?6:4);
-			
-			var variant = "";
-			if (disabled) {
-				variant = "-dis";
-			} else if (selected) {
-				variant = "-on";
-			}
-
-			if (selected) selectedTabNode = tab;
-			
-   			html += "<TD width=\"1\" align=\"right\"><IMG onload=\"png(this);\" onload=\"png(this);\" src=\""+theme.root+"img/tabsheet/top-left"+variant+".png\"/></TD><TD class=\""+(disabled?"caption":"caption clickable")+"\" style=\"background-image: url('"+theme.root+"img/tabsheet/top"+variant+".png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/top"+variant+".png', sizingMethod='scale');\">"
-   			html += "<DIV style=\"padding-top:0.5em;\" class=\"caption"+(selected&&!disabled?"":" clickable")+"\">";
-   			if (icon) html += "<IMG onload=\"png(this);\" class=\"icon\" src=\""+icon+"\"/>";
-   			html += caption+"</DIV>";
-   			html += "</TD><TD><IMG  onload=\"png(this);\" src=\""+theme.root+"img/tabsheet/top-right"+variant+".png\"/></TD>";	
-   			
-   			
-   			// POSTTABS		     
-   			posttabs += "<TD align=\"right\" style=\"background-image: url('"+theme.root+"img/tabsheet/top-lite.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/top-lite.png', sizingMethod='scale');\"><IMG  onload=\"png(this);\" height=\""+(selected?6:4)+"\" width=\"8\" src=\""+theme.root+"img/tabsheet/tab-left.png\"/></TD><TD "+(selected?"bgcolor=\"white\"":"style=\"background-image: url('"+theme.root+"img/tabsheet/top-lite.png') !important;background: white;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/top-lite.png', sizingMethod='scale');\"")+"></TD><TD style=\"background-image: url('"+theme.root+"img/tabsheet/top-lite.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/top-lite.png', sizingMethod='scale');\"><IMG  onload=\"png(this);\" height=\""+(selected?6:4)+"\" width=\"8\" src=\""+theme.root+"img/tabsheet/tab-right.png\"/></TD>";			
-		}
-   		html += "<TD width=\"100%\"></TD></TR>"+posttabs+"<TD style=\"background-image: url('"+theme.root+"img/tabsheet/top-lite.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/top-lite.png', sizingMethod='scale');\" ></TD><TD><IMG  onload=\"png(this);\" src=\""+theme.root+"img/tabsheet/top-right-lite.png\"/></TD></TR>";
-   		
-    	//Content
-    	html +="</TBODY></TABLE><TABLE width=\"100%\" class=\"tabsheet-table\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><TBODY><TR valign=\"top\"><TD style=\"width:12px;background-image: url('"+theme.root+"img/tabsheet/left.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/left.png', sizingMethod='scale');\"></TD><TD style=\"width:100% !important;width:auto;\" class=\"tabsheet-content\" bgcolor=\"white\" colspan=\""+(len*3+1)+"\"><DIV></DIV></TD><TD width=\"12\" style=\"background-image: url('"+theme.root+"img/tabsheet/right.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/right.png', sizingMethod='scale');\"></TD></TR>";
-		html += "<TR height=\"12\" valign=\"top\"><TD width=\"8\"><IMG onload=\"png(this);\" src=\""+theme.root+"img/tabsheet/bottom-left.png\"></TD><TD style=\"background-image: url('"+theme.root+"img/tabsheet/bottom.png') !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+theme.root+"img/tabsheet/bottom.png', sizingMethod='scale');\" colspan=\""+(len*3+1)+"\"></TD><TD><IMG  onload=\"png(this);\" src=\""+theme.root+"img/tabsheet/bottom-right.png\"></TD></TR></TBODY></TABLE>";
-		div.innerHTML = html;
-		
-		// TODO click listeners
-		
-		if (!disabled) {
-			var varId = theme.getVariableElement(uidl,"string","selected").getAttribute("id");		
-			for (var i=0; i<len;i++) {
-				var tabNode = tabNodes[i];
-				if (tabNode == selectedTabNode||("true"==tabNode.getAttribute("disabled"))) continue;
-				var key = tabNode.getAttribute("key");
-				var tab = div.firstChild.firstChild.firstChild.childNodes[2+i*3];
-				theme.addAddClassListener(theme,client,tab,"mouseover","over",tab);
-				theme.addRemoveClassListener(theme,client,tab,"mouseout","over",tab);
-				theme.addSetVarListener(theme,client,tab,"click",varId,key,true);
-			}		
-		}
-		
-		var content = div.childNodes[1].firstChild.firstChild.childNodes[1];
-		if (selectedTabNode) {
-			theme.renderChildNodes(renderer,selectedTabNode, content);
-		}
-		
-	}
-	
-},
-
-
-
-/**
- * Prevent text selection in buttons and etc.
- */
-addPreventSelectionListener : function(theme,client,div,event) {
-	if(itmill.wb.isFF) {
-		div.style.MozUserSelect = "none";
-	} else if(itmill.wb.isWebkit) {
-		div.style.WebkitUserSelect = "none";
-	} else {
-		// For IE
-		this.client.addEventListener(div, "selectstart", function(e) { 
-			var evt = itmill.lib.getEvent(e);
-			evt.stop();
-			return false;
-		}
-		);
-	}
 }
-
-
-
-
-
 
 }); // End of BaseTheme -class
 
@@ -4815,13 +4408,11 @@ addPreventSelectionListener : function(theme,client,div,event) {
  *  @constructor
  *
  *	External resources: filterselect.css, filterselect.js
- *	
- *
  *
  *  @author Oy IT Mill Ltd / Tomi Virtanen
  */
 
-itmill.themes.Base.FilterSelect = function(renderer,uidl,target,layoutInfo) {
+itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	
     // TODO working on undoable & tabbing etc
     
@@ -5170,8 +4761,7 @@ itmill.themes.Base.FilterSelect.prototype.defocusOption = function(index) {
 		this.parentTheme.removeCSSClass(option, "over");
 }
 
-/* Flash component
-*/
+/* Flash component */
 itmill.themes.Base.FilterSelect.prototype.flash = function(el) {
 	
 	if(!this.filtering) {
@@ -5192,7 +4782,6 @@ itmill.themes.Base.FilterSelect.prototype.adjustWidth = function(el, width) {
 		//el.style.width = width;
 	} 
 }
-
 
 /* Select option */
 itmill.themes.Base.FilterSelect.prototype.selected = function(id) {
@@ -5412,11 +5001,12 @@ itmill.themes.Base.FilterSelect.prototype.decodeCaption = function(encoded) {
 	return unescape(encoded.replace(/[+]+/g, " "));
 }
 
-/* ** DIV Windowing ** */
+
+/* ** Inline Windowing ** */
 
 
 /**
- * Overlay is an object to be used by for example windows (by composition).
+ * Overlay is an object to be used by e.g. windows (by composition).
  * 
  * Other components that might use it:
  *  * tooltips
@@ -5430,9 +5020,8 @@ itmill.themes.Base.Overlay = function(w,h,x,y,zIndexBase) {
 	h = (h ? h : 400);
 	var agent = navigator.userAgent.toLowerCase();
 	// IE 6 and mac FF needs iFrame blocker to prevent some form elements
-	// seeing trought Overlay, all IE versions with acroreader
-	// TODO change to use itmill.wb.isIE
-	if ( agent.indexOf("msie") > 0 ) {
+	// seeing trought Overlay, all IE versions with acrobat reader
+	if (itmill.wb.isIE) {
 		console.log("Adding Iframe blocker");
 		this._blocker = document.createElement("iframe");
 		this._blocker.className = "overlay_blocker";
