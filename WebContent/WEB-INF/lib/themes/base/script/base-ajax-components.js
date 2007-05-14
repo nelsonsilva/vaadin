@@ -3023,8 +3023,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         }
 		
 		if (rowheaders) {
-            td = d.createElement("td"); tdDiv = d.createElement("div");
-            td.className = "tablecell";
+            td = d.createElement("td"); 
+            tdDiv = d.createElement("div");
+            td.className = "tablecell rowheader";
             tdDiv.className = "cellContent";
 			if (iconUrl) {
                 icon = d.createElement("img");
@@ -3645,6 +3646,7 @@ scrollTableRecalc : function(pid, target) {
     	var cell = h[i];
         var cid = cell.getAttribute("cid");
         var w = colWidths[cid] || cell.offsetWidth;
+        if (w<20) w = 20;
 		cell.style.width = w + "px";
         // et div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
         // now text doesn't overlap resizer & sort indicator
