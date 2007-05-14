@@ -234,8 +234,14 @@ IMG.overlay {
 	color: CaptionText;
 	background-color: ActiveCaption;
 }
-.itmtk .panel .panelborder, .panel-strong .panelborder, .panel-light .panelborder {
+.itmtk .panel .panelborder, .panel-strong .panelborder {
 	border: 2px groove ThreeDHighlight;
+}
+.itmtk .panel-light .panelborder {
+	border: none;
+}
+.itmtk .panel-light .panelcaption {
+	font-weight: bold;
 }
 
 /* Select */
