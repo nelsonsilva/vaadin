@@ -1807,7 +1807,7 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 	var readonly = uidl.getAttribute("readonly") == "true";
 	
 	/* locale, translate UI */
-	var locale = uidl.getAttribute("locale")	
+	var locale = uidl.getAttribute("locale");
 	if (locale && !disabled && !readonly) {
 		locale = locale.toLowerCase().split("_")[0];
 		var lang = client.loadDocument(theme.root+"ext/jscalendar/lang/calendar-"+locale+".js",false);
@@ -1855,8 +1855,17 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
     if (style != "time") {
 		if (dayValue) {
 			// Using calendar - create textfield
+			
+			// Format date string using current locale
+			var d = new Date();
+	    	d.setDate(dayValue);
+	    	d.setMonth(monthValue-1); // JS Date object uses 0-11 months
+	    	d.setFullYear(yearValue);
+	    	var format = Calendar._TT["DEF_DATE_FORMAT"]? Calendar._TT["DEF_DATE_FORMAT"] : "%Y-%m-%d";
+	    	var dateText = d.print(format);
+	    	
 		    if (readonly) {
-		    	text = theme.createTextNodeTo(div,dayValue+"."+monthValue+"."+yearValue);
+		    	text = theme.createTextNodeTo(div, dateText);
 		    } else {
 		    	text = theme.createInputElementTo(div,"text");
 				text.id = inputId;
@@ -1865,9 +1874,9 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 			    	text.disabled = true;
 			    }	            
 			    if (yearValue >0 && monthValue >0 && dayValue >0) {
-				    text.value = dayValue+"."+monthValue+"."+yearValue;
+			    	text.value = dateText;
 				} else {
-				    text.value ="";
+				    text.value = "";
 				}
 		    }
 			
@@ -2070,14 +2079,14 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 },
 
 dateFieldShowCalendar : function (e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	// "this" is triggering element that has inputs id in inputId
 	var inputField = evt.target.ownerDocument.getElementById(evt.target.inputId);
 	
 	// This uses Calendar object directly, DO NOT USE setup() helper methods - it will leak
 	var cal = window.calendar;
-
-	var dValue = Date.parseDate(inputField.value, "%d,%m,%Y");
+	// TODO should be using proper locale
+	var dValue = Date.parseDate(inputField.value, Calendar._TT["DEF_DATE_FORMAT"]);
 
 	console.debug("show calendar");
 	
@@ -2090,7 +2099,7 @@ dateFieldShowCalendar : function (e) {
 			itmill.themes.Base.prototype.dateFieldUpdateFromCalendar,
 			itmill.themes.Base.prototype.dateFieldCloseCalendar
 		);
-		cal.setDateFormat("%d.%m.%Y");
+		cal.setDateFormat(Calendar._TT["DEF_DATE_FORMAT"]);
 		mustCreate = true;
 	} else {
 		// modifying existing calendar Object
@@ -2115,21 +2124,21 @@ dateFieldUpdateFromCalendar : function (){
 		// we have doped it with triggerElement that points to "..." Button
 		var field = document.getElementById(this.triggerElement.inputId);
 		field.value = this.date.print(this.dateFormat);
-		field.updateVariables();
+		field.updateVariables(this.date);
 		this.hide();
 	}
 },
 
-dateFieldUpdateVariables : function () {
+dateFieldUpdateVariables : function (d) {
 	// "this" must be textField
 	if (this.value == null || this.value == "") {
 		return;
 	}
-	var a = this.value.split(".");
+	//var a = this.value.split(".");
 	
-	this.client.changeVariable(this.dayVarId, a[0], false);
-	this.client.changeVariable(this.monthVarId, a[1], false);
-	this.client.changeVariable(this.yearVarId, a[2], this.immediate);
+	this.client.changeVariable(this.dayVarId, d.getDate(), false);
+	this.client.changeVariable(this.monthVarId, d.getMonth()+1, false);
+	this.client.changeVariable(this.yearVarId, d.getFullYear(), this.immediate);
 	
 },
 
