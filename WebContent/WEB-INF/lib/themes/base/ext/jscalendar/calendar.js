@@ -1177,7 +1177,7 @@ Calendar.prototype._init = function (firstDayOfWeek, date) {
 					cell.className += " today";
 					cell.ttip += Calendar._TT["PART_TODAY"];
 				}
-				if (weekend.indexOf(wday.toString()) != -1)
+				if (weekend && weekend.indexOf(wday.toString()) != -1)
 					cell.className += cell.otherMonth ? " oweekend" : " weekend";
 			}
 		}
@@ -1525,13 +1525,14 @@ Calendar.prototype._displayWeekdays = function () {
 		cell.className = "day name";
 		var realday = (i + fdow) % 7;
 		if (i) {
-			cell.ttip = Calendar._TT["DAY_FIRST"].replace("%s", Calendar._DN[realday]);
+			if(Calendar._TT["DAY_FIRST"]) cell.ttip = Calendar._TT["DAY_FIRST"].replace("%s", Calendar._DN[realday]);
+			else cell.ttip = "";
 			cell.navtype = 100;
 			cell.calendar = this;
 			cell.fdow = realday;
 			Calendar._add_evs(cell);
 		}
-		if (weekend.indexOf(realday.toString()) != -1) {
+		if (weekend && weekend.indexOf(realday.toString()) != -1) {
 			Calendar.addClass(cell, "weekend");
 		}
 		cell.innerHTML = Calendar._SDN[(i + fdow) % 7];
@@ -1587,7 +1588,7 @@ Date.parseDate = function(str, fmt) {
 	var m = -1;
 	var d = 0;
 	var a = str.split(/\W+/);
-	var b = fmt.match(/%./g);
+	var b = fmt.match(/(%.)|([dmy]{1,2})/g);
 	var i = 0, j = 0;
 	var hr = 0;
 	var min = 0;
@@ -1597,15 +1598,19 @@ Date.parseDate = function(str, fmt) {
 		switch (b[i]) {
 		    case "%d":
 		    case "%e":
+		    case "dd":
 			d = parseInt(a[i], 10);
 			break;
 
 		    case "%m":
+		    case "mm":
 			m = parseInt(a[i], 10) - 1;
 			break;
 
 		    case "%Y":
 		    case "%y":
+		    case "yy":
+		    case "y":
 			y = parseInt(a[i], 10);
 			(y < 100) && (y += (y > 29) ? 1900 : 2000);
 			break;
@@ -1773,8 +1778,11 @@ Date.prototype.print = function (str) {
 	s["%y"] = ('' + y).substr(2, 2); // year without the century (range 00 to 99)
 	s["%Y"] = y;		// year with the century
 	s["%%"] = "%";		// a literal '%' character
+	s["dd"] = s["%d"];
+	s["mm"] = s["%m"];
+	s["yy"] = s["y"] = s["%Y"];
 
-	var re = /%./g;
+	var re = /(%.)|([ymd]{1,2})/g;
 	if (!Calendar.is_ie5 && !Calendar.is_khtml)
 		return str.replace(re, function (par) { return s[par] || par; });
 
