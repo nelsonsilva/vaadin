@@ -3042,7 +3042,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                 icon.src = iconUrl;
                 tdDiv.appendChild(icon);
 			}
-            tdDiv.appendChild(d.createTextNode(row.getAttribute("caption")));
+            tdDiv.innerHTML += row.getAttribute("caption")||"&nbsp;";
             td.appendChild(tdDiv);
             tr.appendChild(td);
 		}	
@@ -3171,8 +3171,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         }
         div.style.width = model.state.width;
     }
-    cout.style.width = (parseInt(model.state.width) - 4) + "px";
-    hout.style.width = (parseInt(model.state.width) - 4) + "px";
+    cout.style.width = (parseInt(model.state.width) - 3) + "px";
+    hout.style.width = (parseInt(model.state.width) - 3) + "px";
     // ensure browsers don't make any intelligent cell resizing
     hout.firstChild.style.width = "6000px";
     
@@ -3259,12 +3259,12 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
         
         if(model.meta.rowheaders) {
             var rhCell = d.createElement("td");
-            rhCell.className = "tablecell";
+            rhCell.className = "tablecell rowheader";
             var cellContent = d.createElement("div");
             cellContent.className = "cellContent";
             cellContent.style.width = (target.colWidths["heh"] - 4) + "px";
             // TODO row icon ???
-            cellContent.innerHTML = ruidl.getAttribute("caption");
+            cellContent.innerHTML = ruidl.getAttribute("caption")||"&nbsp;";
             rhCell.appendChild(cellContent);
             row.appendChild(rhCell);
         }
@@ -3655,7 +3655,10 @@ scrollTableRecalc : function(pid, target) {
     	var cell = h[i];
         var cid = cell.getAttribute("cid");
         var w = colWidths[cid] || cell.offsetWidth;
-        if (w<20) w = 20;
+        if (w<19) {
+        	w = 19;
+        	colWidths[cid] = w;
+        }
 		cell.style.width = w + "px";
         // et div.headerContents width to w - COL_RESIZER_WIDTH - margin - 10px extra for possible sort indicator
         // now text doesn't overlap resizer & sort indicator
