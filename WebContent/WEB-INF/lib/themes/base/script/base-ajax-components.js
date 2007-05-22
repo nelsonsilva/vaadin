@@ -882,22 +882,6 @@ addSetVarListener : function(theme, client, element, event, variable, key, immed
 	);
 },
 
-// TODO no usage (14.5.2007), should be removed?
-addRemoveVarListener : function(theme, client, element, event, variable, key, immediate) {
-	client.addEventListener(element,event, function(e) {
-			theme.removeArrayVariable(client,variable,key,immediate);
-		}
-	);
-},
-
-// TODO no usage (14.5.2007), should be removed?
-addAddVarListener : function(theme, client, element, event, variable, key, immediate) {
-	client.addEventListener(element,event, function(e) {
-			theme.addArrayVariable(client,variable,key,immediate);
-		}
-	);
-},
-
 addToggleVarListener : function(theme, client, element, event, variable, key, immediate) {
 	client.addEventListener(element,event, function(e) {
 			theme.toggleArrayVariable(client,variable,key,immediate);
