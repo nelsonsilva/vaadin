@@ -1640,91 +1640,6 @@ itmill.Client.prototype.processAllLayoutFunctions = function() {
 	}
 }
 
-
-/** Returns a cross-browser object with useful event properties.
- * 
- * @deprecated use same function in itmill.lib
- * 
- * e: 					the ('raw') event  
- * type:				event type
- * target:				the target element
- * targetX:				X-position of the target element
- * targetY:				Y-position of the target element
- * key:					pressed key character
- * alt:					true if ALT -key was held
- * shift:				true if SHIFT -key was held
- * ctrl:				true if CTRL -key was held
- * rightclick:			true if the right mousebutton was clicked, or ctrl held while clicking
- * mouseX:				X-position of the mouse
- * mouseY:				Y-position of the mouse
- *
- *  @param e			The event, null for window.event (IE)
- *
- *	@return Properties object.  
- */
-itmill.Client.prototype.getEvent = function(e) {
-	var props = new Object()
-
-	if (!e) var e = window.event;
-	props.e = e;
-	props.type = e.type;
-	
-	var targ;	
-	if (e.target) { 
-		targ = e.target;
-	} else if (e.srcElement) { 
-		targ = e.srcElement;
-	}
-	if (targ.nodeType == 3) {
-		targ = targ.parentNode;
-	}
-	props.target = targ;
-	var p = this.getElementPosition(targ);
-	props.targetX = p.x;
-	props.targetY = p.y;
-	
-	var code;
-	if (e.keyCode) {
-	 code = e.keyCode;
-	} else if (e.which) {
-		code = e.which;
-	}
-	if (code) {
-		props.key = String.fromCharCode(code);
-	}
-	
-	props.alt = e.altKey;
-	props.ctrl = e.ctrlKey;
-	props.shift = e.shiftKey;
-	
-	var rightclick;
-	if (e.which) {
-		rightclick = (e.which == 3 || (props.ctrl));
-	} else if (e.button) {
-		rightclick = (e.button == 2|| (props.ctrl));
-	}
-	props.rightclick = rightclick;
-	
-	if (e.pageX || e.pageY) 	{
-		props.mouseX = e.pageX;
-		props.mouseY = e.pageY;
-	} else if (e.clientX || e.clientY) 	{
-		props.mouseX = e.clientX + document.body.scrollLeft
-			+ document.documentElement.scrollLeft;
-		props.mouseY = e.clientY + document.body.scrollTop
-			+ document.documentElement.scrollTop;
-	}
-	
-	props.stop = function() {
-		e.cancelBubble = true;
-		if (e.stopPropagation) e.stopPropagation();
-		if (e.preventDefault) e.preventDefault();
-		return false;
-	}
-	
-	return props;
-}
-
 /**
  * This method should be called when element receives focus. Client stores reference to
  * currently focused element PID, so it can restore focus if element gets re-rendered
@@ -1761,35 +1676,6 @@ itmill.Client.prototype.setFocus = function(pid) {
  		return el;
 	else 
 		return null;
-}
-
-/**
- * @deprecated use itmill.lib.getElementPosition instead
- *  TODO Remove this
- */
-itmill.Client.prototype.getElementPosition = function(element) {
-	var props = new Object();
-// TODO scroll offsets testing in IE
-	var obj = element;
-	var x = obj.offsetLeft + (obj.scrollLeft||0);
-	var y = obj.offsetTop + (obj.scrollTop||0);
-	if (obj.parentNode||obj.offsetParent) {
-		while (obj.offsetParent||obj.parentNode) {
-            obj = obj.offsetParent||obj.parentNode;
-			if (obj.nodeName == "TBODY") continue;
-			x += (obj.offsetLeft||0) - (obj.scrollLeft||0);
-			y += (obj.offsetTop||0) - (obj.scrollTop||0);
-		}
-	} else if (obj.x) {
-		x += obj.x;
-		y += obj.y;
-	}
-	props.x = x;
-	props.y = y;
-	props.h = element.offsetHeight;
-	props.w = element.offsetWidth;
-	
-	return props;
 }
 
 /** Prints objects properties into separate window.

@@ -691,7 +691,7 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
         uidlDebug.uidl = uidl;
 		client.addEventListener(uidlDebug,"click", function (e) {
             if(window.confirm("Print components UIDL to console?")) {
-                var event = client.getEvent(e);
+                var event = itmill.lib.getEvent(e);
                 console.info("Printing components UIDL");
                 console.dirxml(event.target.uidl);
             }
@@ -829,7 +829,7 @@ addToggleClassListener : function(theme, client, element, event, className, targ
 
 addStopListener : function(theme, client, element, event) {
 	this.client.addEventListener(element, event, function(e) { 
-			var evt = client.getEvent(e);
+			var evt = itmill.lib.getEvent(e);
 			return evt.stop();
 		}
 	);
@@ -1674,7 +1674,7 @@ addExpandNodeListener : function(theme, client, button, event, subnodes, expandV
 },
 
 treeNodeShowContextMenu: function(e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	if(evt.rightclick || evt.type == "contextmenu") {
 		evt.stop();
 		// Build ContextMenu compatible structure form list
@@ -2476,7 +2476,7 @@ renderLink : function(renderer, uidl, target, layoutInfo) {
 
 addLinkOpenWindowListener : function(theme, client, element, event, url, target, features) {
 	client.addEventListener(element,(event=="rightclick"?"click":event), function(e) {
-			var evt = client.getEvent(e);
+			var evt = itmill.lib.getEvent(e);
 			if (event=="rightclick"&&!evt.rightclick) return;
 			if (!target) {
 				window.location = url;
@@ -2881,7 +2881,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var inner  = theme.createElementTo(div,"div","border");
 
     // TODO check if this is needed
-	var offsetLeft = client.getElementPosition(inner).x;
+	var offsetLeft = itmill.lib.getElementPosition(inner).x;
     
     // TODO move building actions object to beginning of the funtion -> redraw if actions change
 	// Actions
@@ -3181,7 +3181,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 
 	var status = target.ownerDocument.getElementById(pid+"status");
     model.status = status;
-	var p = client.getElementPosition(hout);
+	var p = itmill.lib.getElementPosition(hout);
 	status.style.marginTop = 35 + "px";
 	status.style.marginLeft = Math.round(div.offsetWidth/2 - 75 ) +"px";
     vcols.style.marginLeft = (div.offsetWidth - 22) + "px";
@@ -3445,7 +3445,7 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 	var colWidths = table.colWidths;
 	
 	var mouseDragListener = function (e) {
-			var evt = client.getEvent(e);
+			var evt = itmill.lib.getEvent(e);
 			evt.stop();
 			element.ownerDocument.onselectstart = function(e) {return false;}
 			var target = element.target;
@@ -3469,7 +3469,7 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 			client.removeEventListener(element.ownerDocument.body,"mousemove",mouseDragListener);
 			client.removeEventListener(element.ownerDocument.body,"mouseup",arguments.callee);
 			client.removeEventListener(element.ownerDocument.body,"drag",stopListener);
-			var evt = client.getEvent(e);
+			var evt = itmill.lib.getEvent(e);
 			evt.stop();
 			element.ownerDocument.onselectstart = null;
 			element.dragging = false;
@@ -3477,13 +3477,13 @@ tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 	};
 	
 	var stopListener = function (e) {
-		var evt = client.getEvent(e);
+		var evt = itmill.lib.getEvent(e);
 		evt.stop();
 		return false;
 	}
 	
 	client.addEventListener(element,"mousedown", function(e) {
-		var evt = client.getEvent(e);
+		var evt = itmill.lib.getEvent(e);
 		evt.stop();
 		element.dragging = true;
 		element.moved = false;
@@ -3691,7 +3691,7 @@ addToDragOrderGroup : function (client, theme, element, group, variable, sortVar
 	group.elements[idx] = element;
 	
 	var mouseDragListener = function (e) {
-			var evt = client.getEvent(e);
+			var evt = itmill.lib.getEvent(e);
 			evt.stop();
 			element.ownerDocument.onselectstart = function() {return false;}
 			var target = element.target;
@@ -3708,7 +3708,7 @@ addToDragOrderGroup : function (client, theme, element, group, variable, sortVar
 			for (var i=0;i<els.length;i++) {
 				if (i==element.idx) continue;
 				var el = els[i];
-				var p = client.getElementPosition(el);
+				var p = itmill.lib.getElementPosition(el);
 				if (i!=dragGroup.origIdx&&i-1!=dragGroup.origIdx&&p.x < evt.mouseX && p.x+p.w/2 > evt.mouseX) {
 						dragGroup.targetIdx = i; 
 						el.style.borderLeft = "1px solid black";
@@ -3730,7 +3730,7 @@ addToDragOrderGroup : function (client, theme, element, group, variable, sortVar
 	var mouseUpListener = function(e) {
 			client.removeEventListener(element.ownerDocument.body,"mousemove",mouseDragListener);
 			client.removeEventListener(element.ownerDocument.body,"mouseup",arguments.callee);
-			var evt = client.getEvent(e);
+			var evt = itmill.lib.getEvent(e);
 			evt.stop();
 			element.ownerDocument.onselectstart = null;
 			element.target.style.background = "";
@@ -3770,7 +3770,7 @@ addToDragOrderGroup : function (client, theme, element, group, variable, sortVar
 	};
 	
 	client.addEventListener(element,"mousedown", function(e) {
-		var evt = client.getEvent(e);
+		var evt = itmill.lib.getEvent(e);
 		evt.stop();
 		element.dragGroup.dragging = true;
 		element.dragGroup.moved = false;
@@ -3803,7 +3803,7 @@ addToDragOrderGroup : function (client, theme, element, group, variable, sortVar
  */
 tableRowShowContextMenu : function(e) {
 	var client = itmill.clients[0];
-	var evt = client.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	if(evt.rightclick || evt.type == "contextmenu") {
 		// stop bubling
 		evt.stop();
@@ -3842,7 +3842,7 @@ tableRowShowContextMenu : function(e) {
  */
 tableShowColumnSelectMenu : function(e) {
  	var client = itmill.clients[0];
- 	var evt = client.getEvent(e);
+ 	var evt = itmill.lib.getEvent(e);
  	// stop bubbling
  	evt.stop();
  	var cm = client.getContextMenu();
@@ -4596,7 +4596,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 			});	
             // Add blur (unfocus) listener
             this.client.addEventListener(fs.search, 'change', function (e) {
-                    //var evt = this.client.getEvent(e);
+                    //var evt = itmill.lib.getEvent(e);
                     //evt.stop();                    
                     fs.deselect(fs.selectedIndex%fs.size);					
 					fs.selectedIndex = fs.focusedIndex;		
@@ -5923,7 +5923,7 @@ itmill.ui.Shortcut = function(target, func, keyCode, c, a, s) {
 }
 
 itmill.ui._shortcutHandler =  function(e) {
-	var evt = itmill.Client.prototype.getEvent(e);
+	var evt = itmill.lib.getEvent(e);
 	// TODO cont shoud be fetched
 	var cont = document.body;
 	if(cont.shortcutMap.length > 0) {
