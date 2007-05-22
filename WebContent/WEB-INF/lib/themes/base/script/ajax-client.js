@@ -67,6 +67,9 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 	// Initialize variableChangeQueue
 	this.variableStates = new Object();
 	
+	this.requestsSent = 0;
+	this.requestsReceived = 0;
+	
 	// Create empty renderers list
 	this.renderers = new Object(); 
 
@@ -432,7 +435,9 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
             // in case of session timeout, server error etc
             if (req.readyState != 4 || typeof req.status == 'undefined' || req.status == null)
                 return;
-        
+                
+            client.requestsReceived++;
+                
             // Check status code
             if (req.status != 200) {
                 console.error(req);
@@ -542,6 +547,7 @@ itmill.Client.prototype.processVariableChanges = function (repaintAll,nowait) {
 	activeRequest.setRequestHeader('Content-Type',
                       'application/x-www-form-urlencoded; charset=UTF-8');
 	activeRequest.send(useGetParams?null:changes);
+	this.requestsSent++;
 }
 
 /** Get first child element in given parent.

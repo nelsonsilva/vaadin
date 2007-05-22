@@ -1326,11 +1326,11 @@ renderPanel : function(renderer, uidl, target, layoutInfo) {
 			theme.renderChildNodes(renderer, uidl, content);
 },
 
-/** under development
+/** 
+ * under development
  * this should be easily modified not to use polling in case "comet" is implemented
  */ 
 renderProgressIndicator : function(renderer, uidl, target, layoutInfo) {
-    // TODO try to mess intervals
     // Create container element
     var div = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
     var id = div.id;
@@ -1339,8 +1339,10 @@ renderProgressIndicator : function(renderer, uidl, target, layoutInfo) {
     var appId = this.clientId;
 
     var f = function() {
-        // poll server for changes
-        itmill.clients[appId].processVariableChanges(false,false);
+        // poll server for changes if no other request is currently on its way
+        var c = itmill.clients[appId];
+        if(c.requestsReceived == c.requestsSent)
+	        c.processVariableChanges(false,true);
         if(null == document.getElementById(id)) {
             //if progressindicator is removed, clear this interval
             clearInterval(renderer.theme.intervals[id]);
