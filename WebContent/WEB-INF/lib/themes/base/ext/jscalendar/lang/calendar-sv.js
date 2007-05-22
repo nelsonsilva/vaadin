@@ -1,4 +1,4 @@
-﻿// ** I18N
+// ** I18N
 
 // Calendar SV language (Swedish, svenska)
 // Author: Mihai Bazon, <mihai_bazon@yahoo.com>

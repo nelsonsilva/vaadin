@@ -1,4 +1,4 @@
-﻿// ** I18N
+// ** I18N
 
 // Calendar FI language (Finnish, Suomi)
 // Author: Jarno K?yhk?, <gambler@phnet.fi>
