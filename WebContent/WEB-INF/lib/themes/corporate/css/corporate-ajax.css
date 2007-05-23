@@ -709,63 +709,46 @@
 
 /* Filter-select extensions */
 
-.itmtk .filterselect .fssearch-layout .input {
+.itmtk .filterselect .input {
 	background: #f6f9fc	url(../img/common/input_bg.png) repeat-x;
-	border: solid 1px #8fa5b3;
-	border-right: none;
+	border-color: #8fa5b3;
 }
-.itmtk .filterselect .fssearch-layout .fsinput {
-	border: none;
+.itmtk .filterselect .fsinput {
 	background: transparent;
 }
-.itmtk .filterselect .fssearch-layout .dropdown {
+.itmtk .filterselect .toggle-btn {
 	background: #f6f9fc	url(../img/common/input_bg.png) repeat-x;
-	border: solid 1px #8fa5b3;
-	border-left: none;
+	border-color: #8fa5b3;
 }
-.itmtk .filterselect .fspopup,
 .itmtk .filterselect .fspopup-show {
-	
-}
-.itmtk .filterselect .selectbox {
-	border: solid 1px #d3d4dc;
-	border-width: 0 1px;
-}
-.itmtk .filterselect .selectbox-row {
-	padding: 1px 0 1px 5px;
-}
-.itmtk .filterselect .selectbox .over {
-	color: #0165cb;
-	
+	background-color: #fff;
 }
 .itmtk .filterselect .selectedrow {
 	background-color: #f9ffc6;
 	color: #2c3437;
 }
-.itmtk .filterselect .layout {
-	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
-	border: solid 1px #d3d4dc;
-	padding: 0;
-	margin: 0;
-	margin-right: -2px
-}
-.itmtk .filterselect .layout .disabled {
-		opacity: 0.2;
+.itmtk .filterselect .page-up .disabled,
+.itmtk .filterselect .page-down .disabled {
+	opacity: 0.2;
 	filter: alpha(opacity=20);
-	border: none;
 }
-.itmtk .filterselect .fsup,
-.itmtk .filterselect .fsdown {
-	border: none;
+.itmtk .filterselect .page-up,
+.itmtk .filterselect .page-down {
+	background: #d7eafe url(../img/tabsheet/header_bg.png) repeat-x;
 }
-.itmtk .filterselect .over .fsup,
-.itmtk .filterselect .over .fsdown {
-	background-color: #f0f4f9;
-	border: none;
+.itmtk .filterselect .page-up span,
+.itmtk .filterselect .page-down span {
+	background-color: transparent;
 }
-.itmtk .filterselect .statics {
-	border: solid 1px #d3d4dc;
-	border-top: none;
+.itmtk .filterselect .over {
+	background: #d7eafe url(../img/common/input_bg.png) repeat-x;
+}
+.itmtk .filterselect .selectbox .over {
+	color: #3e9dff;
+	background: #e4eefa;
+}
+.itmtk .filterselect .stats {
+	border-color: #8fa5b3;
 	font-size: 0.9em;
 }
 
