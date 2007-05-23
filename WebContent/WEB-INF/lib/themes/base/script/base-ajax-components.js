@@ -4480,17 +4480,17 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	// Render default header
 	this.parentTheme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	
-	var table = this.parentTheme.createElementTo(div,"table","fslayout");
-	var tbody = this.parentTheme.createElementTo(table,"tbody");
-	var tr = this.parentTheme.createElementTo(tbody,"tr","row");
-	var td = this.parentTheme.createElementTo(tr,"td","cell");
-	table = this.parentTheme.createElementTo(td,"table","fssearch-layout");
-	var slbody = this.parentTheme.createElementTo(table,"tbody");
-	var sltr = this.parentTheme.createElementTo(slbody,"tr");
-	var sltdfield = this.parentTheme.createElementTo(sltr,"td","input");
-	var sltdtoggle = this.parentTheme.createElementTo(sltr,"td","dropdown");
+	var layout = this.parentTheme.createElementTo(div,"div","fslayout");
+	//var tbody = this.parentTheme.createElementTo(table,"div");
+	//var tr = this.parentTheme.createElementTo(tbody,"div","row");
+	//var td = this.parentTheme.createElementTo(tr,"div","cell");
+	var searchLayout = this.parentTheme.createElementTo(layout,"div","fssearch-layout");
+	//var slbody = this.parentTheme.createElementTo(table,"div");
+	//var sltr = this.parentTheme.createElementTo(slbody,"div");
+	var sltdfield = this.parentTheme.createElementTo(searchLayout,"div","input");
+	var sltdtoggle = this.parentTheme.createElementTo(searchLayout,"div","toggle-btn");
     //undoable
-	var sltdundo = this.parentTheme.createElementTo(sltr,"td");
+	var sltdundo = this.parentTheme.createElementTo(searchLayout,"div");
 	
 	var	input = this.parentTheme.createElementTo(sltdfield,"input","fsinput");
 	input.setAttribute('type','text');
@@ -4512,31 +4512,31 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 		);
 	}
     
-	var	imagebg = this.parentTheme.createElementTo(sltdtoggle,"div","toggle-bg");	
-	var	image = this.parentTheme.createElementTo(imagebg,"div","toggle");	
+	//var	imagebg = this.parentTheme.createElementTo(sltdtoggle,"div","toggle-bg");	
+	var	image = this.parentTheme.createElementTo(sltdtoggle,"div","toggle");
 	this.parentTheme.addAddClassListener(this.parentTheme,this.client,image,"mouseover","highlighted");
 	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,image,"mouseout","highlighted");
 			
-	tr = this.parentTheme.createElementTo(tbody,"tr","row");
-	td = this.parentTheme.createElementTo(tr,"td","cell");
-	td.setAttribute('colspan','2');
+	//tr = this.parentTheme.createElementTo(tbody,"div","row");
+	//td = this.parentTheme.createElementTo(tr,"div","cell");
+	//td.setAttribute('colspan','2');
 	
-	this.popup = this.parentTheme.createElementTo(td,"div","fspopup");
-	var layout = this.parentTheme.createElementTo(this.popup,"div");
-	this.parentTheme.addAddClassListener(this.parentTheme,this.client,layout,"mouseover","over");
-	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,layout,"mouseout","over");
-	this.upbutton = this.parentTheme.createElementTo(layout,"div","fsup");	
-	this.parentTheme.createElementTo(layout,"div");
+	this.popup = this.parentTheme.createElementTo(layout,"div","fspopup");
+	var upBtn = this.parentTheme.createElementTo(this.popup,"div","page-up");
+	this.parentTheme.addAddClassListener(this.parentTheme,this.client,upBtn,"mouseover","over");
+	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,upBtn,"mouseout","over");
+	this.upbutton = this.parentTheme.createElementTo(upBtn,"span");
+	//this.parentTheme.createElementTo(layout,"div");
 	
 	var selectdiv = this.parentTheme.createElementTo(this.popup,"div","selectbox");
 	if (focusid) this.popup.focusid = focusid;
 	if (tabindex) this.popup.tabIndex = tabindex;				
 	
-	this.layout = this.parentTheme.createElementTo(this.popup,"div");
-	this.downbutton = this.parentTheme.createElementTo(this.layout,"div","fsdown");
-	this.parentTheme.addAddClassListener(this.parentTheme,this.client,this.layout,"mouseover","over");
-	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,this.layout,"mouseout","over");	
-	this.statics = this.parentTheme.createElementTo(this.popup,"div","statics");
+	var downBtn = this.parentTheme.createElementTo(this.popup,"div","page-down");
+	this.downbutton = this.parentTheme.createElementTo(downBtn,"span","fsdown");
+	this.parentTheme.addAddClassListener(this.parentTheme,this.client,downBtn,"mouseover","over");
+	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,downBtn,"mouseout","over");	
+	this.statics = this.parentTheme.createElementTo(this.popup,"div","stats");
 	this.updateStatistics();
 	
 	this.updateButtons();
@@ -4678,7 +4678,7 @@ itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {
 	this.show(this.visibleList);
 	this.parentTheme.removeCSSClass(this.toggle, "toggle");
 	this.parentTheme.addCSSClass(this.toggle, "toggle-selected");				
-	this.adjustWidth(this.layout,this.search.clientWidth);			
+	//this.adjustWidth(this.layout,this.search.clientWidth);			
 }
 
 /* Close dropdown box */
@@ -4711,7 +4711,7 @@ itmill.themes.Base.FilterSelect.prototype.show = function(element) {
 		// TODO width of arrow-icon (18px) could be checked
 		element.className = 'fspopup-show';		
 		if (element.offsetWidth < element.parentNode.offsetWidth) {
-			element.style.width = ( element.parentNode.offsetWidth)+ "px"
+			element.style.width = (element.parentNode.offsetWidth - 2)+ "px"
 		}
 	}
 }
@@ -4776,13 +4776,13 @@ itmill.themes.Base.FilterSelect.prototype.flash = function(el) {
 		setTimeout(cancelFlash,1500);
 	}	
 }
-
+/* Not needed, this should be left for presentation layer (CSS)
 itmill.themes.Base.FilterSelect.prototype.adjustWidth = function(el, width) {
 	if (el.clientWidth <= width) {
 		//el.style.width = width;
 	} 
 }
-
+*/
 /* Select option */
 itmill.themes.Base.FilterSelect.prototype.selected = function(id) {
 	if (id >=0 && id < this.select.childNodes.length) {		
@@ -4871,7 +4871,7 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 			// unescape and replace all '+' characters with space. 
 			var caption = this.decodeCaption(values[i]);			
 			optionNode.caption = caption;									
-			optionNode.innerHTML = caption||"&nbsp";
+			optionNode.innerHTML = caption||"&nbsp;";
 			if (this.selectMode == "multi") {
 				// TODO multiselections
 			} else {
