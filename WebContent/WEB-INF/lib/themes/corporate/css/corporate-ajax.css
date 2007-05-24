@@ -709,16 +709,12 @@
 
 /* Filter-select extensions */
 
-.itmtk .filterselect .input {
+.itmtk .filterselect .fssearch-layout {
 	background: #f6f9fc	url(../img/common/input_bg.png) repeat-x;
 	border-color: #8fa5b3;
 }
 .itmtk .filterselect .fsinput {
 	background: transparent;
-}
-.itmtk .filterselect .toggle-btn {
-	background: #f6f9fc	url(../img/common/input_bg.png) repeat-x;
-	border-color: #8fa5b3;
 }
 .itmtk .filterselect .fspopup-show {
 	background-color: #fff;
