@@ -4579,9 +4579,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
                 fs.focusSearchField();				
 			});	
             // Add blur (unfocus) listener
-            this.client.addEventListener(fs.search, 'change', function (e) {
-                    //var evt = itmill.lib.getEvent(e);
-                    //evt.stop();                    
+            this.client.addEventListener(fs.search, 'blur', function (e) {
                     fs.deselect(fs.selectedIndex%fs.size);					
 					fs.selectedIndex = fs.focusedIndex;		
 					fs.updateSearch();
@@ -4600,7 +4598,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 				} else if (keyCode == 27) {
 					fs.closeDropdown();
 					fs.updateSearch();
-				} else if (keyCode == 13) {					
+				} else if (keyCode == 13) {
 					fs.deselect(fs.selectedIndex%fs.size);					
 					fs.selectedIndex = fs.focusedIndex;		
 					fs.updateSearch();
@@ -4865,7 +4863,7 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 		for (var i=this.startIndex; i<keys.length && i<this.startIndex+this.size;i++) {
 			var optionNode = this.parentTheme.createElementTo(this.select,"div");
 			optionNode.style.whiteSpace = "nowrap";
-			optionNode.id = index;
+			optionNode.index = index;
 			optionNode.value = keys[i];	
 			this.parentTheme.addCSSClass(optionNode,"selectbox-row");
 			// unescape and replace all '+' characters with space. 
@@ -4889,18 +4887,16 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 			var fs = this;
 			
 			// clicklistener for this option
-			this.client.addEventListener(optionNode, 'click', function () {																											
-				var	id = -1;
-				if(fs.agent.indexOf("msie")==-1) {
-					id = this.id;
-					fs.parentTheme.removeCSSClass(this,"over");
-				} else {											
-					id = this.event.srcElement.id;
-					fs.parentTheme.removeCSSClass(this.event.srcElement,"over");						
-				}
+			this.client.addEventListener(optionNode, 'mousedown', function (e) {																											
+				var	index = -1;
+				var evt = itmill.lib.getEvent(e);
+				evt.stop();
+				index = evt.target.index;
+				fs.parentTheme.removeCSSClass(evt.target,"over");
+				
 				fs.deselect(fs.selectedIndex%fs.size);
-				fs.selectedIndex = id;
-				fs.focusedIndex	= id;
+				fs.selectedIndex = index;
+				fs.focusedIndex	= index;
 				fs.updateSearch();
 				fs.closeDropdown();
 				fs.focusSearchField();
