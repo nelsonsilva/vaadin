@@ -4568,10 +4568,12 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 				if (fs.visibleList != null) {
 					fs.closeDropdown();    
 	   				fs.focusSearchField();
-				} else {										
-	    			fs.dropdownMode();
-	    			fs.focusSearchField();	    	    			
-				}				
+				} else {
+					if(!fs.justClosed) {
+		    			fs.dropdownMode();
+		    			fs.focusSearchField();	    	    			
+					}
+				}
 			});	
             
 			// Add focus listener	
@@ -4583,7 +4585,13 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
                     fs.deselect(fs.selectedIndex%fs.size);					
 					fs.selectedIndex = fs.focusedIndex;		
 					fs.updateSearch();
-					fs.closeDropdown();			
+					fs.closeDropdown();
+					
+					// crossplatform workaround to catch click on toggle button
+					fs.justClosed = true;
+					setTimeout(function() {
+						fs.justClosed = false;
+					},100);
             });	
 			
 			// Add search field keydown listener	
