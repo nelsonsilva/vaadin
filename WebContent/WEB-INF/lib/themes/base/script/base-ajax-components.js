@@ -4413,9 +4413,7 @@ renderCheckBox : function(renderer, uidl, target, layoutInfo) {
  */
 
 itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
-	
-    // TODO working on undoable & tabbing etc
-    
+   
 	this.parentTheme = renderer.theme;	
 	var parentRenderer = renderer.parentRenderer;
 	this.client = renderer.client;			
@@ -4487,18 +4485,19 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	var searchLayout = this.parentTheme.createElementTo(layout,"div","fssearch-layout");
 	//var slbody = this.parentTheme.createElementTo(table,"div");
 	//var sltr = this.parentTheme.createElementTo(slbody,"div");
-	var sltdfield = this.parentTheme.createElementTo(searchLayout,"div","input");
-	var sltdtoggle = this.parentTheme.createElementTo(searchLayout,"div","toggle-btn");
+	//var sltdfield = this.parentTheme.createElementTo(searchLayout,"div","input");
+	//var sltdtoggle = this.parentTheme.createElementTo(searchLayout,"div","toggle-btn");
     //undoable
-	var sltdundo = this.parentTheme.createElementTo(searchLayout,"div");
+	//var sltdundo = this.parentTheme.createElementTo(searchLayout,"div");
 	
-	var	input = this.parentTheme.createElementTo(sltdfield,"input","fsinput");
+	var	input = this.parentTheme.createElementTo(searchLayout,"input","fsinput");
 	input.setAttribute('type','text');
 	if(selectedValue != null)
 		input.value = selectedValue;	
     //undoable
-	input.oldValue = oldValue;
-	if(modified&&oldValue&&oldValue != div.oldValue) {
+	//input.oldValue = oldValue;
+	
+	/*if(modified&&oldValue&&oldValue != div.oldValue) {
         input.style.background= "#FDFFB3";
 	    var undo = this.parentTheme.createElementTo(sltdundo,"span","undo-button");
 	    undo.title = "Undo";
@@ -4510,12 +4509,16 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 					parentTheme.setVariable(client, selectionVariable, input.oldValue, true);
 				}
 		);
-	}
+	}*/
     
-	//var	imagebg = this.parentTheme.createElementTo(sltdtoggle,"div","toggle-bg");	
-	var	image = this.parentTheme.createElementTo(sltdtoggle,"div","toggle");
-	this.parentTheme.addAddClassListener(this.parentTheme,this.client,image,"mouseover","highlighted");
-	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,image,"mouseout","highlighted");
+	//var imagebg = this.parentTheme.createElementTo(sltdtoggle,"div","toggle-bg");	
+	var	image = this.parentTheme.createElementTo(searchLayout,"img", "toggle");
+	image.style.width = 19;
+	image.style.height = 20;
+	image.style.textAlign = "right";
+	image.src = this.parentTheme.root + "img/filterselect/dropdown.gif";
+	//this.parentTheme.addAddClassListener(this.parentTheme,this.client,image,"mouseover","highlighted");
+	//this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,image,"mouseout","highlighted");
 			
 	//tr = this.parentTheme.createElementTo(tbody,"div","row");
 	//td = this.parentTheme.createElementTo(tr,"div","cell");
@@ -4682,8 +4685,8 @@ itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {
 		}
 	
 	this.show(this.visibleList);
-	this.parentTheme.removeCSSClass(this.toggle, "toggle");
-	this.parentTheme.addCSSClass(this.toggle, "toggle-selected");				
+	//this.parentTheme.removeCSSClass(this.toggle, "toggle");
+	//this.parentTheme.addCSSClass(this.toggle, "toggle-selected");				
 	//this.adjustWidth(this.layout,this.search.clientWidth);			
 }
 
@@ -4701,8 +4704,8 @@ itmill.themes.Base.FilterSelect.prototype.closeDropdown = function() {
 	}
 	this.hide(this.visibleList);
 	this.visibleList = null;
-	this.parentTheme.removeCSSClass(this.toggle, "toggle-selected");
-	this.parentTheme.addCSSClass(this.toggle, "toggle");
+	//this.parentTheme.removeCSSClass(this.toggle, "toggle-selected");
+	//this.parentTheme.addCSSClass(this.toggle, "toggle");
 }
 
 
@@ -4724,7 +4727,7 @@ itmill.themes.Base.FilterSelect.prototype.show = function(element) {
 
 itmill.themes.Base.FilterSelect.prototype.hide = function(element) {
 	if (element) {				
-		element.className = 'fspopup';		
+		element.className = 'fspopup';
 	}
 }
 
