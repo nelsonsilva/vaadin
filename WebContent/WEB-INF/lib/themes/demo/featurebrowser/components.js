@@ -37,7 +37,7 @@ renderFeatureBrowserLayout : function(renderer,uidl,target,layoutInfo) {
 	if (document.getElementById(pid) == null) {
 		
 		// Create container element
-		var paintableDiv = renderer.theme.createPaintableElement(renderer,uidl,document.body,layoutInfo);
+		var paintableDiv = renderer.theme.createPaintableElement(renderer,uidl,target,layoutInfo);
 	 	var div = theme.createElementTo(paintableDiv,"div",null);
 		div.id="featurebrowser-mainlayout";
 		
