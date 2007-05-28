@@ -709,10 +709,12 @@ IMG.overlay {
 }
 
 /* Select in lazy loading mode */
-
+.itmtk .filterselect {
+	width: 100%;
+}
 .itmtk .filterselect .fssearch-layout {
 	height: 18px;
-	border: 1px solid #aaaaaa;
+	border: 1px solid ThreeDShadow;
 	background-color: ThreeDHighlight;
 	white-space: nowrap;
 	padding-right: 22px;
@@ -723,7 +725,7 @@ IMG.overlay {
 	margin: 0;
 	padding: 2px;
 	width: 100%;
-	height: 14px;
+	height: 13px;
 }
 
 .itmtk .filterselect .toggle {
@@ -732,44 +734,47 @@ IMG.overlay {
 	margin-top: -1px;
 }
 
-.itmtk .filterselect .over {
+
+.itmtk .fspopupcont .over {
 	cursor: pointer;
 	border: none;
 }
 
 .itmtk .fspopupcont .fspopup-show {
-	background-color: ThreeDHighlight;
-	border-left: 1px solid #aaaaaa;
-	border-right: 1px solid #aaaaaa;
-	clear: left;
+	background-color: Menu;
+	border: 1px solid ThreeDShadow;
+	border-top: 1px solid ThreeDLightShadow;
 }
 
-.itmtk .fspopupcont .page-up,
-.itmtk .fspopupcont .page-down {
-	border-bottom: 1px solid #aaa;
-	background-color: #a6b8d6;
+.itmtk .fspopupcont .fspopup-show .page-up,
+.itmtk .fspopupcont .fspopup-show .page-down {
+	border: 1px solid ThreeDHighlight;
+	border-bottom: 1px solid ThreeDShadow;
+	border-right-color: transparent;
+	background-color: ThreeDFace;
 }
 
 .itmtk .fspopupcont .page-down {
-	border-top: 1px solid #aaa;
+	border-top: 1px solid ThreeDShadow;
 }
 
 .itmtk .fspopupcont .page-up span,
 .itmtk .fspopupcont .page-down span {
 	display: block;
-	width: 100%;
 	height: 10px;
 	background: transparent url(../img/filterselect/up.gif) no-repeat 50% 50%;
 	cursor: pointer;
 	text-align: right; /* IE event fix */
+	border: 1px solid transparent;
+	border-bottom: none;
 }
 
 .itmtk .fspopupcont .page-down span {
-	background: #a6b8d6 url(../img/filterselect/down.gif) no-repeat 50% 50%;
+	background-image: url(../img/filterselect/down.gif);
 }
 
 .itmtk .fspopupcont .over span {
-	background-color: orange;
+	border-color: ThreeDShadow;
 }
 
 .itmtk .fspopupcont .over .disabled {
@@ -777,30 +782,26 @@ IMG.overlay {
 }
 
 .itmtk .fspopupcont .selectbox {
-	margin: 0;
-	padding: 0;
 	width: 100%;
+	border-bottom: 1px solid ThreeDLightShadow;
 }
 
-.itmtk .fspopupcont .selectbox-row {
-	margin: 0;
+.itmtk .fspopupcont .selectbox .selectbox-row {
 	padding: 0 3px;
 	cursor: pointer;
 }
 
-.itmtk .fspopupcont .selectedrow {
-	background-color: #b1b1b1;
-	color: white;
+.itmtk .fspopupcont .selectbox .selectedrow {
+	background-color: HighLight;
+	color: HighLightText;
 }
 
 .itmtk .fspopupcont .selectbox .over {	
-	border: none;
-	background-color: #DCECFD;
-	color: black;
+	background-color: HighLight;
+	color: HighLightText;
 }
 
-.itmtk .fspopupcont .stats {
-	border-bottom: 1px solid #aaaaaa;
+.itmtk .fspopupcont .fspopup-show .stats {
 	text-align: center;
 }
 
