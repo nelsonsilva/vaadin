@@ -4556,15 +4556,15 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
             		fs.hasFocus = false;
             		
             		// defer leaving component
-					clearTimeout(fs.changeClosesPopup);
-					fs.changeClosesPopup = setTimeout(function() {
+					clearTimeout(fs.client.changeClosesPopup);
+					fs.client.changeClosesPopup = setTimeout(function() {
 						if(!fs.hasFocus) {
 		                    fs.deselect(fs.selectedIndex%fs.size);					
 							fs.selectedIndex = fs.focusedIndex;		
 							fs.updateSearch();
 							fs.closeDropdown();
 						}
-					},300);
+					},150);
 					
             });	
 			
@@ -4713,7 +4713,8 @@ itmill.themes.Base.FilterSelect.prototype.rollUp = function() {
 
 
 /* Open dropdown box */
-itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {	
+itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {
+	clearTimeout(this.client.changeClosesPopup);	
 	if(this.visibleList != null)
 		this.hide(this.visibleList);
 	this.visibleList = this.popup;	
@@ -4953,9 +4954,9 @@ itmill.themes.Base.FilterSelect.prototype.upButtonClick = function(e) {
 	} else {											
 		fs = this.event.srcElement.fs;							
 	}
+	fs.hasFocus = true;
 	fs.focusSearchField();				
 	fs.moveUp(fs);
-	fs.hasFocus = true;
 }
 
 
@@ -4968,10 +4969,10 @@ itmill.themes.Base.FilterSelect.prototype.downButtonClick = function(e) {
 	} else {											
 		fs = this.event.srcElement.fs;							
 	}
+	fs.hasFocus = true;
 	fs.focusSearchField();
 	fs.startIndex += fs.size;	
 	fs.moveDown(fs);
-	fs.hasFocus = true;
 }
 
 /* Show previous 'page' */
