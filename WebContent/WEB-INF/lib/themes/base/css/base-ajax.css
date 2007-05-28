@@ -297,19 +297,18 @@ IMG.overlay {
 }
 
 .itmtk .table .colsel-container {
-	position:absolute;
-	height:20px;
+	display:block;
+	/* container is only one pixel height to stay away of column resizers */
+	width:14px;
+	overflow:hidden;
+	border:0;
+	margin:0;
+	float:right;
 	/* Needed for Safari */
-	z-index: 1;
-}
-
-* html .itmtk .table .colsel-container {
-	margin-left:10px;
 }
 
 .itmtk .table .colsel {
-	position:absolute;
-	width: 10px;
+	width: 14px;
 	height: 14px;
 	height: 0.4em;
 	border: 1px solid ButtonText;
@@ -343,11 +342,15 @@ IMG.overlay {
 	padding: 0.0em 0.4em 0.1em 0.4em;
 }
 
+.itmtk .table .hcontainer {
+	
+	border-bottom: 1px solid ButtonShadow;
+}
+
 .itmtk .table .hout {
 	height: 1em;
 	overflow: hidden;
 	padding-bottom: 0.2em;
-	border-bottom: 1px solid ButtonShadow;
 }
 .itmtk .table .hin td {
 	overflow:hidden;
@@ -734,32 +737,25 @@ IMG.overlay {
 	border: none;
 }
 
-.itmtk .filterselect .fspopup {
-	position: absolute;	
-	display: none;
-}
-
-.itmtk .filterselect .fspopup-show {
-	position: absolute;
-	z-index: 200000;
+.itmtk .fspopupcont .fspopup-show {
 	background-color: ThreeDHighlight;
 	border-left: 1px solid #aaaaaa;
 	border-right: 1px solid #aaaaaa;
 	clear: left;
 }
 
-.itmtk .filterselect .page-up,
-.itmtk .filterselect .page-down {
+.itmtk .fspopupcont .page-up,
+.itmtk .fspopupcont .page-down {
 	border-bottom: 1px solid #aaa;
 	background-color: #a6b8d6;
 }
 
-.itmtk .filterselect .page-down {
+.itmtk .fspopupcont .page-down {
 	border-top: 1px solid #aaa;
 }
 
-.itmtk .filterselect .page-up span,
-.itmtk .filterselect .page-down span {
+.itmtk .fspopupcont .page-up span,
+.itmtk .fspopupcont .page-down span {
 	display: block;
 	width: 100%;
 	height: 10px;
@@ -768,41 +764,42 @@ IMG.overlay {
 	text-align: right; /* IE event fix */
 }
 
-.itmtk .filterselect .page-down span {
+.itmtk .fspopupcont .page-down span {
 	background: #a6b8d6 url(../img/filterselect/down.gif) no-repeat 50% 50%;
 }
 
-.itmtk .filterselect .over span {
+.itmtk .fspopupcont .over span {
 	background-color: orange;
 }
 
-.itmtk .filterselect .over .disabled {
+.itmtk .fspopupcont .over .disabled {
 	background-color: transparent;
 }
 
-.itmtk .filterselect .selectbox {
+.itmtk .fspopupcont .selectbox {
 	margin: 0;
 	padding: 0;
 	width: 100%;
 }
 
-.itmtk .filterselect .selectbox-row {
+.itmtk .fspopupcont .selectbox-row {
 	margin: 0;
 	padding: 0 3px;
 	cursor: pointer;
 }
 
-.itmtk .filterselect .selectedrow {
+.itmtk .fspopupcont .selectedrow {
 	background-color: #b1b1b1;
 	color: white;
 }
 
-.itmtk .filterselect .selectbox .over {	
+.itmtk .fspopupcont .selectbox .over {	
+	border: none;
 	background-color: #DCECFD;
 	color: black;
 }
 
-.itmtk .filterselect .stats {
+.itmtk .fspopupcont .stats {
 	border-bottom: 1px solid #aaaaaa;
 	text-align: center;
 }
@@ -949,4 +946,19 @@ IMG.overlay {
 	border: 1px solid gray;
 }
 .itmtk .tooltip span {
+}
+
+.itmtk .fspopupcont {
+	position:absolute;
+}
+.itmtk .fspopupcont .shadow {
+	position:absolute;	
+	overflow: auto;
+}
+.itmtk .fspopupcont .shadow div{
+	display:none;
+}
+.itmtk .fspopupcont .overlay_body div {
+	z-index:31003 !important;
+	background: #fff;
 }

@@ -2884,8 +2884,8 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	delete alNode;
 
 	inner.innerHTML = "<div id=\""+pid+"status\" class=\"tablestatus\" style=\"display:none;\"></div>";
-    inner.innerHTML += '<div class="colsel-container"></div><div class="hcontainer"></div>';
-	var vcols = model.vcols = inner.childNodes[1];
+    inner.innerHTML += '<div class="hcontainer"><div class="colsel-container"></div></div>';
+	var vcols = model.vcols = inner.childNodes[1].firstChild;
 	if (visiblecols && ! model.meta.disabled) {
 		vcols.innerHTML = "<DIV class=\"colsel\"><div></div></DIV>";
 		renderer.client.addEventListener(vcols,"click",theme.tableShowColumnSelectMenu);
@@ -2895,10 +2895,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var alignments = model.alignments = new Array();
 	
 	// headers
-	var hout = theme.createElementTo(inner.childNodes[2],"div","bg");
+	var hout = theme.createElementTo(inner.childNodes[1],"div","bg");
     model.hout = hout; // add reference for later use
 	hout.id = pid+"hout";
-	hout.style.overflow = "hidden";	
+	hout.style.overflow = "hidden";
 	theme.addCSSClass(hout,"hout");
 	var html = "<div><TABLE id=\""+pid+"hin\" class=\"hin\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><TBODY><TR>";	
 	if (rowheaders) {
@@ -3065,7 +3065,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
                 }
             }
             // render content
-            if(comp.nodeName == 'label' && ! comp.getAttribute("caption") && comp.firstChild && comp.firstChild.data) {
+            if(comp.nodeName == 'label' && ! comp.getAttribute("id") && comp.firstChild && comp.firstChild.data) {
                 // skip heavy renderUIDL function if only text
                 tdDiv.appendChild(d.createTextNode(comp.firstChild.data));
             } else {
@@ -3158,7 +3158,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         div.style.width = model.state.width;
     }
     cout.style.width = (parseInt(model.state.width) - 3) + "px";
-    hout.style.width = (parseInt(model.state.width) - 3) + "px";
+    hout.style.width = (parseInt(model.state.width) - 3 - 16) + "px";
     // ensure browsers don't make any intelligent cell resizing
     hout.firstChild.style.width = "6000px";
     
@@ -3168,7 +3168,6 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	var p = itmill.lib.getElementPosition(hout);
 	status.style.marginTop = 35 + "px";
 	status.style.marginLeft = Math.round(div.offsetWidth/2 - 75 ) +"px";
-    vcols.style.marginLeft = (div.offsetWidth - 22) + "px";
 
 	if(! model.meta.disabled) {
 		// add listener only for enabled table
@@ -3291,7 +3290,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             cellContent.style.width = (target.colWidths[colorder[currentCol]] - 4) + "px";
             cell.appendChild(cellContent);
             // render cell content
-            if(comp.nodeName == 'label' && ! comp.getAttribute("caption") && comp.firstChild && comp.firstChild.data) {
+            if(comp.nodeName == 'label' && ! comp.getAttribute("id") && comp.firstChild && comp.firstChild.data) {
                 // skip heavy renderUIDL function if only text
                 cellContent.appendChild(d.createTextNode(comp.firstChild.data));
             } else {
@@ -4524,7 +4523,10 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	//td = this.parentTheme.createElementTo(tr,"div","cell");
 	//td.setAttribute('colspan','2');
 	
-	this.popup = this.parentTheme.createElementTo(layout,"div","fspopup");
+	this.popupContainer = itmill.themes.Base.FilterSelect.Popup.getInstance(this.client);
+	
+	this.popup = document.createElement("div");
+	this.popup.className = "fspopup";
 	var upBtn = this.parentTheme.createElementTo(this.popup,"div","page-up");
 	this.parentTheme.addAddClassListener(this.parentTheme,this.client,upBtn,"mouseover","over");
 	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,upBtn,"mouseout","over");
@@ -4572,29 +4574,32 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 					fs.closeDropdown();    
 	   				fs.focusSearchField();
 				} else {
-					if(!fs.justClosed) {
-		    			fs.dropdownMode();
-		    			fs.focusSearchField();	    	    			
-					}
+	    			fs.dropdownMode();
+	    			fs.focusSearchField();	    	    			
 				}
+				return false;
 			});	
             
 			// Add focus listener	
-			this.client.addEventListener(fs.search, 'focus', function () {					  
-                fs.focusSearchField();				
+			this.client.addEventListener(fs.search, 'focus', function () {
+                fs.focusSearchField();
 			});	
+			
             // Add blur (unfocus) listener
             this.client.addEventListener(fs.search, 'blur', function (e) {
-                    fs.deselect(fs.selectedIndex%fs.size);					
-					fs.selectedIndex = fs.focusedIndex;		
-					fs.updateSearch();
-					fs.closeDropdown();
+            		fs.hasFocus = false;
+            		
+            		// defer leaving component
+					clearTimeout(fs.changeClosesPopup);
+					fs.changeClosesPopup = setTimeout(function() {
+						if(!fs.hasFocus) {
+		                    fs.deselect(fs.selectedIndex%fs.size);					
+							fs.selectedIndex = fs.focusedIndex;		
+							fs.updateSearch();
+							fs.closeDropdown();
+						}
+					},300);
 					
-					// crossplatform workaround to catch click on toggle button
-					fs.justClosed = true;
-					setTimeout(function() {
-						fs.justClosed = false;
-					},100);
             });	
 			
 			// Add search field keydown listener	
@@ -4633,6 +4638,80 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 				} 
 			});														
 		}			
+}
+
+/**
+ * Use getInstance instead!
+ * @private
+ */
+itmill.themes.Base.FilterSelect.Popup = function() {
+ 	this._container = document.createElement("div");
+ 	this._container.className = "fspopupcont";
+ 	this._container.style.display = "none";
+ 	this._htmlElement = document.createElement("div");
+ 	this._htmlElement.popup = this; // save reference for event handlers
+ 	this._ol = new itmill.themes.Base.Overlay();
+ 	this._ol.setZindexBase(31000); // Toolkit default for context menus
+ 	this._ol.SHADOW_OFFSET = 0;
+ 	this._ol.SHADOW_WIDTH = 0;
+	this._ol.appendTo(this._container);
+	var pTarget = this._ol.getPaintTarget();
+	pTarget.appendChild(this._htmlElement);
+}
+itmill.themes.Base.FilterSelect.Popup.__instance__ = null;
+
+/**
+ * Singleton method for getting popupcontainer
+ * @param client Client object for  which container is fetched
+ * @return Overlay
+ */
+itmill.themes.Base.FilterSelect.Popup.getInstance = function(client) {
+	if(!this.__instance__) {
+		this.__instance__ = new itmill.themes.Base.FilterSelect.Popup();
+		this.__instance__.appendTo(client.mainWindowElement);
+	}
+	return this.__instance__;
+}
+itmill.themes.Base.FilterSelect.Popup.prototype.appendTo = function(el) {
+	el.appendChild(this._container);
+}
+itmill.themes.Base.FilterSelect.Popup.prototype.showOptions = function(fs) {
+	// truncate old content
+	while(this._htmlElement.firstChild) {
+		this._htmlElement.removeChild(this._htmlElement.firstChild);
+	}
+	
+	// set maximum width for context menu
+	this._ol.setWidth(300);
+	
+	this._htmlElement.appendChild(fs.popup);
+	
+	
+	this._container.style.visibility = "hidden";
+	this._container.style.display = "block";
+	var pos = itmill.lib.getElementPosition(fs.popup);
+	
+	this._ol.setWidth(fs.popup.offsetWidth);
+	
+	this._ol.setHeight(fs.popup.offsetHeight);
+	var pos = itmill.lib.getElementPosition(fs.search.parentNode);
+	var x = pos.x + document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+	var y = pos.y + pos.h + document.body.scrollTop
+			+ document.documentElement.scrollTop;
+	this._container.style.top = y + "px";
+	this._container.style.left = x + "px";
+	this._container.style.visibility = "visible";
+}
+itmill.themes.Base.FilterSelect.Popup.prototype._hide = function() {
+	this._container.style.display = "none";
+}
+/**
+ * Cleans circular references to avoid IE leaks and detaches menu from
+ * html DOM
+ */
+itmill.themes.Base.FilterSelect.Popup.prototype.cleanUp = function() {
+	// TODO
 }
 
 itmill.themes.Base.FilterSelect.prototype.rollDown = function() {	
@@ -4712,6 +4791,8 @@ itmill.themes.Base.FilterSelect.prototype.closeDropdown = function() {
 itmill.themes.Base.FilterSelect.prototype.focusSearchField = function() {
 	this.search.focus();
     this.search.select();
+    this.hasFocus = true;
+    
 	//TODO: Select the text
 }
 
@@ -4719,16 +4800,12 @@ itmill.themes.Base.FilterSelect.prototype.show = function(element) {
 	if (element) {
 		// TODO width of arrow-icon (18px) could be checked
 		element.className = 'fspopup-show';		
-		if (element.offsetWidth < element.parentNode.offsetWidth) {
-			element.style.width = (element.parentNode.offsetWidth - 2)+ "px"
-		}
+		this.popupContainer.showOptions(this);
 	}
 }
 
 itmill.themes.Base.FilterSelect.prototype.hide = function(element) {
-	if (element) {				
-		element.className = 'fspopup';
-	}
+	this.popupContainer._hide();
 }
 
 
@@ -4925,7 +5002,7 @@ itmill.themes.Base.FilterSelect.prototype.updateContent = function() {
 }
 
 /* Handle up-button click */
-itmill.themes.Base.FilterSelect.prototype.upButtonClick = function(e) {	   
+itmill.themes.Base.FilterSelect.prototype.upButtonClick = function(e) {
     var agent = navigator.userAgent.toLowerCase();
 	var fs = null;
 	if(agent.indexOf("msie")==-1) {
@@ -4935,6 +5012,7 @@ itmill.themes.Base.FilterSelect.prototype.upButtonClick = function(e) {
 	}
 	fs.focusSearchField();				
 	fs.moveUp(fs);
+	fs.hasFocus = true;
 }
 
 
@@ -4950,6 +5028,7 @@ itmill.themes.Base.FilterSelect.prototype.downButtonClick = function(e) {
 	fs.focusSearchField();
 	fs.startIndex += fs.size;	
 	fs.moveDown(fs);
+	fs.hasFocus = true;
 }
 
 /* Show previous 'page' */
@@ -5841,9 +5920,13 @@ itmill.ui.ContextMenu.prototype.showContextMenu = function(aOptions, evt, action
 	this._ol.setHeight(this._htmlElement.offsetHeight);
 	var x = evt.mouseX;
 	var y = evt.mouseY;
+	
+	var scrolleft = document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+	
 	// if not enough room on right side, pop on left
 	if(x + this._htmlElement.offsetWidth + this._ol.SHADOW_WIDTH > itmill.wb.getWindowWidth()) {
-		x = itmill.wb.getWindowWidth() - this._htmlElement.offsetWidth - this._ol.SHADOW_WIDTH;
+		x = itmill.wb.getWindowWidth() + scrolleft - this._htmlElement.offsetWidth - this._ol.SHADOW_WIDTH;
 	}
 	
 	// if not enough room below, pop on top

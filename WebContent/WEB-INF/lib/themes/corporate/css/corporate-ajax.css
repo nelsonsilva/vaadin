@@ -365,14 +365,22 @@
 
 /* Column selector styles */
 
+.itmtk .table .colsel-container {
+	margin:0;
+	padding:0;
+	border: none;
+	height:20px;
+	width:14px;
+}
+
+* html .itmtk .table .colsel-container {
+	width:12px;
+}
+
 .itmtk .table .colsel {
 	margin:0;
 	padding:0;
-	height: 25px;
-	border: none;
-	border-bottom: solid 1px #85a2c5;
-	border-top: solid 2px #d3dce7;
-	position: static;
+	border: 0px;
 }
 .itmtk .table-paging .scroll,
 .itmtk .list .scroll {
@@ -381,10 +389,12 @@
 	position: static;
 }
 .itmtk .table .colsel div {
-	width: 13px;
+	width: 12px;
 	height: 13px;
 	background: transparent url(../img/table/column_select_arrow.png) no-repeat;
-	margin: 5px 3px;
+	margin: 5px 0px 0 0;
+	border: 0px;
+	
 }
 .itmtk .table .popup,
 .itmtk .table-paging .popup,
@@ -433,10 +443,15 @@
 
 .itmtk .table .hout {
 	height: 23px;
-	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
-	border-bottom: none;
-	border-top: solid 2px #d3dce7;
 }
+
+.itmtk .table .hcontainer {
+	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
+	border-top: solid 2px #d3dce7;
+	border-bottom: solid 1px #d3dce7;
+	height: 23px;
+}
+
 .itmtk .table .hin {
 	height: 23px;
 }
@@ -455,7 +470,6 @@
 }
 .itmtk .table .bg {
 	height: 23px;
-	background: #d4e7fe	url(../img/table/column_header_bg.png) repeat-x;
 	border-bottom: solid 1px #85a2c5;
 }
 .itmtk .table tr.odd {
@@ -716,34 +730,34 @@
 .itmtk .filterselect .fsinput {
 	background: transparent;
 }
-.itmtk .filterselect .fspopup-show {
+.itmtk .fspopupcont .fspopup-show {
 	background-color: #fff;
 }
-.itmtk .filterselect .selectedrow {
+.itmtk .fspopupcont .selectedrow {
 	background-color: #f9ffc6;
 	color: #2c3437;
 }
-.itmtk .filterselect .page-up .disabled,
-.itmtk .filterselect .page-down .disabled {
+.itmtk .fspopupcont .page-up .disabled,
+.itmtk .fspopupcont .page-down .disabled {
 	opacity: 0.2;
 	filter: alpha(opacity=20);
 }
-.itmtk .filterselect .page-up,
-.itmtk .filterselect .page-down {
+.itmtk .fspopupcont .page-up,
+.itmtk .fspopupcont .page-down {
 	background: #d7eafe url(../img/tabsheet/header_bg.png) repeat-x;
 }
-.itmtk .filterselect .page-up span,
-.itmtk .filterselect .page-down span {
-	background-color: transparent;
+.itmtk .fspopupcont .page-up span,
+.itmtk .fspopupcont .page-down span {
+	background-color: d7eafe;
 }
-.itmtk .filterselect .over {
+.itmtk .fspopupcont .over {
 	background: #d7eafe url(../img/common/input_bg.png) repeat-x;
 }
-.itmtk .filterselect .selectbox .over {
+.itmtk .fspopupcont .selectbox .over {
 	color: #3e9dff;
 	background: #e4eefa;
 }
-.itmtk .filterselect .stats {
+.itmtk .fspopupcont .stats {
 	border-color: #8fa5b3;
 	font-size: 0.9em;
 }
