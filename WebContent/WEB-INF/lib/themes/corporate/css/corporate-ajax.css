@@ -732,28 +732,31 @@
 }
 .itmtk .fspopupcont .fspopup-show {
 	background-color: #fff;
+	border-color: #8fa5b3;
 }
-.itmtk .fspopupcont .selectedrow {
+.itmtk .fspopupcont .fspopup-show .selectedrow {
 	background-color: #f9ffc6;
 	color: #2c3437;
 }
-.itmtk .fspopupcont .page-up .disabled,
-.itmtk .fspopupcont .page-down .disabled {
+.itmtk .fspopupcont .fspopup-show .page-up .disabled,
+.itmtk .fspopupcont .fspopup-show .page-down .disabled {
 	opacity: 0.2;
 	filter: alpha(opacity=20);
 }
-.itmtk .fspopupcont .page-up,
-.itmtk .fspopupcont .page-down {
+.itmtk .fspopupcont .fspopup-show .page-up,
+.itmtk .fspopupcont .fspopup-show .page-down {
 	background: #d7eafe url(../img/tabsheet/header_bg.png) repeat-x;
+	border-bottom-color: #8fa5b3;
 }
 .itmtk .fspopupcont .page-up span,
 .itmtk .fspopupcont .page-down span {
 	background-color: d7eafe;
+	border: none;
 }
-.itmtk .fspopupcont .over {
+.itmtk .fspopupcont .fspopup-show .over {
 	background: #d7eafe url(../img/common/input_bg.png) repeat-x;
 }
-.itmtk .fspopupcont .selectbox .over {
+.itmtk .fspopupcont .fspopup-show .selectbox .over {
 	color: #3e9dff;
 	background: #e4eefa;
 }
