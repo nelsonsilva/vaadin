@@ -1936,6 +1936,7 @@ itmill.lib.getEvent = function(e) {
 itmill.lib.getElementPosition = function(element) {
 	var props = new Object();
 // TODO scroll offsets testing in IE
+	var offsetparents = new Array();
 	var obj = element;
 	var x = obj.offsetLeft + (obj.scrollLeft||0);
 	var y = obj.offsetTop + (obj.scrollTop||0);
@@ -1945,10 +1946,26 @@ itmill.lib.getElementPosition = function(element) {
 			if (obj.nodeName == "TBODY") continue;
 			x += (obj.offsetLeft||0) - (obj.scrollLeft||0);
 			y += (obj.offsetTop||0) - (obj.scrollTop||0);
+			offsetparents.push(obj);
 		}
 	} else if (obj.x) {
 		x += obj.x;
 		y += obj.y;
+	}
+	if(!itmill.wb.isIE) {
+		// loop all parents and add scrollLeft/Top if element was not in offsetparent tree
+		// we'll miss these if those elements are not in offsetParent hierarchy
+		obj = element;
+		while(obj.parentNode) {
+			obj = obj.parentNode;
+			if(obj.nodeName == "BODY")
+				break;
+			if(offsetparents.indexOf(obj) == -1 ) {
+				x -= obj.scrollLeft;
+				y -= obj.scrollTop;
+			}
+			
+		}
 	}
 	props.x = x;
 	props.y = y;
