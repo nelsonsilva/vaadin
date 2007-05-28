@@ -3128,7 +3128,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         // snip or grow size from "scrolling" part
         cout.style.height = ( parseInt(model.meta.sizeableH) - extraH ) + "px";
     } else {
-        // fix containers height to initial height of table + scrollbar
+        // fix containers height to initial height of table
         // due, some timing issues, tables height is not always stabilized,
         // so calculate using pagelength & rowheight instead of offsetHeight
         cout.style.height = (model.meta.pagelength*model.rowheight)+"px";
