@@ -2967,7 +2967,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	
 	// We have set this attribute also in CSS, but due reindeer bug (?)
 	// set scrolling in JS also
-	cout.style.overflow = "scroll";
+	cout.style.overflow = "auto";
 	
 	// Now we have a very weird bugfix: mac FF has big issues setting scrollbars
 	// to right layer. Now that we have set up new scrollbars and possibly under
@@ -3131,7 +3131,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
         // fix containers height to initial height of table + scrollbar
         // due, some timing issues, tables height is not always stabilized,
         // so calculate using pagelength & rowheight instead of offsetHeight
-        cout.style.height = (model.meta.pagelength*model.rowheight+16)+"px";
+        cout.style.height = (model.meta.pagelength*model.rowheight)+"px";
     }
 
     model.aSpacer.style.height = prePad + "px";
@@ -3161,6 +3161,14 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     hout.style.width = (parseInt(model.state.width) - 3 - 16) + "px";
     // ensure browsers don't make any intelligent cell resizing
     hout.firstChild.style.width = "6000px";
+    
+    // if we got a horizontal scrollbar and height not explicitely set,
+    // fix height of content div with scrollbar height
+    if(!model.meta.sizeableH &&
+    	(cout.clientWidth != cout.scrollWidth)
+    	) {
+    	cout.style.height = (parseInt(cout.style.height) + 16 )+"px";
+    }
     
 
 	var status = target.ownerDocument.getElementById(pid+"status");
