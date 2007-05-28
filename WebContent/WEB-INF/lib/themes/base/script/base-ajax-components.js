@@ -4556,8 +4556,8 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
             		fs.hasFocus = false;
             		
             		// defer leaving component
-					clearTimeout(fs.client.changeClosesPopup);
-					fs.client.changeClosesPopup = setTimeout(function() {
+					clearTimeout(fs.popupContainer.changeClosesPopup);
+					fs.popupContainer.changeClosesPopup = setTimeout(function() {
 						if(!fs.hasFocus) {
 		                    fs.deselect(fs.selectedIndex%fs.size);					
 							fs.selectedIndex = fs.focusedIndex;		
@@ -4700,7 +4700,7 @@ itmill.themes.Base.FilterSelect.prototype.rollDown = function() {
 }
 
 itmill.themes.Base.FilterSelect.prototype.rollUp = function() {	
-	if(this.focusedIndex>0) {	
+	if(this.focusedIndex>0) {
 		this.defocusOption(this.focusedIndex);
 		this.focusedIndex--;
 		
@@ -4714,7 +4714,7 @@ itmill.themes.Base.FilterSelect.prototype.rollUp = function() {
 
 /* Open dropdown box */
 itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {
-	clearTimeout(this.client.changeClosesPopup);	
+	clearTimeout(this.popupContainer.changeClosesPopup);	
 	if(this.visibleList != null)
 		this.hide(this.visibleList);
 	this.visibleList = this.popup;	
