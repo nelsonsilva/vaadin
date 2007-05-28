@@ -4485,51 +4485,17 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	// Render default header
 	this.parentTheme.renderDefaultComponentHeader(renderer,uidl,div,layoutInfo);
 	
-	var layout = this.parentTheme.createElementTo(div,"div","fslayout");
-	//var tbody = this.parentTheme.createElementTo(table,"div");
-	//var tr = this.parentTheme.createElementTo(tbody,"div","row");
-	//var td = this.parentTheme.createElementTo(tr,"div","cell");
-	var searchLayout = this.parentTheme.createElementTo(layout,"div","fssearch-layout");
-	//var slbody = this.parentTheme.createElementTo(table,"div");
-	//var sltr = this.parentTheme.createElementTo(slbody,"div");
-	//var sltdfield = this.parentTheme.createElementTo(searchLayout,"div","input");
-	//var sltdtoggle = this.parentTheme.createElementTo(searchLayout,"div","toggle-btn");
-    //undoable
-	//var sltdundo = this.parentTheme.createElementTo(searchLayout,"div");
-	
+	var searchLayout = this.parentTheme.createElementTo(div,"div","fssearch-layout");
 	var	input = this.parentTheme.createElementTo(searchLayout,"input","fsinput");
 	input.setAttribute('type','text');
 	if(selectedValue != null)
-		input.value = selectedValue;	
-    //undoable
-	//input.oldValue = oldValue;
-	
-	/*if(modified&&oldValue&&oldValue != div.oldValue) {
-        input.style.background= "#FDFFB3";
-	    var undo = this.parentTheme.createElementTo(sltdundo,"span","undo-button");
-	    undo.title = "Undo";
-        var parentTheme = this.parentTheme;
-        var selectionVariable = this.selectionVariable;
-		client.addEventListener(undo, "click", 
-			function(e) {
-                    target.oldValue = input.oldValue;
-					parentTheme.setVariable(client, selectionVariable, input.oldValue, true);
-				}
-		);
-	}*/
-    
-	//var imagebg = this.parentTheme.createElementTo(sltdtoggle,"div","toggle-bg");	
+		input.value = selectedValue;
+		
 	var	image = this.parentTheme.createElementTo(searchLayout,"img", "toggle");
 	image.style.width = 19;
 	image.style.height = 20;
 	image.style.textAlign = "right";
 	image.src = this.parentTheme.root + "img/filterselect/dropdown.gif";
-	//this.parentTheme.addAddClassListener(this.parentTheme,this.client,image,"mouseover","highlighted");
-	//this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,image,"mouseout","highlighted");
-			
-	//tr = this.parentTheme.createElementTo(tbody,"div","row");
-	//td = this.parentTheme.createElementTo(tr,"div","cell");
-	//td.setAttribute('colspan','2');
 	
 	this.popupContainer = itmill.themes.Base.FilterSelect.Popup.getInstance(this.client);
 	
@@ -4539,7 +4505,6 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	this.parentTheme.addAddClassListener(this.parentTheme,this.client,upBtn,"mouseover","over");
 	this.parentTheme.addRemoveClassListener(this.parentTheme,this.client,upBtn,"mouseout","over");
 	this.upbutton = this.parentTheme.createElementTo(upBtn,"span");
-	//this.parentTheme.createElementTo(layout,"div");
 	
 	var selectdiv = this.parentTheme.createElementTo(this.popup,"div","selectbox");
 	if (focusid) this.popup.focusid = focusid;
@@ -4560,13 +4525,6 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	this.search = input;	
 	this.visibleList = null;
 	this.isSafari = navigator.userAgent.toLowerCase().indexOf("safari") >=0;
-	
-	// Some browser dependant configuration
-	if (this.isSafari) {
-		this.toggle.style.border = "none"; 	
-	} else {
-		//this.toggle.style.border = "1px solid #7f9db9"; 
-	}
 	
 	// Initial update	
 	this.updateContent();
@@ -4690,14 +4648,20 @@ itmill.themes.Base.FilterSelect.Popup.prototype.showOptions = function(fs) {
 	}
 	
 	// set maximum width for context menu
-	this._ol.setWidth(300);
-	
+	var maxw = fs.search.parentNode.offsetWidth;
+	this._ol.setWidth(maxw);
 	this._htmlElement.appendChild(fs.popup);
 	
 	
 	this._container.style.visibility = "hidden";
 	this._container.style.display = "block";
 	var pos = itmill.lib.getElementPosition(fs.popup);
+	
+	// Calculate minimum width and apply if necessary
+	fs.popup.style.cssFloat = "left";
+	var w = fs.popup.offsetWidth + 10; // 10 pixel buffer
+	fs.popup.style.cssFloat = "none";
+	if(w > maxw) this._ol.setWidth(w);
 	
 	this._ol.setWidth(fs.popup.offsetWidth);
 	
@@ -4752,29 +4716,8 @@ itmill.themes.Base.FilterSelect.prototype.rollUp = function() {
 itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {	
 	if(this.visibleList != null)
 		this.hide(this.visibleList);
-	this.visibleList = this.popup;
-		
-		// ie fix. All select components are hidden when popup is open.
-        if (this.agent.indexOf("msie")>=0) {
-			var sels = this.popup.ownerDocument.getElementsByTagName("select");
-			if (sels) {
-				var len = sels.length;
-				var hidden = new Array();
-				for (var i=0;i<len;i++) {
-					var sel = sels[i];
-					if (sel.style&&sel.style.display!="none") {
-						sel.style.visibility = "hidden";
-						hidden[hidden.length] = sel;
-					}
-				}		
-				this.popupSelectsHidden = hidden;
-			}
-		}
-	
+	this.visibleList = this.popup;	
 	this.show(this.visibleList);
-	//this.parentTheme.removeCSSClass(this.toggle, "toggle");
-	//this.parentTheme.addCSSClass(this.toggle, "toggle-selected");				
-	//this.adjustWidth(this.layout,this.search.clientWidth);			
 }
 
 /* Close dropdown box */
@@ -4791,8 +4734,6 @@ itmill.themes.Base.FilterSelect.prototype.closeDropdown = function() {
 	}
 	this.hide(this.visibleList);
 	this.visibleList = null;
-	//this.parentTheme.removeCSSClass(this.toggle, "toggle-selected");
-	//this.parentTheme.addCSSClass(this.toggle, "toggle");
 }
 
 
@@ -4870,13 +4811,7 @@ itmill.themes.Base.FilterSelect.prototype.flash = function(el) {
 		setTimeout(cancelFlash,1500);
 	}	
 }
-/* Not needed, this should be left for presentation layer (CSS)
-itmill.themes.Base.FilterSelect.prototype.adjustWidth = function(el, width) {
-	if (el.clientWidth <= width) {
-		//el.style.width = width;
-	} 
-}
-*/
+
 /* Select option */
 itmill.themes.Base.FilterSelect.prototype.selected = function(id) {
 	if (id >=0 && id < this.select.childNodes.length) {		
