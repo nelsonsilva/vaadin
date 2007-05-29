@@ -4564,7 +4564,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 							fs.updateSearch();
 							fs.closeDropdown();
 						}
-					},15000);
+					},150);
 					
             });	
 			
