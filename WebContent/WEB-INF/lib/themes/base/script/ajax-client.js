@@ -1656,8 +1656,13 @@ itmill.Client.prototype.setFocus = function(pid) {
 		// run custom focus handler if one exists, else focus paintable div
 		if(el._onfocus)
 			el._onfocus();
-		else
-			el.focus();
+		else {
+			try {
+				el.focus();
+			} catch(e) {
+				// IGNORE, IE6 don't allow focusing hidden elements
+			}
+		}
 	}
 }
 
