@@ -709,9 +709,7 @@ IMG.overlay {
 }
 
 /* Select in lazy loading mode */
-.itmtk .filterselect {
-	width: 100%;
-}
+
 .itmtk .filterselect .fssearch-layout {
 	height: 18px;
 	border: 1px solid ThreeDShadow;
