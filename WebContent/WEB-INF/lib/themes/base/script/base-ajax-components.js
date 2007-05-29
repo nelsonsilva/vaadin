@@ -4529,7 +4529,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	// Initial update	
 	this.updateContent();
 	this.focusOption(this.focusedIndex);
-			
+	
 	// add listeners
 		if (!disabled&&!readonly) {
 			
@@ -4652,7 +4652,6 @@ itmill.themes.Base.FilterSelect.Popup.prototype.showOptions = function(fs) {
 	this._ol.setWidth(maxw);
 	this._htmlElement.appendChild(fs.popup);
 	
-	
 	this._container.style.visibility = "hidden";
 	this._container.style.display = "block";
 	var pos = itmill.lib.getElementPosition(fs.popup);
@@ -4663,8 +4662,6 @@ itmill.themes.Base.FilterSelect.Popup.prototype.showOptions = function(fs) {
 	fs.popup.style.cssFloat = "none";
 	if(w > maxw) this._ol.setWidth(w);
 	
-	this._ol.setWidth(fs.popup.offsetWidth);
-	
 	this._ol.setHeight(fs.popup.offsetHeight);
 	var pos = itmill.lib.getElementPosition(fs.search.parentNode);
 	var x = pos.x + document.body.scrollLeft
@@ -4674,6 +4671,9 @@ itmill.themes.Base.FilterSelect.Popup.prototype.showOptions = function(fs) {
 	this._container.style.top = y + "px";
 	this._container.style.left = x + "px";
 	this._container.style.visibility = "visible";
+	
+	// Fix dropdown height to initial page length (size)
+	if(!fs.select.style.height) fs.select.style.height = fs.select.offsetHeight + "px";
 }
 itmill.themes.Base.FilterSelect.Popup.prototype._hide = function() {
 	this._container.style.display = "none";
