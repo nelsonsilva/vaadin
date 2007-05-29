@@ -736,8 +736,11 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		} 
 	}
 	var popupTarget = (captionText || iconUrl || error)?caption:target;
-	if (description) {
-		popupTarget._descriptionHTML = client.getXMLtext(description);
+	if (description || error) {
+		if(error)
+			popupTarget._descriptionHTML = '<span class="error">' + client.getXMLtext(error) + '</span>';
+		else
+			popupTarget._descriptionHTML = client.getXMLtext(description);
 		this.client.addEventListener(popupTarget, "mouseover",this._onDescriptionMouseOver);
 		this.client.addEventListener(popupTarget, "mouseout",this._onDescriptionMouseOut);
 	}
@@ -6179,7 +6182,7 @@ itmill.ui.Tooltip.prototype.showTooltip = function(content, evt) {
 	
 	// if not enough room below, pop on top
 	if(y + this._htmlElement.offsetHeight + this.EXTRA_WIDTH*2 > itmill.wb.getWindowHeight()) {
-		y = itmill.wb.getWindowHeight() - this._htmlElement.offsetHeight * 2 - this.EXTRA_WIDTH - 15;
+		y = itmill.wb.getWindowHeight() - this._htmlElement.offsetHeight - this.EXTRA_WIDTH - 15;
 	}
 	this._container.style.top = y + "px";
 	this._container.style.left = x + "px";
