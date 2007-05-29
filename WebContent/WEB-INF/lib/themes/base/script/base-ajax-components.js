@@ -4564,7 +4564,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 							fs.updateSearch();
 							fs.closeDropdown();
 						}
-					},150);
+					},15000);
 					
             });	
 			
@@ -4715,8 +4715,11 @@ itmill.themes.Base.FilterSelect.prototype.rollUp = function() {
 /* Open dropdown box */
 itmill.themes.Base.FilterSelect.prototype.dropdownMode = function() {
 	clearTimeout(this.popupContainer.changeClosesPopup);	
-	if(this.visibleList != null)
+	if(this.visibleList != null) {
+		if(this.visibleList == this.popup)
+			return;
 		this.hide(this.visibleList);
+	}
 	this.visibleList = this.popup;	
 	this.show(this.visibleList);
 }
