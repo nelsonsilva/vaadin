@@ -2129,7 +2129,8 @@ dateFieldUpdateVariables : function (d) {
 		d = this.date;
 		if (!d||!d.getDate) {
 			try {
-				d = new Date();
+				d = new Date(); // base: now
+				// Split value
 				var separator = ".";
 				var parts = this.value.split(".");
 				if (parts.length==1) {
@@ -2145,10 +2146,19 @@ dateFieldUpdateVariables : function (d) {
 					separator = " ";
 				}
 				if (parts.length>3) {
-					this.value = "";
-					// TODO could try to parse this
-					this.style.backgroundColor = "red";
-					return; 
+					try {
+						var msec = Date.parse(this.value);
+						if (msec <= 0) {
+							this.value = "";
+							this.style.backgroundColor = "red";
+							return; 
+						}
+					} catch (e) { 
+						this.value = "";
+						this.style.backgroundColor = "red";
+						return; 
+					}
+					d.setTime(msec);
 				} else if (parts.length==1) {
 					var n = parseInt(parts[0]);
 					if (parts[0].length==4) {
@@ -2161,9 +2171,11 @@ dateFieldUpdateVariables : function (d) {
 					var n1 = parseInt(parts[1]);
 					if (parts[0].length==4) {
 						d.setYear(n0);
+						d.setDate(1);
 						d.setMonth(n1-1);
 					} else if (parts[1].length==4) {
 						d.setYear(n1);
+						d.setDate(1);
 						d.setMonth(n0-1);
 					} else if (n0>12) {
 						d.setMonth(0); // avoid month length problems
