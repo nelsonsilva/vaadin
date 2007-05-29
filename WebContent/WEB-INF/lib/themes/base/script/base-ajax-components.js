@@ -2128,6 +2128,9 @@ dateFieldUpdateVariables : function (d) {
 	if (!d||!d.getDate) {
 		d = this.date;
 		if (!d||!d.getDate) {
+			// Try to parse input; does not fail for every inconsistent date,
+			// but produces a valid date instead (2007.02.29 -> 2007.03.01) 
+			// TODO: indicate error with class, not hardcoded red background
 			try {
 				d = new Date(); // base: now
 				// Split value
@@ -2145,7 +2148,8 @@ dateFieldUpdateVariables : function (d) {
 					parts = this.value.split(" ");
 					separator = " ";
 				}
-				if (parts.length>3) {
+				if (this.value.length>10||parts.length>3) {
+					// input seems long, try parsing w/ Date
 					try {
 						var msec = Date.parse(this.value);
 						if (msec <= 0) {
@@ -2160,6 +2164,7 @@ dateFieldUpdateVariables : function (d) {
 					}
 					d.setTime(msec);
 				} else if (parts.length==1) {
+					// Use todays date, set year or day
 					var n = parseInt(parts[0]);
 					if (parts[0].length==4) {
 						d.setYear(n);
@@ -2167,6 +2172,7 @@ dateFieldUpdateVariables : function (d) {
 						d.setDate(n);
 					}
 				} else if(parts.length==2) {
+					// year + month (set day=1), or month + day (keep current year)
 					var n0 = parseInt(parts[0]);
 					var n1 = parseInt(parts[1]);
 					if (parts[0].length==4) {
@@ -2200,11 +2206,13 @@ dateFieldUpdateVariables : function (d) {
 						}
 					}
 				} else {
+					// year + month + date
 					d.setMonth(0); // avoid month length problems
 					var n0 = parseInt(parts[0]);
 					var n1 = parseInt(parts[1]);
 					var n2 = parseInt(parts[2]);
 					if (parts[0].length==4) {
+						// year first
 						d.setYear(n0);
 						if (n1>12) {
 							d.setDate(n1);
@@ -2217,6 +2225,7 @@ dateFieldUpdateVariables : function (d) {
 							d.setMonth(n1-1);
 						}
 					} else if (parts[2].length==4) {
+						// year last
 						d.setYear(n2);
 						if (n1>12) {
 							d.setDate(n1);
@@ -2226,7 +2235,7 @@ dateFieldUpdateVariables : function (d) {
 							d.setMonth(n1-1);
 						}
 					} else {
-						// ambiguous, assuming year last
+						// ambiguous, assuming year last 
 						d.setYear(n2);
 						if (n0>12) {
 							d.setDate(n0);
