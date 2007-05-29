@@ -689,13 +689,7 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	if (renderer.client.debugEnabled) {
 		var uidlDebug = this.createElementTo(caption,"div","uidl");
         uidlDebug.uidl = uidl;
-		client.addEventListener(uidlDebug,"click", function (e) {
-            if(window.confirm("Print components UIDL to console?")) {
-                var event = itmill.lib.getEvent(e);
-                console.info("Printing components UIDL");
-                console.dirxml(event.target.uidl);
-            }
-		});
+		client.addEventListener(uidlDebug,"click", theme._onDebugIconClick);
 	}
 	
 	if (!(captionText||error||description||icon))
@@ -717,7 +711,6 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	this.createTextNodeTo(caption,captionText);
 	this.setCSSClass(caption,"caption");
 	
-	var errorIcon;
 	if (error) {
 		this.addCSSClass(caption,"clickable");
 		var icon = this.createElementTo(caption,"img","icon");
@@ -728,7 +721,8 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		} else {
 			this.setCSSClass(icon,"error");
 		}
-		errorIcon = icon;
+		icon._error = error;
+		this.client.addEventListener(icon, "click", this._onErrorIconClick);
 	} else if (description) {
 	
 		if(!captionText) this.addCSSClass(caption,"hide");
@@ -742,16 +736,26 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 		} 
 	}
 	var popupTarget = (captionText || iconUrl || error)?caption:target;
-	if (error||description) {
-		if(error) {
-			popupTarget._descriptionHTML = '<span class="error">' + client.getXMLtext(error) + "</span>";
-		} else {
-			popupTarget._descriptionHTML = client.getXMLtext(description);
-		}
+	if (description) {
+		popupTarget._descriptionHTML = client.getXMLtext(description);
 		this.client.addEventListener(popupTarget, "mouseover",this._onDescriptionMouseOver);
 		this.client.addEventListener(popupTarget, "mouseout",this._onDescriptionMouseOut);
 	}
 	return caption;
+},
+_onDebugIconClick : function (e) {
+    if(window.confirm("Print components UIDL to console?")) {
+        var event = itmill.lib.getEvent(e);
+        console.info("Printing components UIDL");
+        console.dirxml(event.target.uidl);
+    }
+},
+_onErrorIconClick : function (e) {
+    if(window.confirm("Print component error to console?")) {
+        var event = itmill.lib.getEvent(e);
+        console.info("Component error:");
+        console.dirxml(event.target._error);
+    }
 },
 
 _onDescriptionMouseOver : function(e) {
