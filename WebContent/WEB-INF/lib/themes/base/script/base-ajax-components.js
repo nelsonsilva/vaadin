@@ -2120,7 +2120,128 @@ dateFieldUpdateVariables : function (d) {
 	if (this.value == null || this.value == "") {
 		return;
 	}
-	//var a = this.value.split(".");
+	
+	if (!d||!d.getDate) {
+		d = this.date;
+		if (!d||!d.getDate) {
+			try {
+				d = new Date();
+				var separator = ".";
+				var parts = this.value.split(".");
+				if (parts.length==1) {
+					parts = this.value.split("-");
+					separator = "-";
+				}
+				if (parts.length==1) {
+					parts = this.value.split("/");
+					separator = "/";
+				}
+				if (parts.length==1) {
+					parts = this.value.split(" ");
+					separator = " ";
+				}
+				if (parts.length>3) {
+					this.value = "";
+					// TODO could try to parse this
+					this.style.backgroundColor = "red";
+					return; 
+				} else if (parts.length==1) {
+					var n = parseInt(parts[0]);
+					if (parts[0].length==4) {
+						d.setYear(n);
+					} else {
+						d.setDate(n);
+					}
+				} else if(parts.length==2) {
+					var n0 = parseInt(parts[0]);
+					var n1 = parseInt(parts[1]);
+					if (parts[0].length==4) {
+						d.setYear(n0);
+						d.setMonth(n1-1);
+					} else if (parts[1].length==4) {
+						d.setYear(n1);
+						d.setMonth(n0-1);
+					} else if (n0>12) {
+						d.setMonth(0); // avoid month length problems
+						d.setDate(n0);
+						d.setMonth(n1-1);
+						// check n2>12
+					} else if (n1>12) {
+						d.setMonth(0);
+						d.setDate(n1);
+						d.setMonth(n0-1);
+					} else {
+						// ambiguous, use default
+						if (separator=="/") {
+							// us style
+							d.setMonth(0);
+							d.setDate(n1);
+							d.setMonth(n0-1);
+						} else {
+							d.setMonth(0);
+							d.setDate(n0);
+							d.setMonth(n1-1);
+						}
+					}
+				} else {
+					d.setMonth(0); // avoid month length problems
+					var n0 = parseInt(parts[0]);
+					var n1 = parseInt(parts[1]);
+					var n2 = parseInt(parts[2]);
+					if (parts[0].length==4) {
+						d.setYear(n0);
+						if (n1>12) {
+							d.setDate(n1);
+							d.setMonth(n2-1);
+						} if (n2>12) {
+							d.setDate(n2);
+							d.setMonth(n1-1);
+						} else {
+							d.setDate(n2);
+							d.setMonth(n1-1);
+						}
+					} else if (parts[2].length==4) {
+						d.setYear(n2);
+						if (n1>12) {
+							d.setDate(n1);
+							d.setMonth(n0-1);
+						} else {
+							d.setDate(n0);
+							d.setMonth(n1-1);
+						}
+					} else {
+						// ambiguous, assuming year last
+						d.setYear(n2);
+						if (n0>12) {
+							d.setDate(n0);
+							d.setMonth(n1-1);
+						} else if (n1>12||separator=="/") {
+							// us default
+							d.setDate(n1);
+							d.setMonth(n0-1);
+						} else {
+							d.setDate(n0);
+							d.setMonth(n1-1);
+						}
+
+					}
+				}
+			} catch (e) {
+				this.style.backgroundColor = "red";
+				this.focus();
+				return; 
+			}
+			if (!d.getDate()) {
+				this.style.backgroundColor = "red";
+				this.focus();
+				return;
+			}
+			this.style.backgroundColor = "";
+			var format = Calendar._TT["DEF_DATE_FORMAT"]? Calendar._TT["DEF_DATE_FORMAT"] : "%Y-%m-%d";
+			this.value = d.print(format);
+			
+		}
+	}
 	
 	this.client.changeVariable(this.dayVarId, d.getDate(), false);
 	this.client.changeVariable(this.monthVarId, d.getMonth()+1, false);
