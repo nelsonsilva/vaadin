@@ -16,3 +16,11 @@
 	/* workaround for IE z-index bug */
 	z-index:31002;
 }
+
+/* FilterSelect styles for IE6 */
+* html .itmtk .filterselect .fssearch-layout {
+	padding: 0;
+}
+* html .itmtk .filterselect .fssearch-layout .fsinput {
+	margin-right: -20px;
+}
