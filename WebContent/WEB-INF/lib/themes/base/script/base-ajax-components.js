@@ -1857,7 +1857,8 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 	    	var format = Calendar._TT["DEF_DATE_FORMAT"]? Calendar._TT["DEF_DATE_FORMAT"] : "%Y-%m-%d";
 	    	var dateText = d.print(format);
 	    	
-		    if (readonly) {
+		    if (readonly) {	
+				if (yearValue==-1) dateText = new Date().print(format).replace(/[0-9]/g,"0");
 		    	text = theme.createTextNodeTo(div, dateText);
 		    } else {
 		    	text = theme.createInputElementTo(div,"text");
@@ -1874,12 +1875,16 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 		    }
 			
 			// Create button
-		    var button = theme.createInputElementTo(div,"button","btn clickable");
-		    button.id =buttonId;
-		    button.inputId = inputId;
-		    
-		    button.value = "...";
-		    if (disabled||readonly) {
+		    var button;
+		    if (readonly) {
+		    	button  = theme.createElementTo(div,"span");
+		    } else {
+			    button  = theme.createInputElementTo(div,"button","btn"+(readonly||disabled?"":" clickable"));
+			    button.id =buttonId;
+			    button.inputId = inputId;
+			    button.value = "...";
+		    }
+		    if (disabled) {
 		    	button.disabled = true;
 		    }
 		} else {
@@ -1925,6 +1930,7 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 	}
     if (hourVar) {
     	if (readonly) {
+    		if (hourValue<0) hourValue = 0;
     		theme.createTextNodeTo(div," "+(hourValue<10?"0"+hourValue:hourValue));
     	} else {
 	    	hour = theme.createElementTo(div,"select");
@@ -1949,6 +1955,7 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
     if (minVar) {
     	// Minute select
     	if (readonly) {
+    		if (minValue<0) minValue = 0;
     		theme.createTextNodeTo(div,":"+(minValue<10?"0"+minValue:minValue));
     	} else {
 	    	theme.createTextNodeTo(div,":");
@@ -1969,6 +1976,7 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
     if (secVar) {
     	// Second select
     	if (readonly) {
+    		if (secValue<0) secValue = 0;
     		theme.createTextNodeTo(div,":"+(secValue<10?"0"+secValue:secValue));
     	} else {
 	    	theme.createTextNodeTo(div,":");
@@ -1989,6 +1997,7 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
     if (msecVar) {
     	// Millisecond select
     	if (readonly) {
+    			if (msecValue<0) msecValue = 0;
 	    		var cap = msecValue;
 	    		if (i+1 < 100) {
 	    			cap = "0"+cap;
@@ -2127,7 +2136,6 @@ dateFieldUpdateVariables : function (d) {
 	if (this.value == null || this.value == "") {
 		return;
 	}
-	
 	if (!d||!d.getDate) {
 		d = this.date;
 		if (!d||!d.getDate) {
