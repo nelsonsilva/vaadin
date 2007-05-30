@@ -16,13 +16,13 @@
 }
 
 #featurebrowser-divider {
-	background-image: url(img/tab_handle.png);
+	background-image: url(../featurebrowser/img/tab_handle.png);
 }
 
 body.itmtk
 {
 	background: white;
-	background-image: url(img/m_bg.png);
+	background-image: url(../featurebrowser/img/m_bg.png);
 	background-repeat: no-repeat;
 }
 
