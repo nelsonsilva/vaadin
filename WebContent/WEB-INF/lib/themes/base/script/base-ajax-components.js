@@ -2887,14 +2887,14 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
     var redraw = false;
     var allowUpdate = true;
-	if (target.colWidths) {
+	if (target.model && target.model.colWidths) {
 		if(target.model.tableBody.childNodes.length > 0) {
     	    // we are repainting existing table with rows in it
     	    redraw = true;
-			colWidths = target.colWidths;
+			colWidths = target.model.colWidths;
 		} else {
 			// table is empty -> delete colWidths to recalc
-			target.colWidths = null;
+			target.model.colWidths = null;
 			colWidths = model.colWidths = new Object();
 		}
 	} else {
@@ -2967,6 +2967,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
             return;
         }
     }
+    // save colWidths in model
+    model.colWidths = colWidths;
+    
     // rest of the function is ideally run only when first time painting table
     if(!div) {
         // Create containing DIV
@@ -2992,7 +2995,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     		// need to scroll top on every redraw
         	var fvVar = theme.createVarFromUidl(div,theme.getVariableElement(uidl,"integer","firstvisible"));
 			fvVar.value = 1;
-			delete target.colWidths;
+			delete target.model.colWidths;
 			theme.updateVar(this, fvVar, true);
 			return;
 			// now render to the end and then "scrollup" on cache request
@@ -3035,7 +3038,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		var ak = alNode.getElementsByTagName("action");
 		for (var i=0;i<ak.length;i++) {
 			actions[ak[i].getAttribute("key")] = ak[i].getAttribute("caption");
-		}
+		} 
         model.meta.actions = actions;
 	}
 	delete alNode;
@@ -3073,6 +3076,9 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 		var cap =  col.getAttribute("caption")||(visiblecols?"":"");
 		var sort =  col.getAttribute("sortable");
 		var cid =  col.getAttribute("cid");
+		var width = col.getAttribute("width");
+		if(width && !colWidths[cid])
+			colWidths[cid] = parseInt(width)  + 4; // 3px for left margin, 1px for border
 		var iconUrl =  col.getAttribute("icon");
 		if (iconUrl && iconUrl.indexOf("theme://") == 0) {
 		    iconUrl = (theme.iconRoot != null ? theme.iconRoot : theme.root) 
@@ -3260,7 +3266,7 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
     tableB.appendChild(df);
     table.appendChild(tableB);
-    if(itmill.wb.isFF || itmill.wb.isOpera) {
+    if(itmill.wb.isFF || itmill.wb.isOpera) {
     	// mozilla and opera will "sqeeze" table to 100% even though
     	// it is in div with overflow: auto so we will expand it temporarely
     	cout.style.width = "6000px";
@@ -3422,7 +3428,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             rhCell.className = "tablecell rowheader";
             var cellContent = d.createElement("div");
             cellContent.className = "cellContent";
-            cellContent.style.width = (target.colWidths["heh"] - 4) + "px";
+            cellContent.style.width = (tm.colWidths["heh"] - 4) + "px";
             // TODO row icon ???
             cellContent.innerHTML = ruidl.getAttribute("caption")||"&nbsp;";
             rhCell.appendChild(cellContent);
@@ -3462,7 +3468,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
             var cellContent = d.createElement("div");
             cellContent.className = "cellContent";
             // table cell shoudn't need explicit size, but due IE bug, explicitely set content divs size
-            cellContent.style.width = (target.colWidths[colorder[currentCol]] - 4) + "px";
+            cellContent.style.width = (tm.colWidths[colorder[currentCol]] - 4) + "px";
             cell.appendChild(cellContent);
             // render cell content
             if(comp.nodeName == 'label' && ! comp.getAttribute("id") && comp.firstChild && comp.firstChild.data) {
@@ -3600,7 +3606,7 @@ scrollTableScrollUpdate : function(renderer,target, model,uidl) {
 // Header order drag & drop	
 tableAddWidthListeners : function(client,theme,element,cid,table,pid) {
 	
-	var colWidths = table.colWidths;
+	var colWidths = table.model.colWidths;
 	
 	var mouseDragListener = function (e) {
 			var evt = itmill.lib.getEvent(e);
@@ -3786,10 +3792,9 @@ scrollTableAddScrollHandler : function(client, theme, target) {
 
 scrollTableRecalc : function(pid, target) {
 	var div = target.ownerDocument.getElementById(pid);
-	var colWidths = div.colWidths;
+	var colWidths = div.model.colWidths;
 	if (!colWidths) {
-		colWidths = new Object();
-		div.colWidths = colWidths;
+		colWidths = div.model.colWidths = new Object();
 	}
 	var hout = target.ownerDocument.getElementById(pid+"hout");
     var cout = target.ownerDocument.getElementById(pid+"cout");
@@ -3800,16 +3805,19 @@ scrollTableRecalc : function(pid, target) {
     var m = div.model;
     
 
-    if(!colWidths[h[0].getAttribute("cid")]) {
+    if(!div.model.state.initDone) {
         // this is the initial calculation, we'll sync header and column depending on which is wider
         // loop headers and columns natural widths, browser may squeeze them to fit whole table
         var defPad = 10;
         for (var i = 0;i<h.length;i++) {
+        	if(colWidths[h[i].getAttribute("cid")])
+        		continue; // width set by server
         	if(c && c[i])
 	            colWidths[h[i].getAttribute("cid")] = parseInt((h[i].lastChild.clientWidth > c[i].clientWidth) ? (h[i].clientWidth) : c[i].clientWidth) + defPad;
             else
             	colWidths[h[i].getAttribute("cid")] = parseInt(h[i].clientWidth) + defPad;
         }
+        div.model.state.initDone = true;
     }
     for(var i = 0;i< h.length ;i++) {
     	var cell = h[i];
