@@ -771,6 +771,7 @@ _onDescriptionMouseOver : function(e) {
 	if(trg._descriptionHTML) {
 		var client = itmill.lib.getClient(trg);
 		if(client) {
+			trg.__tooltipActive = true;
 			trg._popuptimeout = window.setTimeout(function() {
 				var tt = client.getTooltip();
 				tt.showTooltip(trg._descriptionHTML, evt);
@@ -789,6 +790,7 @@ _onDescriptionMouseOut : function(e) {
 		var client = itmill.lib.getClient(trg);
 		var tt = client.getTooltip();
 		tt._hide();
+		trg.__tooltipActive = false;
 	}
 },
 

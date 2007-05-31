@@ -1448,12 +1448,12 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 }
 
 /**
- *   Remove all event listener functions from a element.
+ * Remove all event listener functions from a element. Also makes other
+ * cleaning like removing visible tooltips and active keyboard shortcuts.
  *  
- *   @param element      The element
- *   @param type         Type of event to listen for [click|mouseover|mouseout|...]
- *   @param func         The listener function to remove.
- *  
+ * @param element      The element
+ * @param type         Type of event to listen for [click|mouseover|mouseout|...]
+ * @param func         The listener function to remove.
  */
  itmill.Client.prototype.removeAllEventListeners = function(element) {
  	var removed = 0;
@@ -1475,6 +1475,9 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 			this.debug("KeyboardShortcut removed");
 			delete element._elementsShortcuts[j];
 		}
+	}
+	if(element.__tooltipActive) {
+		this.getTooltip().hide();
 	}
 	// TODO eventMAp -> paintable & only get DIV:s
 	var childs = element.getElementsByTagName("*");
@@ -1502,9 +1505,12 @@ itmill.Client.prototype.removeEventListener = function(element,type,func,id) {
 					delete element._elementsShortcuts[j];
 				}
 			}
+			if(element.__tooltipActive) {
+				window.clearTimeout(element._popuptimeout);
+				this.getTooltip()._hide();
+			}
 		}
 	}
-	
 	return removed;
 }
 
