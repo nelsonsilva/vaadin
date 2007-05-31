@@ -3260,7 +3260,13 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
 	}
     tableB.appendChild(df);
     table.appendChild(tableB);
-	cout.appendChild(table);
+    if(itmill.wb.isFF || itmill.wb.isOpera) {
+    	// mozilla and opera will "sqeeze" table to 100% even though
+    	// it is in div with overflow: auto so we will expand it temporarely
+    	cout.style.width = "6000px";
+    }
+   	cout.appendChild(table);
+   	
     // create spacer elements and save reference to model (needed for webkit bug on table margins)
     model.bSpacer = theme.createElementTo(cout,"div");
     model.bSpacer.className = "spacer";
@@ -3298,6 +3304,10 @@ renderScrollTable : function(renderer,uidl,target,layoutInfo) {
     
 	div.recalc = theme.scrollTableRecalc;
  	div.recalc(pid,target);
+	// table size now explicitely set via column widths, remove width hack
+ 	if(itmill.wb.isFF || itmill.wb.isOpera)
+ 		cout.style.width = "";
+ 	
 	cout.scrollLeft = scrolledLeft;
 	hout.scrollLeft = scrolledLeft;
 
