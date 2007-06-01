@@ -4638,7 +4638,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 	this.selectMode = uidl.getAttribute("selectmode");	
 	this.selectable = this.selectMode == "multi" || this.selectMode == "single";
 	
-	var div = this.parentTheme.createPaintableElement(renderer,uidl,target,layoutInfo);
+	var div = this.pntbl = this.parentTheme.createPaintableElement(renderer,uidl,target,layoutInfo);
     this.parentTheme.addCSSClass(div,"filterselect");    
 	if (uidl.getAttribute("invisible")) {
         // Don't render content if invisible, remove form-style caption as well
@@ -4664,7 +4664,8 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 
 	var modified = uidl.getAttribute("modified");
     var oldValue = (modified?target.oldValue:null);
-    var selectedValue = options.getAttribute("selectedValue");
+    var selectedValue = this.selectedValue= options.getAttribute("selectedValue");
+    
     if (!div.oldValue) 
         div.oldValue = selectedValue;
 
@@ -4741,16 +4742,29 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
             this.client.addEventListener(fs.search, 'blur', function (e) {
             		fs.hasFocus = false;
             		
-            		// defer leaving component
+            		// defer leaving component, we may have clicked internal part
+            		// which detaches focus temporarely
 					clearTimeout(fs.popupContainer.changeClosesPopup);
 					fs.popupContainer.changeClosesPopup = setTimeout(function() {
 						if(!fs.hasFocus) {
-		                    fs.deselect(fs.selectedIndex%fs.size);					
-							fs.selectedIndex = fs.focusedIndex;		
-							fs.updateSearch();
+							if(fs.focusedIndex != fs.selectedIndex) {
+								// something has been typed but not handeled 
+								if(	fs.select && fs.select.childNodes[fs.focusedIndex] &&
+									fs.select.childNodes[fs.focusedIndex].caption == fs.search.value
+								) {
+									// exact match, select focused index 
+				                    fs.deselect(fs.selectedIndex%fs.size);					
+									fs.selectedIndex = fs.focusedIndex;
+									fs.updateSearch();
+								} else {
+									// typed value does not match with any option
+									// -> revert old value to text box
+									fs.search.value = fs.selectedValue;
+								}
+							}
 							fs.closeDropdown();
 						}
-					},150);
+					},300);
 					
             });	
 			
@@ -4767,7 +4781,7 @@ itmill.themes.Base.FilterSelect = function(renderer, uidl, target, layoutInfo) {
 					fs.closeDropdown();
 					fs.updateSearch();
 				} else if (keyCode == 13) {
-					fs.deselect(fs.selectedIndex%fs.size);					
+					fs.deselect(fs.selectedIndex%fs.size);
 					fs.selectedIndex = fs.focusedIndex;		
 					fs.updateSearch();
 					fs.closeDropdown();
@@ -5026,6 +5040,7 @@ itmill.themes.Base.FilterSelect.prototype.updateSearch = function() {
 		if(option != null && option.caption != null) {			
 			var val = option.caption;
 			this.search.value = val;
+			this.selectedValue = val;
 		}
 	} else {
 		this.search.value = "";
@@ -5045,26 +5060,21 @@ itmill.themes.Base.FilterSelect.prototype.deselect = function(id) {
 itmill.themes.Base.FilterSelect.prototype.updateButtons = function() {		
 	if(this.startIndex<=0) {
 		this.parentTheme.addCSSClass(this.upbutton,"disabled");
-		this.upbutton.fs = this;				
-		this.client.removeEventListener(this.upbutton, 'click', this.upButtonClick);		
 	} else {
-		this.client.removeEventListener(this.upbutton, 'click', this.upButtonClick);
 		this.parentTheme.removeCSSClass(this.upbutton,"disabled");
-		this.upbutton.fs = this;
-		this.client.addEventListener(this.upbutton, 'click', this.upButtonClick);
 	}
+	this.upbutton.fs = this;				
+	this.client.removeEventListener(this.upbutton, 'click', this.upButtonClick);
+	this.client.addEventListener(this.upbutton, 'click', this.upButtonClick);
 	 
 	if(this.total <= this.size || this.startIndex >= this.total-this.size) {
 		this.parentTheme.addCSSClass(this.downbutton,"disabled");
-		this.downbutton.fs = this;			
-		this.client.removeEventListener(this.downbutton, 'click', this.downButtonClick);		
 	} else {
-		// remove and then add again
-		this.client.removeEventListener(this.downbutton, 'click', this.downButtonClick);	
 		this.parentTheme.removeCSSClass(this.downbutton,"disabled");
-		this.downbutton.fs = this;
-		this.client.addEventListener(this.downbutton, 'click', this.downButtonClick);		
-	}	
+	}
+	this.client.removeEventListener(this.downbutton, 'click', this.downButtonClick);	
+	this.downbutton.fs = this;
+	this.client.addEventListener(this.downbutton, 'click', this.downButtonClick);		
 }
 
 /* Update options. Gets new options from server if nesessary. */
@@ -5144,8 +5154,9 @@ itmill.themes.Base.FilterSelect.prototype.upButtonClick = function(e) {
 		fs = this.event.srcElement.fs;							
 	}
 	fs.hasFocus = true;
-	fs.focusSearchField();				
-	fs.moveUp(fs);
+	fs.focusSearchField();
+	if(fs.startIndex > 0)
+		fs.moveUp(fs);
 }
 
 
@@ -5160,8 +5171,10 @@ itmill.themes.Base.FilterSelect.prototype.downButtonClick = function(e) {
 	}
 	fs.hasFocus = true;
 	fs.focusSearchField();
-	fs.startIndex += fs.size;	
-	fs.moveDown(fs);
+	if( !(fs.total <= fs.size || fs.startIndex >= fs.total-fs.size)) {
+		fs.startIndex += fs.size;	
+		fs.moveDown(fs);
+	}
 }
 
 /* Show previous 'page' */
