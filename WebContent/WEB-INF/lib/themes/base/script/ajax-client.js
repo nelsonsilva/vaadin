@@ -98,7 +98,6 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 			// TODO close all windows
 			debug("Removed " + unregisterAllLayoutFunctions()+ " layout functions.");
 			
-			window.png = null;
 		});
 		var client = this;
 		var func = function() {
@@ -118,23 +117,6 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 	// This effect will be permanent for this browser session 
 	// (i.e. affects all sites from here on). Shouldn't be a problem to anyone.
 	if(itmill.wb.isIE) client.enableBgCache();
-	
-	// TODO remove global
-	window.png = function(img) {
-       var src = img.src;
-        if (!src || src.indexOf("pixel.gif")>0) return;
-        if (src.indexOf(".png")<1) return
-        if (!itmill.wb.isIE6) return;
-        
-        var w = img.width||16; // def width 16, hidden icons fail otherwise
-        var h = img.height||16;
-        
-        img.onload = null;
-        img.src = clientRoot + "pixel.gif";
-        img.style.height = h+"px";
-        img.style.width = w+"px";
-        img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+src+"', sizingMethod='crop');";               
-	}
 	
 }
 
@@ -704,32 +686,6 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 			this.warn("Window element not found!");
 	}
 	win.document.itmtkWindowElement = winElement;
-	
-	if (!win.png) {
-		var clientRoot = this.clientRoot;
-		// PNG loading support in IE
-		// TODO remove global
-		win.png = function(img) {
-                var ua = navigator.userAgent.toLowerCase();
-                if (ua.indexOf("windows")<0) return;
-                var msie = ua.indexOf("msie");
-                if (msie < 0) return;
-                var v = parseInt(ua.substring(msie+5,msie+6));
-                if (!v || v < 5 || v > 6) return;
-                
-                var src = img.src;
-                var w = img.width;
-                var h = img.height;
-                
-                if (src && src.indexOf(clientRoot+"pixel.gif")>0) return;
-                
-                img.onload = null;
-                img.src = clientRoot + "pixel.gif";
-                img.style.height = h+"px";
-                img.style.width = w+"px";
-                img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+src+"', sizingMethod='crop');";               
-        }
-	}
 	
 	// Return the content element
 	return winElement;
