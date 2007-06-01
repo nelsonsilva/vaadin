@@ -712,7 +712,6 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	this.setCSSClass(caption,"caption");
 	
 	if (error) {
-		this.addCSSClass(caption,"clickable");
 		var icon = this.createElementTo(caption,"img","icon");
 		icon.src = theme.root+"img/icon/error-mini.gif";
 		if (iconUrl) {
@@ -737,8 +736,14 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 	}
 	var popupTarget = (captionText || iconUrl || error)?caption:target;
 	if (description || error) {
-		if(error)
-			popupTarget._descriptionHTML = '<span class="error">' + client.getXMLtext(error) + '</span>';
+		if(error) {
+			if(error.getAttribute("level") && error.getAttribute("level") == "system") {
+				popupTarget._descriptionHTML = '<span class="error">System error</span>';
+				popupTarget._error = error;
+		} else {
+				popupTarget._descriptionHTML = '<span class="error">' + client.getXMLtext(error) + '</span>';
+			}
+		}
 		else
 			popupTarget._descriptionHTML = client.getXMLtext(description);
 		this.client.addEventListener(popupTarget, "mouseover",this._onDescriptionMouseOver);
@@ -754,11 +759,15 @@ _onDebugIconClick : function (e) {
     }
 },
 _onErrorIconClick : function (e) {
-    if(window.confirm("Print component error to console?")) {
-        var event = itmill.lib.getEvent(e);
-        console.info("Component error:");
-        console.dirxml(event.target._error);
-    }
+		var evt = itmill.lib.getEvent(e);
+		if(evt.shift) {
+			var client = itmill.lib.getClient(evt.target);
+	        if(evt.target._error) {
+		        console.info("System error message:");
+		        console.dirxml(evt.target._error);
+	        }
+	        evt.stop();
+		}
 },
 
 _onDescriptionMouseOver : function(e) {
@@ -775,7 +784,7 @@ _onDescriptionMouseOver : function(e) {
 			trg._popuptimeout = window.setTimeout(function() {
 				var tt = client.getTooltip();
 				tt.showTooltip(trg._descriptionHTML, evt);
-			}, 800);
+			}, 600);
 		}
 	}
 },
