@@ -103,7 +103,7 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 		var client = this;
 		var func = function() {
 			client.resizeTimeout=null;
-			client.processAllLayoutFunctions()
+			client.processAllLayoutFunctions();
 		};
 		
 		addEventListener(window,"resize", function () {	
@@ -112,6 +112,12 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 		});
 		
 	}
+	
+	
+	// Fix IE CSS background image flicker problem
+	// This effect will be permanent for this browser session 
+	// (i.e. affects all sites from here on). Shouldn't be a problem to anyone.
+	if(itmill.wb.isIE) client.enableBgCache();
 	
 	// TODO remove global
 	window.png = function(img) {
@@ -413,7 +419,7 @@ itmill.Client.prototype.registerRenderer = function (theme, tag, componentStyle,
  */
 itmill.Client.prototype.unregisterAllRenderers = function () {
 
-	// We just create new, empty rederer map.
+	// We just create new, empty renderer map.
 	this.renderers = new Object();
 
 }
@@ -639,8 +645,9 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
     win.document.renderUIDL = function(uidl,currentNode) {
     	this.client.renderUIDL(uidl,currentNode);
     }
+    // TODO ILLEGAL global
     win.document.client = this;
-    with (this) {
+ 	with (this) {
 		addEventListener(win,"unload", function () {
 			try {
 				removeAllEventListeners(win.document);
@@ -681,7 +688,7 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 	// Add unregister callback
 	var client = this;
 	win.onunload = function() { 
-		client.unregisterWindow(name); 
+		client.unregisterWindow(name);
 		win.onunload = null;
 	}
 	
@@ -701,6 +708,7 @@ itmill.Client.prototype.initializeNewWindow = function (win,uidl,theme) {
 	if (!win.png) {
 		var clientRoot = this.clientRoot;
 		// PNG loading support in IE
+		// TODO remove global
 		win.png = function(img) {
                 var ua = navigator.userAgent.toLowerCase();
                 if (ua.indexOf("windows")<0) return;
@@ -1805,6 +1813,15 @@ itmill.Client.prototype.createElement = function(nodeName, target) {
 	} else {
 		return document.createElement(nodeName);
 	}
+}
+
+/**
+ * Enable CSS background image cache for Internet Explorer
+ */
+itmill.Client.prototype.enableBgCache = function() {
+	try {
+	  document.execCommand("BackgroundImageCache", false, true);
+	} catch(err) {}
 }
 
 /**
