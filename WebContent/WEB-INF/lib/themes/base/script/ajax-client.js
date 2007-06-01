@@ -79,45 +79,17 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 	
 	this.windowOrder = new Array();
 	
-	// Remove all eventListeners on window.unload
-	with (this) {
-		addEventListener(window,"unload", function () {
-			var removed =  removeAllEventListeners(document);
-			if (window.eventMap) {
-				for (var t in window.eventMap) {
-					var i = window.eventMap[t].length;
-					while (i--) {
-						client.removeEventListener(window,t,window.eventMap[t][i]);
-						removed++;
-					}
-				}
-				window.eventMap = null;
-			}
-			
-			debug("Removed " + removed + " event listeners.");
-			// TODO close all windows
-			debug("Removed " + unregisterAllLayoutFunctions()+ " layout functions.");
-			
-		});
-		var client = this;
-		var func = function() {
-			client.resizeTimeout=null;
-			client.processAllLayoutFunctions();
-		};
-		
-		addEventListener(window,"resize", function () {	
-			if (client.resizeTimeout) clearTimeout(client.resizeTimeout);				
-			client.resizeTimeout = setTimeout(func,500);
-		});
-		
+	// if first toolkit app
+	if(this.clientId == 0) {
+		// Add listener to run clean up on window.unload
+		this.addEventListener(window,"unload", itmill.lib._onUnload);
+		// Add listener to run on window resize
+		this.addEventListener(window,"resize", itmill.lib._onResize);
+		// Fix IE CSS background image flicker problem
+		// This effect will be permanent for this browser session 
+		// (i.e. affects all sites from here on). Shouldn't be a problem to anyone.
+		if(itmill.wb.isIE) client.enableBgCache();
 	}
-	
-	
-	// Fix IE CSS background image flicker problem
-	// This effect will be permanent for this browser session 
-	// (i.e. affects all sites from here on). Shouldn't be a problem to anyone.
-	if(itmill.wb.isIE) client.enableBgCache();
-	
 }
 
 /** Start the ajax client.
@@ -151,14 +123,14 @@ itmill.Client.prototype.warn = function (message, folded, extraStyle, html) {
         console.warn(message);
     }
 }
-/** Write debug message to debug window.
+/** 
+ * Write debug message to debug window.
  *
  *  @param message The message to be written
  *  @param folded True if the message should be foldable and folded to default,
  *			false or missing otherwise.
  *
  *  @author IT Mill Ltd.
- *
  */
 itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
 	// Check if we are in debug mode
@@ -167,25 +139,26 @@ itmill.Client.prototype.debug = function (message, folded, extraStyle, html) {
     }
 }
 
-/** Write object properties to console.
+/** 
+ * Write object properties to console.
  *
  *  @param obj The object that is debugged.
- *  @param level The recursion level that the properties are inspected.
- *
  *  @author IT Mill Ltd.
- *
  */
-itmill.Client.prototype.debugObject = function (obj,level) {
-	this.debug(this.printObject(obj,level),true,null,true);
+itmill.Client.prototype.debugObject = function (obj) {
+	// Check if we are in debug mode
+	if ((typeof console) != 'undefined' && this.debugEnabled)	{ 
+        console.dir(obj);
+    }
 }
 
-/** Write error message to debug window.
+/** 
+ * Write error message to debug window.
  *
  *  @param message The message to be written
  *  @param causeException Exception that caused this error.
  *
  *  @author IT Mill Ltd.
- *
  */
 itmill.Client.prototype.error = function (message, causeException) {
 
@@ -2012,6 +1985,51 @@ itmill.lib.getShortcutHandlerNode = function(el) {
 	
 	if(!node)
 		return document.body;
+}
+
+/*
+ * This function runs some cleaning when user leaves or restarts application.
+ */
+itmill.lib._onUnload = function() {
+	var client = itmill.clients[0]; // get one toolkit app
+	if(!itmill.eventListenersRemoved) {
+		// event listeners can be removed at once
+		var removed =  client.removeAllEventListeners(document);
+		
+		if (window.eventMap) {
+			for (var t in window.eventMap) {
+				var i = window.eventMap[t].length;
+				while (i--) {
+					client.removeEventListener(window,t,window.eventMap[t][i]);
+					removed++;
+				}
+			}
+			window.eventMap = null;
+		}
+		client.debug("Removed " + removed + " event listeners.");
+		itmill.eventListenersRemoved = true;
+	}
+	
+	for(var i = 0; i < itmill.clients.length; i++) {
+		// each clients layout functions must be removed separately
+		client = itmill.clients[i]; // get one toolkit app
+		// TODO close all "native" windows
+		client.debug("Removed " + client.unregisterAllLayoutFunctions()+ " layout functions.");
+	}
+}
+
+/*
+ * This function runs on window.resize. Currently it only runs layout fuctions
+ * with a small delay (not to run them constantly durin resizing).
+ */
+itmill.lib._onResize = function() {
+	if(itmill.resizeTimeout) clearTimeout(itmill.resizeTimeout());
+	itmill.resizeTimeout = setTimeout(function() {
+		delete(itmill.resizeTimeout);
+		for(var i = 0; i < itmill.clients.length; i++) {
+			itmill.clients[i].processAllLayoutFunctions();
+		}
+	},500);
 }
  
  
