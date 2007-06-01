@@ -88,7 +88,7 @@ itmill.Client = function(windowElementNode, servletUrl, clientRoot, waitElement)
 		// Fix IE CSS background image flicker problem
 		// This effect will be permanent for this browser session 
 		// (i.e. affects all sites from here on). Shouldn't be a problem to anyone.
-		if(itmill.wb.isIE) client.enableBgCache();
+		if(itmill.wb.isIE) itmill.lib.enableBgCache();
 	}
 }
 
@@ -1745,15 +1745,6 @@ itmill.Client.prototype.createElement = function(nodeName, target) {
 }
 
 /**
- * Enable CSS background image cache for Internet Explorer
- */
-itmill.Client.prototype.enableBgCache = function() {
-	try {
-	  document.execCommand("BackgroundImageCache", false, true);
-	} catch(err) {}
-}
-
-/**
  * This is a class that provides browser detection and some
  * crossbrowser functions needed in various components.
  * 
@@ -2018,12 +2009,22 @@ itmill.lib._onUnload = function() {
 	}
 }
 
+/**
+ * Enable CSS background image cache for Internet Explorer
+ */
+itmill.lib.enableBgCache = function() {
+	try {
+	  document.execCommand("BackgroundImageCache", false, true);
+	} catch(err) {}
+}
+
+
 /*
  * This function runs on window.resize. Currently it only runs layout fuctions
  * with a small delay (not to run them constantly durin resizing).
  */
 itmill.lib._onResize = function() {
-	if(itmill.resizeTimeout) clearTimeout(itmill.resizeTimeout());
+	if(itmill.resizeTimeout) clearTimeout(itmill.resizeTimeout);
 	itmill.resizeTimeout = setTimeout(function() {
 		delete(itmill.resizeTimeout);
 		for(var i = 0; i < itmill.clients.length; i++) {
