@@ -4969,12 +4969,19 @@ itmill.themes.Base.FilterSelect.prototype.doSearch = function() {
 	this.focusedIndex = 0;
 		
 	// Get the value to search for
-	var searchFor = escape("" + this.search.value.toString().toLowerCase());		
+	
+	
+	
+	if(true)
+		var searchFor = encodeURIComponent("" + this.search.value.toString().toLowerCase());		
+	else
+		var searchFor = escape("" + this.search.value.toString().toLowerCase());		
 	
 	var date = new Date();
 	
 	// send request
 	var text = this.client.loadDocument(this.uri + "/" + date.getTime() + "/" + searchFor, true);	
+	console.log()
 	this.ops = eval("(" + text + ")");
 	
 	this.total = (this.ops != null && this.ops.total != null)?parseInt(this.ops.total):0;
