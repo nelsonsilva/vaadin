@@ -408,6 +408,11 @@ itmill.Client.prototype.createRequestChangeListener = function(client, req) {
             }
     
             // Get updates
+            debugger;
+            var response = eval('('+req.responseText.substr(3)+'})');
+            
+            console.dir(response);
+            
             var updates = req.responseXML;
             // responseXML should be null if not valid XML, but sadly not, validate
             // by detecting count of changes element
