@@ -744,8 +744,13 @@ renderDefaultComponentHeader : function(renderer, uidl, target, layoutInfo) {
 				popupTarget._descriptionHTML = '<span class="error">' + client.getXMLtext(error) + '</span>';
 			}
 		}
-		else
-			popupTarget._descriptionHTML = client.getXMLtext(description);
+		else {
+			popupTarget._descriptionHTML = "";
+			for(var n = description.firstChild; n != null; n = n.nextSibling) {
+				popupTarget._descriptionHTML += (n.nodeType == Node.ELEMENT_NODE)? client.getXMLtext(n) : n.data;
+			}
+			
+		}
 		this.client.addEventListener(popupTarget, "mouseover",this._onDescriptionMouseOver);
 		this.client.addEventListener(popupTarget, "mouseout",this._onDescriptionMouseOut);
 	}
@@ -1813,9 +1818,12 @@ renderDateField : function(renderer, uidl, target, layoutInfo) {
 	/* locale, translate UI */
 	var locale = uidl.getAttribute("locale");
 	if (locale && !disabled && !readonly) {
-		locale = locale.toLowerCase().split("_")[0];
-		var lang = client.loadDocument(theme.root+"ext/jscalendar/lang/calendar-"+locale+".js",false);
-		if (lang) {			
+    var localeLang = locale.toLowerCase().split("_")[0]; 
+    var localeCountry = locale.toLowerCase().split("_")[1];
+    locale = localeLang; 
+    if (localeLang == 'en' && localeCountry == 'us') locale = 'us'; 
+    var lang = client.loadDocument(theme.root+"ext/jscalendar/lang/calendar-"+locale+".js",false); 
+    if (lang) {  
 			try {
 				window.eval(lang);
 			} catch (e) {
@@ -6223,11 +6231,13 @@ itmill.ui.Tooltip.prototype.showTooltip = function(content, evt) {
 	
 	// append new tooltip
 	
-	this._htmlElement.innerHTML = "<span>"+content+"</span>";
+	this._htmlElement.innerHTML = "<span>" + content + "</span>";
 	
 	this._container.style.visibility = "hidden";
 	this._container.style.display = "block";
+	this._htmlElement.firstChild.style.cssFloat = "left";
 	this._ol.setWidth(this._htmlElement.firstChild.offsetWidth + this.EXTRA_WIDTH*2);
+	this._htmlElement.firstChild.style.cssFloat = "none";
 	
 	this._ol.setHeight(this._htmlElement.offsetHeight);
 	var x = evt.mouseX;
@@ -6239,7 +6249,7 @@ itmill.ui.Tooltip.prototype.showTooltip = function(content, evt) {
 	
 	// if not enough room below, pop on top
 	if(y + this._htmlElement.offsetHeight + this.EXTRA_WIDTH*2 > itmill.wb.getWindowHeight()) {
-		y = itmill.wb.getWindowHeight() - this._htmlElement.offsetHeight - this.EXTRA_WIDTH - 15;
+		y -= this._htmlElement.offsetHeight + this.EXTRA_WIDTH + 15;
 	}
 	this._container.style.top = y + "px";
 	this._container.style.left = x + "px";

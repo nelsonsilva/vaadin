@@ -11,7 +11,7 @@ construct : function(themeRoot) {
 
 	// Call parent constructur (explicit call is necessary)
 	arguments.callee.$.construct.call(this,themeRoot);
-	this.themeName = "corporate";
+	this.themeName = "example";
 },
 
 /** Register all renderers to a ajax client.

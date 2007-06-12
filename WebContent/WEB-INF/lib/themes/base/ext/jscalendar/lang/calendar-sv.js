@@ -1,5 +1,5 @@
-Calendar._DN=new Array("söndag""måndag""tisdag","onsdag","torsdag","fredag","lördag""söndag");
-Calendar._SDN=new Array("Sö""Må""Ti","On","To","Fr","Lö""Sö")
+Calendar._DN=new Array("söndag","måndag","tisdag","onsdag","torsdag","fredag","lördag","söndag");
+Calendar._SDN=new Array("Sö","Må","Ti","On","To","Fr","Lö","Sö")
 Calendar._SDN_len=2;
 Calendar._SMN_len=3;
 Calendar._MN=new Array("januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december");

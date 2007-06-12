@@ -17,10 +17,20 @@
 	z-index:31002;
 }
 
+
 /* FilterSelect styles for IE6 */
 * html .itmtk .filterselect .fssearch-layout {
 	padding: 0;
 }
 * html .itmtk .filterselect .fssearch-layout .fsinput {
 	margin-right: -20px;
+	overflow: visible;
+}
+
+/** Panel layout fix for IE6/7 (needed at least by filterselect */
+.panel .layout {
+	width: 100%;
+}
+.panel .layout .layout {
+	width: auto;
 }

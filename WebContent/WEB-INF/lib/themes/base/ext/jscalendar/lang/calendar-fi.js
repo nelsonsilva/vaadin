@@ -1,6 +1,6 @@
 Calendar._DN=new Array("Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai","Sunnuntai");
 Calendar._SDN=new Array("Su","Ma","Ti","Ke","To","Pe","La","Su");
-Calendar._MN=new Array("Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu""Heinäkuu""Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu");
+Calendar._MN=new Array("Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu");
 Calendar._SMN=new Array("Tam","Hel","Maa","Huh","Tou","Kes","Hei","Elo","Syy","Lok","Mar","Jou");
 Calendar._TT={};
 Calendar._TT["INFO"]="Tietoja kalenterista";

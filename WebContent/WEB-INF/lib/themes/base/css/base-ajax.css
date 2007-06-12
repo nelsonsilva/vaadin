@@ -723,6 +723,7 @@ IMG.overlay {
 	margin: 0;
 	padding: 2px;
 	width: 100%;
+	min-width: 80px;
 	height: 13px;
 }
 
@@ -802,6 +803,16 @@ IMG.overlay {
 .itmtk .fspopupcont .fspopup-show .stats {
 	text-align: center;
 }
+
+/* Opera specific fixes for filter select*/
+.itmtk .filterselect .fssearch-layout.opera {
+	padding: 0;
+}
+.itmtk .filterselect .opera .fsinput {
+	margin-right: -19px;
+	width: 120px;
+}
+
 
 /* Overlay components styles */
 .itmtk .overlay_blocker {
