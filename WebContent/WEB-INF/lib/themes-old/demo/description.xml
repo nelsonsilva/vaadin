@@ -8,7 +8,6 @@
 		IT Mill Toolkit Corporate theme.
 	</description>
 
-	<extends theme="corporate" />  
 
 	<!--  Corporate theme only supports UIDL mode -->
 	<modes>

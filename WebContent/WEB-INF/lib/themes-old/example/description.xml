@@ -8,8 +8,7 @@
 		IT Mill Toolkit Example theme.
 	</description>
 
-	<extends theme="corporate" />  
-
+	
 	<modes>
 		<mode name="ajax"/>
 		<mode name="html"/>
