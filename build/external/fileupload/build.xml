@@ -1,0 +1,51 @@
+<!--
+
+Updates /WebContent/WEB-INF/lib/commons-fileupload-custom.jar
+
+We have wrapped Apache packages under com.itmill.toolkit.external 
+to prevent possible conflicts with developer given Apache classes.
+
+When developing, you should add src or classes directory to your classpath
+
+NOTES:
+
+a)
+commons-fileupload-custom.jar is used only for internal development
+
+b)
+classes/com/itmill/toolkit/external/org/apache/commons/fileupload is added to release JARs.
+
+-->
+<project name="itmill-toolkit-external" default="jar">
+
+	<target name="init">
+		<property name="server.main.class" value="com.itmill.toolkit.demo.DesktopServer" />
+		<property name="webserver.jar" value="WebServer/winstone-0.9.9.jar" />
+		<property file="build.properties" />
+	</target>
+
+	<!-- Compiles your Toolkit application -->
+	<target name="compile" depends="init">
+		<echo message="Compiling Toolkit application sources." />
+		<path id="compile.class.path">
+			<pathelement path="../../../lib/jetty/servlet-api-2.5-6.1.5.jar" />
+		</path>
+
+		<javac srcdir="src" destdir="classes" classpathref="compile.class.path">
+		</javac>
+		<echo>Removing javax.portlet and commons IO classes (not required)</echo>
+		<delete dir="classes/javax" />
+		<delete dir="classes/com/itmill/toolkit/external/org/apache/commons/io" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="../../../WebContent/WEB-INF/lib/commons-fileupload-custom.jar" compress="true">
+			<fileset dir="classes">
+				<patternset>
+					<include name="com/itmill/toolkit/external/org/apache/commons/fileupload/**/*" />
+				</patternset>
+			</fileset>
+		</jar>
+	</target>
+
+</project>
