@@ -13,7 +13,8 @@ a)
 commons-fileupload-custom.jar is used only for internal development
 
 b)
-classes/com/itmill/toolkit/external/org/apache/commons/fileupload is added to release JARs.
+/build/build.xml calls this ant file with target compile
+=> classes/com/itmill/toolkit/external/org/apache/commons/fileupload is added to release JARs.
 
 -->
 <project name="itmill-toolkit-external" default="jar">
