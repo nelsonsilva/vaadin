@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>IT Mill Toolkit 5</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" />
+		<!--[if IE]>
+		<link rel="stylesheet" type="text/css" href="css/ie.css" />
+		<![endif]-->
+		<script type="text/javascript">
+		
+		window.onload = function() {
+			itmill.init();
+		}
+		
+		var itmill = function() {
+		
+			var packageOpen = false;
+			var packageContent;
+			var package;
+		
+			return {
+			
+				init : function() {
+					// Fetch references
+					packageContent = document.getElementById("package-contents-content");
+					package = document.getElementById("package-contents");
+					
+					// Hide package contents initially
+					packageContent.style.display = "none";
+					
+					// Generate clearing element
+					var clearer = document.createElement("div");
+					var container = document.getElementById("container");
+					var i = 0;
+					while(true) {
+						var child = container.childNodes[i++];
+						if(child.nodeType == 1 && child.className == "content") {
+							child.appendChild(clearer);
+							break;
+						}
+					}
+					clearer.style.height = "0";
+					clearer.style.overflow = "hidden";
+					clearer.style.clear = "both";
+					
+					// Enable package contents panel hiding/showing
+					var toggle = package.getElementsByTagName("h3")[0];
+					toggle.style.cursor = "pointer";
+					toggle.title = "Show/hide package contents";
+					// Use the quick-n-dirty way to attach event listeners
+					toggle.onclick = this.togglePackage;					
+					
+					// TODO enable demo button hovers
+					var demos = document.getElementById("demos").getElementsByTagName("li");
+					for(var i=0; i < demos.length; i++) {
+						demos[i].onmouseover = this.focusDemo;
+						//demos[i].onmouseout = this.blurDemos;
+					}
+					document.getElementById("demos").onmouseout = this.blurDemos;
+					
+					
+					// TODO implement feedback popup
+				},
+				
+				togglePackage : function() {
+					if(packageOpen) {
+							packageContent.style.display = "none";
+							packageOpen = false;
+						} else {
+							packageContent.style.display = "block";
+							packageOpen = true;
+						}
+				},
+				
+				focusDemo : function(e) {
+					var evt = e ? e : window.event;
+					var target = evt.target.parentNode; // Should be the LI element
+					var demos = document.getElementById("demos").getElementsByTagName("li");
+					for(var i=0; i < demos.length; i++) {
+						var demo = demos[i];
+						if(demo != target)
+							demo.style.opacity = "0.2";
+						else
+							demo.style.opacity = "1";
+					}
+				},
+				
+				blurDemos : function() {
+					var demos = document.getElementById("demos").getElementsByTagName("li");
+					for(var i=0; i < demos.length; i++) {
+						demos[i].style.opacity = "1";
+					}
+				}
+				
+			};
+		}();
+		
+		</script>
+	</head>
+	<body>
+	
+	<div id="container">
+	
+		<div class="header">
+			<h1>Introducing IT Mill Toolkit 5</h1>
+			<em>Effortless web application development for Java-programmers.</em>
+			<a href="http://www.itmill.com" title="Open www.itmill.com">Visit itmill.com</a>
+		</div> <!-- /Header -->
+		
+		<div class="content">
+		
+			<div id="demos">
+				<h2>Demos</h2>
+				<ul>
+					<li id="windowed-demos"><a href="windowed-demo">Windowed demos</a></li>
+					<li id="reservr"><a href="reservr">Reservation application</a></li>
+					<li id="feature-browser"><a href="feature-browser">Feature browser</a></li>
+					<li id="notifications"><a href="notification-demo">Notifications</a></li>
+				</ul>			
+			</div> <!-- /demos -->
+			
+			<div id="getting-started">
+				<h2>Getting started</h2>
+				
+				<h4>Eclipse IDE Quickstart</h4>
+				<p>The easiest way to start working with IT Mill Toolkit is to 
+				use Eclipse IDE with the Toolkit quickstart project.
+				<a href="quickstart.html" class="more">Instant Toolkit workspace for Eclipse</a></p>
+				
+				<h4>Manual Deployment</h4>
+				<p>If you do not use Eclipse, you can manually deploy the Toolkit 
+				WAR-package to your server with these simple steps.
+				<a href="deployment.html" class="more">How to deploy Toolkit WAR-package to a server</a></p>
+				
+			</div> <!-- /getting-started -->
+			
+			<div id="support-licensing">
+				<h2>Support and Licensing</h2>
+				
+				<h4>Documentation</h4>
+				<p>Need help using IT Mill Toolkit? Look no further. Everything you need to know is here.</p>
+				<ul class="links">
+					<li><a href="manual.html">Manual</a> <a href="manual.pdf" class="more"><span>(</span>PDF<span>)</span></a></li>
+					<li><a href="javadoc.html" class="more">JavaDoc API</a></li>
+					<li><a href="http://forum.itmill.com" class="more">Support forum</a></li>
+				</ul>
+				
+				<h4>Licenses</h4>
+				<p>All of IT Mill Toolkit's core is licensed under liberal Open Source license. Commercial licenses are also available.
+				<a href="licensing-guidelines.html" class="more">Licensing Guidelines</a></p>
+				
+			</div> <!-- /support-licensing -->
+			
+			<div id="package-contents">
+				<div class="top"></div>
+				
+				<h3>&raquo; Package contents</h3>
+				<em>Version 5.0.0-beta</em>
+				
+				<div id="package-contents-content"> <!-- For JavaScript hooking -->
+				
+				<div class="library">
+					<h5>Library</h5>
+					<p>Contains all you need to start a new Toolkit project (binaries, sources, default 
+					themes and widgetsets). <a href="toolkit-jar">Toolkit JAR</a></p>
+				</div>
+				
+				<div class="documentation">
+					<h5>Documentation</h5>
+					<ul>
+						<li><a href="release-notes.html">Release Notes</a></li>
+						<li><a href="manual.html">Manual</a> &nbsp; (<a href="manual.pdf">view as PDF</a>)</li>
+						<li><a href="javadoc.html">JavaDoc API</a></li>
+					</ul>
+				</div>
+				
+				<div class="support">
+					<h5>Support &amp; Licensing</h5>
+					<ul>
+						<li><a href="http://forum.itmill.com">Support forum</a></li>
+						<li><a href="licensing-guidelines.html">Licensing Guidelines</a></li>
+						<li>Prices and purchase from <a href="mailto:sales@itmill.com">sales@itmill.com</a></li>
+					</ul>
+				</div>
+				
+				</div>
+			
+				<div class="bottom"></div>
+			</div> <!-- /package-contents -->
+			
+		</div> <!-- /content-->
+		
+		<div class="footer">
+			<a href="http://www.itmill.com">IT Mill Ltd.</a>
+			<em>Interfacing IT</em>
+		</div> <!-- /footer -->
+	
+	</div> <!-- /container -->
+	
+	</body>
+</html>
