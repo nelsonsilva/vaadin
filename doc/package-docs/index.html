@@ -15,9 +15,11 @@
 		
 		var itmill = function() {
 		
+			var isIE = /MSIE/.test(navigator.userAgent) && !window.opera;
 			var packageOpen = false;
 			var packageContent;
 			var package;
+			var demoArea;
 		
 			return {
 			
@@ -25,6 +27,7 @@
 					// Fetch references
 					packageContent = document.getElementById("package-contents-content");
 					package = document.getElementById("package-contents");
+					demoArea = document.getElementById("demos");
 					
 					// Hide package contents initially
 					packageContent.style.display = "none";
@@ -52,12 +55,12 @@
 					toggle.onclick = this.togglePackage;					
 					
 					// TODO enable demo button hovers
-					var demos = document.getElementById("demos").getElementsByTagName("li");
+					var demos = demoArea.getElementsByTagName("li");
 					for(var i=0; i < demos.length; i++) {
 						demos[i].onmouseover = this.focusDemo;
 						//demos[i].onmouseout = this.blurDemos;
 					}
-					document.getElementById("demos").onmouseout = this.blurDemos;
+					demoArea.onmouseout = this.blurDemos;
 					
 					
 					// TODO implement feedback popup
@@ -75,21 +78,39 @@
 				
 				focusDemo : function(e) {
 					var evt = e ? e : window.event;
-					var target = evt.target.parentNode; // Should be the LI element
+					var target = evt.target ? evt.target.parentNode : evt.srcElement.parentNode; // Should be the LI element
+					if(target.nodeType != 1 || target.nodeName != "LI")
+						return;
+						
 					var demos = document.getElementById("demos").getElementsByTagName("li");
 					for(var i=0; i < demos.length; i++) {
 						var demo = demos[i];
-						if(demo != target)
-							demo.style.opacity = "0.2";
-						else
-							demo.style.opacity = "1";
+						if(demo != target) {
+							if(isIE)
+								demo.style.filter = "alpha(opacity=60)";
+							else 
+								demo.style.opacity = "0.6";
+							
+						} else {
+							if(isIE)
+								demo.style.filter = "";
+							else 
+								demo.style.opacity = "1";
+						}
 					}
 				},
 				
-				blurDemos : function() {
+				blurDemos : function(e) {
+					var evt = e ? e : window.event;
+					var target = evt.toElement || evt.relatedTarget;
+					if((target == demoArea || target.parentNode == demoArea || target.parentNode.parentNode == demoArea) && target.nodeName != "H2")
+						return;
 					var demos = document.getElementById("demos").getElementsByTagName("li");
 					for(var i=0; i < demos.length; i++) {
-						demos[i].style.opacity = "1";
+						if(isIE)
+							demos[i].style.filter = "";
+						else 
+							demos[i].style.opacity = "1";
 					}
 				}
 				
