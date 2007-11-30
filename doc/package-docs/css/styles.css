@@ -7,7 +7,13 @@ body {
 	font-size: 62.5%; /* Scale down to 10px */
 	line-height: 1.8em;
 	color: #5c666a;
-	background: #e9eced url(../img/body-bg.png) repeat-x;
+	background: #e9eced url(../img/body-bg.gif) repeat-x;
+}
+
+.clearer {
+	height: 0;
+	overflow: hidden;
+	clear: both;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -207,21 +213,21 @@ a.more span {
 }
 
 #demos #windowed-demos {
-	background: transparent url(../img/demos/windowed.png) no-repeat;
+	background: #fff url(../img/demos/windowed.png) no-repeat;
 	margin-right: 15px;
 }
 
 #demos #reservr {
-	background: transparent url(../img/demos/reservr.png) no-repeat;
+	background: #fff url(../img/demos/reservr.png) no-repeat;
 }
 
 #demos #feature-browser {
-	background: transparent url(../img/demos/feature-browser.png) no-repeat;
+	background: #fff url(../img/demos/feature-browser.png) no-repeat;
 	margin-right: 15px;
 }
 
 #demos #notifications {
-	background: transparent url(../img/demos/notifications.png) no-repeat;
+	background: #fff url(../img/demos/notifications.png) no-repeat;
 }
 
 

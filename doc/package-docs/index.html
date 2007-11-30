@@ -32,21 +32,6 @@
 					// Hide package contents initially
 					packageContent.style.display = "none";
 					
-					// Generate clearing element
-					var clearer = document.createElement("div");
-					var container = document.getElementById("container");
-					var i = 0;
-					while(true) {
-						var child = container.childNodes[i++];
-						if(child.nodeType == 1 && child.className == "content") {
-							child.appendChild(clearer);
-							break;
-						}
-					}
-					clearer.style.height = "0";
-					clearer.style.overflow = "hidden";
-					clearer.style.clear = "both";
-					
 					// Enable package contents panel hiding/showing
 					var toggle = package.getElementsByTagName("h3")[0];
 					toggle.style.cursor = "pointer";
@@ -210,6 +195,7 @@
 				<div class="bottom"></div>
 			</div> <!-- /package-contents -->
 			
+			<div class="clearer"></div>
 		</div> <!-- /content-->
 		
 		<div class="footer">
