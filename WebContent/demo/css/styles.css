@@ -265,8 +265,7 @@ a.more span {
 }
 
 #package-contents {
-	float: right;
-	margin: -105px 1px 0 0;
+	margin: 0;
 }
 
 #package-contents-content {
@@ -333,4 +332,38 @@ a.more span {
 	font-size: 1.1em;
 	margin: 4px 0 5px 0;
 	color: #5b7b93;
+}
+
+
+/* feedback box */
+
+#feedback {
+	margin-top: 8px;
+}
+
+#feedback h4{
+	font-size: 1.1em;
+	margin: 4px 0 5px 0;
+	color: #5b7b93;
+}
+
+#feedback form {
+	margin: 0;
+	padding: 0;
+}
+
+#feedback textarea {
+	font-family: "Trebuchet MS", Tahoma, Geneva, Helvetica, Arial, sans-serif;
+	border: solid 1px #c8cdd0;
+	background: #fff;
+	font-size: 1.1em;
+	padding: 3px;
+	width: 290px;
+	height: 50px;
+	margin: 2px 0;
+	color: #5c666a;
+}
+
+#feedback .blur {
+	color: #a0acb1;
 }
