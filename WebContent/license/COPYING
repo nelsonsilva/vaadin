@@ -1,67 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>IT Mill Toolkit 5</title>
-		<link rel="stylesheet" type="text/css" href="../demo/css/styles.css" />
-		<!--[if IE]>
-		<link rel="stylesheet" type="text/css" href="../demo/css/ie.css" />
-		<![endif]-->
-	</head>
-	<body>
-	
-	<div id="container">
-	
-		<div class="header">
-			<h1>Introducing IT Mill Toolkit 5</h1>
-			<em>Effortless web application development for Java-programmers.</em>
-		</div> <!-- /Header -->
-		
-		<div class="content">
-			
-			<div>
-				
-			<h1>Licensing Summary</h1>
-
-<p>IT Mill Toolkit is available for use under two licensing options:
-
-<ul>
-	<li><a href="#opensource">Open Source licensing</a> with
-	permissive Apache 2.0 license. This option includes the core library
-	and is fully functional. Open Source licensing option does not include
-	any support, guarantees or all commercially available tools and
-	features.</li>
-	<li><a href="#commercial">Commercial license</a> can be purchased
-	from IT Mill Ltd. It is designed to suit commercial use of the library
-	and includes support, guarantee as well as additional tools that
-	accelerate software development with IT Mill Toolkit</li>
-</ul>
-</p>
-
-<p>Please read carefully about the licensing options and
-evaluate the suitability of the actual license files before use. If you
-have any questions about licensing options, please contact sales at <a
-	href="http://www.itmill.com/"> IT Mill Ltd</a>.</p>
-
-<p>The following tools and services are not provided with Open
-Source license
-<ul>
-	<li><b>IT Mill Toolkit Testing Tools</b>: Demo version of Testing
-	Tools may be included in this distribution package for evaluation purposes.
-	Continuous or production use of this demo package is forbidden without
-	<a href="#commercial">commercial license</a>.</li>
-	<li><b>Support services</b>: No support is provided, but use of
-	discussion forums is encouraged.</li>
-	<li><b>Guarantee</b>: Open Source version is provided without
-	guarantee. Please report any issues, we try to fix them in upcoming
-	product releases.</li>
-	<li><b>IPR protection</b>: No IPR protection is provided other
-	than stated in the Apache 2.0 license.</li>
-</ul>
-
-
-<h1><a name="opensource" />Open Source License</h1>
-<pre>
 		IT MILL TOOLKIT LICENSE INFORMATION
 		
 December 4th, 2007
@@ -270,18 +206,4 @@ available from other locations.
     http://hsqldb.org/web/hsqlLicense.html
   Source code availability: http://hsqldb.org/
   Used only in IT Mill Toolkit demos.
-</pre>
-			</div> <!-- /getting-started -->
-			
-			<div class="clearer"></div>
-		</div> <!-- /content-->
-		
-		<div class="footer">
-			<a href="http://www.itmill.com">IT Mill Ltd.</a>
-			<em>Interfacing IT</em>
-		</div> <!-- /footer -->
-	
-	</div> <!-- /container -->
-	
-	</body>
-</html>
+  
