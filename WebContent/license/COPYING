@@ -192,10 +192,20 @@ available from other locations.
     modifications are at com/itmill/toolkit/external 
     within itmill-toolkit-<platform></platform>-<version></version>.jar
 
-* Google Web Toolkit (GWT) - Google Maps API
+* Google Maps API for Google Web Toolkit (GWT)
   License: Apache Software License  
   Source code availability: http://sourceforge.net/projects/gwt/
-  
+
+* java.util.regex.Pattern for Google Web Toolkit (GWT)
+  License: Apache License v. 2.0 (above)
+  Source code availability: package com.itmill.toolkit.terminal.gwt.client.util
+    within itmill-toolkit-<platform></platform>-<version></version>.jar
+
+* Date locales and parsing for Google Web Toolkit (GWT)
+  License: Apache License v. 2.0 (above)
+  Source code availability: package com.itmill.toolkit.terminal.gwt.client.util
+    within itmill-toolkit-<platform></platform>-<version></version>.jar
+    
 * Jetty
   License: Apache License v. 2.0 (above)
   Source code availability: http://jetty.mortbay.org
