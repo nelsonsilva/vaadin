@@ -116,6 +116,14 @@ a.more span {
 	font-size: 1.2em;
 }
 
+#container .header strong {
+	position: absolute;
+	margin: 20px 0 0 335px;
+	font-size: 2em;
+	color: #44adf9;
+	font-weight: normal;
+}
+
 
 
 /* content area */
