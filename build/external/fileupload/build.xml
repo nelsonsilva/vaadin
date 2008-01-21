@@ -32,7 +32,7 @@ b)
 			<pathelement path="../../../lib/jetty/servlet-api-2.5-6.1.5.jar" />
 		</path>
 
-		<javac srcdir="src" destdir="classes" classpathref="compile.class.path">
+		<javac source="1.4" target="1.4" srcdir="src" destdir="classes" classpathref="compile.class.path">
 		</javac>
 		<echo>Removing javax.portlet and commons IO classes (not required)</echo>
 		<delete dir="classes/javax" />
