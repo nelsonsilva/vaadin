@@ -106,12 +106,16 @@ a.more span {
 	display: none;
 }
 
+#container .header div#header-links {
+    float: right;
+    text-align: right;
+    margin: 20px 27px 0 0;
+}
+
 #container .header a {
 	color: #5c666a;
-	float: right;
 	padding-right: 10px;
 	background: transparent url(../img/link-arrow2.png) no-repeat center right;
-	margin: 30px 27px 0 0;
 	border: none;
 	font-size: 1.2em;
 }
