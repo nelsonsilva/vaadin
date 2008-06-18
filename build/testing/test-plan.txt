@@ -1,0 +1,60 @@
+==========================================================================================
+IT Mill Toolkit Testing Plan for Automated Testing
+==========================================================================================
+
+The test plan for automated testing includes detailed instructions for
+setting up the environment for automated testing and the tests
+themselves.
+
+=================
+Test Applications
+=================
+
+1: http://...:8888/TestSimplestApplication
+2: http://...:8888/TestFeatureBrowser
+3: http://...:8888/TestRobustnessComplex
+4: http://...:8888/RobustnessComplex
+
+============
+Test Scripts
+============
+
+Test scripts are located in the IT Mill Toolkit repository branch to
+be tested. You should probably make a symbolic link from the directory
+where you are running automated tests to the source code tree.
+
+Example layout:
+
+-- /root (testing root)
+ |-- autobuilder
+ | |
+ | |-- trunk
+ | | `-- build/testing/scripts     - Test scripts for trunk
+ | |
+ | `-- branches
+ |   `-- 5.2
+ |     `-- build/testing/scripts   - Test scripts for 5.2 branch
+ |
+ `-- testing                       - Automated test configuration and results
+   |
+   |-- trunk
+   | |-- config.xml                - Configuration for testing the trunk
+   | |-- scripts                   - ln -s ../../autobuilder/trunk/testing/scripts
+   | `-- results                   - Result directory containing reports
+   |
+   `-- branch-5.2
+     |-- config.xml                - Configuration for testing the trunk
+     |-- scripts                   - ln -s ../../autobuilder/trunk/testing/scripts
+     `-- results                   - Result directory containing reports
+   
+-------------------------
+Smoketest (smoketest.txt)
+-------------------------
+
+This test is useful for the situation where all other tests fail, for
+isolating the problem.
+
+Execute application 0
+
+- Assert the displayed text.
+

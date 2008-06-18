@@ -1,0 +1,55 @@
+waitForLoad(1);
+
+// i-button,BUTTON
+click('0,PID_Screate',undefined, 'left');
+waitForLoad(3);
+waitForLoad(4);
+waitForLoad(5);
+waitForLoad(6);
+waitForLoad(7);
+
+// i-table,DIV
+assert('0,PID7',[1,0,1,0,0,1,0], 'equals', 'DIV( c:i-table-cell-content){Julian}');
+
+// i-table,DIV
+
+// i-table,DIV
+assert('0,PID336',[1,0,1,0,0,1,0], 'equals', 'DIV( c:i-table-cell-content){Penguin}');
+
+// i-table,DIV
+click('0,PID336',[1,0,1,0,0,3,0], 'left');
+
+// i-button i-button-link,BUTTON
+click('0,PID338',undefined, 'left');
+
+// i-button i-button-link,BUTTON
+click('0,PID340',undefined, 'left');
+
+// i-checkbox,SPAN
+click('0,check4',undefined, 'left');
+// i-checkbox,SPAN
+change('0,check4',undefined,'on');
+
+// i-textfield i-textfield-focus,INPUT
+click('0,PID375',undefined, 'left');
+// i-textfield,INPUT
+change('0,PID375',undefined,'Catti');
+
+// i-checkbox,SPAN
+click('0,check12',undefined, 'left');
+// i-checkbox,SPAN
+change('0,check12',undefined,'on');
+
+// i-checkbox,SPAN
+click('0,check4',undefined, 'left');
+// i-checkbox,SPAN
+change('0,check4',undefined,'on');
+
+// i-table,DIV
+click('0,PID336',[1,0,1,0,0,0,0], 'left');
+
+// i-button i-button-link,BUTTON
+click('0,PID339',undefined, 'left');
+
+// i-table,DIV
+assert('0,PID336',[1,0,1,0,0,1,0], 'equals', 'DIV( c:i-table-cell-content){Catti}');

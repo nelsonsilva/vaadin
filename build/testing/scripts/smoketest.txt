@@ -1,0 +1,4 @@
+waitForLoad(1);
+
+// i-label TT-highlight,DIV
+assert('0,PID2',undefined, 'equals', 'DIV( c:i-label){Simplest Application label}');

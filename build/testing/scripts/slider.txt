@@ -1,0 +1,13 @@
+waitForLoad(1);
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,2,0,0], 'left');
+
+// i-panel i-panel-light,DIV
+assert('0,PID22',[0,0], 'equals', 'SPAN(){Slider}');
+
+// i-orderedlayout,DIV
+assert('0,PID23',[0,0,0,0,0], 'equals', 'SPAN(){Value: 20.0}');
+
+// i-orderedlayout,DIV
+assert('0,PID23',[0,1,0,0,0], 'equals', 'SPAN(){Value: 0.5}');

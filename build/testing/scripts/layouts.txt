@@ -1,0 +1,79 @@
+waitForLoad(1);
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,5,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID6',[0,0,0,1,0,0,0], 'equals', 'SPAN(){Layouts}');
+
+// i-panel,DIV
+assert('0,PID_SNormalPanel',[0,0], 'equals', 'SPAN(){This is a normal panel}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SNormalPanel',[1,0,0,0,0], 'equals', 'DIV( c:i-label){A normal panel.}');
+
+// i-panel i-panel-light,DIV
+assert('0,PID_SLightPanel',[0,0], 'equals', 'SPAN(){This is a light panel}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SLightPanel',[1,0,0,0,0], 'equals', 'DIV( c:i-label){A light-style panel.}');
+
+// i-tabsheet,DIV
+assert('0,PID17',[0,0,0,1,0,0,0], 'equals', 'SPAN(){Vertical OrderedLayout}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SVerticalOrderedLayout',[0,0,0], 'equals', 'DIV( c:i-label){Component 1}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SVerticalOrderedLayout',[0,1,0], 'equals', 'DIV( c:i-label){Component 2}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SVerticalOrderedLayout',[0,2,0], 'equals', 'DIV( c:i-label){Component 3}');
+
+// i-tabsheet,DIV
+assert('0,PID17',[0,0,0,2,0,0,0], 'equals', 'SPAN(){Horizontal OrderedLayout}');
+
+// i-tabsheet,DIV
+assert('0,PID17',[0,0,0,3,0,0,0], 'equals', 'SPAN(){GridLayout}');
+
+// i-tabsheet,DIV
+click('0,PID17',[0,0,0,2,0,0,0], 'left');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SHorizontalOrderedLayout',[0,0,0,0,0,0], 'equals', 'DIV( c:i-label){Component 1}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SHorizontalOrderedLayout',[0,0,0,0,1,0], 'equals', 'DIV( c:i-label){Component 2}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SHorizontalOrderedLayout',[0,0,0,0,2,0], 'equals', 'DIV( c:i-label){Component 3}');
+
+// i-tabsheet,DIV
+click('0,PID17',[0,0,0,3,0,0,0], 'left');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SGridLayout',[1,0,0,0,1], 'equals', 'DIV( c:i-label){Component 1.1}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SGridLayout',[1,0,1,0,1], 'equals', 'DIV( c:i-label){Component 1.2}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SGridLayout',[1,0,2,0,1], 'equals', 'DIV( c:i-label){Component 1.3}');
+
+// i-gridlayout,TABLE
+assert('0,PID_SGridLayout',[1,1,0], 'equals', 'TD()');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SGridLayout',[1,1,1,0,1], 'equals', 'DIV( c:i-label){Component 2.2}');
+
+// i-gridlayout,TABLE
+assert('0,PID_SGridLayout',[1,1,2], 'equals', 'TD()');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SGridLayout',[1,2,0,0,1], 'equals', 'DIV( c:i-label){Component 3.1}');
+
+// i-gridlayout,TABLE
+assert('0,PID_SGridLayout',[1,2,1], 'equals', 'TD()');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SGridLayout',[1,2,2,0,1], 'equals', 'DIV( c:i-label){Component 3.3}');

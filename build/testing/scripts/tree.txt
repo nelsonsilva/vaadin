@@ -1,0 +1,97 @@
+waitForLoad(1);
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,1,1,2,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID6',[0,0,0,1,0,0,0], 'equals', 'SPAN(){Tree}');
+
+// i-panel i-panel-light,DIV
+assert('0,PID_SmainLayout',[0,0,0,0,0,0,0,0], 'equals', 'SPAN(){Select item}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_SmainLayout',[0,0,0,0,0,0,1,0,0,0,0], 'equals', 'DIV( c:i-label){Try both right- and left-click!}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[0,0,0], 'equals', 'SPAN(){Section 1}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[0,1,0,0,0], 'equals', 'SPAN(){Team A}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[0,1,1,0,0], 'equals', 'SPAN(){Team B}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[1,0,0], 'equals', 'SPAN(){Section 2}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[1,1,0,0,0], 'equals', 'SPAN(){Team A}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[1,1,1,0,0], 'equals', 'SPAN(){Team B}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[2,0,0], 'equals', 'SPAN(){Section 3}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[2,1,0,0,0], 'equals', 'SPAN(){Team A}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[2,1,1,0,0], 'equals', 'SPAN(){Team B}');
+
+// i-tree,DIV
+click('0,PID_Stree',[2,1,0,0,0], 'left');
+
+// i-tree,DIV
+assert('0,PID_Stree',[2,1,0,0,0], 'equals', 'SPAN(){Team A}');
+
+// i-tree,DIV
+assert('0,PID_Stree',[2,1,1,0,0], 'equals', 'SPAN(){Team B}');
+
+// i-tree,DIV
+click('0,PID_Stree',[2], 'left');
+
+// i-tree,DIV
+assert('0,PID_Stree',[2,0,0], 'equals', 'SPAN(){Section 3}');
+
+// i-tree,DIV
+click('0,PID_Stree',[2], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[1], 'left');
+
+// i-orderedlayout,DIV
+assert('0,PID_SmainLayout',[0,0,0,0,0,0,1,0,0], 'equals', 'DIV( c:i-orderedlayout-margin-top i-orderedlayout-margin-right i-orderedlayout-margin-bottom i-orderedlayout-margin-left){DIV(){DIV( c:i-label){Try both right- and left-click!}}DIV(){DIV( c:i-tree){DIV( c:i-tree-node i-tree-node-expanded){DIV( c:i-tree-node-caption){SPAN(){Section 1}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Section 2}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}DIV( c:i-tree-node i-tree-node-expanded){DIV( c:i-tree-node-caption){SPAN(){Section 3}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption i-tree-node-selected){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}}}}');
+
+// i-tree,DIV
+click('0,PID_Stree',[0], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[2], 'left');
+
+// i-orderedlayout,DIV
+assert('0,PID_SmainLayout',[0,0,0,0,0,0,1,0,0], 'equals', 'DIV( c:i-orderedlayout-margin-top i-orderedlayout-margin-right i-orderedlayout-margin-bottom i-orderedlayout-margin-left){DIV(){DIV( c:i-label){Try both right- and left-click!}}DIV(){DIV( c:i-tree){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Section 1}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Section 2}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Section 3}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption i-tree-node-selected){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}}}}');
+
+// i-tree,DIV
+click('0,PID_Stree',[2], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[1], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[0], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[0,1,0,0,0], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[0,1,0], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[0,1,1], 'left');
+
+// i-tree,DIV
+click('0,PID_Stree',[0,1,1], 'left');
+
+// i-orderedlayout,DIV
+assert('0,PID_SmainLayout',[0,0,0,0,0,0,1,0,0], 'equals', 'DIV( c:i-orderedlayout-margin-top i-orderedlayout-margin-right i-orderedlayout-margin-bottom i-orderedlayout-margin-left){DIV(){DIV( c:i-label){Try both right- and left-click!}}DIV(){DIV( c:i-tree){DIV( c:i-tree-node i-tree-node-expanded){DIV( c:i-tree-node-caption){SPAN(){Section 1}}DIV( c:i-tree-node-children){DIV( c:i-tree-node i-tree-node-expanded){DIV( c:i-tree-node-caption i-tree-node-selected){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}DIV( c:i-tree-node i-tree-node-expanded){DIV( c:i-tree-node-caption){SPAN(){Section 2}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}DIV( c:i-tree-node i-tree-node-expanded){DIV( c:i-tree-node-caption){SPAN(){Section 3}}DIV( c:i-tree-node-children){DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team A}}DIV( c:i-tree-node-children)}DIV( c:i-tree-node){DIV( c:i-tree-node-caption){SPAN(){Team B}}DIV( c:i-tree-node-children)}}}}}}');

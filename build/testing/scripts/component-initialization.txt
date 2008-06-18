@@ -1,0 +1,100 @@
+waitForLoad(1);
+
+setStepWaitTime(500);
+
+// i-tree,DIV
+assert('0,PID_SFeatureBrowser: Main Tree',[0,0,0], 'equals', 'SPAN(){All examples}');
+
+// i-table,DIV
+assert('0,PID_SFeatureBrowser: Main Table',[0,0,0,0,0,0,0,1], 'equals', 'DIV( c:i-table-caption-container){Category}');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Choose example}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,0,0], 'left');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,0,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Labels}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,1,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Buttons and links}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,2,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Basic value input}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,3,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){RichText}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,4,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Choices, choices}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,5,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Layouts}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,1,1,0,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){ComboBox}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,1,1,1,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Table (_grid_)}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,1,1,2,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Tree}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,2,1,0,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Notifications}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,2,1,1,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Client caching}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,2,1,2,0,0], 'left');
+waitForLoad(3);
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Embedding}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,2,1,3,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Windowing}');
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,2,1,4,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID7',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){JavaScript API}');

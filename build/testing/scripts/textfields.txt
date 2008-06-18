@@ -1,0 +1,41 @@
+waitForLoad(1);
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,2,0,0], 'left');
+
+// i-tabsheet,DIV
+assert('0,PID6',[0,0,0,1,0,0,0], 'equals', 'SPAN(){Basic value input}');
+
+// i-orderedlayout,DIV
+assert('0,PID14',[0,0,0,0,0], 'equals', 'SPAN(){Basic}');
+
+// i-textfield TT-highlight,INPUT
+assert('0,PID_SBasicTextField',undefined, 'equals', 'INPUT( c:i-textfield)');
+
+// i-textfield i-textfield-focus,INPUT
+click('0,PID_SBasicTextField',undefined, 'left');
+// i-textfield,INPUT
+change('0,PID_SBasicTextField',undefined,'user entered value');
+
+// i-orderedlayout,DIV
+click('0,PID14',[0,0,0,0], 'left');
+
+// i-textfield TT-highlight,INPUT
+assert('0,PID_SBasicTextField',undefined, 'equals', 'INPUT( v:user entered value c:i-textfield)');
+
+// i-orderedlayout,DIV
+assert('0,PID16',[0,0,0,0,0], 'equals', 'SPAN(){Area}');
+
+// i-textarea TT-highlight,TEXTAREA
+assert('0,PID_SAreaTextField',undefined, 'equals', 'TEXTAREA( c:i-textarea)');
+
+// i-textarea i-textarea-focus,TEXTAREA
+click('0,PID_SAreaTextField',undefined, 'left');
+// i-textarea,TEXTAREA
+change('0,PID_SAreaTextField',undefined,'user entered line1\nuser entered line2\n\nfourth line..');
+
+// i-orderedlayout,DIV
+click('0,PID12',[0], 'left');
+
+// i-textarea TT-highlight,TEXTAREA
+assert('0,PID_SAreaTextField',undefined, 'equals', 'TEXTAREA( v:user entered line1\nuser entered line2\n\nfourth line.. c:i-textarea)');

@@ -1,0 +1,84 @@
+waitForLoad(1);
+
+// i-tree,DIV
+click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,4,0,0], 'left');
+
+// i-orderedlayout,DIV
+assert('0,PID14',[0,2,0,0,0], 'equals', 'SPAN(){NativeSelect}');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:1 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'null');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,0], 'left');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:0 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'5');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,5], 'left');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:5 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'4');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,4], 'left');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:4 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'2');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,2], 'left');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:2 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'4');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,4], 'left');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'3');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,3], 'left');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:3 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0], 'left');
+// i-select,DIV
+change('0,PID_SNativeSelect',[0],'1');
+
+// i-select,DIV
+click('0,PID_SNativeSelect',[0,1], 'left');
+
+// i-select,DIV
+assert('0,PID_SNativeSelect',[0], 'equals', 'SELECT( sel:1 c:i-select-select){OPTION(){}OPTION(){Item 1}OPTION(){Item 2}OPTION(){Item 3}OPTION(){Item 4}OPTION(){Item 5}}');
