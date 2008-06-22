@@ -1,6 +1,6 @@
 waitForLoad(1);
 
-setStepWaitTime(500);
+setStepWaitTime(1000);
 
 // i-tree,DIV
 assert('0,PID_SFeatureBrowser: Main Tree',[0,0,0], 'equals', 'SPAN(){All examples}');
