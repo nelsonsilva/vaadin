@@ -1,10 +1,18 @@
 waitForLoad(1);
 
+// setStepWaitTime(1000);
+
 // i-tree,DIV
 click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,0,0,0], 'left');
 
 // i-label TT-highlight,DIV
 assert('0,PID_Slabel1',undefined, 'equals', 'DIV( c:i-label){A plain label without caption.}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_Slabel3',undefined, 'equals', 'DIV( c:i-label){This text has <b>HTML</b> formatting.<br/>A plain <i>Label</i> will show the markup, while a <u>XHTML-mode</u> <i>Label</i> will show the formatted text.}');
+
+// i-label TT-highlight,DIV
+assert('0,PID_Slabel5',undefined, 'equals', 'DIV( c:i-label){This text has linebreaks._n__n_They will show up in a preformatted Label,_n_but not in a _plain_ Label._n__n_       This is an indented row. _n_       Same indentation here.}');
 
 // i-orderedlayout,DIV
 assert('0,PID_SPlain w/ caption + tooltip',[1,0,0,0,0,0,0], 'equals', 'SPAN(){Label caption}');
@@ -13,13 +21,7 @@ assert('0,PID_SPlain w/ caption + tooltip',[1,0,0,0,0,0,0], 'equals', 'SPAN(){La
 assert('0,PID_Slabel2',undefined, 'equals', 'DIV( c:i-label){A plain label with caption.}');
 
 // i-label TT-highlight,DIV
-assert('0,PID_Slabel3',undefined, 'equals', 'DIV( c:i-label){This text has <b>HTML</b> formatting.<br/>A plain <i>Label</i> will show the markup, while a <u>XHTML-mode</u> <i>Label</i> will show the formatted text.}');
-
-// i-label TT-highlight,DIV
 assert('0,PID_Slabel4',undefined, 'equals', 'DIV( c:i-label){This text has B(){HTML} formatting.BR()A plain I(){Label} will show the markup, while a U(){XHTML-mode} I(){Label} will show the formatted text.}');
-
-// i-label TT-highlight,DIV
-assert('0,PID_Slabel5',undefined, 'equals', 'DIV( c:i-label){This text has linebreaks._n__n_They will show up in a preformatted Label,_n_but not in a _plain_ Label._n__n_       This is an indented row. _n_       Same indentation here.}');
 
 // i-label,DIV
 assert('0,PID_Slabel6',[0], 'equals', 'PRE(){This text has linebreaks._n__n_They will show up in a preformatted Label,_n_but not in a _plain_ Label._n__n_       This is an indented row. _n_       Same indentation here.}');

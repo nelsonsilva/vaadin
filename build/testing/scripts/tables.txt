@@ -4,7 +4,7 @@ waitForLoad(1);
 click('0,PID_SFeatureBrowser: Main Tree',[0,1,1,1,1,0,0], 'left');
 
 // i-tabsheet,DIV
-assert('0,PID6',[0,0,0,1,0,0,0], 'equals', 'SPAN(){Table (_grid_)}');
+assert('0,PID6',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Table (_grid_)}');
 
 // i-table,DIV
 assert('0,PID_SAllCreatures',[0,0,0,0,0,0,0], 'equals', 'TD(){DIV( c:i-table-resizer)DIV( c:i-table-caption-container)}');
@@ -88,40 +88,40 @@ click('0,PID_SAllCreatures',[1,0,1,0,4,0,0], 'left');
 click('0,PID13',undefined, 'left');
 
 // i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,0,0,0], 'equals', 'DIV( c:i-table-cell-content){2}');
+assert('0,PID_SSavedCreatures',[1,0,1,0,0,0,0], 'equals', 'DIV( c:i-table-cell-content){0}');
 
 // i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,0,1,0], 'equals', 'DIV( c:i-table-cell-content){Dog}');
+assert('0,PID_SSavedCreatures',[1,0,1,0,0,1,0], 'equals', 'DIV( c:i-table-cell-content){Penguin}');
 
 // i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,0,2,0], 'equals', 'DIV( c:i-table-cell-content){Crazy}');
+assert('0,PID_SSavedCreatures',[1,0,1,0,0,2,0], 'equals', 'DIV( c:i-table-cell-content){Quick}');
 
 // i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,0,3,0], 'equals', 'DIV( c:i-table-cell-content){Walking}');
+assert('0,PID_SSavedCreatures',[1,0,1,0,0,3,0], 'equals', 'DIV( c:i-table-cell-content){Sleeping}');
 
 // i-table,DIV
 assert('0,PID_SSavedCreatures',[1,0,1,0,0,4,0], 'equals', 'DIV( c:i-table-cell-content){false}');
 
 // i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,1,0,0], 'equals', 'DIV( c:i-table-cell-content){4}');
+assert('0,PID_SSavedCreatures',[1,0,1,0,1,0,0], 'equals', 'DIV( c:i-table-cell-content){2}');
+
+// i-table,DIV
+assert('0,PID_SSavedCreatures',[1,0,1,0,1,1,0], 'equals', 'DIV( c:i-table-cell-content){Dog}');
+
+// i-table,DIV
+assert('0,PID_SSavedCreatures',[1,0,1,0,1,2,0], 'equals', 'DIV( c:i-table-cell-content){Crazy}');
+
+// i-table,DIV
+assert('0,PID_SSavedCreatures',[1,0,1,0,1,3,0], 'equals', 'DIV( c:i-table-cell-content){Walking}');
+
+// i-table,DIV
+assert('0,PID_SSavedCreatures',[1,0,1,0,1,4,0], 'equals', 'DIV( c:i-table-cell-content){false}');
 
 // i-table,DIV
 assert('0,PID_SSavedCreatures',[1,0,1,0,2,0,0], 'equals', 'DIV( c:i-table-cell-content){3}');
 
 // i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,3,0,0], 'equals', 'DIV( c:i-table-cell-content){0}');
-
-// i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,3,1,0], 'equals', 'DIV( c:i-table-cell-content){Penguin}');
-
-// i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,3,2,0], 'equals', 'DIV( c:i-table-cell-content){Quick}');
-
-// i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,3,3,0], 'equals', 'DIV( c:i-table-cell-content){Sleeping}');
-
-// i-table,DIV
-assert('0,PID_SSavedCreatures',[1,0,1,0,3,4,0], 'equals', 'DIV( c:i-table-cell-content){false}');
+assert('0,PID_SSavedCreatures',[1,0,1,0,3,0,0], 'equals', 'DIV( c:i-table-cell-content){4}');
 
 // i-orderedlayout,DIV
 assert('0,PID11',[0,2,0,0,0], 'equals', 'SPAN(){Saved creatures}');

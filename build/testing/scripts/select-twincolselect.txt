@@ -17,23 +17,28 @@ assert('0,PID_STwinColSelect',[1,0], 'equals', 'BUTTON( c:i-button){SPAN(){>>}}'
 
 // i-select-twincol,DIV
 assert('0,PID_STwinColSelect',[1,2], 'equals', 'BUTTON( c:i-button){SPAN(){<<}}');
+
+//////////////////////
+// New recording:
+
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'3');
+change('0,PID_STwinColSelect',[0],'1');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[0,1], 'left');
 // i-select-twincol,DIV
-contextmenu('0,PID_STwinColSelect',[0,3]);
-// i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'5');
+change('0,PID_STwinColSelect',[0],'3');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[0,3], 'left');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'3');
+change('0,PID_STwinColSelect',[0],'1,3');
 
 // i-select-twincol,DIV
-click('0,PID_STwinColSelect',[0,1], 'left', false, false, false, true);
+click('0,PID_STwinColSelect',[0,1], 'left', true, false, false, false);
+
+// New recording ends
+//////////////////////
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[1,0], 'left');
@@ -44,7 +49,7 @@ assert('0,PID_STwinColSelect',[0], 'equals', 'SELECT( c:i-select-twincol-options
 // i-select-twincol,DIV
 assert('0,PID_STwinColSelect',[2], 'equals', 'SELECT( sel: 1,2, c:i-select-twincol-selections){OPTION(){Item 1}OPTION(){Item 3}OPTION(){Item 5}}');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'4');
+change('0,PID_STwinColSelect',[0],'1');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[0,1], 'left');
@@ -58,7 +63,7 @@ assert('0,PID_STwinColSelect',[0], 'equals', 'SELECT( c:i-select-twincol-options
 // i-select-twincol,DIV
 assert('0,PID_STwinColSelect',[2], 'equals', 'SELECT( sel: 3, c:i-select-twincol-selections){OPTION(){Item 1}OPTION(){Item 3}OPTION(){Item 5}OPTION(){Item 4}}');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'2');
+change('0,PID_STwinColSelect',[0],'0');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[0,0], 'left');
@@ -72,12 +77,12 @@ assert('0,PID_STwinColSelect',[2], 'equals', 'SELECT( sel: 4, c:i-select-twincol
 // i-select-twincol,DIV
 assert('0,PID_STwinColSelect',[0], 'equals', 'SELECT( c:i-select-twincol-options)');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[2],'3');
+change('0,PID_STwinColSelect',[2],'1');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[2,1], 'left');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[2],'3');
+change('0,PID_STwinColSelect',[2],'1,2,3');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[2,3], 'left', false, false, true, false);
@@ -91,12 +96,12 @@ assert('0,PID_STwinColSelect',[0], 'equals', 'SELECT( sel: 0,1,2, c:i-select-twi
 // i-select-twincol,DIV
 assert('0,PID_STwinColSelect',[2], 'equals', 'SELECT( c:i-select-twincol-selections){OPTION(){Item 1}OPTION(){Item 2}}');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[2],'1');
+change('0,PID_STwinColSelect',[2],'0');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[2,0], 'left');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[2],'1');
+change('0,PID_STwinColSelect',[2],'0,1');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[2,1], 'left', false, false, true, false);
@@ -110,12 +115,12 @@ assert('0,PID_STwinColSelect',[2], 'equals', 'SELECT( c:i-select-twincol-selecti
 // i-select-twincol,DIV
 assert('0,PID_STwinColSelect',[0], 'equals', 'SELECT( sel: 3,4, c:i-select-twincol-options){OPTION(){Item 3}OPTION(){Item 5}OPTION(){Item 4}OPTION(){Item 1}OPTION(){Item 2}}');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'3');
+change('0,PID_STwinColSelect',[0],'0');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[0,0], 'left');
 // i-select-twincol,DIV
-change('0,PID_STwinColSelect',[0],'3');
+change('0,PID_STwinColSelect',[0],'0,1,2,3,4');
 
 // i-select-twincol,DIV
 click('0,PID_STwinColSelect',[0,4], 'left', false, false, true, false);

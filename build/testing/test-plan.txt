@@ -10,6 +10,7 @@ themselves.
 Test Applications
 =================
 
+0: -
 1: http://...:8888/TestSimplestApplication
 2: http://...:8888/TestFeatureBrowser
 3: http://...:8888/TestRobustnessComplex
@@ -46,6 +47,11 @@ Example layout:
      |-- config.xml                - Configuration for testing the trunk
      |-- scripts                   - ln -s ../../autobuilder/trunk/testing/scripts
      `-- results                   - Result directory containing reports
+
+
+==========
+Test Suite
+==========
    
 -------------------------
 Smoketest (smoketest.txt)
@@ -54,7 +60,80 @@ Smoketest (smoketest.txt)
 This test is useful for the situation where all other tests fail, for
 isolating the problem.
 
-Execute application 0
+Execute application 1
 
-- Assert the displayed text.
+1. Assert the displayed text.
 
+-------------------
+Labels (labels.txt)
+-------------------
+
+Tests that different formatting modes of labels produce correct
+content in the browser.
+
+Execute application 2 (Feature Browser)
+
+1. Click "Labels" on the tree.
+2. In each label formatting mode example
+ 2.1 assert the caption, if it exists
+ 2.2 assert the label value
+
+---------------------
+Buttons (buttons.txt)
+---------------------
+
+Tests that Button components are rendered correctly in different
+styles and that checkboxes work.
+
+Execute application 2 (Feature Browser)
+
+1. Click "Buttons and Links"
+2. Assert section title "Buttons and Links"
+3. For each button type, assert:
+ a. Value (for checkboxes)
+ b. Label, including possible icon
+
+---------------------------------------------
+Twin Column Select (select-twincolselect.txt)
+---------------------------------------------
+
+Execute application 2 (Feature Browser)
+
+1. Click "Choises, choises"
+2. Assert initial state:
+   2.1 Assert left list
+   2.2 Assert right list
+   2.3 Assert control buttons (<<, >>)
+3. (Selecting items 3 and 5)
+  3.1 Select "Item 3" on the left list
+  3.2 Select "Item 5" on the left list
+  3.3 Select "Item 3" on the left list while pressing Ctrl (multiselect)
+  3.4 Click ">>"
+     - This moves items 3 and 5 to the right list
+  3.5. Assert that
+   3.5.1 Left list has items 2, 4
+   3.5.2 Right list has items 1, 3, 5
+4. (Selecting "Item 4")
+  4.1 Select "Item 4" on left list
+  4.2 Click ">>"
+    - This moves item 4 after the other items on the right list
+  4.3 Assert left list (2)
+  4.4 Assert right list (1,3,5,4)
+5. (Selecting "Item 2")
+  5.1 Select "Item 2" on left list
+  5.2 Click ">>"
+    - This moves item 2 after the other items on the right list
+  5.3 Assert left list (empty)
+  5.4 Assert right list (1,3,5,4,2)
+6. (Deselecting items and range select)
+  6.1 Select "Item 3" on right list
+  6.2 While pressing shift down, select "Item 4" on right list, thus selecting items 3,5,4.
+  6.3 Click "<<"
+  6.4 Assert left list (3,5,4)
+  6.5 Assert right list (1,2)
+7. (Deselecting items and range select)
+  7.1 Select "Item 1" on right list
+  7.2 While pressing shift down, select "Item 2" on right list, thus selecting items 1,2.
+  7.3 Click "<<"
+  7.4 Assert left list (3,5,4,1,2)
+  7.5 Assert right list (empty)
