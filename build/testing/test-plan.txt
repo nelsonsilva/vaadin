@@ -28,6 +28,7 @@ Example layout:
 
 -- /root (testing root)
  |-- autobuilder
+ | |-- build.py                    - The build-test script
  | |
  | |-- trunk
  | | `-- build/testing/scripts     - Test scripts for trunk
@@ -38,16 +39,26 @@ Example layout:
  |
  `-- testing                       - Automated test configuration and results
    |
-   |-- trunk
-   | |-- config.xml                - Configuration for testing the trunk
-   | |-- scripts                   - ln -s ../../autobuilder/trunk/testing/scripts
-   | `-- results                   - Result directory containing reports
+   |-- toolkit-automated-testing   - The automated test tool
+   | `-- templates                 - HTML templates for the test reports
    |
-   `-- branch-5.2
-     |-- config.xml                - Configuration for testing the trunk
-     |-- scripts                   - ln -s ../../autobuilder/trunk/testing/scripts
-     `-- results                   - Result directory containing reports
-
+   |-- trunk
+   | |-- nightly                   - Nightly builds from trunk
+   | | |-- config.xml              - Configuration for nightly build tests
+   | | |-- scripts                 - ln -s ../../../autobuilder/trunk/testing/scripts
+   | | `-- results                 - Result directory containing reports
+   | |
+   | `-- development               - Development builds from trunk
+   |   |-- config.xml              - Configuration for testing the trunk
+   |   |-- scripts                 - ln -s ../../../../autobuilder/branches/5.2/testing/scripts
+   |   `-- results                 - Result directory containing reports
+   |
+   `-- branch
+     `-- 5.2
+       `-- development             - Development builds from 5.2 branch
+         |-- config.xml            - Configuration for testing the 5.2 branch
+         |-- scripts               - ln -s ../../../../autobuilder/branches/5.2/testing/scripts
+         `-- results               - Result directory containing reports
 
 ==========
 Test Suite
@@ -64,9 +75,19 @@ Execute application 1
 
 1. Assert the displayed text.
 
--------------------
-Labels (labels.txt)
--------------------
+-------------------------------------------------------
+Component Initialization (component-initialization.txt)
+-------------------------------------------------------
+
+Execute application 2 (Feature Browser)
+
+1. For each item in the main tree:
+ 1.1 Click item in the main tree
+ 1.2 Assert the title of the section shown in the tab in the lower-right panel
+
+----------------------------
+Label Component (labels.txt)
+----------------------------
 
 Tests that different formatting modes of labels produce correct
 content in the browser.
@@ -78,9 +99,9 @@ Execute application 2 (Feature Browser)
  2.1 assert the caption, if it exists
  2.2 assert the label value
 
----------------------
-Buttons (buttons.txt)
----------------------
+------------------------------
+Button Component (buttons.txt)
+------------------------------
 
 Tests that Button components are rendered correctly in different
 styles and that checkboxes work.
@@ -93,8 +114,48 @@ Execute application 2 (Feature Browser)
  a. Value (for checkboxes)
  b. Label, including possible icon
 
+------------------------------------
+DateField Component (datefields.txt)
+------------------------------------
+
+------------------------------------
+TextField Component (textfields.txt)
+------------------------------------
+
+-----------------------------
+Slider Component (slider.txt)
+-----------------------------
+
+-------------------------------------------------------------------
+Select Component: Multiple Selection List (select-listmultiple.txt)
+-------------------------------------------------------------------
+
+---------------------------------------------------------------
+Select Component: Single Selection List (select-listsingle.txt)
+---------------------------------------------------------------
+
+-------------------------------------------------------
+Select Component: Option Group (select-optiongroup.txt)
+-------------------------------------------------------
+
+--------------------------------------------------------------
+Select Component: Radio Button Group (select-radiobuttons.txt)
+--------------------------------------------------------------
+
+---------------------------------------------------
+Select Component: Native Select (select-native.txt)
+---------------------------------------------------
+
+-------------------------------------------------
+Select Component: Combo Box (select-combobox.txt)
+-------------------------------------------------
+
+-------------------------------------------------------------------------------------
+Select Component: Combo Box / StartsWithFilter (select-combobox-startswithfilter.txt)
+-------------------------------------------------------------------------------------
+
 ---------------------------------------------
-Twin Column Select (select-twincolselect.txt)
+Select Component: Twin Column Select (select-twincolselect.txt)
 ---------------------------------------------
 
 Execute application 2 (Feature Browser)
@@ -137,3 +198,22 @@ Execute application 2 (Feature Browser)
   7.3 Click "<<"
   7.4 Assert left list (3,5,4,1,2)
   7.5 Assert right list (empty)
+
+
+--------------------------------------------------------------------------------
+
+-------------------------------
+Layout Components (layouts.txt)
+-------------------------------
+
+----------------------------
+Table Component (tables.txt)
+----------------------------
+
+-------------------------
+Tree Component (tree.txt)
+-------------------------
+
+-------------------------------------------------
+Complex Robustness Tests (robustness-complex.txt)
+-------------------------------------------------
