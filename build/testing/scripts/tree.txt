@@ -4,7 +4,7 @@ waitForLoad(1);
 click('0,PID_SFeatureBrowser: Main Tree',[0,1,1,1,2,0,0], 'left');
 
 // i-tabsheet,DIV
-assert('0,PID6',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Tree}');
+assert('0,PID6',[0,0,0,0,1,0,0,0], 'equals', 'SPAN(){Tree}');
 
 // i-panel i-panel-light,DIV
 assert('0,PID_SmainLayout',[0,0,0,0,0,0,0,0], 'equals', 'SPAN(){Select item}');

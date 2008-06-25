@@ -4,7 +4,7 @@ waitForLoad(1);
 click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,2,0,0], 'left');
 
 // i-tabsheet,DIV
-assert('0,PID6',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Basic value input}');
+assert('0,PID6',[0,0,0,0,1,0,0,0], 'equals', 'SPAN(){Basic value input}');
 
 // i-orderedlayout,DIV
 assert('0,PID14',[0,0,0,0,0], 'equals', 'SPAN(){Basic}');

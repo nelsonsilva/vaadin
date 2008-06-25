@@ -4,7 +4,7 @@ waitForLoad(1);
 click('0,PID_SFeatureBrowser: Main Tree',[0,1,0,1,5,0,0], 'left');
 
 // i-tabsheet,DIV
-assert('0,PID6',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Layouts}');
+assert('0,PID6',[0,0,0,0,1,0,0,0], 'equals', 'SPAN(){Layouts}');
 
 // i-panel,DIV
 assert('0,PID_SNormalPanel',[0,0], 'equals', 'SPAN(){This is a normal panel}');
@@ -19,7 +19,7 @@ assert('0,PID_SLightPanel',[0,0], 'equals', 'SPAN(){This is a light panel}');
 assert('0,PID_SLightPanel',[1,0,0,0,0], 'equals', 'DIV( c:i-label){A light-style panel.}');
 
 // i-tabsheet,DIV
-assert('0,PID17',[0,1,0,0,1,0,0,0], 'equals', 'SPAN(){Vertical OrderedLayout}');
+assert('0,PID17',[0,0,0,0,1,0,0,0], 'equals', 'SPAN(){Vertical OrderedLayout}');
 
 // i-label TT-highlight,DIV
 assert('0,PID_SVerticalOrderedLayout',[0,0,0], 'equals', 'DIV( c:i-label){Component 1}');
@@ -31,13 +31,13 @@ assert('0,PID_SVerticalOrderedLayout',[0,1,0], 'equals', 'DIV( c:i-label){Compon
 assert('0,PID_SVerticalOrderedLayout',[0,2,0], 'equals', 'DIV( c:i-label){Component 3}');
 
 // i-tabsheet,DIV
-assert('0,PID17',[0,1,0,0,2,0,0,0], 'equals', 'SPAN(){Horizontal OrderedLayout}');
+assert('0,PID17',[0,0,0,0,2,0,0,0], 'equals', 'SPAN(){Horizontal OrderedLayout}');
 
 // i-tabsheet,DIV
-assert('0,PID17',[0,1,0,0,3,0,0,0], 'equals', 'SPAN(){GridLayout}');
+assert('0,PID17',[0,0,0,0,3,0,0,0], 'equals', 'SPAN(){GridLayout}');
 
 // i-tabsheet,DIV
-click('0,PID17',[0,1,0,0,2,0,0,0], 'left');
+click('0,PID17',[0,0,0,0,2,0,0,0], 'left');
 
 // i-label TT-highlight,DIV
 assert('0,PID_SHorizontalOrderedLayout',[0,0,0,0,0,0], 'equals', 'DIV( c:i-label){Component 1}');
@@ -49,7 +49,7 @@ assert('0,PID_SHorizontalOrderedLayout',[0,0,0,0,1,0], 'equals', 'DIV( c:i-label
 assert('0,PID_SHorizontalOrderedLayout',[0,0,0,0,2,0], 'equals', 'DIV( c:i-label){Component 3}');
 
 // i-tabsheet,DIV
-click('0,PID17',[0,1,0,0,3,0,0,0], 'left');
+click('0,PID17',[0,0,0,0,3,0,0,0], 'left');
 
 // i-label TT-highlight,DIV
 assert('0,PID_SGridLayout',[0,0,1,0,0,0,1], 'equals', 'DIV( c:i-label){Component 1.1}');
