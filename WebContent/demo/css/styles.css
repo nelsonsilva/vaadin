@@ -52,6 +52,10 @@ a.more span {
 	color: #5c666a;
 }
 
+a[name]:hover {
+	color: #5c666a;
+}
+
 
 /* page furniture */
 
@@ -134,11 +138,36 @@ a.more span {
 
 .content h2 {
 	font-size: 18px;
-	color: #f14c1a;
+	color: #39529b;
 	height: 18px;
-	padding: 4px 0 6px 34px;
+	padding: 4px 0 6px 0;
 	letter-spacing: -0.02em;
 }
+
+.content h1 {
+	font-size: 22px;
+	color: #39529b;
+	height: 22px;
+	padding: 15px 0 10px 0;
+	letter-spacing: -0.02em;
+}
+
+#index .content h2 {
+	padding-left: 34px;
+}
+
+.content p,
+.content li,
+.content pre {
+	font-size: 12px;
+}
+
+#index .panel p,
+#index .panel li {
+	font-size: 11px;
+}
+
+
 
 #getting-started h2 {
 	background: transparent url(../img/icon-home.png) no-repeat;
