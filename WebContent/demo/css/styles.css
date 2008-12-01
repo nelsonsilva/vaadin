@@ -136,6 +136,14 @@ a[name]:hover {
 
 /* content area */
 
+.content h3 {
+	font-size: 14px;
+	color: #39529b;
+	height: 14px;
+	padding: 4px 0 6px 0;
+	letter-spacing: -0.02em;
+}
+
 .content h2 {
 	font-size: 18px;
 	color: #39529b;
