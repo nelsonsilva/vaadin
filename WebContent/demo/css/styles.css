@@ -202,7 +202,6 @@ a[name]:hover {
 #demos {
 	width: 335px;
 	float: right;
-	font-size: 1.2em;
 }
 
 #getting-started h4,
@@ -213,18 +212,19 @@ a[name]:hover {
 }
 
 #getting-started p,
+#demos p,
 #support-licensing p {
 	margin: 0 0 1em 0;
 }
 
-#support-licensing .links {
+.links {
 	list-style: none;
 	padding: 0;
 	margin: -1em 0 1em 0;
 	height: 1.8em;
 }
 
-#support-licensing .links li {
+.links li {
 	float: left;
 	margin-right: 1.5em;
 }
@@ -240,51 +240,40 @@ a[name]:hover {
 
 /* demo icons */
 
-#demo-buttons {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	width: 100%;
+#demos #sampler {
+	width: 345px;
+	height: 138px;
+	background: transparent url(../img/sampler-btn.png) no-repeat;
+	margin-top: -14px;
 }
 
-#demo-buttons li {
-	float: left;
-	width: 160px;
-	height: 135px;
-	margin-top: 14px;
-}
-
-#demo-buttons .clearer {
-	float: none;
-	height: 0;
-	margin: 0;
-}
-
-#demo-buttons li a {
+#sampler a {
 	display: block;
-	padding-top: 115px;
-	height: 20px;
-	width: 160px;
-	text-align: center;
+	width: 345px;
+	height: 138px;
+	text-indent: -90000px;
 }
 
-#demo-buttons #windowed-demos {
-	background: #fff url(../img/demos/windowed.png) no-repeat;
+#sampler span {
+	position: relative;
+	top: -34px;
+	left: 140px;
 }
 
-#demo-buttons #reservr {
-	background: #fff url(../img/demos/reservr.png) no-repeat;
-	margin-right: 15px;
+
+#demos #address-book {
+	width: 337px;
+	height: 81px;
+	background: transparent url(../img/address-book-btn.png) no-repeat;
 }
 
-#demo-buttons #feature-browser {
-	background: #fff url(../img/demos/features.png) no-repeat;
-	margin-right: 15px;
+#address-book a {
+	display: block;
+	width: 337px;
+	height: 81px;
+	text-indent: -90000px;
 }
 
-#demo-buttons #notifications {
-	background: #fff url(../img/demos/notifications.png) no-repeat;
-}
 
 
 /* package contents */
