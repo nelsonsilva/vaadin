@@ -252,6 +252,7 @@ a[name]:hover {
 	width: 345px;
 	height: 138px;
 	text-indent: -90000px;
+	outline: none;
 }
 
 #sampler span {
@@ -272,6 +273,7 @@ a[name]:hover {
 	width: 337px;
 	height: 81px;
 	text-indent: -90000px;
+	outline: none;
 }
 
 
