@@ -184,8 +184,12 @@ a[name]:hover {
 #demos h2 {
 	background: transparent url(../img/icon-eye.png) no-repeat;
 }
+#demos h2.tutorial {
+	margin-top: 1.4em;
+}
 #support-licensing h2 {
 	background: transparent url(../img/icon-doc.png) no-repeat;
+	margin-top: 1em;
 }
 
 #getting-started,
@@ -195,13 +199,21 @@ a[name]:hover {
 }
 
 #getting-started,
-#support-licensing {
+#support-licensing,
+#package-contents,
+#feedback {
 	width: 340px;
+	float: right;
+	clear: right;
+}
+#package-contents,
+#feedback {
+	width: 300px;
 }
 
 #demos {
 	width: 335px;
-	float: right;
+	float: left;
 }
 
 #getting-started h4,
@@ -217,7 +229,8 @@ a[name]:hover {
 	margin: 0 0 1em 0;
 }
 
-.links {
+.links,
+#demos ul.links {
 	list-style: none;
 	padding: 0;
 	margin: -1em 0 1em 0;
@@ -261,11 +274,12 @@ a[name]:hover {
 	left: 140px;
 }
 
-
 #demos #address-book {
 	width: 337px;
 	height: 81px;
 	background: transparent url(../img/address-book-btn.png) no-repeat;
+	text-indent: -9000px;
+	margin: 0 0 0.8em 0;
 }
 
 #address-book a {
@@ -274,6 +288,11 @@ a[name]:hover {
 	height: 81px;
 	text-indent: -90000px;
 	outline: none;
+}
+
+#demos ul {
+	margin: 0.2em 0 1em 0;
+	padding-left: 1.5em;
 }
 
 
@@ -356,22 +375,6 @@ a[name]:hover {
 #package-contents .support {
 	clear: left;
 	padding-top: 1.5em;
-}
-
-
-
-/* additional demos */
-
-#additional-demos {
-	clear: left;
-	font-size: 1em;
-	margin-top: 10px;
-}
-
-#additional-demos h3 {
-	font-size: 1.1em;
-	margin: 4px 0 5px 0;
-	color: #5b7b93;
 }
 
 
