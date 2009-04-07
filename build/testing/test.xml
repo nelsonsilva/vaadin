@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project name="Testing Testing Tools" basedir="." default="itmilltest">
+
+  <target name="itmilltest">
+    <fail unless="testingtools.tester.host" message="The 'testingtools.tester.host' property must be defined."/>
+    <fail unless="testingtools.deployment.url" message="The 'testingtools.deployment.url' property must be defined."/>
+
+    <junit fork="yes">
+      <classpath>
+        <pathelement location="build/testing/lib/junit-4.5.jar" />
+        <pathelement location="build/testing/lib/selenium-java-client-driver.jar" />
+        <pathelement path="testingtools-runner.jar" />
+      </classpath>
+      <jvmarg value="-Dtestingtools.tester.host=${testingtools.tester.host}" />
+      <jvmarg value="-Dtestingtools.deployment.url=${testingtools.deployment.url}" />
+      <test name="com.itmill.toolkit.tests.testcases.SamplerSmokeTest" />
+      <test name="com.itmill.toolkit.tests.testcases.SamplerSmokeTest2" />
+
+    </junit>
+
+  </target>
+
+</project>

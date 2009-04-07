@@ -190,7 +190,7 @@ available from other locations.
   License: Apache License v. 2.0 (above)
   Source code availability: http://commons.apache.org/fileupload/
     modifications are at com/itmill/toolkit/external 
-    within itmill-toolkit-<platform></platform>-<version></version>.jar
+    within itmill-toolkit-@platform@-@version@.jar
 
 * Google Maps API for Google Web Toolkit (GWT)
   License: Apache Software License  
@@ -199,12 +199,12 @@ available from other locations.
 * java.util.regex.Pattern for Google Web Toolkit (GWT)
   License: Apache License v. 2.0 (above)
   Source code availability: package com.itmill.toolkit.terminal.gwt.client.util
-    within itmill-toolkit-<platform></platform>-<version></version>.jar
+    within itmill-toolkit-@platform@-@version@.jar
 
 * Date locales and parsing for Google Web Toolkit (GWT)
   License: Apache License v. 2.0 (above)
   Source code availability: package com.itmill.toolkit.terminal.gwt.client.util
-    within itmill-toolkit-<platform></platform>-<version></version>.jar
+    within itmill-toolkit-@platform@-@version@.jar
     
 * Jetty
   License: Apache License v. 2.0 (above)
