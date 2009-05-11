@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload.util;
+package com.vaadin.external.org.apache.commons.fileupload.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -133,7 +133,7 @@ public final class Streams {
 
     /**
      * This convenience method allows to read a
-     * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemStream}'s
+     * {@link com.vaadin.external.org.apache.commons.fileupload.FileItemStream}'s
      * content into a string. The platform's default character encoding
      * is used for converting bytes into characters.
      * @param pStream The input stream to read.
@@ -149,7 +149,7 @@ public final class Streams {
 
     /**
      * This convenience method allows to read a
-     * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemStream}'s
+     * {@link com.vaadin.external.org.apache.commons.fileupload.FileItemStream}'s
      * content into a string, using the given character encoding.
      * @param pStream The input stream to read.
      * @param pEncoding The character encoding, typically "UTF-8".

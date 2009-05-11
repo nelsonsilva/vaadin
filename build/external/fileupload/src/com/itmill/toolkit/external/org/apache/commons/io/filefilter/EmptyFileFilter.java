@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io.filefilter;
+package com.vaadin.external.org.apache.commons.io.filefilter;
 
 import java.io.File;
 

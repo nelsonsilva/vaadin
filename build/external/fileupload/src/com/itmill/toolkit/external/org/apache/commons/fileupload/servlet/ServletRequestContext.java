@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload.servlet;
+package com.vaadin.external.org.apache.commons.fileupload.servlet;
 
 import java.io.InputStream;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.RequestContext;
+import com.vaadin.external.org.apache.commons.fileupload.RequestContext;
 
 /**
  * <p>Provides access to the request information needed for a request made to

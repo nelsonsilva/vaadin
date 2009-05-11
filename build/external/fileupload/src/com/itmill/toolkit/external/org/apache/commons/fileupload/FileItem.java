@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload;
+package com.vaadin.external.org.apache.commons.fileupload;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +28,8 @@ import java.io.UnsupportedEncodingException;
  * <code>multipart/form-data</code> POST request.
  *
  * <p> After retrieving an instance of this class from a {@link
- * com.itmill.toolkit.external.org.apache.commons.fileupload.FileUpload FileUpload} instance (see
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileUpload
+ * com.vaadin.external.org.apache.commons.fileupload.FileUpload FileUpload} instance (see
+ * {@link com.vaadin.external.org.apache.commons.fileupload.FileUpload
  * #parseRequest(javax.servlet.http.HttpServletRequest)}), you may
  * either request all contents of the file at once using {@link #get()} or
  * request an {@link java.io.InputStream InputStream} with

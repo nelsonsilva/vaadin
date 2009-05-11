@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload;
+package com.vaadin.external.org.apache.commons.fileupload;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,8 +22,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-import com.itmill.toolkit.external.org.apache.commons.fileupload.util.Closeable;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.util.Streams;
+import com.vaadin.external.org.apache.commons.fileupload.util.Closeable;
+import com.vaadin.external.org.apache.commons.fileupload.util.Streams;
 
 /**
  * <p> Low level API for processing file uploads.
@@ -281,9 +281,9 @@ public class MultipartStream {
     /**
      * Creates a new instance.
      * @deprecated Use {@link #MultipartStream(InputStream, byte[],
-     * com.itmill.toolkit.external.org.apache.commons.fileupload.MultipartStream.ProgressNotifier)},
+     * com.vaadin.external.org.apache.commons.fileupload.MultipartStream.ProgressNotifier)},
      * or {@link #MultipartStream(InputStream, byte[], int,
-     * com.itmill.toolkit.external.org.apache.commons.fileupload.MultipartStream.ProgressNotifier)}
+     * com.vaadin.external.org.apache.commons.fileupload.MultipartStream.ProgressNotifier)}
      */
     public MultipartStream() {
         this(null, null, null);
@@ -305,7 +305,7 @@ public class MultipartStream {
      *
      * @see #MultipartStream(InputStream, byte[], ProgressNotifier)
      * @deprecated Use {@link #MultipartStream(InputStream, byte[], int,
-     *  com.itmill.toolkit.external.org.apache.commons.fileupload.MultipartStream.ProgressNotifier)}.
+     *  com.vaadin.external.org.apache.commons.fileupload.MultipartStream.ProgressNotifier)}.
      */
     public MultipartStream(InputStream input, byte[] boundary, int bufSize) {
         this(input, boundary, bufSize, null);

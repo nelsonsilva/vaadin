@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io.output;
+package com.vaadin.external.org.apache.commons.io.output;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,8 +24,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import com.itmill.toolkit.external.org.apache.commons.io.FileUtils;
-import com.itmill.toolkit.external.org.apache.commons.io.IOUtils;
+import com.vaadin.external.org.apache.commons.io.FileUtils;
+import com.vaadin.external.org.apache.commons.io.IOUtils;
 
 /**
  * FileWriter that will create and honor lock files to allow simple

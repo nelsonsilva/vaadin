@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io;
+package com.vaadin.external.org.apache.commons.io;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import java.io.OutputStream;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @version $Id: EndianUtils.java 539638 2007-05-18 23:44:30Z bayard $
- * @see com.itmill.toolkit.external.org.apache.commons.io.input.SwappedDataInputStream
+ * @see com.vaadin.external.org.apache.commons.io.input.SwappedDataInputStream
  */
 public class EndianUtils {
 

@@ -198,12 +198,12 @@ available from other locations.
 
 * java.util.regex.Pattern for Google Web Toolkit (GWT)
   License: Apache License v. 2.0 (above)
-  Source code availability: package com.itmill.toolkit.terminal.gwt.client.util
+  Source code availability: package com.vaadin.terminal.gwt.client.util
     within itmill-toolkit-@platform@-@version@.jar
 
 * Date locales and parsing for Google Web Toolkit (GWT)
   License: Apache License v. 2.0 (above)
-  Source code availability: package com.itmill.toolkit.terminal.gwt.client.util
+  Source code availability: package com.vaadin.terminal.gwt.client.util
     within itmill-toolkit-@platform@-@version@.jar
     
 * Jetty

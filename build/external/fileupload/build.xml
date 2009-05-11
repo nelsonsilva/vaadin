@@ -2,7 +2,7 @@
 
 Updates /WebContent/WEB-INF/lib/commons-fileupload-custom.jar
 
-We have wrapped Apache packages under com.itmill.toolkit.external 
+We have wrapped Apache packages under com.vaadin.external 
 to prevent possible conflicts with developer given Apache classes.
 
 When developing, you should add src or classes directory to your classpath
@@ -20,7 +20,7 @@ b)
 <project name="itmill-toolkit-external" default="jar">
 
 	<target name="init">
-		<property name="server.main.class" value="com.itmill.toolkit.demo.DesktopServer" />
+		<property name="server.main.class" value="com.vaadin.demo.DesktopServer" />
 		<property name="webserver.jar" value="WebServer/winstone-0.9.9.jar" />
 		<property file="build.properties" />
 	</target>

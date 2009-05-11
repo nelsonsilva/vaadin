@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload;
+package com.vaadin.external.org.apache.commons.fileupload;
 
 import java.io.File;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.disk.DiskFileItem;
+import com.vaadin.external.org.apache.commons.fileupload.disk.DiskFileItem;
 
 
 /**
  * <p> The default implementation of the
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem FileItem} interface.
+ * {@link com.vaadin.external.org.apache.commons.fileupload.FileItem FileItem} interface.
  *
  * <p> After retrieving an instance of this class from a {@link
- * com.itmill.toolkit.external.org.apache.commons.fileupload.DiskFileUpload DiskFileUpload} instance (see
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.DiskFileUpload
+ * com.vaadin.external.org.apache.commons.fileupload.DiskFileUpload DiskFileUpload} instance (see
+ * {@link com.vaadin.external.org.apache.commons.fileupload.DiskFileUpload
  * #parseRequest(javax.servlet.http.HttpServletRequest)}), you may
  * either request all contents of file at once using {@link #get()} or
  * request an {@link java.io.InputStream InputStream} with

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io.input;
+package com.vaadin.external.org.apache.commons.io.input;
 
 import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.itmill.toolkit.external.org.apache.commons.io.EndianUtils;
+import com.vaadin.external.org.apache.commons.io.EndianUtils;
 
 /**
  * DataInput for systems relying on little endian data formats.

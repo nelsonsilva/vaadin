@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io;
+package com.vaadin.external.org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -33,13 +33,13 @@ import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.DirectoryFileFilter;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.FalseFileFilter;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.FileFilterUtils;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.IOFileFilter;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.SuffixFileFilter;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.TrueFileFilter;
-import com.itmill.toolkit.external.org.apache.commons.io.output.NullOutputStream;
+import com.vaadin.external.org.apache.commons.io.filefilter.DirectoryFileFilter;
+import com.vaadin.external.org.apache.commons.io.filefilter.FalseFileFilter;
+import com.vaadin.external.org.apache.commons.io.filefilter.FileFilterUtils;
+import com.vaadin.external.org.apache.commons.io.filefilter.IOFileFilter;
+import com.vaadin.external.org.apache.commons.io.filefilter.SuffixFileFilter;
+import com.vaadin.external.org.apache.commons.io.filefilter.TrueFileFilter;
+import com.vaadin.external.org.apache.commons.io.output.NullOutputStream;
 
 /**
  * General file manipulation utilities.
@@ -283,8 +283,8 @@ public class FileUtils {
      * If this parameter is <code>null</code>, subdirectories will not be included in the
      * search. Use TrueFileFilter.INSTANCE to match all directories.
      * @return an collection of java.io.File with the matching files
-     * @see com.itmill.toolkit.external.org.apache.commons.io.filefilter.FileFilterUtils
-     * @see com.itmill.toolkit.external.org.apache.commons.io.filefilter.NameFileFilter
+     * @see com.vaadin.external.org.apache.commons.io.filefilter.FileFilterUtils
+     * @see com.vaadin.external.org.apache.commons.io.filefilter.NameFileFilter
      */
     public static Collection listFiles(
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
@@ -329,8 +329,8 @@ public class FileUtils {
      * If this parameter is <code>null</code>, subdirectories will not be included in the
      * search. Use TrueFileFilter.INSTANCE to match all directories.
      * @return an iterator of java.io.File for the matching files
-     * @see com.itmill.toolkit.external.org.apache.commons.io.filefilter.FileFilterUtils
-     * @see com.itmill.toolkit.external.org.apache.commons.io.filefilter.NameFileFilter
+     * @see com.vaadin.external.org.apache.commons.io.filefilter.FileFilterUtils
+     * @see com.vaadin.external.org.apache.commons.io.filefilter.NameFileFilter
      * @since Commons IO 1.2
      */
     public static Iterator iterateFiles(

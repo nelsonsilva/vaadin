@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io;
+package com.vaadin.external.org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
 
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.FileFilterUtils;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.IOFileFilter;
-import com.itmill.toolkit.external.org.apache.commons.io.filefilter.TrueFileFilter;
+import com.vaadin.external.org.apache.commons.io.filefilter.FileFilterUtils;
+import com.vaadin.external.org.apache.commons.io.filefilter.IOFileFilter;
+import com.vaadin.external.org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Abstract class that walks through a directory hierarchy and provides

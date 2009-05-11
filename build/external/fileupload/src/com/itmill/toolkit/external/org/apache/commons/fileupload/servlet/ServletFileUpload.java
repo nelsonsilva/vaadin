@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload.servlet;
+package com.vaadin.external.org.apache.commons.fileupload.servlet;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemFactory;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemIterator;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileUpload;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileUploadException;
+import com.vaadin.external.org.apache.commons.fileupload.FileItemFactory;
+import com.vaadin.external.org.apache.commons.fileupload.FileItemIterator;
+import com.vaadin.external.org.apache.commons.fileupload.FileUpload;
+import com.vaadin.external.org.apache.commons.fileupload.FileUploadException;
 
 /**
  * <p>High level API for processing file uploads.</p>
@@ -33,7 +33,7 @@ import com.itmill.toolkit.external.org.apache.commons.fileupload.FileUploadExcep
  * <code>multipart/mixed</code> encoding type, as specified by
  * <a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867</a>.  Use {@link
  * #parseRequest(HttpServletRequest)} to acquire a list of {@link
- * com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem}s associated with a given HTML
+ * com.vaadin.external.org.apache.commons.fileupload.FileItem}s associated with a given HTML
  * widget.</p>
  *
  * <p>How the data for individual parts is stored is determined by the factory

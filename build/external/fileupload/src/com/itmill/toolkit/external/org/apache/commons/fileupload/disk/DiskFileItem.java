@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload.disk;
+package com.vaadin.external.org.apache.commons.fileupload.disk;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,22 +29,22 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import com.itmill.toolkit.external.org.apache.commons.io.IOUtils;
-import com.itmill.toolkit.external.org.apache.commons.io.FileCleaner;
-import com.itmill.toolkit.external.org.apache.commons.io.output.DeferredFileOutputStream;
+import com.vaadin.external.org.apache.commons.io.IOUtils;
+import com.vaadin.external.org.apache.commons.io.FileCleaner;
+import com.vaadin.external.org.apache.commons.io.output.DeferredFileOutputStream;
 
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileUploadException;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.ParameterParser;
+import com.vaadin.external.org.apache.commons.fileupload.FileItem;
+import com.vaadin.external.org.apache.commons.fileupload.FileUploadException;
+import com.vaadin.external.org.apache.commons.fileupload.ParameterParser;
 
 
 /**
  * <p> The default implementation of the
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem FileItem} interface.
+ * {@link com.vaadin.external.org.apache.commons.fileupload.FileItem FileItem} interface.
  *
  * <p> After retrieving an instance of this class from a {@link
- * com.itmill.toolkit.external.org.apache.commons.fileupload.DiskFileUpload DiskFileUpload} instance (see
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.DiskFileUpload
+ * com.vaadin.external.org.apache.commons.fileupload.DiskFileUpload DiskFileUpload} instance (see
+ * {@link com.vaadin.external.org.apache.commons.fileupload.DiskFileUpload
  * #parseRequest(javax.servlet.http.HttpServletRequest)}), you may
  * either request all contents of file at once using {@link #get()} or
  * request an {@link java.io.InputStream InputStream} with

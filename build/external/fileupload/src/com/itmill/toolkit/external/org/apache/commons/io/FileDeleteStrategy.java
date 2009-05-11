@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io;
+package com.vaadin.external.org.apache.commons.io;
 
 import java.io.File;
 import java.io.IOException;

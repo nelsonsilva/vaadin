@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload.disk;
+package com.vaadin.external.org.apache.commons.fileupload.disk;
 
 import java.io.File;
 
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemFactory;
+import com.vaadin.external.org.apache.commons.fileupload.FileItem;
+import com.vaadin.external.org.apache.commons.fileupload.FileItemFactory;
 
 /**
- * <p>The default {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemFactory}
+ * <p>The default {@link com.vaadin.external.org.apache.commons.fileupload.FileItemFactory}
  * implementation. This implementation creates
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem} instances which keep their
+ * {@link com.vaadin.external.org.apache.commons.fileupload.FileItem} instances which keep their
  * content either in memory, for smaller items, or in a temporary file on disk,
  * for larger items. The size threshold, above which content will be stored on
  * disk, is configurable, as is the directory in which temporary files will be
@@ -44,7 +44,7 @@ import com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemFactory
  * soon as they are no longer needed. (More precisely, when the
  * corresponding instance of {@link java.io.File} is garbage collected.)
  * This is done by the so-called reaper thread, which is started
- * automatically when the class {@link com.itmill.toolkit.external.org.apache.commons.io.FileCleaner}
+ * automatically when the class {@link com.vaadin.external.org.apache.commons.io.FileCleaner}
  * is loaded. It might make sense to terminate that thread, for example,
  * if your web application ends. See the section on "Resource cleanup"
  * in the users guide of commons-fileupload.</p>
@@ -169,7 +169,7 @@ public class DiskFileItemFactory implements FileItemFactory {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Create a new {@link com.itmill.toolkit.external.org.apache.commons.fileupload.disk.DiskFileItem}
+     * Create a new {@link com.vaadin.external.org.apache.commons.fileupload.disk.DiskFileItem}
      * instance from the supplied parameters and the local factory
      * configuration.
      *

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload;
+package com.vaadin.external.org.apache.commons.fileupload;
 
 import java.io.File;
-import com.itmill.toolkit.external.org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import com.vaadin.external.org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 /**
- * <p>The default {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItemFactory}
+ * <p>The default {@link com.vaadin.external.org.apache.commons.fileupload.FileItemFactory}
  * implementation. This implementation creates
- * {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem} instances which keep their
+ * {@link com.vaadin.external.org.apache.commons.fileupload.FileItem} instances which keep their
  * content either in memory, for smaller items, or in a temporary file on disk,
  * for larger items. The size threshold, above which content will be stored on
  * disk, is configurable, as is the directory in which temporary files will be
@@ -79,7 +79,7 @@ public class DefaultFileItemFactory extends DiskFileItemFactory {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Create a new {@link com.itmill.toolkit.external.org.apache.commons.fileupload.DefaultFileItem}
+     * Create a new {@link com.vaadin.external.org.apache.commons.fileupload.DefaultFileItem}
      * instance from the supplied parameters and the local factory
      * configuration.
      *

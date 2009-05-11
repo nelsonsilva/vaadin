@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload;
+package com.vaadin.external.org.apache.commons.fileupload;
 
 
 /**
@@ -24,7 +24,7 @@ package com.itmill.toolkit.external.org.apache.commons.fileupload;
  * <code>multipart/mixed</code> encoding type, as specified by
  * <a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867</a>.  Use {@link
  * #parseRequest(javax.servlet.http.HttpServletRequest)} to acquire a list
- * of {@link com.itmill.toolkit.external.org.apache.commons.fileupload.FileItem FileItems} associated
+ * of {@link com.vaadin.external.org.apache.commons.fileupload.FileItem FileItems} associated
  * with a given HTML widget.</p>
  *
  * <p>How the data for individual parts is stored is determined by the factory

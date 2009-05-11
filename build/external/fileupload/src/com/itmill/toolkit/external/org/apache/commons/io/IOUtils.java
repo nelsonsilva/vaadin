@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.io;
+package com.vaadin.external.org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.itmill.toolkit.external.org.apache.commons.io.output.ByteArrayOutputStream;
+import com.vaadin.external.org.apache.commons.io.output.ByteArrayOutputStream;
 
 /**
  * General IO stream manipulation utilities.

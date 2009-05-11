@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itmill.toolkit.external.org.apache.commons.fileupload.servlet;
+package com.vaadin.external.org.apache.commons.fileupload.servlet;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 
-import com.itmill.toolkit.external.org.apache.commons.io.FileCleaner;
+import com.vaadin.external.org.apache.commons.io.FileCleaner;
 
 
 /**
  * A servlet context listener, which ensures that the
- * {@link com.itmill.toolkit.external.org.apache.commons.io.FileCleaner FileCleaner's}
+ * {@link com.vaadin.external.org.apache.commons.io.FileCleaner FileCleaner's}
  * reaper thread is terminated,
  * when the web application is destroyed.
  */
