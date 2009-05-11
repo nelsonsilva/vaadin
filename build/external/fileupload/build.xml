@@ -36,14 +36,14 @@ b)
 		</javac>
 		<echo>Removing javax.portlet and commons IO classes (not required)</echo>
 		<delete dir="classes/javax" />
-		<delete dir="classes/com/itmill/toolkit/external/org/apache/commons/io" />
+		<delete dir="classes/com/vaadin/external/org/apache/commons/io" />
 	</target>
 
 	<target name="jar" depends="compile">
 		<jar jarfile="../../../WebContent/WEB-INF/lib/commons-fileupload-custom.jar" compress="true">
 			<fileset dir="classes">
 				<patternset>
-					<include name="com/itmill/toolkit/external/org/apache/commons/fileupload/**/*" />
+					<include name="com/vaadin/external/org/apache/commons/fileupload/**/*" />
 				</patternset>
 			</fileset>
 		</jar>
