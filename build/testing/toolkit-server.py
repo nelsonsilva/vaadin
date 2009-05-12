@@ -28,7 +28,7 @@ def startToolkit(packagename, testarea):
 
     # All the stdin, stdout, and stderr must be redirected
     # or otherwise Ant will hang when this start script returns.
-	if execute("ITMILLTOOLKIT_PARAMETERS='--nogui=1' nohup sh start.sh </dev/null >WebContent/nohup.txt 2>&1 &"):
+	if execute("VAADIN_PARAMETERS='--nogui=1' nohup sh start.sh </dev/null >WebContent/nohup.txt 2>&1 &"):
 		print "Launching Toolkit server failed."
 
 	# Wait a little to let it start.
