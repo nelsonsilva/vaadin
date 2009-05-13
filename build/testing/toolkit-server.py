@@ -57,7 +57,7 @@ def commandStart(packagename, packagefile, testarea):
 	if len(testarea) < 3:
 		print "The test area directory may not be too short: %s" % (testarea)
 		sys.exit(1)
-	execute("rm -rf %s/itmill-toolkit-*" % (testarea))
+	execute("rm -rf %s/vaadin-*" % (testarea))
 		
 	print "Creating test area '%s' if it does not already exist." % (testarea)
 	if execute ("mkdir -p %s" % testarea):
