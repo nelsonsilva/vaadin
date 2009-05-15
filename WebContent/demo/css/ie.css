@@ -18,3 +18,7 @@ a.more span {
 *+html #additional-demos {
 	margin-top: -3px;
 }
+
+* html #container .header h1 {
+	margin: 0 0 0 80px;
+}
