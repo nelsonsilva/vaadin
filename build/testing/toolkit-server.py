@@ -33,9 +33,8 @@ def startToolkit(packagename, testarea):
 
 	# Wait a little to let it start.
 	time.sleep(5)
-	
-def stopToolkit():
-	pin = os.popen("ps -do pid,args | grep ITMillToolkit | grep -v grep | grep java | sed -e 's/^ \\+//' | cut -d ' ' -f 1", "r")
+
+def stopProcess(pin):
 	if pin:
 		pid = pin.read()
 		pin.close()
@@ -47,6 +46,12 @@ def stopToolkit():
 			print "Killing existing Toolkit demo, PID [" + pid + "]"
 			execute("kill -9 " + pid)
 			time.sleep(2);
+	
+def stopToolkit():
+	pin = os.popen("ps -do pid,args | grep DemoLauncher | grep -v grep | grep java | sed -e 's/^ \\+//' | cut -d ' ' -f 1", "r")
+	stopProcess(pin)
+	pin = os.popen("ps -do pid,args | grep DevelopmentServerLauncher | grep -v grep | grep java | sed -e 's/^ \\+//' | cut -d ' ' -f 1", "r")
+	stopProcess(pin)
 
 ################################################################################
 # Commands
