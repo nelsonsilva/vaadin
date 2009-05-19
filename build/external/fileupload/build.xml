@@ -25,9 +25,9 @@ b)
 		<property file="build.properties" />
 	</target>
 
-	<!-- Compiles your Toolkit application -->
+	<!-- Compiles your Vaadin application -->
 	<target name="compile" depends="init">
-		<echo message="Compiling Toolkit application sources." />
+		<echo message="Compiling Vaadin application sources." />
 		<path id="compile.class.path">
 			<pathelement path="../../../lib/jetty/servlet-api-2.5-6.1.7.jar" />
 		</path>
