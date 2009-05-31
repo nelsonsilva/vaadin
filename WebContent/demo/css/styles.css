@@ -24,7 +24,6 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h1 {
-	font-size: 36px;
 }
 
 h2 {
@@ -67,29 +66,35 @@ a:active {
 #header {
 	height: 93px;
 	background: #000;
+}
+
+#header-contentcolumn {
+	display: block;
 	position: relative;
-	margin-bottom: 57px;
+	top: 33px;
+	max-width: 984px;
+	padding-left: 8px;
+	padding-right: 8px;
 }
 
 #header h1 {
+	display: inline;
+	position: absolute;
 	width: 393px;
 	height: 48px;
 	background: transparent url(../img/vaadin-logo.png);
-	position: absolute;
-	top: 33px;
-	left: 50%;
 	margin: 0;
-	margin-left: -484px;
-	text-indent: -9999px;
 }
 
 #version {
-	position: absolute;
-	left: 50%;
-	top: 40px;
-	color: #a09f91;
+	display: block;
+	float: right;
+	max-width: 984px;
+	height: 48px;
 	text-align: right;
-	width: 484px;
+	vertical-align: top;
+	padding-top: 7px;
+	color: #a09f91;
 }
 
 #version a {
@@ -108,20 +113,27 @@ a:active {
 }
 
 #subheader {
-	position: absolute;
-	top: 93px;
-	left: 50%;
-	margin-left: -484px;
-	width: 968px;
-	height: 57px;
-	line-height: 57px;
+	display: block;
+	position: static;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-right: 16px;
+}
+
+#subheader .contentcolumn {
+	display: table;
+	position: static;
+	width: 100%;
+}
+
+#subheader strong {
+	display: table-cell;
 }
 
 #subheader .links {
-	width: 484px;
-	position: absolute;
-	top: 2px;
-	left: 50%;
+	display: table-cell;
+	text-align: right;
+	vertical-align: top;
 }
 
 #subheader .links a {
@@ -136,28 +148,31 @@ a:active {
 	color: #000;
 }
 
+.contentcolumn {
+	display: table;
+	max-width: 984px;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
 #upfront {
-	position: relative;
-	height: 288px;
+	clear: both;
 	background: #deddd3;
 	font-size: 16px;
 	line-height: 22px;
+	padding-bottom: 20px;
 }
 
 #sampler {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	margin-left: -484px;
-	width: 476px;
+	display: table-cell;
+	width: 50%;
+	padding-right: 8px;
 }
 
 #eclipse {
-	position: absolute;
-	top: 0;
-	left: 50%;
+	display: table-cell;
 	margin-left: 8px;
-	width: 476px;
+	width: 50%;
 }
 
 #sampler h2,
@@ -178,26 +193,18 @@ a:active {
 }
 
 #content {
-	position: relative;
-	overflow: hidden;
-	margin: 28px 0 56px -484px;
-	left: 50%;
-	width: 968px;
+	padding-top: 25px;
 }
 
 #demos {
-	position: absolute;
-	left: 50%;
-	width: 476px;
-	margin-left: -484px;
+	display: table-cell;
+	width: 50%;
 }
 
 #docs {
-	position: relative;
-	left: 50%;
+	display: table-cell;
 	margin-left: 8px;
-	width: 476px;
-	top: 0;
+	width: 50%;
 }
 
 #docs .tutorial {
@@ -220,26 +227,18 @@ a:active {
 }
 
 #footer {
-	position: relative;
 	background: #f4f4f0;
-	overflow: hidden;
-	padding: 14px 0 28px 0;
 }
 
 #open-source {
-	position: absolute;
-	top: 14px;
-	left: 50%;
-	width: 476px;
-	margin-left: -484px;
+	display: table-cell;
+	width: 50%;
 }
 
 #pro {
-	position: relative;
-	top: 0;
-	left: 50%;
+	display: table-cell;
 	margin-left: 8px;
-	width: 476px;
+	width: 50%;
 }
 
 #footer .slogan {
