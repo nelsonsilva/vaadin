@@ -1,14 +1,17 @@
 html {
 	margin: 0;
 	padding: 0;
+	text-align: center;
 }
 
 body {
 	background-color: #fff;
 	font: normal 14px/20px Helvetica, "Lucida Grande", Arial, Verdana, sans-serif;
 	color: #464440;
-	margin: 0;
 	padding: 0;
+	min-width: 980px;
+	text-align: left;
+	margin: 0 auto;
 }
 
 .clearer {
@@ -24,6 +27,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h1 {
+	font-size: 36px;
 }
 
 h2 {
@@ -66,35 +70,28 @@ a:active {
 #header {
 	height: 93px;
 	background: #000;
-}
-
-#header-contentcolumn {
-	display: block;
 	position: relative;
-	top: 33px;
-	max-width: 984px;
-	padding-left: 8px;
-	padding-right: 8px;
 }
 
 #header h1 {
-	display: inline;
-	position: absolute;
 	width: 393px;
 	height: 48px;
 	background: transparent url(../img/vaadin-logo.png);
+	position: absolute;
+	top: 33px;
+	left: 50%;
 	margin: 0;
+	margin-left: -484px;
+	text-indent: -9999px;
 }
 
 #version {
-	display: block;
-	float: right;
-	max-width: 984px;
-	height: 48px;
-	text-align: right;
-	vertical-align: top;
-	padding-top: 7px;
+	position: absolute;
+	left: 50%;
+	top: 40px;
 	color: #a09f91;
+	text-align: right;
+	width: 484px;
 }
 
 #version a {
@@ -113,27 +110,18 @@ a:active {
 }
 
 #subheader {
-	display: block;
-	position: static;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	margin-right: 16px;
-}
-
-#subheader .contentcolumn {
-	display: table;
-	position: static;
-	width: 100%;
-}
-
-#subheader strong {
-	display: table-cell;
+	position: relative;
+	width: 968px;
+	height: 57px;
+	line-height: 57px;
+	margin: 0 auto;
 }
 
 #subheader .links {
-	display: table-cell;
-	text-align: right;
-	vertical-align: top;
+	width: 484px;
+	position: absolute;
+	top: 2px;
+	left: 50%;
 }
 
 #subheader .links a {
@@ -148,31 +136,28 @@ a:active {
 	color: #000;
 }
 
-.contentcolumn {
-	display: table;
-	max-width: 984px;
-	margin-left: 8px;
-	margin-right: 8px;
-}
-
 #upfront {
-	clear: both;
+	position: relative;
+	height: 288px;
 	background: #deddd3;
 	font-size: 16px;
 	line-height: 22px;
-	padding-bottom: 20px;
 }
 
 #sampler {
-	display: table-cell;
-	width: 50%;
-	padding-right: 8px;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -484px;
+	width: 476px;
 }
 
 #eclipse {
-	display: table-cell;
+	position: absolute;
+	top: 0;
+	left: 50%;
 	margin-left: 8px;
-	width: 50%;
+	width: 476px;
 }
 
 #sampler h2,
@@ -193,18 +178,26 @@ a:active {
 }
 
 #content {
-	padding-top: 25px;
+	position: relative;
+	overflow: hidden;
+	margin: 28px 0 56px -484px;
+	left: 50%;
+	width: 968px;
 }
 
 #demos {
-	display: table-cell;
-	width: 50%;
+	position: absolute;
+	left: 50%;
+	width: 476px;
+	margin-left: -484px;
 }
 
 #docs {
-	display: table-cell;
+	position: relative;
+	left: 50%;
 	margin-left: 8px;
-	width: 50%;
+	width: 476px;
+	top: 0;
 }
 
 #docs .tutorial {
@@ -227,18 +220,26 @@ a:active {
 }
 
 #footer {
+	position: relative;
 	background: #f4f4f0;
+	overflow: hidden;
+	padding: 14px 0 28px 0;
 }
 
 #open-source {
-	display: table-cell;
-	width: 50%;
+	position: absolute;
+	top: 14px;
+	left: 50%;
+	width: 476px;
+	margin-left: -484px;
 }
 
 #pro {
-	display: table-cell;
+	position: relative;
+	top: 0;
+	left: 50%;
 	margin-left: 8px;
-	width: 50%;
+	width: 476px;
 }
 
 #footer .slogan {
