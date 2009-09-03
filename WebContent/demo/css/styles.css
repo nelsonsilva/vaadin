@@ -248,3 +248,16 @@ a:active {
 	margin-left: -484px;
 	color: #a09f91;
 }
+
+
+.codeblock {
+	background: #f0efea;
+	padding: 1em;
+	margin: 1em 0;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+}
+
+.codeblock h4 {
+	margin-top: 0;
+}
