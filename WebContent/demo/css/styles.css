@@ -177,6 +177,12 @@ a:active {
 	font-weight: bold;
 }
 
+#upfront p {
+	font-weight: normal;
+	color: #464440;
+	text-decoration: none;
+}
+
 #content {
 	position: relative;
 	overflow: hidden;
