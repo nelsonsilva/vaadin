@@ -72,7 +72,7 @@ def stopVaadin():
 # Commands
 ################################################################################
 
-def commandStart(packagename, packagefile, outputdir, testarea):
+def commandStart(packagename, packagefile, outputdir, testarea, testbenchdir):
 	# Remove old build
 	print "Cleaning test area '%s'..." % (testarea)
 	if len(testarea) < 3:
@@ -112,7 +112,6 @@ def commandStart(packagename, packagefile, outputdir, testarea):
 		sys.exit(1)
 
 	# Copy testbench libraries.
-	testbenchdir = "build/lib/testbench"
 	libdir       = installationpath + "/WebContent/WEB-INF/lib"
 	print "Copying testbench libraries from '%s' to '%s'" % (testbenchdir, libdir)
 	if execute ("cp -r  %s %s/" % (testbenchdir, libdir)):
@@ -142,10 +141,11 @@ command = sys.argv[1]
 commandStop()
 	
 if command == "start" or command == "restart":
-	packagename = sys.argv[2]
-	packagefile = sys.argv[3]
-	outputdir   = sys.argv[4]
-	testarea    = sys.argv[5]
-	commandStart(packagename, packagefile, outputdir, testarea)
+	packagename  = sys.argv[2]
+	packagefile  = sys.argv[3]
+	outputdir    = sys.argv[4]
+	testarea     = sys.argv[5]
+	testbenchdir = sys.argv[6]
+	commandStart(packagename, packagefile, outputdir, testarea, testbenchdir)
 
 print "Done."
