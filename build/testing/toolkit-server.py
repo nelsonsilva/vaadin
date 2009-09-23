@@ -36,7 +36,6 @@ def startVaadin(packagename, testarea):
 				"WebContent/demo/lib/jetty/jetty-util-6.1.7.jar:"+\
 				"WebContent/demo/lib/jetty/servlet-api-2.5-6.1.7.jar:"+\
 				"WebContent/WEB-INF/classes:WebContent/WEB-INF/src"
-	classpath += ":%(libdir)s/testbench/*:%(libdir)s/testbench/lib/*" % {"libdir": libdir}
 
 	javacmd = "java -cp %(classpath)s com.vaadin.launcher.DemoLauncher --nogui=1" % {"classpath": classpath}
 	print javacmd
@@ -111,14 +110,6 @@ def commandStart(packagename, packagefile, outputdir, testarea):
 		print "Copying theme files failed."
 		sys.exit(1)
 
-	# Copy testbench libraries.
-	testbenchdir = "build/lib/testbench"
-	libdir       = installationpath + "/WebContent/WEB-INF/lib"
-	print "Copying testbench libraries from '%s' to '%s'" % (testbenchdir, libdir)
-	if execute ("cp -r  %s %s/" % (testbenchdir, libdir)):
-		print "Copying testbench libraries to test installation failed."
-		sys.exit(1)
-	
 	# Start new Vaadin demo service
 	startVaadin(packagename, testarea)
 	
@@ -142,10 +133,10 @@ command = sys.argv[1]
 commandStop()
 	
 if command == "start" or command == "restart":
-	packagename = sys.argv[2]
-	packagefile = sys.argv[3]
-	outputdir   = sys.argv[4]
-	testarea    = sys.argv[5]
+	packagename  = sys.argv[2]
+	packagefile  = sys.argv[3]
+	outputdir    = sys.argv[4]
+	testarea     = sys.argv[5]
 	commandStart(packagename, packagefile, outputdir, testarea)
 
 print "Done."
