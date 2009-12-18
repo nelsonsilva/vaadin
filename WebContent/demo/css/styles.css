@@ -152,6 +152,30 @@ a:active {
 	width: 476px;
 }
 
+#sampler .new {
+	position: absolute;
+	top: 24px;
+	right: 40px;
+	font-size: 11px;
+	font-weight: bold;
+	font-style: normal;
+	color: #807e78;
+	text-align: center;
+	width: 135px;
+}
+
+#sampler .new strong {
+	font-size: 16px;
+	line-height: 16px;
+	color: #fff;
+	display: block;
+	padding: 6px 0;
+	background: #40b527;
+	border-radius: 9px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+}
+
 #eclipse {
 	position: absolute;
 	top: 0;
