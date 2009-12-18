@@ -152,7 +152,8 @@ a:active {
 	width: 476px;
 }
 
-#sampler .new {
+#sampler .new,
+#eclipse .new {
 	position: absolute;
 	top: 24px;
 	right: 40px;
@@ -164,7 +165,8 @@ a:active {
 	width: 135px;
 }
 
-#sampler .new strong {
+#sampler .new strong,
+#eclipse .new strong {
 	font-size: 16px;
 	line-height: 16px;
 	color: #fff;
