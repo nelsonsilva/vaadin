@@ -17,7 +17,7 @@ def execute(cmd):
 # Unpacks the Vaadin installation package to a target location.
 # The package file name must have absolute path.
 def unpackVaadin(packagefile, targetdir):
-	cmd = "tar zxf %{PF}s -C ${TD}s" % {"PF": packagefile, "TD": targetdir}
+	cmd = "unzip %{PF}s -d ${TD}s" % {"PF": packagefile, "TD": targetdir}
 	if execute(cmd):
 		print "Unpacking Vaadin installation package %{PF} to ${TD} failed." % {"PF": packagefile, "TD": targetdir}
 		sys.exit(1)
@@ -85,7 +85,7 @@ def commandStart(packagename, packagefile, outputdir, testarea):
 		sys.exit(1)
 		
 	print "Extracting Vaadin package '%s' to test area '%s'..." % (packagefile, testarea)
-	if execute ("tar zxf %s -C %s" % (packagefile, testarea)):
+	if execute ("unzip %s -d %s" % (packagefile, testarea)):
 		print "Extracting Vaadin package failed."
 		sys.exit(1)
 
