@@ -94,7 +94,6 @@ def commandStart(packagename, packagefile, outputdir, testarea):
 
 	# Copy extra class files from the output directory to the test area. (#3325)
 	classsrc  = resultpath + "/classes/com/vaadin/tests"
-	classsrc += " " + resultpath + "/classes/com/vaadin/automatedtests"
 	classtrg  = installationpath + "/WebContent/WEB-INF/classes/com/vaadin/"
 	print "Copying all class files from %s to %s..." % (classsrc, classtrg)
 	if execute ("cp -r %s %s" % (classsrc, classtrg)):
