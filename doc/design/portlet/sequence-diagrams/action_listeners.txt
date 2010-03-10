@@ -1,0 +1,78 @@
+participant Client
+participant Portal
+participant "Portlet A"
+participant PortletListener
+participant PortletCommunicationManager
+
+note over "Portlet A": Vaadin portlet
+
+Client->Portal: Action
+activate Portal
+
+Portal->Portlet A: processAction(ActionRequest)
+activate Portlet A
+
+Portlet A->Portlet A: handleRequest(ActionRequest)
+
+Portlet A->PortletListener: handleActionRequest()
+activate PortletListener
+PortletListener-->Portlet A:
+deactivate PortletListener
+
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal->Portlet A: doDispatch(RenderRequest)
+activate Portlet A
+Portlet A->Portlet A: handleRequest(RenderRequest)
+
+Portlet A->PortletListener: handleRenderRequest()
+activate PortletListener
+PortletListener-->Portlet A:
+deactivate PortletListener
+
+Portlet A->Portlet A: writeAjaxPage()
+
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal-->Client: new rendered HTML page
+deactivate Portal
+
+note over Client: HTML bootstrap page loaded
+
+Client->Portal: static file requests (widgetset, theme etc.)
+activate Portal
+Portal-->Client:
+deactivate Portal
+
+Client->Portal: resource request (UIDL) for portlet A
+activate Portal
+Portal->Portlet A: serveResource(ResourceRequest)
+activate Portlet A
+
+Portlet A->Portlet A: handleRequest(ResourceRequest)
+
+Portlet A->PortletListener: handleResourceRequest()
+activate PortletListener
+PortletListener-->Portlet A:
+deactivate PortletListener
+
+Portlet A->PortletCommunicationManager: handleUidlRequest(ResourceRequest)
+activate PortletCommunicationManager
+PortletCommunicationManager->PortletCommunicationManager: handleVariables()
+PortletCommunicationManager->PortletCommunicationManager: paintAfterVariableChanges()
+PortletCommunicationManager-->Portlet A: 
+deactivate PortletCommunicationManager
+
+Portlet A-->Portal: UIDL content
+deactivate Portlet A
+Portal-->Client: UIDL content
+deactivate Portal
+
+Client->Portal: static file requests
+activate Portal
+Portal-->Client:
+deactivate Portal
+
+note over Client: Vaadin application ready

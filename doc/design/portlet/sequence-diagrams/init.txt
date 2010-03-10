@@ -1,0 +1,48 @@
+participant Client
+participant Portal
+participant "Portlet A"
+participant "Portlet B"
+
+note over "Portlet A": Vaadin portlet
+
+Client->Portal: Render
+activate Portal
+
+note over "Portlet A","Portlet B": Render requests are processed in arbitrary order or in parallel
+
+Portal->Portlet A: render
+activate Portlet A
+Portlet A->Portlet A: writeAjaxPage()
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal->Portlet B: render
+activate Portlet B
+Portlet B-->Portal:
+deactivate Portlet B
+
+Portal-->Client: rendered HTML page
+deactivate Portal
+
+note over Client: All basic HTML content loaded
+
+Client->Portal: static file requests (widgetset, theme etc.)
+activate Portal
+Portal-->Client:
+deactivate Portal
+
+Client->Portal: resource request (UIDL) for portlet A
+activate Portal
+Portal->Portlet A: resource request (UIDL) for portlet A
+activate Portlet A
+Portlet A-->Portal: UIDL content
+deactivate Portlet A
+Portal-->Client: UIDL content
+deactivate Portal
+
+Client->Portal: static file requests
+activate Portal
+Portal-->Client:
+deactivate Portal
+
+note over Client: Vaadin application ready

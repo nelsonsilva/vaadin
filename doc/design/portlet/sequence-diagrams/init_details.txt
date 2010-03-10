@@ -1,0 +1,62 @@
+participant Client
+participant Portal
+participant "Portlet A"
+participant PortletRequestListener
+participant TransactionListener
+participant PortletListener
+participant Window
+participant PortletCommunicationManager
+
+Client->Portal: Render
+activate Portal
+
+Portal->Portlet A: render
+activate Portlet A
+Portlet A->Portlet A: findApplicationInstance()
+Portlet A->Portlet A: getApplicationContext()
+Portlet A->Portlet A: updateBrowserProperties()
+Portlet A->PortletRequestListener: onRequestStart()
+Portlet A->Portlet A: startApplication()
+Portlet A->TransactionListener: startTransaction()
+Portlet A->Portlet A: getApplicationWindow()
+Portlet A->PortletListener: handleRenderRequest()
+Portlet A->Portlet A: handleOtherRequest()
+  Portlet A->Window: setTerminal()
+  Portlet A->Window: handleParameters()
+  Portlet A->Portlet A: writeAjaxPage()
+Portlet A->TransactionListener: endTransaction()
+Portlet A->PortletRequestListener: onRequestEnd()
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal-->Client: rendered HTML page
+deactivate Portal
+
+note over Client: All basic HTML content loaded
+
+Client->Portal: resource request (UIDL) for portlet A
+activate Portal
+Portal->Portlet A: UIDL resource request
+activate Portlet A
+Portlet A->Portlet A: findApplicationInstance()
+Portlet A->Portlet A: getApplicationContext()
+Portlet A->Portlet A: updateBrowserProperties()
+Portlet A->PortletRequestListener: onRequestStart()
+Portlet A->Portlet A: startApplication()
+Portlet A->TransactionListener: startTransaction()
+Portlet A->Portlet A: getApplicationWindow()
+Portlet A->PortletListener: handleResourceRequest()
+Portlet A->PortletCommunicationManager: handleUidlRequest(ResourceRequest)
+activate PortletCommunicationManager
+PortletCommunicationManager->PortletCommunicationManager: handleVariables()
+PortletCommunicationManager->PortletCommunicationManager: paintAfterVariableChanges()
+PortletCommunicationManager-->Portlet A: 
+deactivate PortletCommunicationManager
+Portlet A->TransactionListener: endTransaction()
+Portlet A->PortletRequestListener: onRequestEnd()
+Portlet A-->Portal: UIDL content
+deactivate Portlet A
+Portal-->Client: UIDL content
+deactivate Portal
+
+note over Client: Vaadin application ready

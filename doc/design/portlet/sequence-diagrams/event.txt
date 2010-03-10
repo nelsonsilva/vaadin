@@ -1,0 +1,101 @@
+participant Client
+participant Portal
+participant "Portlet A"
+participant "Portlet B"
+participant PortletListener
+participant PortletApplicationContext2
+
+note left of Portal: Portlet events can\nonly be sent from an\naction or event request
+note left of Portal: Shared render parameters\nfollow the same model\nas events, but without\nthe event processing phase
+
+note over "Portlet A": Vaadin portlet
+
+opt
+  Client->Portal: ResourceRequest (UIDL)
+  activate Portal
+  Portal->Portlet A: handleRequest(ResourceRequest)
+  activate Portlet A
+  note over "Portlet A": normal UIDL handling, e.g.\nbutton click triggers event
+  Portlet A->PortletApplicationContext2: sendPortletEvent()
+  activate PortletApplicationContext2
+  PortletApplicationContext2-->Portlet A: open new action URL in window
+  deactivate PortletApplicationContext2
+  Portlet A-->Portal: UIDL to open new action URL in window
+  deactivate Portlet A
+  Portal-->Client: UIDL to open new action URL in window
+  deactivate Portal
+end
+
+Client->Portal: Action
+activate Portal
+
+note over "Portlet A","Portlet B": Process all actions before rendering any portlet
+
+Portal->Portlet A: processAction()
+activate Portlet A
+Portlet A->Portlet A: handleRequest(ActionRequest)
+Portlet A->PortletListener: handleActionRequest()
+Portlet A->Portlet A: ActionResponse.setEvent()
+note left of Portal: Details of event delivery\nmay depend on the portal
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal->Portlet B: processAction()
+activate Portlet B
+Portlet B-->Portal:
+deactivate Portlet B
+
+note over "Portlet A","Portlet B": Events are received by portlets that have\nexpressed interest in them by event name.\n\nDifferent portlets can receive events in parallel\nor sequentially, immediately or after the action\nbut always before the render phase
+
+Portal->Portlet A: processEvent()
+activate Portlet A
+Portlet A->Portlet A: handleRequest(EventRequest)
+Portlet A->PortletListener: handleEventRequest()
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal->Portlet B: processEvent()
+activate Portlet B
+Portlet B-->Portal:
+deactivate Portlet B
+
+note over "Portlet A","Portlet B": Render requests are processed in\narbitrary order or in parallel
+
+Portal->Portlet A: render
+activate Portlet A
+Portlet A->Portlet A: handleRequest(RenderRequest)
+Portlet A->Portlet A: writeAjaxPage()
+Portlet A-->Portal:
+deactivate Portlet A
+
+Portal->Portlet B: render
+activate Portlet B
+Portlet B-->Portal:
+deactivate Portlet B
+
+Portal-->Client: new rendered HTML page
+deactivate Portal
+
+note over Client: All basic HTML content loaded
+
+Client->Portal: static file requests (widgetset, theme etc.)
+activate Portal
+Portal-->Client:
+deactivate Portal
+
+Client->Portal: resource request (UIDL) for portlet A
+activate Portal
+Portal->Portlet A: resource request (UIDL) for portlet A
+activate Portlet A
+Portlet A->PortletListener: handleResourceRequest()
+Portlet A-->Portal: UIDL content
+deactivate Portlet A
+Portal-->Client: UIDL content
+deactivate Portal
+
+Client->Portal: static file requests
+activate Portal
+Portal-->Client:
+deactivate Portal
+
+note over Client: Vaadin application ready
