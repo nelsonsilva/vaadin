@@ -53,8 +53,8 @@ p {
 
 a {
 	text-decoration: none;
-	padding: 0 3px;
-	margin: 0 -3px;
+	padding: 1px 3px;
+	margin: -1px -3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
@@ -77,6 +77,10 @@ a:hover {
 a:active {
 	color: #000;
 	background: #a09f91;
+	}
+
+a img {
+	border: none;
 	}
 
 ul {
@@ -200,7 +204,6 @@ ul.link-list {
 #links {
 	width: 484px;
 	position: absolute;
-	top: 2px;
 	left: 50%;
 	z-index: 1;
 	}
@@ -211,9 +214,10 @@ ul.link-list {
 
 #links a {
 	font-size: 12px;
-	line-height: 34px;
+	line-height: 38px;
 	color: #a09f91;
 	margin-left: 14px;
+	white-space: nowrap;
 	}
 
 #subheader a:hover {
@@ -316,6 +320,7 @@ ul.link-list {
 #sampler .new em {
 	font-style: normal;
 	color: #959588;
+	white-space: nowrap;
 	}
 
 #sampler-slideshow {
@@ -527,14 +532,10 @@ ul.link-list {
 	width: 570px;
 	}
 
-#eclipse {
-	padding-left: 110px;
-	background: transparent url(../img/eclipse-logo.png) no-repeat 10px 0;
-	}
-
 #eclipse a {
 	display: block;
-	background: transparent;
+	padding-left: 110px;
+	background: transparent url(../img/eclipse-logo.png) no-repeat 10px 0;
 	}
 
 #eclipse p {
@@ -586,8 +587,10 @@ ul.link-list {
 	float: left;
 	width: 360px;
 	margin-right: 32px;
-	background: transparent url(../img/book-of-vaadin.png) no-repeat 7px 126px;
+	background: transparent url(../img/book-of-vaadin.png) no-repeat 7px 8.5em;
 	padding-top: 40px;
+	*background-position: 7px 106px;
+	height: 18em;
 	}
 
 #docs p {
