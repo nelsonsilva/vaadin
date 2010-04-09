@@ -1,14 +1,14 @@
-		IT MILL TOOLKIT LICENSE INFORMATION
+		VAADIN LICENSE INFORMATION
 		
-December 4th, 2007
+April 4th, 2010
 
 
-The IT Mill Toolkit software and sample code developed by IT Mill is 
-licensed under the Apache License, v. 2.0. Other software included in this 
+The Vaadin software and sample code developed by IT Mill is licensed
+under the Apache License, v. 2.0. Other software included in this
 distribution is provided under other licenses, as listed in the Included 
 Software and Licenses section at the bottom of this page. Source code for 
-software included in this distribution is available from the IT Mill 
-Toolkit project or as otherwise indicated at the bottom of this page.  
+software included in this distribution is available from the Vaadin 
+project or as otherwise indicated at the bottom of this page.  
 
 =====
 
@@ -178,7 +178,7 @@ reason of your accepting any such warranty or additional liability.
 
 LICENSE INFORMATION REGARDING BUNDLED THIRD-PARTY SOFTWARE
 
-The following third party software is distributed with IT Mill Toolkit
+The following third party software is distributed with Vaadin
 and is provided under other licenses and/or has source 
 available from other locations.
 
@@ -189,31 +189,10 @@ available from other locations.
 * Apache Commons FileUpload
   License: Apache License v. 2.0 (above)
   Source code availability: http://commons.apache.org/fileupload/
-    modifications are at com/vaadin/external 
+    modifications are in com/vaadin/external 
     within vaadin-@version@.jar
 
-* Google Maps API for Google Web Toolkit (GWT)
-  License: Apache Software License  
-  Source code availability: http://sourceforge.net/projects/gwt/
-
-* java.util.regex.Pattern for Google Web Toolkit (GWT)
-  License: Apache License v. 2.0 (above)
-  Source code availability: package com.vaadin.terminal.gwt.client.util
-    within vaadin-@version@.jar
-
-* Date locales and parsing for Google Web Toolkit (GWT)
-  License: Apache License v. 2.0 (above)
-  Source code availability: package com.vaadin.terminal.gwt.client.util
-    within vaadin-@version@.jar
-    
 * Jetty
   License: Apache License v. 2.0 (above)
   Source code availability: http://jetty.mortbay.org
-  Used only in IT Mill Toolkit demos.
-  
-* HSQLDB Database Engine
-  License: See License folder within this package or
-    http://hsqldb.org/web/hsqlLicense.html
-  Source code availability: http://hsqldb.org/
-  Used only in IT Mill Toolkit demos.
-  
+  Used only in Vaadin demos.
