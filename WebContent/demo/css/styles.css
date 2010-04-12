@@ -383,13 +383,19 @@ ul {
 	vertical-align: middle;
 }
 
-#tabs .tab a,
-#tabs .tab a:hover,
-#tabs .tab a:focus {
+#tabs .tab a {
 	margin: 0;
 	padding: 0;
-	background: transparent;
 	color: #00a2d8;
+	-webkit-transition: linear .2s color;
+	}
+
+#tabs .tab:hover a,
+#tabs .tab a:focus {
+	background: transparent;
+	margin: 0;
+	padding: 0;
+	color: #464440;
 	}
 
 #tabs .tab:hover {
@@ -403,6 +409,7 @@ ul {
 
 #tabs .selected,
 #tabs .selected:hover,
+#tabs .selected:hover a,
 #tabs .selected a,
 #tabs .selected a:hover,
 #tabs .selected a:focus {
@@ -562,235 +569,38 @@ h3.reasons {
 
 
 
-
-
-
-
-
-
-/***
-LEGACY
-****/
-
 /***************************************************
- * Add-on demos 
+ * Section specific styles
  ***************************************************/
-
-#addons {
-	width: 588px;
-	float: left;
+.book {
 	overflow: hidden;
 	}
 
-#addons ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	overflow: hidden;
-	}
-
-#addons li {
-	float: left;
-	width: 182px;
-	height: 182px;
-	margin: 0 14px 0 0;
-	position: relative;
-	padding: 0;
-	}
-
-#addons li span {
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: block;
-	width: 172px;
-	padding: 120px 5px 0;
-	background: transparent url(../img/addon-screen-clip.png) no-repeat;
-	text-align: center;
-	font-size: 12px;
-	line-height: 1.3;
-	}
-
-#addons h4 {
-	font-size: 14px;
+.book h5 {
 	font-weight: bold;
-	margin: 0 0 3px;
+	font-size: 18px;
 	}
 
-#addons a {
-	display: block;
-	width: 182px;
-	color: #64635a;
-	padding: 0;
-	margin: 0;
-	background: transparent;
-	}
-
-#addons a:hover span {
-	background-position: -182px 0;
-	}
-
-#addons a:hover h4 {
-	color: #00b4f0;
-	}
-
-
-
-
-/***************************************************
- * Directory teaser
- ***************************************************/
-#directory-teaser {
-	float: right;
-	width: 217px;
-	padding: 26px 58px;
-	border: 3px solid #40b527;
-	font-size: 12px;
-	line-height: 16px;
-	-moz-border-radius: 12px;
-	-webkit-border-radius: 12px;
-	border-radius: 12px;
-	}
-
-#directory-teaser h4 {
-	font-size: 16px;
-	font-weight: bold;
-	margin: 0;
-	}
-
-#directory-teaser h4 em {
-	color: #40b527;
-	font-style: normal;
-	}
-
-#directory-teaser h3 {
-	width: 247px;
-	height: 56px;
-	background: transparent url(../img/directory-logo.png) no-repeat;
-	margin-left: -17px;
-	}
-
-#directory-teaser h3 * {
-	display: none;
-	}
-
-#directory-teaser p {
+.book h6 {
+	margin: -0.7em 0 .7em;
 	color: #464440;
-	background: transparent;
+	font-size: 13px;
+	font-style: italic;
+	color: #736f5e;
 	}
 
-
-
-/***************************************************
- * Code examples
- ***************************************************/
-#code-examples {
-	clear: both;
+.book img {
 	float: left;
-	width: 360px;
-	margin-right: 32px;
+	margin-right: 1.2em;
 	}
 
-
-
-
-/***************************************************
- * Getting started
- ***************************************************/
-
-#getting-started,
-#support {
+.book p {
 	float: left;
-	width: 570px;
+	width: 77%;
 	}
 
-#eclipse {
-	padding-left: 110px;
-	background: transparent url(../img/eclipse-logo.png) no-repeat 10px 0;
-	}
-
-#eclipse a {
-	display: block;
-	background: transparent;
-	}
-
-#eclipse p {
-	color: #464440;
-	margin: 0;
-	}
-
-#tutorial {
-	margin-top: 32px;
-	padding-left: 110px;
-	background: transparent url(../img/address-book-icon.png) no-repeat 10px 0;
-	}
-
-#tutorial p {
-	margin: 0;
-	}
-
-#tutorial ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	}
-
-#tutorial li {
+.dzone img,
+.tutorial img {
 	float: left;
-	margin-right: 3em;;
-	}
-
-
-
-
-/***************************************************
- * Documentation
- ***************************************************/
-
-#docs {
-	clear: both;
-	float: left;
-	width: 360px;
-	margin-right: 32px;
-	background: transparent url(../img/book-of-vaadin.png) no-repeat 7px 126px;
-	padding-top: 40px;
-	}
-
-#docs p {
-	padding-left: 100px;
-	margin: 0;
-	}
-
-#docs ul {
-	margin: 0;
-	padding-left: 120px;
-	}
-
-
-
-
-
-/***************************************************
- * Support
- ***************************************************/
-
-#support {
-	margin-top: 48px;
-	overflow: hidden;
-	padding-top: 4px;
-	width: 530px;
-	background: #f4f4f0;
-	-moz-border-radius: 9px;
-	-webkit-border-radius: 9px;
-	border-radius: 9px;
-	font-size: 12px;
-	line-height: 18px;
-	overflow: hidden;
-	}
-
-#open-source,
-#pro {
-	float: left;
-	width: 45%;
-	margin: 0 1% 0 4%;
-	}
+	margin: 0 1em 2em 0;
+}
