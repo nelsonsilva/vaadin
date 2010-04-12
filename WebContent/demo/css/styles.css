@@ -213,6 +213,7 @@ ul {
 	line-height: 34px;
 	color: #a09f91;
 	margin-left: 14px;
+	white-space: nowrap;
 	}
 
 #subheader a:hover {
@@ -382,6 +383,15 @@ ul {
 	vertical-align: middle;
 }
 
+#tabs .tab a,
+#tabs .tab a:hover,
+#tabs .tab a:focus {
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	color: #00a2d8;
+	}
+
 #tabs .tab:hover {
 	color: #464440;
 	}
@@ -392,7 +402,10 @@ ul {
 	}
 
 #tabs .selected,
-#tabs .selected:hover {
+#tabs .selected:hover,
+#tabs .selected a,
+#tabs .selected a:hover,
+#tabs .selected a:focus {
 	color: #000;
 	cursor: default;
 	-webkit-transition: linear .2s color;
