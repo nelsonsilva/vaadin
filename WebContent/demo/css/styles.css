@@ -225,6 +225,28 @@ ul {
 	padding-left: 1.3em;
 	}
 
+#footer {
+	margin: 0 auto;
+	width: 968px;
+	height: 60px;
+	color: #000;
+	font-size: 11px;
+	}
+
+#footer a {
+	float: right;
+	}
+
+#footer strong {
+	font-size: 13px;
+	}
+
+#footer strong em {
+	color: #00b4f0;
+	font-style: normal;
+	margin: 0 0.2em 0 -0.15em;
+	}
+
 /***************************************************
  * Sampler 
  ***************************************************/
@@ -426,6 +448,7 @@ ul {
 h3.reasons {
 	color: #78776d;
 	margin: 0 0 40px;
+	height: 30px;
 	}
 	
 #reasons {
@@ -572,6 +595,10 @@ h3.reasons {
 /***************************************************
  * Section specific styles
  ***************************************************/
+img {
+	border: none;
+	}
+
 .book {
 	overflow: hidden;
 	}
@@ -603,4 +630,9 @@ h3.reasons {
 .tutorial img {
 	float: left;
 	margin: 0 1em 2em 0;
-}
+	}
+
+.tools img {
+	margin: 0em 2em .8em 2em;
+	float: right;
+	}
