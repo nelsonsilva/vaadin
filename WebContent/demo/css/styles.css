@@ -117,7 +117,7 @@ ul {
 #header h1 {
 	width: 393px;
 	height: 46px;
-	background: transparent url(../img/vaadin-logo.png);
+	background: transparent url(../img/vaadin-logo.png) no-repeat;
 	position: absolute;
 	top: 23px;
 	left: 50%;
@@ -574,7 +574,7 @@ h3.reasons {
 	background-position: right top;
 	}
 
-.thumb.video span{
+.thumb.video span {
 	background-image: url(../img/video-screen-clip.png);
 	}
 
