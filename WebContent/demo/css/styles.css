@@ -52,6 +52,10 @@ h5 {
 	margin-bottom: .5em;
 	}
 
+h6 {
+	font-size: 14px;
+	margin: .6em 0 .1em;
+	}
 
 p {
 	margin: 0 0 1em;
@@ -113,7 +117,7 @@ ul {
 #header h1 {
 	width: 393px;
 	height: 46px;
-	background: transparent url(../img/vaadin-logo.png);
+	background: transparent url(../img/vaadin-logo.png) no-repeat;
 	position: absolute;
 	top: 23px;
 	left: 50%;
@@ -209,6 +213,7 @@ ul {
 	line-height: 34px;
 	color: #a09f91;
 	margin-left: 14px;
+	white-space: nowrap;
 	}
 
 #subheader a:hover {
@@ -218,6 +223,28 @@ ul {
 
 ul {
 	padding-left: 1.3em;
+	}
+
+#footer {
+	margin: 0 auto;
+	width: 968px;
+	height: 60px;
+	color: #000;
+	font-size: 11px;
+	}
+
+#footer a {
+	float: right;
+	}
+
+#footer strong {
+	font-size: 13px;
+	}
+
+#footer strong em {
+	color: #00b4f0;
+	font-style: normal;
+	margin: 0 0.2em 0 -0.15em;
 	}
 
 /***************************************************
@@ -310,7 +337,7 @@ ul {
 	width: 574px;
 	height: 258px;
 	background: transparent url(../img/sampler-screen-clip.png) no-repeat;
-	z-index: 1000;
+	z-index: 10;
 	}
 
 #sampler-slideshow ul {
@@ -374,7 +401,40 @@ ul {
 	-webkit-transition: linear .2s color;
 	}
 
-#tabs .selected {
+#tabs .tab * {
+	vertical-align: middle;
+}
+
+#tabs .tab a {
+	margin: 0;
+	padding: 0;
+	color: #00a2d8;
+	-webkit-transition: linear .2s color;
+	}
+
+#tabs .tab:hover a,
+#tabs .tab a:focus {
+	background: transparent;
+	margin: 0;
+	padding: 0;
+	color: #464440;
+	}
+
+#tabs .tab:hover {
+	color: #464440;
+	}
+
+#tabs .tab span {
+	font-size: 9px;
+	margin-left: .7em;
+	}
+
+#tabs .selected,
+#tabs .selected:hover,
+#tabs .selected:hover a,
+#tabs .selected a,
+#tabs .selected a:hover,
+#tabs .selected a:focus {
 	color: #000;
 	cursor: default;
 	-webkit-transition: linear .2s color;
@@ -388,271 +448,186 @@ ul {
 h3.reasons {
 	color: #78776d;
 	margin: 0 0 40px;
+	height: 30px;
 	}
 	
 #reasons {
-	float: left;
-	width: 769px;
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	height: 400px;
 	}
 
-#reasons li {
+#reasons.js {
+	float: left;
+	width: 769px;
+	}
+
+#reasons .tab {
 	display: block;
-	margin: 0;
-	padding: 40px;
-	width: 689px;
+	margin: 0 0 1em;
+	padding: 20px 40px;
 	background: #efeee9;
 	-webkit-border-radius: 9px;
 	-moz-border-radius: 9px;
 	border-radius: 9px;
-	min-height: 200px;
+	clear: left;
+	overflow: hidden;
 	}
 
-#reasons li h4 {
+#reasons.js .tab {
+	width: 689px;
+	}
+
+#reasons .tab h4 {
 	font-weight: bold;
 	font-size: 24px;
+	margin: 14px 0 24px;
+	}
+
+#reasons .tab .col {
+	width: 22.8%;
+	margin-right: 2%;
+	float: left;
+	margin-bottom: 2em;
+	}
+
+#reasons .tab .col2 {
+	width: 47.8%;
+	margin-right: 2%;
+	float: left;
+	margin-bottom: 2em;
+	}
+
+#reasons .tab .col3 {
+	width: 72.8%;
+	margin-right: 2%;
+	float: left;
+	margin-bottom: 2em;
+	}
+
+#reasons .tab .col4 {
+	clear: left;
+	margin-bottom: 2em;
+	}
+
+#reasons .tab .newline {
+	clear: left;
+	}
+
+#reasons .tab p:last-child {
 	margin: 0;
 	}
 
+#reasons .tab h5 {
+	margin-top: 0;
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-/***
-LEGACY
-****/
 
 /***************************************************
- * Add-on demos 
+ * Thumbnail links 
  ***************************************************/
 
-#addons {
-	width: 588px;
-	float: left;
-	overflow: hidden;
-	}
 
-#addons ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	overflow: hidden;
-	}
-
-#addons li {
-	float: left;
-	width: 182px;
-	height: 182px;
-	margin: 0 14px 0 0;
+.thumb {
+	display: inline;
+	display: inline-block;
+	zoom: 1;
 	position: relative;
+	width: 182px;
+	overflow: hidden;
 	padding: 0;
+	margin: 1em 0 0;
+	background: transparent;
 	}
 
-#addons li span {
+.thumb:hover {
+	background: transparent;
+	}
+
+.thumb img {
 	position: absolute;
 	top: 0;
 	left: 0;
+	margin: 0;
+	border: none;
+	}
+
+.thumb span {
 	display: block;
-	width: 172px;
-	padding: 120px 5px 0;
-	background: transparent url(../img/addon-screen-clip.png) no-repeat;
+	position: relative;
+	top: 0;
+	left: 0;
+	padding: 116px 0 0;
+	background: transparent url(../img/screen-clip.png) no-repeat;
+	color: #464440;
 	text-align: center;
 	font-size: 12px;
 	line-height: 1.3;
 	}
 
-#addons h4 {
-	font-size: 14px;
-	font-weight: bold;
-	margin: 0 0 3px;
-	}
-
-#addons a {
+.thumb span strong {
 	display: block;
-	width: 182px;
-	color: #64635a;
-	padding: 0;
-	margin: 0;
+	font-size: 13px;
+	}
+
+.thumb:hover span {
+	background-position: right top;
+	}
+
+.thumb.video span {
+	background-image: url(../img/video-screen-clip.png);
+	}
+
+.thumb-rel,
+.thumb-rel:hover {
+	font-size: 11px;
 	background: transparent;
+	display: block;
+	text-align: center;
 	}
 
-#addons a:hover span {
-	background-position: -182px 0;
+.col2 .thumb {
+	margin-left: 22%;
 	}
-
-#addons a:hover h4 {
-	color: #00b4f0;
-	}
-
 
 
 
 /***************************************************
- * Directory teaser
+ * Section specific styles
  ***************************************************/
-#directory-teaser {
+img {
+	border: none;
+	}
+
+.book {
+	overflow: hidden;
+	}
+
+.book h5 {
+	font-weight: bold;
+	font-size: 18px;
+	}
+
+.book h6 {
+	margin: -0.7em 0 .7em;
+	color: #464440;
+	font-size: 13px;
+	font-style: italic;
+	color: #736f5e;
+	}
+
+.book img {
+	float: left;
+	margin-right: 1.2em;
+	}
+
+.dzone img,
+.tutorial img {
+	float: left;
+	margin: 0 1em 2em 0;
+	}
+
+.tools img {
+	margin: 0em 2em .8em 2em;
 	float: right;
-	width: 217px;
-	padding: 26px 58px;
-	border: 3px solid #40b527;
-	font-size: 12px;
-	line-height: 16px;
-	-moz-border-radius: 12px;
-	-webkit-border-radius: 12px;
-	border-radius: 12px;
-	}
-
-#directory-teaser h4 {
-	font-size: 16px;
-	font-weight: bold;
-	margin: 0;
-	}
-
-#directory-teaser h4 em {
-	color: #40b527;
-	font-style: normal;
-	}
-
-#directory-teaser h3 {
-	width: 247px;
-	height: 56px;
-	background: transparent url(../img/directory-logo.png) no-repeat;
-	margin-left: -17px;
-	}
-
-#directory-teaser h3 * {
-	display: none;
-	}
-
-#directory-teaser p {
-	color: #464440;
-	background: transparent;
-	}
-
-
-
-/***************************************************
- * Code examples
- ***************************************************/
-#code-examples {
-	clear: both;
-	float: left;
-	width: 360px;
-	margin-right: 32px;
-	}
-
-
-
-
-/***************************************************
- * Getting started
- ***************************************************/
-
-#getting-started,
-#support {
-	float: left;
-	width: 570px;
-	}
-
-#eclipse {
-	padding-left: 110px;
-	background: transparent url(../img/eclipse-logo.png) no-repeat 10px 0;
-	}
-
-#eclipse a {
-	display: block;
-	background: transparent;
-	}
-
-#eclipse p {
-	color: #464440;
-	margin: 0;
-	}
-
-#tutorial {
-	margin-top: 32px;
-	padding-left: 110px;
-	background: transparent url(../img/address-book-icon.png) no-repeat 10px 0;
-	}
-
-#tutorial p {
-	margin: 0;
-	}
-
-#tutorial ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	}
-
-#tutorial li {
-	float: left;
-	margin-right: 3em;;
-	}
-
-
-
-
-/***************************************************
- * Documentation
- ***************************************************/
-
-#docs {
-	clear: both;
-	float: left;
-	width: 360px;
-	margin-right: 32px;
-	background: transparent url(../img/book-of-vaadin.png) no-repeat 7px 126px;
-	padding-top: 40px;
-	}
-
-#docs p {
-	padding-left: 100px;
-	margin: 0;
-	}
-
-#docs ul {
-	margin: 0;
-	padding-left: 120px;
-	}
-
-
-
-
-
-/***************************************************
- * Support
- ***************************************************/
-
-#support {
-	margin-top: 48px;
-	overflow: hidden;
-	padding-top: 4px;
-	width: 530px;
-	background: #f4f4f0;
-	-moz-border-radius: 9px;
-	-webkit-border-radius: 9px;
-	border-radius: 9px;
-	font-size: 12px;
-	line-height: 18px;
-	overflow: hidden;
-	}
-
-#open-source,
-#pro {
-	float: left;
-	width: 45%;
-	margin: 0 1% 0 4%;
 	}
