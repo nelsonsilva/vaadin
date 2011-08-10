@@ -186,12 +186,6 @@ available from other locations.
   License: Apache License v. 2.0 (above)
   Source code availability: http://code.google.com/webtoolkit/
 
-* Apache Commons FileUpload
-  License: Apache License v. 2.0 (above)
-  Source code availability: http://commons.apache.org/fileupload/
-    modifications are in com/vaadin/external 
-    within vaadin-@version@.jar
-
 * Jetty
   License: Apache License v. 2.0 (above)
   Source code availability: http://jetty.mortbay.org
