@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys,os,datetime,subprocess,time
+import sys,os,datetime,subprocess,time,glob
 
 ################################################################################
 # Configuration
@@ -14,14 +14,6 @@ def execute(cmd):
 	# print cmd
 	return os.system(cmd)
 
-# Unpacks the Vaadin installation package to a target location.
-# The package file name must have absolute path.
-def unpackVaadin(packagefile, targetdir):
-	cmd = "unzip %{PF}s -d ${TD}s" % {"PF": packagefile, "TD": targetdir}
-	if execute(cmd):
-		print "Unpacking Vaadin installation package %{PF} to ${TD} failed." % {"PF": packagefile, "TD": targetdir}
-		sys.exit(1)
-
 ################################################################################
 # startVaadin()
 # Starts the Vaadin server process.
@@ -32,10 +24,14 @@ def startVaadin(packagename, testarea):
 
 	libdir = testarea + "/" + packagename + "/WebContent/WEB-INF/lib"
 
-	classpath = "WebContent/demo/lib/jetty/jetty-6.1.7.jar:"+\
-				"WebContent/demo/lib/jetty/jetty-util-6.1.7.jar:"+\
-				"WebContent/demo/lib/jetty/servlet-api-2.5-6.1.7.jar:"+\
+	classpath = "WebContent/tests/lib/jetty/jetty-6.1.7.jar:"+\
+				"WebContent/tests/lib/jetty/jetty-util-6.1.7.jar:"+\
+				"WebContent/tests/lib/jetty/servlet-api-2.5-6.1.7.jar:"+\
 				"WebContent/WEB-INF/classes:WebContent/WEB-INF/src"
+	
+    # add *.jar from libdir on the classpath
+	for jarname in glob.glob(libdir+"/*.jar"):
+		classpath = classpath + ":" + jarname
 
 	javacmd = "java -cp %(classpath)s com.vaadin.launcher.DemoLauncher --nogui=1" % {"classpath": classpath}
 	print javacmd
@@ -54,10 +50,10 @@ def stopProcess(pin):
 		pin.close()
 		pid = pid.rstrip('\n')
 		if len(pid)>0:
-			print "Killing existing Vaadin demo, PID [" + pid + "]"
+			print "Killing existing Vaadin test server, PID [" + pid + "]"
 			execute("kill -9 " + pid)
 			time.sleep(5);
-			print "Killing existing Vaadin demo, PID [" + pid + "]"
+			print "Killing existing Vaadin test server, PID [" + pid + "]"
 			execute("kill -9 " + pid)
 			time.sleep(2);
 	
@@ -78,39 +74,22 @@ def commandStart(packagename, packagefile, outputdir, testarea):
 		print "The test area directory may not be too short: %s" % (testarea)
 		sys.exit(1)
 	execute("rm -rf %s/vaadin-*" % (testarea))
+
+	installationpath = testarea + "/" + packagename + "/WebContent"
 		
 	print "Creating test area '%s' if it does not already exist..." % (testarea)
-	if execute ("mkdir -p %s" % testarea):
+	if execute ("mkdir -p %s" % installationpath):
 		print "Creation of test area '%s' failed." % (testarea)
 		sys.exit(1)
 		
-	print "Extracting Vaadin package '%s' to test area '%s'..." % (packagefile, testarea)
-	if execute ("unzip %s -d %s" % (packagefile, testarea)):
+	print "Extracting Vaadin package '%s' to test area '%s'..." % (packagefile, installationpath)
+	if execute ("unzip %s -d %s" % (packagefile, installationpath)):
 		print "Extracting Vaadin package failed."
 		sys.exit(1)
 
 	resultpath       = outputdir[:outputdir.rfind("/")]
-	installationpath = testarea + "/" + packagename
 
-	# Copy extra class files from the output directory to the test area. (#3325)
-	classsrc  = resultpath + "/classes/com/vaadin/tests"
-	classtrg  = installationpath + "/WebContent/WEB-INF/classes/com/vaadin/"
-	print "Copying all class files from %s to %s..." % (classsrc, classtrg)
-	if execute ("cp -r %s %s" % (classsrc, classtrg)):
-		print "Copying class files failed."
-		sys.exit(1)
-
-	# TODO (#3325): Copy test themes, etc.
-	webcontent = "WebContent"
-	themepath  = webcontent + "/VAADIN/themes"
-	testthemes = themepath + "/tests-*"
-	themetrg   = installationpath + "/WebContent/VAADIN/themes/"
-	print "Copying themes from %s to %s..." % (testthemes, themetrg)
-	if execute ("cp -r %s %s" % (testthemes, themetrg)):
-		print "Copying theme files failed."
-		sys.exit(1)
-
-	# Start new Vaadin demo service
+	# Start new Vaadin test service
 	startVaadin(packagename, testarea)
 	
 	# Wait for the service to start
