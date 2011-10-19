@@ -26,6 +26,7 @@ def startVaadin(packagename, testarea):
 
 	classpath = "WebContent/tests/lib/jetty/jetty-6.1.7.jar:"+\
 				"WebContent/tests/lib/jetty/jetty-util-6.1.7.jar:"+\
+				"WebContent/tests/lib/emma-2.0.5312-patched.jar:"+\
 				"WebContent/tests/lib/jetty/servlet-api-2.5-6.1.7.jar:"+\
 				"WebContent/WEB-INF/classes:WebContent/WEB-INF/src"
 	
@@ -33,7 +34,7 @@ def startVaadin(packagename, testarea):
 	for jarname in glob.glob(libdir+"/*.jar"):
 		classpath = classpath + ":" + jarname
 
-	javacmd = "java -cp %(classpath)s com.vaadin.launcher.DemoLauncher --nogui=1" % {"classpath": classpath}
+	javacmd = "java -cp %(classpath)s -Demma.coverage.out.file=%(emmaout)s com.vaadin.launcher.DemoLauncher --nogui=1" % {"classpath": classpath, "emmaout": testarea + "/" + packagename + "/war.ec" }
 	print javacmd
 
     # All the stdin, stdout, and stderr must be redirected
@@ -51,8 +52,8 @@ def stopProcess(pin):
 		pid = pid.rstrip('\n')
 		if len(pid)>0:
 			print "Killing existing Vaadin test server, PID [" + pid + "]"
-			execute("kill -9 " + pid)
-			time.sleep(5);
+			execute("kill " + pid)
+			time.sleep(10);
 			print "Killing existing Vaadin test server, PID [" + pid + "]"
 			execute("kill -9 " + pid)
 			time.sleep(2);
